@@ -116,7 +116,7 @@ Always respond in a friendly and helpful tone.
 
 /* --- fallback route --- */
 
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
