@@ -114,12 +114,6 @@ Always respond in a friendly and helpful tone.
 
 });
 
-/* --- fallback route --- */
-
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(publicPath, "index.html"));
-});
-
 /* --- puerto Railway --- */
 
 const PORT = process.env.PORT || 3000;
