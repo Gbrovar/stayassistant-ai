@@ -19,12 +19,18 @@ const __dirname = path.dirname(__filename);
 
 /* servir carpeta public */
 
-app.use(express.static(path.join(__dirname, "../public")));
+const publicPath = path.resolve(__dirname, "../public");
+
+app.use(express.static(publicPath));
 
 /* ruta raíz */
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
+  res.sendFile(path.join(publicPath, "index.html"));
+});
+
+app.get("/health", (req, res) => {
+  res.send("OK");
 });
 
 /* --- OpenAI --- */
