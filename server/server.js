@@ -9,46 +9,51 @@ dotenv.config();
 
 const app = express();
 
+/* --- middleware --- */
+
 app.use(cors());
 app.use(express.json());
 
-/* --- Fix importante para Railway paths --- */
+/* --- paths --- */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* servir carpeta public */
+const publicPath = path.join(__dirname, "../public");
 
-const publicPath = path.resolve(__dirname, "../public");
+/* --- servir archivos estáticos --- */
 
 app.use(express.static(publicPath));
 
-/* ruta raíz */
+/* --- health check (importante para Railway) --- */
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+/* --- root route --- */
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-app.get("/health", (req, res) => {
-  res.send("OK");
-});
-
-/* --- OpenAI --- */
+/* --- OpenAI client --- */
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+/* --- chat endpoint --- */
+
 app.post("/chat", async (req, res) => {
 
-  const userMessage = req.body.message;
-
   try {
+
+    const userMessage = req.body.message || "";
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-
         {
           role: "system",
           content: `
@@ -86,12 +91,10 @@ Nearby recommendations:
 Always respond in a friendly and helpful tone.
 `
         },
-
         {
           role: "user",
           content: userMessage
         }
-
       ]
     });
 
@@ -109,6 +112,12 @@ Always respond in a friendly and helpful tone.
 
   }
 
+});
+
+/* --- fallback route --- */
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(publicPath, "index.html"));
 });
 
 /* --- puerto Railway --- */
