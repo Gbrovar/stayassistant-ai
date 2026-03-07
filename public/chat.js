@@ -1,4 +1,4 @@
-let selectedLanguage = "English";
+let selectedLanguage = null;
 
 window.onload = function () {
 
