@@ -76,6 +76,14 @@ Selected language: ${userLanguage}
 
 If no language is selected, detect the language used by the guest and answer in that language.
 
+At the end of your response include the detected language in this format:
+
+LANGUAGE: English
+or
+LANGUAGE: Español
+or
+LANGUAGE: Deutsch
+
 At the end of your response, internally determine the language used by the guest.
 
 Supported languages:
@@ -254,9 +262,23 @@ Always assist guests politely and clearly.
 
     const reply = completion.choices[0].message.content;
 
+    let detectedLanguage = userLanguage;
+
+    if (!detectedLanguage) {
+
+    const match = reply.match(/LANGUAGE:\s*(English|Español|Deutsch)/i);
+
+    if (match) {
+        detectedLanguage = match[1];
+    }
+
+    }
+
+    const cleanReply = reply.replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "").trim();
+
     res.json({
-    reply,
-    language: userLanguage
+        reply: cleanReply,
+        language: detectedLanguage
     });
 
   } catch (error) {
