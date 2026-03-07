@@ -9,9 +9,9 @@ window.onload = function () {
     </div>
 
     <div class="message bot" id="languageButtons">
-        <button onclick="selectLanguage('English')">🇬🇧 English</button>
-        <button onclick="selectLanguage('Español')">🇪🇸 Español</button>
-        <button onclick="selectLanguage('Deutsch')">🇩🇪 Deutsch</button>
+        <button onclick="selectLanguage('English')">🇬🇧 EN</button>
+<button onclick="selectLanguage('Español')">🇪🇸 ES</button>
+<button onclick="selectLanguage('Deutsch')">🇩🇪 DE</button>
     </div>
     `;
 
