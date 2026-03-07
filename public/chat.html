@@ -31,6 +31,11 @@ border-radius:30px;
 cursor:pointer;
 font-size:15px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:.25s;
+}
+
+#chat-button:hover{
+transform:translateY(-2px);
 }
 
 /* WIDGET */
@@ -47,6 +52,20 @@ display:none;
 flex-direction:column;
 box-shadow:0 20px 40px rgba(0,0,0,0.45);
 overflow:hidden;
+animation:chatOpen .3s ease;
+}
+
+/* ANIMACIÓN */
+
+@keyframes chatOpen{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 /* HEADER */
@@ -65,14 +84,21 @@ padding:15px;
 flex:1;
 overflow-y:auto;
 font-size:14px;
+scroll-behavior:smooth;
 }
 
 .message{
 margin-bottom:10px;
 max-width:85%;
-padding:10px 12px;
-border-radius:10px;
+padding:12px 14px;
+border-radius:14px;
 line-height:1.4;
+animation:fadeIn .2s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(5px);}
+to{opacity:1;transform:translateY(0);}
 }
 
 .user{
@@ -86,38 +112,40 @@ background:#1f2937;
 color:#e5e7eb;
 }
 
-/* BOTONES IDIOMA */
+/* TARJETAS IDIOMA */
 
 #languageButtons{
 display:flex;
 gap:10px;
-margin-top:10px;
-flex-wrap:wrap;
+margin-top:12px;
 }
 
-#languageButtons button{
+.language-card{
 
+flex:1;
 background:#0f172a;
-color:white;
 border:1px solid #374151;
-padding:10px 14px;
-border-radius:20px;
-font-size:14px;
+border-radius:12px;
+padding:12px;
+text-align:center;
 cursor:pointer;
-
-display:flex;
-align-items:center;
-gap:6px;
-
-transition:all .2s ease;
+transition:.2s;
 
 }
 
-#languageButtons button:hover{
-
+.language-card:hover{
 background:#1f2937;
-transform:translateY(-1px);
+transform:translateY(-2px);
+}
 
+.language-flag{
+font-size:22px;
+margin-bottom:4px;
+}
+
+.language-name{
+font-size:13px;
+color:#d1d5db;
 }
 
 /* INPUT */
@@ -148,6 +176,11 @@ border-radius:8px;
 background:#22c55e;
 color:white;
 cursor:pointer;
+transition:.2s;
+}
+
+button.send:hover{
+background:#16a34a;
 }
 
 /* QUICK BUTTONS */
@@ -164,7 +197,7 @@ flex-wrap:wrap;
 border:none;
 background:#1f2937;
 color:white;
-padding:6px 10px;
+padding:7px 12px;
 border-radius:20px;
 font-size:12px;
 cursor:pointer;
@@ -173,9 +206,7 @@ transition:.2s;
 }
 
 .quick-buttons button:hover{
-
 background:#374151;
-
 }
 
 /* MOBILE */
@@ -203,14 +234,8 @@ input{
 font-size:16px;
 }
 
-/* idioma móvil */
-
-#languageButtons button{
-
-flex:1;
-justify-content:center;
-font-size:15px;
-
+#languageButtons{
+flex-direction:column;
 }
 
 }
