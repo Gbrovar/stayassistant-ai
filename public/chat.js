@@ -1,8 +1,8 @@
-window.onload = function () {
+window.onload=function(){
 
-const messages = document.getElementById("messages");
+const messages=document.getElementById("messages");
 
-messages.innerHTML += `
+messages.innerHTML+=`
 <div class="message bot">
 Assistant: Hello 👋 Welcome to Ocean View Apartment.<br><br>
 Please choose your language:
@@ -41,7 +41,31 @@ messages.innerHTML+=`<div class="message user">You: ${lang}</div>`;
 const buttons=document.getElementById("languageButtons");
 if(buttons) buttons.remove();
 
+showQuickActions();
+
 sendMessage(lang);
+
+}
+
+/* quick actions */
+
+function showQuickActions(){
+
+const messages=document.getElementById("messages");
+
+messages.innerHTML+=`
+<div id="quick-actions">
+
+<button onclick="quick('What time is check-in?')">Check-in</button>
+
+<button onclick="quick('What is the wifi password?')">Wifi</button>
+
+<button onclick="quick('Restaurants nearby?')">Restaurants</button>
+
+<button onclick="quick('How do I get from the airport?')">Transport</button>
+
+</div>
+`;
 
 }
 
@@ -97,14 +121,14 @@ messages.scrollTop=messages.scrollHeight;
 
 }
 
-/* quick buttons */
+/* quick */
 
 function quick(text){
 document.getElementById("input").value=text;
 sendMessage();
 }
 
-/* enter para enviar */
+/* enter */
 
 document.getElementById("input").addEventListener("keypress",function(e){
 if(e.key==="Enter"){
