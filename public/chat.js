@@ -217,18 +217,24 @@ async function sendMessage(forcedText = null) {
     input.value = "";
 
     messages.innerHTML += `
-<div class="bot-wrapper" id="typing">
+        <div class="bot-wrapper" id="typing">
 
-<div class="bot-avatar">
-🤖
-</div>
+        <div class="bot-avatar">
+        🤖
+        </div>
 
-<div class="bot-message">
-Typing...
-</div>
+        <div class="bot-message">
 
-</div>
-`;
+        <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+        </div>
+
+        </div>
+
+        </div>
+    `;
 
     messages.scrollTop = messages.scrollHeight;
 
