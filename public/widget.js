@@ -29,7 +29,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = "/chat.html";
+        iframe.src = "/chat.html?embed=true";
 
         iframe.style.position = "fixed";
         iframe.style.bottom = "90px";
