@@ -119,8 +119,16 @@ function showQuickActions() {
 
     messages.innerHTML += `
 
-<div class="message bot">
+<div class="bot-wrapper">
+
+<div class="bot-avatar">
+🤖
+</div>
+
+<div class="bot-message">
 ${title}
+</div>
+
 </div>
 
 <div id="quick-actions">
@@ -164,8 +172,16 @@ function showRecommendations(text) {
 
         messages.innerHTML += `
 
-<div class="message bot">
+<div class="bot-wrapper">
+
+<div class="bot-avatar">
+🤖
+</div>
+
+<div class="bot-message">
 ${title}
+</div>
+
 </div>
 
 <div id="quick-actions">
@@ -200,7 +216,20 @@ async function sendMessage(forcedText = null) {
 
     input.value = "";
 
-    messages.innerHTML += `<div class="message bot" id="typing">Assistant is typing...</div>`;
+    messages.innerHTML += `
+<div class="bot-wrapper" id="typing">
+
+<div class="bot-avatar">
+🤖
+</div>
+
+<div class="bot-message">
+Typing...
+</div>
+
+</div>
+`;
+
     messages.scrollTop = messages.scrollHeight;
 
     try {
@@ -242,7 +271,19 @@ ${data.reply}
         const typing = document.getElementById("typing");
         if (typing) typing.remove();
 
-        messages.innerHTML += `<div class="message bot">Assistant: Sorry, something went wrong.</div>`;
+        messages.innerHTML += `
+<div class="bot-wrapper">
+
+<div class="bot-avatar">
+🤖
+</div>
+
+<div class="bot-message">
+Sorry, something went wrong.
+</div>
+
+</div>
+`;
 
     }
 
