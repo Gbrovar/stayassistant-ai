@@ -55,7 +55,7 @@ const redis = createClient({
 redis.on("error", (err) => console.error("Redis error", err));
 
 await redis.connect();
-
+console.log("Redis connected successfully");
 
 
 /* --- chat endpoint --- */
