@@ -1,13 +1,21 @@
 let selectedLanguage = "English";
 
-window.onload=function(){
+window.onload = function () {
 
-const messages=document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
-messages.innerHTML+=`
-<div class="message bot">
-Assistant: Hello 👋 Welcome to Ocean View Apartment.<br><br>
+    messages.innerHTML += `
+<div class="bot-wrapper">
+
+<div class="bot-avatar">
+🤖
+</div>
+
+<div class="bot-message">
+Hello 👋 Welcome to Ocean View Apartment.<br><br>
 Please choose your language:
+</div>
+
 </div>
 
 <div id="languageButtons">
@@ -34,82 +42,82 @@ Please choose your language:
 
 /* seleccionar idioma */
 
-function selectLanguage(lang){
+function selectLanguage(lang) {
 
-selectedLanguage = lang;
+    selectedLanguage = lang;
 
-const messages=document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
-messages.innerHTML+=`<div class="message user">You: ${lang}</div>`;
+    messages.innerHTML += `<div class="message user">You: ${lang}</div>`;
 
-const buttons=document.getElementById("languageButtons");
-if(buttons) buttons.remove();
+    const buttons = document.getElementById("languageButtons");
+    if (buttons) buttons.remove();
 
-translateUI();
+    translateUI();
 
-showQuickActions();
+    showQuickActions();
 
-sendMessage(lang);
+    sendMessage(lang);
 
 }
 
 /* traducir UI */
 
-function translateUI(){
+function translateUI() {
 
-const input=document.getElementById("input");
+    const input = document.getElementById("input");
 
-if(selectedLanguage==="Español"){
-input.placeholder="Pregunta sobre check-in, wifi o restaurantes...";
-}
+    if (selectedLanguage === "Español") {
+        input.placeholder = "Pregunta sobre check-in, wifi o restaurantes...";
+    }
 
-if(selectedLanguage==="Deutsch"){
-input.placeholder="Fragen Sie nach Check-in, WLAN oder Restaurants...";
-}
+    if (selectedLanguage === "Deutsch") {
+        input.placeholder = "Fragen Sie nach Check-in, WLAN oder Restaurants...";
+    }
 
-if(selectedLanguage==="English"){
-input.placeholder="Ask about check-in, wifi or restaurants...";
-}
+    if (selectedLanguage === "English") {
+        input.placeholder = "Ask about check-in, wifi or restaurants...";
+    }
 
 }
 
 /* quick actions */
 
-function showQuickActions(){
+function showQuickActions() {
 
-const messages=document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
-let title="";
-let checkin="";
-let wifi="";
-let restaurants="";
-let transport="";
+    let title = "";
+    let checkin = "";
+    let wifi = "";
+    let restaurants = "";
+    let transport = "";
 
-if(selectedLanguage==="Español"){
-title="¿En qué puedo ayudarte?";
-checkin="Check-in";
-wifi="Contraseña wifi";
-restaurants="Restaurantes";
-transport="Transporte aeropuerto";
-}
+    if (selectedLanguage === "Español") {
+        title = "¿En qué puedo ayudarte?";
+        checkin = "Check-in";
+        wifi = "Contraseña wifi";
+        restaurants = "Restaurantes";
+        transport = "Transporte aeropuerto";
+    }
 
-if(selectedLanguage==="English"){
-title="How can I help you?";
-checkin="Check-in info";
-wifi="Wifi password";
-restaurants="Restaurants";
-transport="Airport transport";
-}
+    if (selectedLanguage === "English") {
+        title = "How can I help you?";
+        checkin = "Check-in info";
+        wifi = "Wifi password";
+        restaurants = "Restaurants";
+        transport = "Airport transport";
+    }
 
-if(selectedLanguage==="Deutsch"){
-title="Wie kann ich helfen?";
-checkin="Check-in";
-wifi="WLAN Passwort";
-restaurants="Restaurants";
-transport="Flughafentransport";
-}
+    if (selectedLanguage === "Deutsch") {
+        title = "Wie kann ich helfen?";
+        checkin = "Check-in";
+        wifi = "WLAN Passwort";
+        restaurants = "Restaurants";
+        transport = "Flughafentransport";
+    }
 
-messages.innerHTML+=`
+    messages.innerHTML += `
 
 <div class="message bot">
 ${title}
@@ -132,29 +140,29 @@ ${title}
 
 /* recomendaciones dinámicas */
 
-function showRecommendations(text){
+function showRecommendations(text) {
 
-const messages=document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
-text=text.toLowerCase();
+    text = text.toLowerCase();
 
-if(text.includes("restaurant") || text.includes("food") || text.includes("dinner") || text.includes("restaurante")){
+    if (text.includes("restaurant") || text.includes("food") || text.includes("dinner") || text.includes("restaurante")) {
 
-let title="";
+        let title = "";
 
-if(selectedLanguage==="Español"){
-title="Restaurantes recomendados cerca:";
-}
+        if (selectedLanguage === "Español") {
+            title = "Restaurantes recomendados cerca:";
+        }
 
-if(selectedLanguage==="English"){
-title="Recommended places nearby:";
-}
+        if (selectedLanguage === "English") {
+            title = "Recommended places nearby:";
+        }
 
-if(selectedLanguage==="Deutsch"){
-title="Empfohlene Restaurants in der Nähe:";
-}
+        if (selectedLanguage === "Deutsch") {
+            title = "Empfohlene Restaurants in der Nähe:";
+        }
 
-messages.innerHTML+=`
+        messages.innerHTML += `
 
 <div class="message bot">
 ${title}
@@ -171,76 +179,88 @@ ${title}
 </div>
 `;
 
-}
+    }
 
 }
 
 /* enviar mensaje */
 
-async function sendMessage(forcedText=null){
+async function sendMessage(forcedText = null) {
 
-const input=document.getElementById("input");
-const messages=document.getElementById("messages");
+    const input = document.getElementById("input");
+    const messages = document.getElementById("messages");
 
-let userText=forcedText?forcedText:input.value.trim();
+    let userText = forcedText ? forcedText : input.value.trim();
 
-if(!userText) return;
+    if (!userText) return;
 
-if(!forcedText){
-messages.innerHTML+=`<div class="message user">You: ${userText}</div>`;
-}
+    if (!forcedText) {
+        messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
+    }
 
-input.value="";
+    input.value = "";
 
-messages.innerHTML+=`<div class="message bot" id="typing">Assistant is typing...</div>`;
-messages.scrollTop=messages.scrollHeight;
+    messages.innerHTML += `<div class="message bot" id="typing">Assistant is typing...</div>`;
+    messages.scrollTop = messages.scrollHeight;
 
-try{
+    try {
 
-const response=await fetch("/chat",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-message:userText,
-language:selectedLanguage
-})
-});
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: userText,
+                language: selectedLanguage
+            })
+        });
 
-const data=await response.json();
+        const data = await response.json();
 
-const typing=document.getElementById("typing");
-if(typing) typing.remove();
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
 
-messages.innerHTML+=`<div class="message bot">Assistant: ${data.reply}</div>`;
+        messages.innerHTML += `
+<div class="bot-wrapper">
 
-showRecommendations(userText);
+<div class="bot-avatar">
+🤖
+</div>
 
-}catch(error){
+<div class="bot-message">
+${data.reply}
+</div>
 
-const typing=document.getElementById("typing");
-if(typing) typing.remove();
+</div>
+`;
 
-messages.innerHTML+=`<div class="message bot">Assistant: Sorry, something went wrong.</div>`;
+        showRecommendations(userText);
 
-}
+    } catch (error) {
 
-messages.scrollTop=messages.scrollHeight;
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
+
+        messages.innerHTML += `<div class="message bot">Assistant: Sorry, something went wrong.</div>`;
+
+    }
+
+    messages.scrollTop = messages.scrollHeight;
 
 }
 
 /* quick */
 
-function quick(text){
-document.getElementById("input").value=text;
-sendMessage();
+function quick(text) {
+    document.getElementById("input").value = text;
+    sendMessage();
 }
 
 /* enter */
 
-document.getElementById("input").addEventListener("keypress",function(e){
-if(e.key==="Enter"){
-sendMessage();
-}
+document.getElementById("input").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
 });
