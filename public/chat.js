@@ -1,3 +1,5 @@
+let selectedLanguage = "English";
+
 window.onload=function(){
 
 const messages=document.getElementById("messages");
@@ -34,6 +36,8 @@ Please choose your language:
 
 function selectLanguage(lang){
 
+selectedLanguage = lang;
+
 const messages=document.getElementById("messages");
 
 messages.innerHTML+=`<div class="message user">You: ${lang}</div>`;
@@ -41,9 +45,31 @@ messages.innerHTML+=`<div class="message user">You: ${lang}</div>`;
 const buttons=document.getElementById("languageButtons");
 if(buttons) buttons.remove();
 
+translateUI();
+
 showQuickActions();
 
 sendMessage(lang);
+
+}
+
+/* traducir UI */
+
+function translateUI(){
+
+const input=document.getElementById("input");
+
+if(selectedLanguage==="Español"){
+input.placeholder="Pregunta sobre check-in, wifi o restaurantes...";
+}
+
+if(selectedLanguage==="Deutsch"){
+input.placeholder="Fragen Sie nach Check-in, WLAN oder Restaurants...";
+}
+
+if(selectedLanguage==="English"){
+input.placeholder="Ask about check-in, wifi or restaurants...";
+}
 
 }
 
@@ -53,28 +79,58 @@ function showQuickActions(){
 
 const messages=document.getElementById("messages");
 
+let title="";
+let checkin="";
+let wifi="";
+let restaurants="";
+let transport="";
+
+if(selectedLanguage==="Español"){
+title="¿En qué puedo ayudarte?";
+checkin="Check-in";
+wifi="Contraseña wifi";
+restaurants="Restaurantes";
+transport="Transporte aeropuerto";
+}
+
+if(selectedLanguage==="English"){
+title="How can I help you?";
+checkin="Check-in info";
+wifi="Wifi password";
+restaurants="Restaurants";
+transport="Airport transport";
+}
+
+if(selectedLanguage==="Deutsch"){
+title="Wie kann ich helfen?";
+checkin="Check-in";
+wifi="WLAN Passwort";
+restaurants="Restaurants";
+transport="Flughafentransport";
+}
+
 messages.innerHTML+=`
 
 <div class="message bot">
-How can I help you?
+${title}
 </div>
 
 <div id="quick-actions">
 
-<button onclick="quick('What time is check-in?')">Check-in info</button>
+<button onclick="quick('What time is check-in?')">${checkin}</button>
 
-<button onclick="quick('What is the wifi password?')">Wifi password</button>
+<button onclick="quick('What is the wifi password?')">${wifi}</button>
 
-<button onclick="quick('Restaurants nearby?')">Restaurants</button>
+<button onclick="quick('Restaurants nearby?')">${restaurants}</button>
 
-<button onclick="quick('How do I get from the airport?')">Airport transport</button>
+<button onclick="quick('How do I get from the airport?')">${transport}</button>
 
 </div>
 `;
 
 }
 
-/* detectar recomendaciones */
+/* recomendaciones dinámicas */
 
 function showRecommendations(text){
 
@@ -82,12 +138,26 @@ const messages=document.getElementById("messages");
 
 text=text.toLowerCase();
 
-if(text.includes("restaurant") || text.includes("food") || text.includes("dinner")){
+if(text.includes("restaurant") || text.includes("food") || text.includes("dinner") || text.includes("restaurante")){
+
+let title="";
+
+if(selectedLanguage==="Español"){
+title="Restaurantes recomendados cerca:";
+}
+
+if(selectedLanguage==="English"){
+title="Recommended places nearby:";
+}
+
+if(selectedLanguage==="Deutsch"){
+title="Empfohlene Restaurants in der Nähe:";
+}
 
 messages.innerHTML+=`
 
 <div class="message bot">
-Recommended places nearby:
+${title}
 </div>
 
 <div id="quick-actions">
@@ -133,7 +203,8 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-message:userText
+message:userText,
+language:selectedLanguage
 })
 });
 
@@ -143,8 +214,6 @@ const typing=document.getElementById("typing");
 if(typing) typing.remove();
 
 messages.innerHTML+=`<div class="message bot">Assistant: ${data.reply}</div>`;
-
-/* recomendaciones dinámicas */
 
 showRecommendations(userText);
 
