@@ -1,6 +1,10 @@
 (function () {
 
-    function createButton(config) {
+    let iframe = null;
+
+    function createWidget(config) {
+
+        /* botón flotante */
 
         const button = document.createElement("button");
 
@@ -19,11 +23,42 @@
         button.style.boxShadow = "0 10px 25px rgba(0,0,0,0.35)";
         button.style.zIndex = "9999";
 
-        button.onclick = function () {
-            window.open("/chat.html", "_blank");
-        };
-
         document.body.appendChild(button);
+
+        /* iframe del chat */
+
+        iframe = document.createElement("iframe");
+
+        iframe.src = "/chat.html";
+
+        iframe.style.position = "fixed";
+        iframe.style.bottom = "90px";
+        iframe.style.right = "25px";
+        iframe.style.width = "380px";
+        iframe.style.height = "560px";
+        iframe.style.border = "none";
+        iframe.style.borderRadius = "14px";
+        iframe.style.boxShadow = "0 20px 40px rgba(0,0,0,0.45)";
+        iframe.style.zIndex = "9998";
+        iframe.style.display = "none";
+
+        document.body.appendChild(iframe);
+
+        /* abrir/cerrar chat */
+
+        button.onclick = function () {
+
+            if (iframe.style.display === "none") {
+
+                iframe.style.display = "block";
+
+            } else {
+
+                iframe.style.display = "none";
+
+            }
+
+        };
 
     }
 
@@ -32,13 +67,16 @@
         init: function (config) {
 
             if (!config || !config.apartmentId) {
+
                 console.error("StayAssistant: apartmentId is required");
+
                 return;
+
             }
 
             console.log("StayAssistant loaded for apartment:", config.apartmentId);
 
-            createButton(config);
+            createWidget(config);
 
         }
 
