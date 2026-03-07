@@ -267,9 +267,9 @@ Hospital Universitario de Gran Canaria Doctor Negrín
 Always assist guests politely and clearly.
 `
         },
-        {
+        
           ...conversations[conversationId]
-        }
+        
       ]
     });
 
