@@ -44,18 +44,36 @@
         /* WIDGET */
 
         #chat-widget {
+            display: flex;
             position: fixed;
-            bottom: 80px;
-            right: 25px;
             width: 380px;
             height: 560px;
             background: #111827;
             border-radius: 14px;
-            display: none;
             flex-direction: column;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
             overflow: hidden;
-            animation: chatOpen .25s ease;
+
+            /* posición centrada SIEMPRE */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%) scale(.95);
+
+            /* oculto por defecto */
+            opacity: 0;
+            visibility: hidden;
+
+            /* animación */
+            transition:
+                opacity .25s ease,
+                transform .25s ease;
+        }
+
+        #chat-widget.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+
         }
 
         @keyframes chatOpen {
@@ -414,11 +432,7 @@
 
             const widget = document.getElementById("chat-widget");
 
-            if (widget.style.display === "flex") {
-                widget.style.display = "none";
-            } else {
-                widget.style.display = "flex";
-            }
+            widget.classList.toggle("open");
 
         }
 
