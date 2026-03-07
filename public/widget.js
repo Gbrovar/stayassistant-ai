@@ -29,7 +29,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = "/chat.html?embed=true";
+        iframe.src = `/chat.html?embed=true&apartment=${config.apartmentId}`;
 
         iframe.style.position = "fixed";
         iframe.style.bottom = "90px";

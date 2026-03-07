@@ -1,5 +1,8 @@
 const conversationId = crypto.randomUUID();
 
+const params = new URLSearchParams(window.location.search);
+const apartmentId = params.get("apartment");
+
 let selectedLanguage = null;
 
 window.onload = function () {
@@ -259,7 +262,8 @@ async function sendMessage(forcedText = null) {
             body: JSON.stringify({
                 message: userText,
                 language: selectedLanguage,
-                conversationId: conversationId
+                conversationId: conversationId,
+                apartmentId: apartmentId
             })
         });
 

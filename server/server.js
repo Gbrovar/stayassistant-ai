@@ -67,6 +67,8 @@ app.post("/chat", async (req, res) => {
     const userMessage = req.body.message || "";
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
+    const apartmentId = req.body.apartmentId || "default";
+    console.log("Apartment:", apartmentId);
 
     const historyKey = `chat:${conversationId}`;
 
