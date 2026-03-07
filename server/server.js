@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createClient } from "redis";
 
 dotenv.config();
 
@@ -45,9 +46,17 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-/* --- conversation memory --- */
+/* --- redis client --- */
 
-const conversations = {};
+const redis = createClient({
+  url: process.env.REDIS_URL
+});
+
+redis.on("error", (err) => console.error("Redis error", err));
+
+await redis.connect();
+
+
 
 /* --- chat endpoint --- */
 
@@ -59,11 +68,13 @@ app.post("/chat", async (req, res) => {
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
 
-    if (!conversations[conversationId]) {
-        conversations[conversationId] = [];
-    }
+    const historyKey = `chat:${conversationId}`;
 
-    conversations[conversationId].push({
+    let history = await redis.get(historyKey);
+
+    history = history ? JSON.parse(history) : [];
+
+    history.push({
         role: "user",
         content: userMessage
     });
@@ -268,7 +279,7 @@ Always assist guests politely and clearly.
 `
         },
         
-          ...conversations[conversationId]
+          ...history
         
       ]
     });
@@ -289,14 +300,18 @@ Always assist guests politely and clearly.
 
     const cleanReply = reply.replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "").trim();
 
-    conversations[conversationId].push({
+    history.push({
         role: "assistant",
         content: cleanReply
     });
 
-    if (conversations[conversationId].length > 10) {
-        conversations[conversationId].shift();
+    if (history.length > 10) {
+        history = history.slice(-10);
     }
+
+    await redis.set(historyKey, JSON.stringify(history), {
+    EX: 60 * 60 * 6
+    });
 
     res.json({
         reply: cleanReply,
