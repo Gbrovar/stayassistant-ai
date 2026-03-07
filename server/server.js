@@ -45,6 +45,10 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+/* --- conversation memory --- */
+
+const conversations = {};
+
 /* --- chat endpoint --- */
 
 app.post("/chat", async (req, res) => {
@@ -53,6 +57,16 @@ app.post("/chat", async (req, res) => {
 
     const userMessage = req.body.message || "";
     const userLanguage = req.body.language || null;
+    const conversationId = req.body.conversationId || "default";
+
+    if (!conversations[conversationId]) {
+        conversations[conversationId] = [];
+    }
+
+    conversations[conversationId].push({
+        role: "user",
+        content: userMessage
+    });
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -254,8 +268,7 @@ Always assist guests politely and clearly.
 `
         },
         {
-          role: "user",
-          content: userMessage
+          ...conversations[conversationId]
         }
       ]
     });
@@ -275,6 +288,15 @@ Always assist guests politely and clearly.
     }
 
     const cleanReply = reply.replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "").trim();
+
+    conversations[conversationId].push({
+        role: "assistant",
+        content: cleanReply
+    });
+
+    if (conversations[conversationId].length > 10) {
+        conversations[conversationId].shift();
+    }
 
     res.json({
         reply: cleanReply,

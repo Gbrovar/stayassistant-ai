@@ -1,3 +1,5 @@
+const conversationId = crypto.randomUUID();
+
 let selectedLanguage = null;
 
 window.onload = function () {
@@ -256,7 +258,8 @@ async function sendMessage(forcedText = null) {
             },
             body: JSON.stringify({
                 message: userText,
-                language: selectedLanguage
+                language: selectedLanguage,
+                conversationId: conversationId
             })
         });
 
