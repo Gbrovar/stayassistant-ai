@@ -13,17 +13,17 @@ Please choose your language:
 <div id="languageButtons">
 
 <div class="language-card" onclick="selectLanguage('English')">
-<div class="language-flag">🇬🇧</div>
+<img class="flag" src="https://flagcdn.com/gb.svg">
 <div class="language-name">English</div>
 </div>
 
 <div class="language-card" onclick="selectLanguage('Español')">
-<div class="language-flag">🇪🇸</div>
+<img class="flag" src="https://flagcdn.com/es.svg">
 <div class="language-name">Español</div>
 </div>
 
 <div class="language-card" onclick="selectLanguage('Deutsch')">
-<div class="language-flag">🇩🇪</div>
+<img class="flag" src="https://flagcdn.com/de.svg">
 <div class="language-name">Deutsch</div>
 </div>
 
