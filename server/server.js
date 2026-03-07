@@ -52,7 +52,7 @@ app.post("/chat", async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
-    const language = req.body.language || null;
+    const userLanguage = req.body.language || null;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -70,13 +70,18 @@ Always respond in a friendly, clear and helpful tone.
 
 IMPORTANT:
 
-If the guest has selected a language, always answer in that language.
+If the guest selected a language, always respond in that language.
 
-Selected language: ${language}
+Selected language: ${userLanguage}
 
-If no language is selected, detect the language used by the guest and answer in that same language.
+If no language is selected, detect the language used by the guest and answer in that language.
 
-If you don't know the answer, politely suggest contacting reception.
+At the end of your response, internally determine the language used by the guest.
+
+Supported languages:
+- English
+- Español
+- Deutsch
 
 ----------------------------------
 
@@ -249,7 +254,10 @@ Always assist guests politely and clearly.
 
     const reply = completion.choices[0].message.content;
 
-    res.json({ reply });
+    res.json({
+    reply,
+    language: userLanguage
+    });
 
   } catch (error) {
 

@@ -67,20 +67,29 @@ function translateUI() {
 
     const input = document.getElementById("input");
 
-    if (selectedLanguage === "Español") {
-        input.placeholder = "Pregunta sobre check-in, wifi o restaurantes...";
-    }
+    const translations = {
 
-    if (selectedLanguage === "Deutsch") {
-        input.placeholder = "Fragen Sie nach Check-in, WLAN oder Restaurants...";
-    }
+        Español: {
+            placeholder: "Escribe tu mensaje..."
+        },
 
-    if (selectedLanguage === "English") {
-        input.placeholder = "Ask about check-in, wifi or restaurants...";
+        English: {
+            placeholder: "Type your message..."
+        },
+
+        Deutsch: {
+            placeholder: "Nachricht schreiben..."
+        }
+
+    };
+
+    if (translations[selectedLanguage]) {
+
+        input.placeholder = translations[selectedLanguage].placeholder;
+
     }
 
 }
-
 /* quick actions */
 
 function showQuickActions() {
@@ -252,6 +261,14 @@ async function sendMessage(forcedText = null) {
         });
 
         const data = await response.json();
+
+        if (!selectedLanguage && data.language) {
+
+            selectedLanguage = data.language;
+
+            translateUI();
+
+        }
 
         const typing = document.getElementById("typing");
         if (typing) typing.remove();
