@@ -10,7 +10,7 @@
 
 <style>
 
-body {
+body{
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 background:#0b1220;
 margin:0;
@@ -131,23 +131,48 @@ font-size:13px;
 color:#d1d5db;
 }
 
-/* QUICK ACTIONS */
+/* QUICK ACTIONS (MEJORADOS) */
 
 #quick-actions{
+
 display:flex;
-gap:6px;
 flex-wrap:wrap;
-margin-top:10px;
+gap:8px;
+margin-top:14px;
+margin-bottom:4px;
+
 }
 
 #quick-actions button{
-border:none;
-background:#1f2937;
-color:white;
-padding:6px 10px;
+
+background:#111827;
+border:1px solid #374151;
+color:#e5e7eb;
+
+padding:8px 14px;
+
 border-radius:20px;
-font-size:12px;
+
+font-size:13px;
 cursor:pointer;
+
+transition:all .18s ease;
+
+}
+
+#quick-actions button:hover{
+
+background:#1f2937;
+border-color:#4b5563;
+
+transform:translateY(-1px);
+
+}
+
+#quick-actions button:active{
+
+transform:scale(.96);
+
 }
 
 /* INPUT */
@@ -207,6 +232,11 @@ font-size:16px;
 
 #languageButtons{
 flex-direction:column;
+}
+
+#quick-actions button{
+font-size:14px;
+padding:10px 16px;
 }
 
 }
