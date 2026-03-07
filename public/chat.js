@@ -4,29 +4,55 @@ window.onload = function () {
 
     messages.innerHTML += `
     <div class="message bot">
-    Assistant: Hello 👋 Welcome to Ocean View Apartment.<br>
-    I'm your virtual concierge.  
-    You can ask me about check-in, wifi, restaurants or local recommendations.
+    Assistant: Hello 👋 Welcome to Ocean View Apartment.<br><br>
+    Please choose your language:
+    </div>
+
+    <div class="message bot" id="languageButtons">
+        <button onclick="selectLanguage('English')">🇬🇧 English</button>
+        <button onclick="selectLanguage('Español')">🇪🇸 Español</button>
+        <button onclick="selectLanguage('Deutsch')">🇩🇪 Deutsch</button>
     </div>
     `;
 
 };
 
-async function sendMessage() {
+/* -------- seleccionar idioma -------- */
+
+function selectLanguage(lang) {
+
+    const messages = document.getElementById("messages");
+
+    // Mostrar selección del usuario
+    messages.innerHTML += `<div class="message user">You: ${lang}</div>`;
+
+    // eliminar botones
+    const buttons = document.getElementById("languageButtons");
+    if (buttons) buttons.remove();
+
+    // enviar idioma al servidor
+    sendMessage(lang);
+
+}
+
+/* -------- enviar mensaje -------- */
+
+async function sendMessage(forcedText = null) {
 
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
 
-    let userText = input.value.trim();
+    let userText = forcedText ? forcedText : input.value.trim();
 
     if (!userText) return;
 
-    // Mostrar mensaje del usuario
-    messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
+    if (!forcedText) {
+        messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
+    }
 
     input.value = "";
 
-    // Mostrar indicador typing
+    // indicador typing
     messages.innerHTML += `<div class="message bot" id="typing">Assistant is typing...</div>`;
     messages.scrollTop = messages.scrollHeight;
 
@@ -44,11 +70,11 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        // Eliminar indicador typing
+        // eliminar typing
         const typing = document.getElementById("typing");
         if (typing) typing.remove();
 
-        // Mostrar respuesta del asistente
+        // respuesta del asistente
         messages.innerHTML += `<div class="message bot">Assistant: ${data.reply}</div>`;
 
     } catch (error) {
@@ -64,10 +90,14 @@ async function sendMessage() {
 
 }
 
+/* -------- quick buttons -------- */
+
 function quick(text) {
     document.getElementById("input").value = text;
     sendMessage();
 }
+
+/* -------- enter para enviar -------- */
 
 document.getElementById("input").addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
