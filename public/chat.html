@@ -131,6 +131,25 @@ font-size:13px;
 color:#d1d5db;
 }
 
+/* QUICK ACTIONS */
+
+#quick-actions{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+
+#quick-actions button{
+border:none;
+background:#1f2937;
+color:white;
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+cursor:pointer;
+}
+
 /* INPUT */
 
 .input-area{
@@ -158,25 +177,6 @@ border:none;
 border-radius:8px;
 background:#22c55e;
 color:white;
-cursor:pointer;
-}
-
-/* QUICK BUTTONS */
-
-.quick-buttons{
-padding:10px;
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-}
-
-.quick-buttons button{
-border:none;
-background:#1f2937;
-color:white;
-padding:6px 10px;
-border-radius:20px;
-font-size:12px;
 cursor:pointer;
 }
 
@@ -234,14 +234,6 @@ flex-direction:column;
 <button class="send" onclick="sendMessage()">
 Send
 </button>
-
-</div>
-
-<div class="quick-buttons">
-
-<button onclick="quick('What time is check-in?')">Check-in</button>
-<button onclick="quick('Wifi password?')">Wifi</button>
-<button onclick="quick('Restaurants nearby?')">Food</button>
 
 </div>
 
