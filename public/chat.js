@@ -68,3 +68,9 @@ function quick(text) {
     document.getElementById("input").value = text;
     sendMessage();
 }
+
+document.getElementById("input").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
