@@ -2,7 +2,10 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>StayAssistant AI</title>
 
 <style>
@@ -12,17 +15,24 @@ font-family: Arial;
 background:#0f172a;
 color:white;
 text-align:center;
-padding-top:120px;
+padding:40px 20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding-top:60px;
 }
 
 h1{
-font-size:48px;
+font-size:clamp(32px,6vw,48px);
 margin-bottom:10px;
 }
 
 p{
-font-size:20px;
+font-size:clamp(16px,3.5vw,20px);
 opacity:0.8;
+line-height:1.5;
 }
 
 button{
@@ -34,6 +44,8 @@ border-radius:10px;
 background:#22c55e;
 color:white;
 cursor:pointer;
+width:100%;
+max-width:260px;
 }
 
 button:hover{
@@ -45,6 +57,8 @@ background:#16a34a;
 </head>
 
 <body>
+
+<div class="container">
 
 <h1>StayAssistant AI</h1>
 
@@ -59,6 +73,8 @@ Automatically answer guest questions about check-in, wifi, transport and local r
 <a href="/chat.html">
 <button>Try the Demo</button>
 </a>
+
+</div>
 
 </body>
 
