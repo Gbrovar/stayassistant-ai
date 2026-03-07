@@ -52,6 +52,7 @@ app.post("/chat", async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
+    const language = req.body.language || "English";
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -68,10 +69,11 @@ Your job is to help guests with information about the accommodation, services, a
 Always respond in a friendly, clear and helpful tone.
 
 IMPORTANT:
-- Answer in the same language used by the guest.
-- If the guest writes in Spanish, answer in Spanish.
-- If the guest writes in English, answer in English.
-- If the guest writes in German, answer in German.
+
+The guest has selected this language: ${language}
+
+Always answer in this language.
+Never change language even if the guest writes in another language.
 
 If you don't know the answer, politely suggest contacting reception.
 
