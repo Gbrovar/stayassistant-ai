@@ -54,15 +54,20 @@ function showQuickActions(){
 const messages=document.getElementById("messages");
 
 messages.innerHTML+=`
+
+<div class="message bot">
+How can I help you?
+</div>
+
 <div id="quick-actions">
 
-<button onclick="quick('What time is check-in?')">Check-in</button>
+<button onclick="quick('What time is check-in?')">Check-in info</button>
 
-<button onclick="quick('What is the wifi password?')">Wifi</button>
+<button onclick="quick('What is the wifi password?')">Wifi password</button>
 
 <button onclick="quick('Restaurants nearby?')">Restaurants</button>
 
-<button onclick="quick('How do I get from the airport?')">Transport</button>
+<button onclick="quick('How do I get from the airport?')">Airport transport</button>
 
 </div>
 `;
