@@ -74,6 +74,37 @@ How can I help you?
 
 }
 
+/* detectar recomendaciones */
+
+function showRecommendations(text){
+
+const messages=document.getElementById("messages");
+
+text=text.toLowerCase();
+
+if(text.includes("restaurant") || text.includes("food") || text.includes("dinner")){
+
+messages.innerHTML+=`
+
+<div class="message bot">
+Recommended places nearby:
+</div>
+
+<div id="quick-actions">
+
+<button onclick="quick('Tell me about La Marinera restaurant')">La Marinera</button>
+
+<button onclick="quick('Tell me about Mercado del Puerto')">Mercado del Puerto</button>
+
+<button onclick="quick('Tell me about El Allende restaurant')">El Allende</button>
+
+</div>
+`;
+
+}
+
+}
+
 /* enviar mensaje */
 
 async function sendMessage(forcedText=null){
@@ -112,6 +143,10 @@ const typing=document.getElementById("typing");
 if(typing) typing.remove();
 
 messages.innerHTML+=`<div class="message bot">Assistant: ${data.reply}</div>`;
+
+/* recomendaciones dinámicas */
+
+showRecommendations(userText);
 
 }catch(error){
 
