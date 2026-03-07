@@ -3,300 +3,332 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>StayAssistant AI</title>
+    <title>StayAssistant AI</title>
 
-<style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+            background: #0b1220;
+            margin: 0;
+            height: 100vh;
+        }
 
-body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:#0b1220;
-margin:0;
-height:100vh;
-}
+        /* BOTÓN */
 
-/* BOTÓN */
+        #chat-button {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: .25s;
+        }
 
-#chat-button{
-position:fixed;
-bottom:25px;
-right:25px;
-background:linear-gradient(135deg,#22c55e,#16a34a);
-color:white;
-border:none;
-padding:14px 20px;
-border-radius:30px;
-cursor:pointer;
-font-size:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-transition:.25s;
-}
+        #chat-button:hover {
+            transform: translateY(-2px);
+        }
 
-#chat-button:hover{
-transform:translateY(-2px);
-}
+        /* WIDGET */
 
-/* WIDGET */
+        #chat-widget {
+            position: fixed;
+            bottom: 80px;
+            right: 25px;
+            width: 380px;
+            height: 560px;
+            background: #111827;
+            border-radius: 14px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            animation: chatOpen .25s ease;
+        }
 
-#chat-widget{
-position:fixed;
-bottom:80px;
-right:25px;
-width:360px;
-height:520px;
-background:#111827;
-border-radius:14px;
-display:none;
-flex-direction:column;
-box-shadow:0 20px 40px rgba(0,0,0,0.45);
-overflow:hidden;
-animation:chatOpen .25s ease;
-}
+        @keyframes chatOpen {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-@keyframes chatOpen{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* HEADER */
+        /* DESKTOP DEMO MODE */
 
-#chat-widget h3{
-margin:0;
-padding:14px 16px;
-background:#1f2937;
-font-size:15px;
-color:#f9fafb;
-font-weight:500;
-letter-spacing:.2px;
-}
+        @media (min-width:1100px) {
 
-/* MENSAJES */
+            #chat-widget {
 
-#messages{
-padding:15px;
-flex:1;
-overflow-y:auto;
-font-size:14px;
-scroll-behavior:smooth;
-}
+                width: 420px;
+                height: 620px;
 
-.message{
-margin-bottom:10px;
-max-width:85%;
-padding:10px 12px;
-border-radius:10px;
-line-height:1.4;
-}
+                bottom: 50%;
+                right: 50%;
 
-.user{
-background:#2563eb;
-color:white;
-margin-left:auto;
-}
+                transform: translate(50%, 50%);
 
-.bot{
-background:#1f2937;
-color:#e5e7eb;
-}
+                border-radius: 16px;
 
-/* TARJETAS IDIOMA */
+            }
 
-#languageButtons{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
+            #chat-button {
 
-.language-card{
-flex:1;
-background:#0f172a;
-border:1px solid #374151;
-border-radius:10px;
-padding:10px;
-text-align:center;
-cursor:pointer;
-transition:.2s;
-}
+                bottom: 40px;
+                right: 40px;
 
-.language-card:hover{
-background:#1f2937;
-transform:translateY(-2px);
-}
+            }
 
-.language-flag{
-font-size:20px;
-}
+        }
 
-.language-name{
-font-size:13px;
-color:#d1d5db;
-}
+        /* HEADER */
 
-.flag{
-width:22px;
-height:16px;
-display:block;
-margin:0 auto 6px auto;
-border-radius:2px;
-}
+        #chat-widget h3 {
+            margin: 0;
+            padding: 14px 16px;
+            background: #1f2937;
+            font-size: 15px;
+            color: #f9fafb;
+            font-weight: 500;
+            letter-spacing: .2px;
+        }
 
-/* QUICK ACTIONS (MEJORADOS) */
+        /* MENSAJES */
 
-#quick-actions{
+        #messages {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
 
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin-top:14px;
-margin-bottom:4px;
+        .message {
+            margin-bottom: 10px;
+            max-width: 85%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            line-height: 1.4;
+        }
 
-}
+        .user {
+            background: #2563eb;
+            color: white;
+            margin-left: auto;
+        }
 
-#quick-actions button{
+        .bot {
+            background: #1f2937;
+            color: #e5e7eb;
+        }
 
-background:#111827;
-border:1px solid #374151;
-color:#e5e7eb;
+        /* TARJETAS IDIOMA */
 
-padding:8px 14px;
+        #languageButtons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-border-radius:20px;
+        .language-card {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+        }
 
-font-size:13px;
-cursor:pointer;
+        .language-card:hover {
+            background: #1f2937;
+            transform: translateY(-2px);
+        }
 
-transition:all .18s ease;
+        .language-flag {
+            font-size: 20px;
+        }
 
-}
+        .language-name {
+            font-size: 13px;
+            color: #d1d5db;
+        }
 
-#quick-actions button:hover{
+        .flag {
+            width: 22px;
+            height: 16px;
+            display: block;
+            margin: 0 auto 6px auto;
+            border-radius: 2px;
+        }
 
-background:#1f2937;
-border-color:#4b5563;
+        /* QUICK ACTIONS (MEJORADOS) */
 
-transform:translateY(-1px);
+        #quick-actions {
 
-}
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+            margin-bottom: 4px;
 
-#quick-actions button:active{
+        }
 
-transform:scale(.96);
+        #quick-actions button {
 
-}
+            background: #111827;
+            border: 1px solid #374151;
+            color: #e5e7eb;
 
-/* INPUT */
+            padding: 8px 14px;
 
-.input-area{
-display:flex;
-padding:10px;
-background:#0f172a;
-border-top:1px solid #1f2937;
-}
+            border-radius: 20px;
 
-input{
-flex:1;
-padding:10px;
-border:none;
-border-radius:8px;
-background:#1f2937;
-color:white;
-outline:none;
-font-size:14px;
-}
+            font-size: 13px;
+            cursor: pointer;
 
-button.send{
-margin-left:8px;
-padding:10px 14px;
-border:none;
-border-radius:8px;
-background:#22c55e;
-color:white;
-cursor:pointer;
-}
+            transition: all .18s ease;
 
-/* MOBILE */
+        }
 
-@media (max-width:600px){
+        #quick-actions button:hover {
 
-#chat-button{
-bottom:20px;
-right:20px;
-}
+            background: #1f2937;
+            border-color: #4b5563;
 
-#chat-widget{
-right:0;
-bottom:0;
-width:100%;
-height:100%;
-border-radius:0;
-}
+            transform: translateY(-1px);
 
-#messages{
-font-size:15px;
-}
+        }
 
-input{
-font-size:16px;
-}
+        #quick-actions button:active {
 
-#languageButtons{
-flex-direction:column;
-}
+            transform: scale(.96);
 
-#quick-actions button{
-font-size:14px;
-padding:10px 16px;
-}
+        }
 
-}
+        /* INPUT */
 
-</style>
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background: #0f172a;
+            border-top: 1px solid #1f2937;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #1f2937;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        button.send {
+            margin-left: 8px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #22c55e;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* MOBILE */
+
+        @media (max-width:600px) {
+
+            #chat-button {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            #chat-widget {
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+
+            #messages {
+                font-size: 15px;
+            }
+
+            input {
+                font-size: 16px;
+            }
+
+            #languageButtons {
+                flex-direction: column;
+            }
+
+            #quick-actions button {
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+
+        }
+    </style>
 
 </head>
 
 <body>
 
-<button id="chat-button" onclick="toggleChat()">
-💬 Concierge
-</button>
+    <button id="chat-button" onclick="toggleChat()">
+        💬 Concierge
+    </button>
 
-<div id="chat-widget">
+    <div id="chat-widget">
 
-<h3>Ocean View Apartment</h3>
+        <h3>Ocean View Apartment</h3>
 
-<div id="messages"></div>
+        <div id="messages"></div>
 
-<div class="input-area">
+        <div class="input-area">
 
-<input id="input" placeholder="Ask about check-in, wifi or restaurants..." />
+            <input id="input" placeholder="Ask about check-in, wifi or restaurants..." />
 
-<button class="send" onclick="sendMessage()">
-Send
-</button>
+            <button class="send" onclick="sendMessage()">
+                Send
+            </button>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<script src="chat.js"></script>
+    <script src="chat.js"></script>
 
-<script>
+    <script>
 
-function toggleChat(){
+        function toggleChat() {
 
-const widget=document.getElementById("chat-widget");
+            const widget = document.getElementById("chat-widget");
 
-if(widget.style.display==="flex"){
-widget.style.display="none";
-}else{
-widget.style.display="flex";
-}
+            if (widget.style.display === "flex") {
+                widget.style.display = "none";
+            } else {
+                widget.style.display = "flex";
+            }
 
-}
+        }
 
-</script>
+    </script>
 
 </body>
 
