@@ -1,16 +1,18 @@
 (function () {
 
-  window.StayAssistant = {
-    init: function (config) {
+    window.StayAssistant = {
 
-      if (!config || !config.apartmentId) {
-        console.error("StayAssistant: apartmentId is required");
-        return;
-      }
+        init: function (config) {
 
-      console.log("StayAssistant loaded for apartment:", config.apartmentId);
+            if (!config || !config.apartmentId) {
+                console.error("StayAssistant: apartmentId is required");
+                return;
+            }
 
-    }
-  };
+            console.log("StayAssistant loaded for apartment:", config.apartmentId);
+
+        }
+
+    };
 
 })();
