@@ -61,8 +61,25 @@
         button.style.fontSize = "15px";
         button.style.boxShadow = "0 10px 25px rgba(0,0,0,0.35)";
         button.style.zIndex = "9999";
+        button.style.transition = "transform 0.2s ease";
+
+        /* --- pulse animation --- */
+
+        function pulseButton() {
+
+            button.style.transform = "scale(1.08)";
+
+            setTimeout(() => {
+
+                button.style.transform = "scale(1)";
+
+            }, 200);
+
+        }
 
         document.body.appendChild(button);
+
+        let pulseInterval = setInterval(pulseButton, 9000);
 
         /* iframe del chat */
 
@@ -90,6 +107,8 @@
             if (iframe.style.display === "none") {
 
                 iframe.style.display = "block";
+
+                clearInterval(pulseInterval);
 
             } else {
 
