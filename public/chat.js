@@ -63,7 +63,7 @@ function selectLanguage(lang) {
 
     showQuickActions();
 
-    sendMessage(lang);
+    
 
 }
 
