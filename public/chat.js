@@ -223,13 +223,11 @@ async function sendMessage(forcedText = null) {
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
 
-    let userText = forcedText ? forcedText : input.value.trim();
+    let userText = forcedText || input.value.trim();
 
     if (!userText) return;
 
-    if (!forcedText) {
-        messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
-    }
+    messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
 
     input.value = "";
 
