@@ -92,4 +92,10 @@
 
     };
 
+    /* --- auto init widget --- */
+
+    createWidget({
+        propertyId: propertyId
+    });
+
 })();
