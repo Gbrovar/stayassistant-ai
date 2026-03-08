@@ -1,14 +1,42 @@
 (function () {
 
+    if (window.StayAssistantWidgetLoaded) {
+        return;
+    }
+
+    window.StayAssistantWidgetLoaded = true;
+
     let iframe = null;
 
-    /* --- detectar property desde el script --- */
+    /* --- detectar script --- */
 
-    const script = document.currentScript;
+    let script = document.currentScript;
 
-    const params = new URLSearchParams(script.src.split("?")[1]);
+    if (!script) {
 
-    const propertyId = params.get("property") || "demo_property";
+        const scripts = document.getElementsByTagName("script");
+
+        script = scripts[scripts.length - 1];
+
+    }
+
+    /* --- leer parámetros del script --- */
+
+    let propertyId = "demo_property";
+
+    try {
+
+        const url = new URL(script.src);
+
+        const params = new URLSearchParams(url.search);
+
+        propertyId = params.get("property") || "demo_property";
+
+    } catch (e) {
+
+        console.warn("StayAssistant: could not parse script URL");
+
+    }
 
     console.log("StayAssistant widget loaded for property:", propertyId);
 
