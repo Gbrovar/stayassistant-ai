@@ -98,68 +98,70 @@ function translateUI() {
 }
 /* quick actions */
 
-function showQuickActions() {
+async function showQuickActions() {
 
     const messages = document.getElementById("messages");
 
     let title = "";
-    let checkin = "";
-    let wifi = "";
-    let restaurants = "";
-    let transport = "";
 
     if (selectedLanguage === "Español") {
         title = "¿En qué puedo ayudarte?";
-        checkin = "Check-in";
-        wifi = "Contraseña wifi";
-        restaurants = "Restaurantes";
-        transport = "Transporte aeropuerto";
     }
 
     if (selectedLanguage === "English") {
         title = "How can I help you?";
-        checkin = "Check-in info";
-        wifi = "Wifi password";
-        restaurants = "Restaurants";
-        transport = "Airport transport";
     }
 
     if (selectedLanguage === "Deutsch") {
         title = "Wie kann ich helfen?";
-        checkin = "Check-in";
-        wifi = "WLAN Passwort";
-        restaurants = "Restaurants";
-        transport = "Flughafentransport";
     }
 
     messages.innerHTML += `
 
-<div class="bot-wrapper">
+        <div class="bot-wrapper">
 
-<div class="bot-avatar">
-🤖
-</div>
+        <div class="bot-avatar">
+        🤖
+        </div>
 
-<div class="bot-message">
-${title}
-</div>
+        <div class="bot-message">
+        ${title}
+        </div>
 
-</div>
+        </div>
 
-<div id="quick-actions">
+        <div id="quick-actions"></div>
 
-<button onclick="quick('What time is check-in?')">${checkin}</button>
+        `;
 
-<button onclick="quick('What is the wifi password?')">${wifi}</button>
+    try {
 
-<button onclick="quick('Restaurants nearby?')">${restaurants}</button>
+        const response = await fetch(`/property/${propertyId}/suggestions`);
 
-<button onclick="quick('How do I get from the airport?')">${transport}</button>
+        const data = await response.json();
 
-</div>
-`;
+        const container = document.getElementById("quick-actions");
+
+        data.suggestions.forEach(text => {
+
+            const btn = document.createElement("button");
+
+            btn.innerText = text;
+
+            btn.onclick = () => quick(text);
+
+            container.appendChild(btn);
+
+        });
+
+    } catch (error) {
+
+        console.error("Suggestion load error", error);
+
+    }
 
 }
+
 
 /* recomendaciones dinámicas */
 

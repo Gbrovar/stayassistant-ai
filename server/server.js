@@ -36,6 +36,31 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
+app.get("/property/:id/suggestions", (req, res) => {
+
+  const propertyId = req.params.id;
+
+  const property = properties[propertyId];
+
+  if (!property) {
+    return res.json({ suggestions: [] });
+  }
+
+  const faq = property.knowledge.faq.map(f => f.question);
+
+  const services = property.knowledge.services.slice(0, 2);
+
+  const suggestions = [
+    ...faq.slice(0, 2),
+    ...services.slice(0, 2)
+  ];
+
+  res.json({
+    suggestions
+  });
+
+});
+
 /* --- root route --- */
 
 app.get("/", (req, res) => {
