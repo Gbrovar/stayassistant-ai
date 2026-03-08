@@ -78,7 +78,38 @@ export const properties = {
 
             Nearest hospital:
             Hospital Universitario de Gran Canaria Doctor Negrín
-            `
+            `,
+            
+        faq: [
+
+        {
+        question: "How do I open the smart lock?",
+        answer: "Use the keypad next to the door and enter the access code sent to you on the day of arrival."
+        },
+
+        {
+        question: "Where can I leave the trash?",
+        answer: "Trash containers are located at the end of the street next to the supermarket."
+        },
+
+        {
+        question: "Can I store luggage after checkout?",
+        answer: "Yes, luggage storage may be available until 18:00 depending on availability."
+        }
+
+        ],
+
+        services: [
+
+        "Airport transfer service",
+
+        "Bike rental near the beach",
+
+        "Food delivery with Glovo or Uber Eats",
+
+        "Laundry service nearby"
+
+        ],
 
     }
 

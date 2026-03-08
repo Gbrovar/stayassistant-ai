@@ -177,6 +177,19 @@ app.post("/chat", async (req, res) => {
 
           ----------------------------------
 
+          PROPERTY FAQ
+
+          ${property.faq.map(f => `Q: ${f.question}
+          A: ${f.answer}`).join("\n\n")}
+
+          ----------------------------------
+
+          SERVICES
+
+          ${property.services.join("\n")}
+
+          ----------------------------------
+
           EMERGENCY
 
           ${property.emergency}
