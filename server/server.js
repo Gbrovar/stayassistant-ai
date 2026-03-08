@@ -92,6 +92,36 @@ app.post("/chat", async (req, res) => {
       content: userMessage
     });
 
+    const normalizedMessage = userMessage.toLowerCase();
+
+    /* --- FAQ AUTO ANSWER --- */
+
+    const faqMatch = property.faq.find(f =>
+      normalizedMessage.includes(f.question.toLowerCase())
+    );
+
+    if (faqMatch) {
+
+      console.log("FAQ auto-answer triggered");
+
+      const answer = faqMatch.answer;
+
+      history.push({
+        role: "assistant",
+        content: answer
+      });
+
+      await redis.set(historyKey, JSON.stringify(history), {
+        EX: 60 * 60 * 6
+      });
+
+      return res.json({
+        reply: answer,
+        language: userLanguage
+      });
+
+    }
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
