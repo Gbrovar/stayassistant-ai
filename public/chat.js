@@ -1,7 +1,7 @@
 const conversationId = crypto.randomUUID();
 
 const urlParams = new URLSearchParams(window.location.search);
-const apartmentId = urlParams.get("apartment");
+const propertyId = urlParams.get("property");
 
 let selectedLanguage = null;
 
@@ -263,7 +263,7 @@ async function sendMessage(forcedText = null) {
                 message: userText,
                 language: selectedLanguage,
                 conversationId: conversationId,
-                apartmentId: apartmentId
+                propertyId: propertyId
             })
         });
 

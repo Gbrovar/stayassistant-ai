@@ -29,7 +29,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = `/chat.html?embed=true&apartment=${config.apartmentId}`;
+        iframe.src = `/chat.html?embed=true&property=${config.propertyId}`;
 
         iframe.style.position = "fixed";
         iframe.style.bottom = "90px";
@@ -66,7 +66,7 @@
 
         init: function (config) {
 
-            if (!config || !config.apartmentId) {
+            if (!config || !config.propertyId) {
 
                 console.error("StayAssistant: apartmentId is required");
 
@@ -74,7 +74,7 @@
 
             }
 
-            console.log("StayAssistant loaded for apartment:", config.apartmentId);
+            console.log("StayAssistant loaded for property:", config.propertyId);
 
             createWidget(config);
 
