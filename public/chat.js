@@ -142,13 +142,13 @@ async function showQuickActions() {
 
         const container = document.getElementById("quick-actions");
 
-        data.suggestions.forEach(text => {
+        data.suggestions.forEach(item => {
 
             const btn = document.createElement("button");
 
-            btn.innerText = text;
+            btn.innerText = item.label;
 
-            btn.onclick = () => quick(text);
+            btn.onclick = () => quick(item.value);
 
             container.appendChild(btn);
 

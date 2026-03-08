@@ -36,6 +36,7 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
+
 app.get("/property/:id/suggestions", (req, res) => {
 
   const propertyId = req.params.id;
@@ -47,15 +48,34 @@ app.get("/property/:id/suggestions", (req, res) => {
     return res.json({ suggestions: [] });
   }
 
-  const faq = property.knowledge.faq.map(f => f.question);
+  const faq = property.knowledge.faq.slice(0, 2);
   const services = property.knowledge.services.slice(0, 2);
 
-  let suggestions = [
-    ...faq.slice(0, 2),
-    ...services.slice(0, 2)
-  ];
+  const suggestions = [];
 
-  /* --- simple translations --- */
+  faq.forEach(f => {
+
+    suggestions.push({
+      label: translateSuggestion(f.question, language),
+      value: f.question
+    });
+
+  });
+
+  services.forEach(s => {
+
+    suggestions.push({
+      label: translateSuggestion(s, language),
+      value: s
+    });
+
+  });
+
+  res.json({ suggestions });
+
+});
+
+function translateSuggestion(text, language) {
 
   const translations = {
 
@@ -77,19 +97,9 @@ app.get("/property/:id/suggestions", (req, res) => {
 
   };
 
-  if (translations[language]) {
+  return translations[language]?.[text] || text;
 
-    suggestions = suggestions.map(s =>
-      translations[language][s] || s
-    );
-
-  }
-
-  res.json({
-    suggestions
-  });
-
-});
+}
 
 /* --- root route --- */
 
