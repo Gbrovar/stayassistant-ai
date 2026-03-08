@@ -69,11 +69,11 @@ app.post("/chat", async (req, res) => {
     const userMessage = req.body.message || "";
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
-    const propertyId = req.body.propertyId || "default";
+    const propertyId = req.body.propertyId || "demo_property";
 
     console.log("Property:", propertyId);
 
-    const property = properties[propertyId];
+    const property = properties[propertyId] || properties["demo_property"];
 
     if (!property) {
       return res.json({
@@ -96,7 +96,7 @@ app.post("/chat", async (req, res) => {
 
     /* --- FAQ AUTO ANSWER --- */
 
-    const faqMatch = property.faq.find(f =>
+    const faqMatch = property.knowledge.faq.find(f =>
       normalizedMessage.includes(f.question.toLowerCase())
     );
 
