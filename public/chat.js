@@ -136,7 +136,7 @@ async function showQuickActions() {
 
     try {
 
-        const response = await fetch(`/property/${propertyId}/suggestions`);
+        const response = await fetch(`/property/${propertyId}/suggestions?lang=${selectedLanguage}`);
 
         const data = await response.json();
 

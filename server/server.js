@@ -39,6 +39,7 @@ app.get("/health", (req, res) => {
 app.get("/property/:id/suggestions", (req, res) => {
 
   const propertyId = req.params.id;
+  const language = req.query.lang || "English";
 
   const property = properties[propertyId];
 
@@ -47,13 +48,42 @@ app.get("/property/:id/suggestions", (req, res) => {
   }
 
   const faq = property.knowledge.faq.map(f => f.question);
-
   const services = property.knowledge.services.slice(0, 2);
 
-  const suggestions = [
+  let suggestions = [
     ...faq.slice(0, 2),
     ...services.slice(0, 2)
   ];
+
+  /* --- simple translations --- */
+
+  const translations = {
+
+    Español: {
+      "How do I open the smart lock?": "¿Cómo abro la cerradura inteligente?",
+      "Where can I leave the trash?": "¿Dónde puedo tirar la basura?",
+      "Can I store luggage after checkout?": "¿Puedo guardar el equipaje después del checkout?",
+      "Airport transfer service": "Servicio de traslado al aeropuerto",
+      "Bike rental near the beach": "Alquiler de bicicletas cerca de la playa"
+    },
+
+    Deutsch: {
+      "How do I open the smart lock?": "Wie öffne ich das Smart Lock?",
+      "Where can I leave the trash?": "Wo kann ich den Müll entsorgen?",
+      "Can I store luggage after checkout?": "Kann ich mein Gepäck nach dem Checkout lagern?",
+      "Airport transfer service": "Flughafentransfer",
+      "Bike rental near the beach": "Fahrradverleih in Strandnähe"
+    }
+
+  };
+
+  if (translations[language]) {
+
+    suggestions = suggestions.map(s =>
+      translations[language][s] || s
+    );
+
+  }
 
   res.json({
     suggestions
