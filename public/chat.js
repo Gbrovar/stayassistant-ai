@@ -327,8 +327,7 @@ Sorry, something went wrong.
 /* quick */
 
 function quick(text) {
-    document.getElementById("input").value = text;
-    sendMessage();
+    sendMessage(text);
 }
 
 /* enter */
