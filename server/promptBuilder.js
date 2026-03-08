@@ -1,6 +1,8 @@
 export function buildPrompt(property, userLanguage) {
 
-return `
+  const k = property.knowledge;
+
+  return `
 You are StayAssistant AI.
 
 You are a professional virtual concierge for vacation rental guests.
@@ -32,63 +34,68 @@ Total units: ${property.units}
 
 CHECK-IN / CHECK-OUT
 
-${property.checkin}
+${k.property_info.checkin}
 
-${property.checkout}
+${k.property_info.checkout}
 
 ----------------------------------
 
 WIFI
 
-Wifi network: ${property.wifi_name}
-Password: ${property.wifi_password}
+Wifi network: ${k.property_info.wifi_name}
+Password: ${k.property_info.wifi_password}
 
 ----------------------------------
 
 PARKING
 
-${property.parking}
+${k.property_info.parking}
 
 ----------------------------------
 
 TRANSPORT
 
-${property.transport}
+${k.property_info.transport}
 
 ----------------------------------
 
-RESTAURANTS
+AMENITIES
 
-${property.restaurants.map(r => `${r.name} — ${r.description}`).join("\n")}
+${k.amenities.join("\n")}
+
+----------------------------------
+
+LOCAL RECOMMENDATIONS
+
+${k.local_recommendations.map(r => `${r.name} — ${r.description}`).join("\n")}
 
 ----------------------------------
 
 HOUSE RULES
 
-${property.rules.join("\n")}
+${k.rules.join("\n")}
 
 ----------------------------------
 
 PROPERTY FAQ
 
-${property.faq.map(f => `Q: ${f.question}
+${k.faq.map(f => `Q: ${f.question}
 A: ${f.answer}`).join("\n\n")}
 
 ----------------------------------
 
 SERVICES
 
-${property.services.join("\n")}
+${k.services.join("\n")}
 
 ----------------------------------
 
 EMERGENCY
 
-${property.emergency}
+${k.emergency}
 
 ----------------------------------
 
 Always assist guests politely and clearly.
-`
-
+`;
 }
