@@ -2,6 +2,8 @@ export const properties = {
 
     demo_property: {
 
+        id: "demo_property",
+
         name: "Ocean View Apartments",
 
         location: "Las Palmas de Gran Canaria",
