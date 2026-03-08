@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "redis";
+import { properties } from "./properties.js";
 
 dotenv.config();
 
@@ -24,11 +25,11 @@ const publicPath = path.resolve(__dirname, "../public");
 
 console.log("Serving static files from:", publicPath);
 
-/* --- servir archivos estáticos --- */
+/* --- static files --- */
 
 app.use(express.static(publicPath));
 
-/* --- health check (importante para Railway) --- */
+/* --- health check --- */
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
@@ -46,7 +47,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-/* --- redis client --- */
+/* --- Redis client --- */
 
 const redis = createClient({
   url: process.env.REDIS_URL
@@ -55,8 +56,8 @@ const redis = createClient({
 redis.on("error", (err) => console.error("Redis error", err));
 
 await redis.connect();
-console.log("Redis connected successfully");
 
+console.log("Redis connected successfully");
 
 /* --- chat endpoint --- */
 
@@ -68,17 +69,26 @@ app.post("/chat", async (req, res) => {
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
     const propertyId = req.body.propertyId || "default";
+
     console.log("Property:", propertyId);
 
-    const historyKey = `chat:${propertyId}:${conversationId}`;
+    const property = properties[propertyId];
+
+    if (!property) {
+      return res.json({
+        reply: "Property configuration not found."
+      });
+    }
+
+    const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
 
     let history = await redis.get(historyKey);
 
     history = history ? JSON.parse(history) : [];
 
     history.push({
-        role: "user",
-        content: userMessage
+      role: "user",
+      content: userMessage
     });
 
     const completion = await openai.chat.completions.create({
@@ -87,202 +97,98 @@ app.post("/chat", async (req, res) => {
         {
           role: "system",
           content: `
-You are StayAssistant AI.
+          You are StayAssistant AI.
 
-You are a professional virtual concierge for vacation rental guests.
+          You are a professional virtual concierge for vacation rental guests.
 
-Your job is to help guests with information about the accommodation, services, and local recommendations.
+          Your job is to help guests with information about the accommodation, services, and local recommendations.
 
-Always respond in a friendly, clear and helpful tone.
+          Always respond in a friendly, clear and helpful tone.
 
-IMPORTANT:
+          IMPORTANT:
 
-If the guest selected a language, always respond in that language.
+          If the guest selected a language, always respond in that language.
 
-Selected language: ${userLanguage}
+          Selected language: ${userLanguage}
 
-If no language is selected, detect the language used by the guest and answer in that language.
+          If no language is selected, detect the language used by the guest and answer in that language.
 
-At the end of your response include the detected language in this format:
+          At the end of your response include the detected language in this format:
 
-LANGUAGE: English
-or
-LANGUAGE: Español
-or
-LANGUAGE: Deutsch
+          LANGUAGE: English
+          or
+          LANGUAGE: Español
+          or
+          LANGUAGE: Deutsch
 
-At the end of your response, internally determine the language used by the guest.
+          Supported languages:
+          - English
+          - Español
+          - Deutsch
 
-Supported languages:
-- English
-- Español
-- Deutsch
+          ----------------------------------
 
-----------------------------------
+          PROPERTY INFORMATION
 
-PROPERTY INFORMATION
+          Property name: ${property.name}
+          Location: ${property.location}
 
-Property name: Ocean View Apartments
-Location: Las Palmas de Gran Canaria
+          Type: ${property.type}
+          Total units: ${property.units}
 
-Type: Holiday apartment building
-Total apartments: 12 units
+          ----------------------------------
 
-----------------------------------
+          CHECK-IN / CHECK-OUT
 
-CHECK-IN / CHECK-OUT
+          ${property.checkin}
 
-Check-in: from 15:00
-Check-out: before 11:00
+          ${property.checkout}
 
-Early check-in: subject to availability.
+          ----------------------------------
 
-Late check-in:
-Guests arriving after 22:00 can use the self check-in system with a smart lock.
-Instructions are sent automatically on the day of arrival.
+          WIFI
 
-----------------------------------
+          Wifi network: ${property.wifi_name}
+          Password: ${property.wifi_password}
 
-RECEPTION
+          ----------------------------------
 
-Reception hours:
-08:00 – 20:00 daily
+          PARKING
 
-Phone: +34 600 000 000
+          ${property.parking}
 
-Outside reception hours guests can contact the emergency number.
+          ----------------------------------
 
-----------------------------------
+          TRANSPORT
 
-CLEANING
+          ${property.transport}
 
-Cleaning schedule:
-Apartments are cleaned every 3 days for stays longer than 5 nights.
+          ----------------------------------
 
-Fresh towels available upon request.
+          RESTAURANTS
 
-Final cleaning is included in the reservation.
+          ${property.restaurants.map(r => `${r.name} — ${r.description}`).join("\n")}
 
-----------------------------------
+          ----------------------------------
 
-FOOD & DRINK
+          HOUSE RULES
 
-Breakfast: not included.
+          ${property.rules.join("\n")}
 
-Nearby breakfast options:
-- Café Regina
-- Granier Bakery
-- Mercado del Puerto
+          ----------------------------------
 
-There is no restaurant inside the building.
+          EMERGENCY
 
-----------------------------------
+          ${property.emergency}
 
-BAR
+          ----------------------------------
 
-There is no bar on the property.
-
-Nearby bars:
-- La Azotea Rooftop Bar
-- Rocktop Skybar
-
-----------------------------------
-
-WIFI
-
-Wifi network: OceanViewWifi
-Password: welcome123
-
-----------------------------------
-
-PARKING
-
-There is no private parking.
-
-Free street parking available nearby.
-
-Paid parking available at:
-Parking Las Canteras (5 minutes walk)
-
-----------------------------------
-
-TRANSPORT
-
-Taxi from airport to apartment:
-Approx. price: 30–35 €
-
-Bus from airport:
-Line 60 to Santa Catalina station.
-
-Bus stop:
-3 minutes walking from the apartment.
-
-----------------------------------
-
-NEARBY ATTRACTIONS
-
-Las Canteras beach:
-5 minute walk.
-
-El Mercado del Puerto:
-Local food market, 8 minute walk.
-
-La Marinera Restaurant:
-Popular seafood restaurant near the beach.
-
-Bike rentals available near the beach promenade.
-
-Surf schools available at Las Canteras beach.
-
-----------------------------------
-
-SUPERMARKETS
-
-Nearby supermarkets:
-
-- Spar Las Canteras (2 minute walk)
-- Hiperdino Express (5 minute walk)
-
-----------------------------------
-
-HOUSE RULES
-
-No smoking inside the apartment.
-
-No parties allowed.
-
-Quiet hours:
-22:00 – 08:00
-
-----------------------------------
-
-EXTRA SERVICES
-
-Taxi service can be arranged.
-
-Food delivery services like Glovo and Uber Eats are available.
-
-Laundry services available nearby.
-
-Luggage storage may be available depending on availability.
-
-----------------------------------
-
-EMERGENCY
-
-Emergency number in Spain: 112
-
-Nearest hospital:
-Hospital Universitario de Gran Canaria Doctor Negrín
-
-----------------------------------
-
-Always assist guests politely and clearly.
-`
+          Always assist guests politely and clearly.
+          `
         },
-        
-          ...history
-        
+
+        ...history
+
       ]
     });
 
@@ -292,32 +198,32 @@ Always assist guests politely and clearly.
 
     if (!detectedLanguage) {
 
-    const match = reply.match(/LANGUAGE:\s*(English|Español|Deutsch)/i);
+      const match = reply.match(/LANGUAGE:\s*(English|Español|Deutsch)/i);
 
-    if (match) {
+      if (match) {
         detectedLanguage = match[1];
-    }
+      }
 
     }
 
     const cleanReply = reply.replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "").trim();
 
     history.push({
-        role: "assistant",
-        content: cleanReply
+      role: "assistant",
+      content: cleanReply
     });
 
     if (history.length > 10) {
-        history = history.slice(-10);
+      history = history.slice(-10);
     }
 
     await redis.set(historyKey, JSON.stringify(history), {
-    EX: 60 * 60 * 6
+      EX: 60 * 60 * 6
     });
 
     res.json({
-        reply: cleanReply,
-        language: detectedLanguage
+      reply: cleanReply,
+      language: detectedLanguage
     });
 
   } catch (error) {
@@ -332,7 +238,7 @@ Always assist guests politely and clearly.
 
 });
 
-/* --- puerto Railway --- */
+/* --- server port --- */
 
 const PORT = process.env.PORT || 3000;
 
