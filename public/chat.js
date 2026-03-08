@@ -1,7 +1,8 @@
 const conversationId = crypto.randomUUID();
 
-const urlParams = new URLSearchParams(window.location.search);
-const propertyId = urlParams.get("property");
+const params = new URLSearchParams(window.location.search);
+
+const propertyId = params.get("property") || "demo_property";
 
 let selectedLanguage = null;
 

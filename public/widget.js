@@ -2,6 +2,16 @@
 
     let iframe = null;
 
+    /* --- detectar property desde el script --- */
+
+    const script = document.currentScript;
+
+    const params = new URLSearchParams(script.src.split("?")[1]);
+
+    const propertyId = params.get("property") || "demo_property";
+
+    console.log("StayAssistant widget loaded for property:", propertyId);
+
     function createWidget(config) {
 
         /* botón flotante */
@@ -29,7 +39,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = `/chat.html?embed=true&property=${config.propertyId}`;
+        iframe.src = `/chat.html?embed=true&property=${propertyId}`;
 
         iframe.style.position = "fixed";
         iframe.style.bottom = "90px";
