@@ -60,6 +60,22 @@ await redis.connect();
 
 console.log("Redis connected successfully");
 
+/* --- property config endpoint --- */
+
+app.get("/property/:id", (req, res) => {
+
+  const propertyId = req.params.id;
+
+  const property = properties[propertyId] || properties["demo_property"];
+
+  res.json({
+    id: property.id,
+    name: property.name,
+    branding: property.branding
+  });
+
+});
+
 /* --- chat endpoint --- */
 
 app.post("/chat", async (req, res) => {

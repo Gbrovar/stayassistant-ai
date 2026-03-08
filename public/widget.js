@@ -46,12 +46,13 @@
 
         const button = document.createElement("button");
 
-        button.innerText = "💬 Concierge";
+
+        button.innerText = branding.button_text || "💬 Concierge";
 
         button.style.position = "fixed";
         button.style.bottom = "25px";
         button.style.right = "25px";
-        button.style.background = "linear-gradient(135deg,#22c55e,#16a34a)";
+        button.style.background = branding.primary_color;
         button.style.color = "white";
         button.style.border = "none";
         button.style.padding = "14px 22px";
@@ -122,8 +123,26 @@
 
     /* --- auto init widget --- */
 
-    createWidget({
-        propertyId: propertyId
-    });
+    let branding = {
+        button_text: "💬 Concierge",
+        primary_color: "#22c55e"
+    };
+
+    fetch(`/property/${propertyId}`)
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.branding) {
+                branding = data.branding;
+            }
+
+            createWidget();
+
+        })
+        .catch(() => {
+
+            createWidget();
+
+        });
 
 })();

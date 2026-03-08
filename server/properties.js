@@ -12,6 +12,20 @@ export const properties = {
 
         units: 12,
 
+        /* --- BRANDING --- */
+
+        branding: {
+
+            name: "Ocean View Concierge",
+
+            welcome_message: "Hello 👋 Welcome to Ocean View Apartments.",
+
+            button_text: "💬 Concierge",
+
+            primary_color: "#22c55e"
+
+        },
+
         /* --- KNOWLEDGE LAYER --- */
 
         knowledge: {
