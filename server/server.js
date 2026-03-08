@@ -70,7 +70,7 @@ app.post("/chat", async (req, res) => {
     const apartmentId = req.body.apartmentId || "default";
     console.log("Apartment:", apartmentId);
 
-    const historyKey = `chat:${conversationId}`;
+    const historyKey = `chat:${apartmentId}:${conversationId}`;
 
     let history = await redis.get(historyKey);
 
