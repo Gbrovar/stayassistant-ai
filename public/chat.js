@@ -140,17 +140,67 @@ async function showQuickActions() {
 
         const container = document.getElementById("quick-actions");
 
-        data.suggestions.forEach(item => {
+        const suggestions = data.suggestions;
 
-            const btn = document.createElement("button");
+        const MAX_VISIBLE = 4;
 
-            btn.innerText = item.label;
+        let expanded = false;
 
-            btn.onclick = () => quick(item.value, item.label);
+        function renderSuggestions() {
 
-            container.appendChild(btn);
+            container.innerHTML = "";
 
-        });
+            const visible = expanded ? suggestions : suggestions.slice(0, MAX_VISIBLE);
+
+            visible.forEach(item => {
+
+                const btn = document.createElement("button");
+
+                btn.innerText = item.label;
+
+                btn.onclick = () => quick(item.value, item.label);
+
+                container.appendChild(btn);
+
+            });
+
+            if (suggestions.length > MAX_VISIBLE) {
+
+                const toggle = document.createElement("button");
+
+                toggle.className = "more-btn";
+
+                if (!expanded) {
+
+                    toggle.innerText =
+                        selectedLanguage === "Español" ? "Ver más" :
+                        selectedLanguage === "Deutsch" ? "Mehr anzeigen" :
+                        "Show more";
+
+                } else {
+
+                    toggle.innerText =
+                        selectedLanguage === "Español" ? "Ver menos" :
+                        selectedLanguage === "Deutsch" ? "Weniger anzeigen" :
+                        "Show less";
+
+                }
+
+                toggle.onclick = () => {
+
+                    expanded = !expanded;
+
+                    renderSuggestions();
+
+                };
+
+                container.appendChild(toggle);
+
+            }
+
+        }
+
+        renderSuggestions();
 
     } catch (error) {
 
@@ -159,7 +209,6 @@ async function showQuickActions() {
     }
 
 }
-
 
 /* SEND MESSAGE */
 
