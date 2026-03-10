@@ -104,13 +104,13 @@ function translateUI() {
 
 async function showQuickActions() {
 
+    const messages = document.getElementById("messages");
+
     // eliminar quick actions anteriores
     const existing = document.getElementById("quick-actions");
     if (existing) {
-        existing.parentElement.remove();
+        existing.remove();
     }
-
-    const messages = document.getElementById("messages");
 
     let title = "";
 
