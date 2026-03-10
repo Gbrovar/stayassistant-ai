@@ -181,27 +181,48 @@ app.post("/chat", async (req, res) => {
       normalizedMessage.includes(f.question.toLowerCase())
     );
 
-    if (faqMatch) {
+   if (faqMatch) {
 
-      console.log("FAQ auto-answer triggered");
+  console.log("FAQ auto-answer triggered");
 
-      const answer = faqMatch.answer;
+  let answer = faqMatch.answer;
 
-      history.push({
-        role: "assistant",
-        content: answer
-      });
+  // traducir si el usuario no usa inglés
+  if (userLanguage && userLanguage !== "English") {
 
-      await redis.set(historyKey, JSON.stringify(history), {
-        EX: 60 * 60 * 6
-      });
+    const translation = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `Translate the following text to ${userLanguage}. Only return the translated text.`
+        },
+        {
+          role: "user",
+          content: answer
+        }
+      ]
+    });
 
-      return res.json({
-        reply: answer,
-        language: userLanguage
-      });
+    answer = translation.choices[0].message.content;
 
-    }
+  }
+
+  history.push({
+    role: "assistant",
+    content: answer
+  });
+
+  await redis.set(historyKey, JSON.stringify(history), {
+    EX: 60 * 60 * 6
+  });
+
+  return res.json({
+    reply: answer,
+    language: userLanguage
+  });
+
+}
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
