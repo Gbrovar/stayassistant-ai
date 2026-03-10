@@ -324,8 +324,16 @@ Sorry, something went wrong.
 
 /* quick */
 
-function quick(text) {
+function quick(text, label = null) {
+
+    const messages = document.getElementById("messages");
+
+    const displayText = label || text;
+
+    messages.innerHTML += `<div class="message user">You: ${displayText}</div>`;
+
     sendMessage(text);
+
 }
 
 /* enter */
