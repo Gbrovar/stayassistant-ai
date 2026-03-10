@@ -297,7 +297,7 @@ ${data.reply}
 </div>
 `;
 
-        showRecommendations(userText);
+        
 
     } catch (error) {
 
