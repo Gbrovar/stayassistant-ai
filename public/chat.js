@@ -6,16 +6,17 @@ const propertyId = urlParams.get("property") || "demo_property";
 
 let selectedLanguage = null;
 
-window.onload = function () {
+
+/* INIT */
+
+window.onload = async function () {
 
     const messages = document.getElementById("messages");
 
     messages.innerHTML += `
 <div class="bot-wrapper">
 
-<div class="bot-avatar">
-🤖
-</div>
+<div class="bot-avatar">🤖</div>
 
 <div class="bot-message">
 Hello 👋 Welcome to Ocean View Apartment.<br><br>
@@ -44,11 +45,10 @@ Please choose your language:
 </div>
 `;
 
-await showQuickActions();
-
 };
 
-/* seleccionar idioma */
+
+/* SELECT LANGUAGE */
 
 function selectLanguage(lang) {
 
@@ -59,17 +59,17 @@ function selectLanguage(lang) {
     messages.innerHTML += `<div class="message user">You: ${lang}</div>`;
 
     const buttons = document.getElementById("languageButtons");
+
     if (buttons) buttons.remove();
 
     translateUI();
 
     showQuickActions();
 
-    
-
 }
 
-/* traducir UI */
+
+/* TRANSLATE UI */
 
 function translateUI() {
 
@@ -98,7 +98,9 @@ function translateUI() {
     }
 
 }
-/* quick actions */
+
+
+/* QUICK ACTIONS */
 
 async function showQuickActions() {
 
@@ -106,35 +108,23 @@ async function showQuickActions() {
 
     let title = "";
 
-    if (selectedLanguage === "Español") {
-        title = "¿En qué puedo ayudarte?";
-    }
-
-    if (selectedLanguage === "English") {
-        title = "How can I help you?";
-    }
-
-    if (selectedLanguage === "Deutsch") {
-        title = "Wie kann ich helfen?";
-    }
+    if (selectedLanguage === "Español") title = "¿En qué puedo ayudarte?";
+    if (selectedLanguage === "English") title = "How can I help you?";
+    if (selectedLanguage === "Deutsch") title = "Wie kann ich helfen?";
 
     messages.innerHTML += `
 
-        <div class="bot-wrapper">
+<div class="bot-wrapper">
 
-        <div class="bot-avatar">
-        🤖
-        </div>
+<div class="bot-avatar">🤖</div>
 
-        <div class="bot-message">
-        ${title}
-        </div>
+<div class="bot-message">${title}</div>
 
-        </div>
+</div>
 
-        <div id="quick-actions"></div>
+<div id="quick-actions"></div>
 
-        `;
+`;
 
     try {
 
@@ -165,62 +155,9 @@ async function showQuickActions() {
 }
 
 
-/* recomendaciones dinámicas */
+/* SEND MESSAGE */
 
-function showRecommendations(text) {
-
-    const messages = document.getElementById("messages");
-
-    text = text.toLowerCase();
-
-    if (text.includes("restaurant") || text.includes("food") || text.includes("dinner") || text.includes("restaurante")) {
-
-        let title = "";
-
-        if (selectedLanguage === "Español") {
-            title = "Restaurantes recomendados cerca:";
-        }
-
-        if (selectedLanguage === "English") {
-            title = "Recommended places nearby:";
-        }
-
-        if (selectedLanguage === "Deutsch") {
-            title = "Empfohlene Restaurants in der Nähe:";
-        }
-
-        messages.innerHTML += `
-
-<div class="bot-wrapper">
-
-<div class="bot-avatar">
-🤖
-</div>
-
-<div class="bot-message">
-${title}
-</div>
-
-</div>
-
-<div id="quick-actions">
-
-<button onclick="quick('Tell me about La Marinera restaurant')">La Marinera</button>
-
-<button onclick="quick('Tell me about Mercado del Puerto')">Mercado del Puerto</button>
-
-<button onclick="quick('Tell me about El Allende restaurant')">El Allende</button>
-
-</div>
-`;
-
-    }
-
-}
-
-/* enviar mensaje */
-
-async function sendMessage(forcedText = null) {
+async function sendMessage(forcedText = null, displayLabel = null) {
 
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
@@ -229,87 +166,81 @@ async function sendMessage(forcedText = null) {
 
     if (!userText) return;
 
-    messages.innerHTML += `<div class="message user">You: ${userText}</div>`;
+    const displayText = displayLabel || userText;
+
+    messages.innerHTML += `<div class="message user">You: ${displayText}</div>`;
 
     input.value = "";
 
     messages.innerHTML += `
-        <div class="bot-wrapper" id="typing">
+<div class="bot-wrapper" id="typing">
 
-        <div class="bot-avatar">
-        🤖
-        </div>
+<div class="bot-avatar">🤖</div>
 
-        <div class="bot-message">
+<div class="bot-message">
 
-        <div class="typing-dots">
-        <span></span>
-        <span></span>
-        <span></span>
-        </div>
+<div class="typing-dots">
+<span></span>
+<span></span>
+<span></span>
+</div>
 
-        </div>
+</div>
 
-        </div>
-    `;
+</div>
+`;
 
     messages.scrollTop = messages.scrollHeight;
 
     try {
 
         const response = await fetch("/chat", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
+
                 message: userText,
                 language: selectedLanguage,
                 conversationId: conversationId,
                 propertyId: propertyId
+
             })
+
         });
 
         const data = await response.json();
 
-        if (!selectedLanguage && data.language) {
-
-            selectedLanguage = data.language;
-
-            translateUI();
-
-        }
-
         const typing = document.getElementById("typing");
+
         if (typing) typing.remove();
 
         messages.innerHTML += `
 <div class="bot-wrapper">
 
-<div class="bot-avatar">
-🤖
-</div>
+<div class="bot-avatar">🤖</div>
 
-<div class="bot-message">
-${data.reply}
-</div>
+<div class="bot-message">${data.reply}</div>
 
 </div>
 `;
 
-        
+        await showQuickActions();
 
     } catch (error) {
 
         const typing = document.getElementById("typing");
+
         if (typing) typing.remove();
 
         messages.innerHTML += `
 <div class="bot-wrapper">
 
-<div class="bot-avatar">
-🤖
-</div>
+<div class="bot-avatar">🤖</div>
 
 <div class="bot-message">
 Sorry, something went wrong.
@@ -324,24 +255,24 @@ Sorry, something went wrong.
 
 }
 
-/* quick */
+
+/* QUICK BUTTON */
 
 function quick(text, label = null) {
 
-    const messages = document.getElementById("messages");
-
-    const displayText = label || text;
-
-    messages.innerHTML += `<div class="message user">You: ${displayText}</div>`;
-
-    sendMessage(text);
+    sendMessage(text, label);
 
 }
 
-/* enter */
+
+/* ENTER KEY */
 
 document.getElementById("input").addEventListener("keypress", function (e) {
+
     if (e.key === "Enter") {
+
         sendMessage();
+
     }
+
 });
