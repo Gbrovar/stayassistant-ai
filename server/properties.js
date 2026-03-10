@@ -26,6 +26,79 @@ export const properties = {
 
         },
 
+        /* --- QUICK SUGGESTIONS (NEW) --- */
+
+        suggestions: [
+
+            "How do I open the smart lock?",
+            "Where can I leave the trash?",
+            "Airport transfer service",
+            "Bike rental near the beach",
+            "Can I store luggage after checkout?"
+
+        ],
+
+        /* --- RECOMMENDATIONS ENGINE (NEW) --- */
+
+        recommendations: {
+
+            restaurants: [
+
+                {
+                    name: "La Marinera",
+                    description: "One of the best seafood restaurants near Las Canteras beach.",
+                    distance: "5 min walk"
+                },
+
+                {
+                    name: "Mercado del Puerto",
+                    description: "Local food market with many restaurants and tapas bars.",
+                    distance: "8 min walk"
+                },
+
+                {
+                    name: "El Allende",
+                    description: "Modern tapas and Spanish cuisine popular with locals.",
+                    distance: "6 min walk"
+                }
+
+            ],
+
+            transport: [
+
+                {
+                    name: "Airport taxi",
+                    description: "Taxi from the airport to the apartment costs approximately 30–35 €."
+                },
+
+                {
+                    name: "Bus line 60",
+                    description: "Direct bus from the airport to Santa Catalina station."
+                }
+
+            ],
+
+            activities: [
+
+                {
+                    name: "Las Canteras Beach",
+                    description: "Beautiful urban beach ideal for swimming and surfing."
+                },
+
+                {
+                    name: "Surf schools",
+                    description: "Several surf schools operate along Las Canteras beach."
+                },
+
+                {
+                    name: "Bike rental",
+                    description: "Bike rentals available along the beach promenade."
+                }
+
+            ]
+
+        },
+
         /* --- KNOWLEDGE LAYER --- */
 
         knowledge: {
@@ -55,7 +128,7 @@ export const properties = {
                     Parking Las Canteras (5 minutes walk).
                     `,
 
-                transport: `
+                                    transport: `
                     Taxi from airport to the apartment:
                     Approximate price: 30–35 €.
 
@@ -65,6 +138,7 @@ export const properties = {
                     Bus stop:
                     3 minutes walking from the apartment.
                     `
+
             },
 
             amenities: [
@@ -118,8 +192,7 @@ export const properties = {
                 {
                     question: "Can I store luggage after checkout?",
                     answer: "Yes, luggage storage may be available until 18:00 depending on availability."
-                },
-                
+                }
 
             ],
 
