@@ -44,6 +44,8 @@ Please choose your language:
 </div>
 `;
 
+await showQuickActions();
+
 };
 
 /* seleccionar idioma */
