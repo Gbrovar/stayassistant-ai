@@ -119,10 +119,7 @@ export const properties = {
                     question: "Can I store luggage after checkout?",
                     answer: "Yes, luggage storage may be available until 18:00 depending on availability."
                 },
-                {
-                    question: "Can I store luggage after checkout?",
-                    answer: "Yes, luggage storage may be available until 18:00 depending on availability."
-                }
+                
 
             ],
 
