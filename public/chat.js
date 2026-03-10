@@ -142,7 +142,7 @@ async function showQuickActions() {
 
         const suggestions = data.suggestions;
 
-        const MAX_VISIBLE = 2;
+        const MAX_VISIBLE = 4;
 
         let expanded = false;
 
