@@ -148,7 +148,7 @@ async function showQuickActions() {
 
             btn.innerText = item.label;
 
-            btn.onclick = () => quick(item.value);
+            btn.onclick = () => quick(item.value, item.label);
 
             container.appendChild(btn);
 
