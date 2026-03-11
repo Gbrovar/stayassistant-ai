@@ -593,7 +593,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
 function quick(text, label = null) {
 
-    sendMessage(text, label);
+    const displayText = label || text;
+
+    sendMessage(text, displayText);
 
 }
 
