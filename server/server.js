@@ -25,6 +25,7 @@ const __dirname = path.dirname(__filename);
 const publicPath = path.resolve(__dirname, "../public");
 
 console.log("Serving static files from:", publicPath);
+console.log("Google API Key:", process.env.GOOGLE_PLACES_KEY);
 
 /* --- static files --- */
 
