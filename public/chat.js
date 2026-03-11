@@ -118,19 +118,18 @@ async function showQuickActions() {
     if (selectedLanguage === "English") title = "How can I help you?";
     if (selectedLanguage === "Deutsch") title = "Wie kann ich helfen?";
 
-    messages.innerHTML += `
+    if (!document.querySelector("#quick-actions")) {
 
-<div class="bot-wrapper">
+        messages.innerHTML += `
+            <div class="bot-wrapper">
+            <div class="bot-avatar">🤖</div>
+            <div class="bot-message">${title}</div>
+            </div>
+            `;
 
-<div class="bot-avatar">🤖</div>
+    }
 
-<div class="bot-message">${title}</div>
-
-</div>
-
-<div id="quick-actions"></div>
-
-`;
+    messages.innerHTML += `<div id="quick-actions"></div>`;
 
     try {
 
