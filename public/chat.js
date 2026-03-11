@@ -474,6 +474,7 @@ function showProactiveSuggestions() {
     suggestions.forEach(item => {
 
         const btn = document.createElement("button");
+        btn.className = "quick-actions";
 
         btn.innerText = item.label;
 
