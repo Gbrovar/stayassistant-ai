@@ -393,14 +393,16 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         if (typing) typing.remove();
 
         messages.innerHTML += `
-<div class="bot-wrapper">
+            <div class="bot-wrapper">
 
-<div class="bot-avatar">🤖</div>
+            <div class="bot-avatar">🤖</div>
 
-<div class="bot-message">${data.reply}</div>
+            <div class="bot-message">${data.reply}</div>
 
-</div>
-`;
+            </div>
+            `;
+
+        showRecommendations(userText);
 
         await showQuickActions();
 
@@ -411,16 +413,16 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         if (typing) typing.remove();
 
         messages.innerHTML += `
-<div class="bot-wrapper">
+            <div class="bot-wrapper">
 
-<div class="bot-avatar">🤖</div>
+            <div class="bot-avatar">🤖</div>
 
-<div class="bot-message">
-Sorry, something went wrong.
-</div>
+            <div class="bot-message">
+            Sorry, something went wrong.
+            </div>
 
-</div>
-`;
+            </div>
+            `;
 
     }
 
