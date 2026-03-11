@@ -224,10 +224,12 @@ async function showRecommendations(text) {
 
     if (
         text.includes("restaurant") ||
+        text.includes("restaurants") ||
         text.includes("food") ||
         text.includes("dinner") ||
         text.includes("eat") ||
-        text.includes("restaurante")
+        text.includes("restaurante") ||
+        text.includes("restaurantes")
     ) {
         type = "restaurants";
     }
@@ -253,7 +255,9 @@ async function showRecommendations(text) {
         text.includes("grocery") ||
         text.includes("store") ||
         text.includes("shop") ||
-        text.includes("market")
+        text.includes("market") ||
+        text.includes("supermercado") ||
+        text.includes("supermercados")
     ) {
         type = "supermarket";
     }
