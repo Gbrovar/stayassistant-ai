@@ -8,6 +8,11 @@ export const properties = {
 
         location: "Las Palmas de Gran Canaria",
 
+        coordinates: {
+            lat: 28.1416,
+            lng: -15.4314
+        },
+
         type: "Holiday apartment building",
 
         units: 12,
@@ -128,7 +133,7 @@ export const properties = {
                     Parking Las Canteras (5 minutes walk).
                     `,
 
-                                    transport: `
+                transport: `
                     Taxi from airport to the apartment:
                     Approximate price: 30–35 €.
 

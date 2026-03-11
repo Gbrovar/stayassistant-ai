@@ -136,7 +136,7 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
   try {
 
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1200&type=${placeType}&key=${process.env.GOOGLE_PLACES_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${placeType}&key=${process.env.GOOGLE_PLACES_KEY}`;
 
     const response = await fetch(url);
 
