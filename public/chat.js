@@ -453,15 +453,16 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         messages.innerHTML += `
             <div class="bot-wrapper">
-
             <div class="bot-avatar">🤖</div>
-
             <div class="bot-message">${data.reply}</div>
-
             </div>
             `;
 
-        showRecommendations(userText);
+        /* primero recomendaciones */
+
+        await showRecommendations(userText);
+
+        /* luego quick actions */
 
         await showQuickActions();
 
