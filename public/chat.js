@@ -388,60 +388,100 @@ async function showRecommendations(text) {
 
 }
 
+/* PROACTIVE SUGGESTIONS */
+
 function showProactiveSuggestions() {
 
     const messages = document.getElementById("messages");
 
-    let text = `
-Welcome 👋<br><br>
-Since you just arrived, here are some useful things nearby:
-`;
+    let suggestions = [];
 
     if (selectedLanguage === "Español") {
 
-        text = `
-Bienvenido 👋<br><br>
-Si acabas de llegar, aquí tienes algunos lugares útiles cerca:
-`;
+        suggestions = [
+
+            { label: "🛒 Supermercado cercano", value: "Where is the nearest supermarket?" },
+
+            { label: "🍽 Restaurantes cercanos", value: "Recommend restaurants nearby" },
+
+            { label: "🚕 Pedir un taxi", value: "How can I get a taxi?" },
+
+            { label: "💊 Farmacia cercana", value: "Where is the nearest pharmacy?" }
+
+        ];
+
+    }
+
+    else if (selectedLanguage === "Deutsch") {
+
+        suggestions = [
+
+            { label: "🛒 Supermarkt", value: "Where is the nearest supermarket?" },
+
+            { label: "🍽 Restaurants", value: "Recommend restaurants nearby" },
+
+            { label: "🚕 Taxi bestellen", value: "How can I get a taxi?" },
+
+            { label: "💊 Apotheke", value: "Where is the nearest pharmacy?" }
+
+        ];
+
+    }
+
+    else {
+
+        suggestions = [
+
+            { label: "🛒 Supermarket", value: "Where is the nearest supermarket?" },
+
+            { label: "🍽 Restaurants", value: "Recommend restaurants nearby" },
+
+            { label: "🚕 Taxi", value: "How can I get a taxi?" },
+
+            { label: "💊 Pharmacy", value: "Where is the nearest pharmacy?" }
+
+        ];
+
+    }
+
+    let title = "Welcome 👋<br><br>Since you just arrived, here are some useful places nearby:";
+
+    if (selectedLanguage === "Español") {
+
+        title = "Bienvenido 👋<br><br>Si acabas de llegar, aquí tienes algunos lugares útiles cerca:";
 
     }
 
     if (selectedLanguage === "Deutsch") {
 
-        text = `
-Willkommen 👋<br><br>
-Falls Sie gerade angekommen sind, hier sind einige nützliche Orte in der Nähe:
-`;
+        title = "Willkommen 👋<br><br>Hier sind einige nützliche Orte in der Nähe:";
 
     }
 
     messages.innerHTML += `
 
-<div class="bot-wrapper">
+        <div class="bot-wrapper">
+        <div class="bot-avatar">🤖</div>
+        <div class="bot-message">${title}</div>
+        </div>
 
-<div class="bot-avatar">🤖</div>
+        <div id="quick-actions"></div>
 
-<div class="bot-message">
+        `;
 
-${text}
+    const container = document.getElementById("quick-actions");
 
-</div>
+    suggestions.forEach(item => {
 
-</div>
+        const btn = document.createElement("button");
 
-<div id="quick-actions">
+        btn.innerText = item.label;
 
-<button onclick="quick('Where is the nearest supermarket?')">🛒 Supermarket</button>
+        btn.onclick = () => quick(item.value, item.label);
 
-<button onclick="quick('Recommend restaurants nearby')">🍽 Restaurants</button>
+        container.appendChild(btn);
 
-<button onclick="quick('How can I get a taxi?')">🚕 Taxi</button>
-
-<button onclick="quick('Where is the nearest pharmacy?')">💊 Pharmacy</button>
-
-</div>
-
-`;
+    });
 
 }
 
