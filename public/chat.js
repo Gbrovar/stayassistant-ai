@@ -592,7 +592,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 /* QUICK BUTTON */
 
 function quick(text, label = null) {
+
     const displayText = label || text;
+    
     sendMessage(text, displayText);
 
 }
