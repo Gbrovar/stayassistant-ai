@@ -465,11 +465,11 @@ function showProactiveSuggestions() {
         <div class="bot-message">${title}</div>
         </div>
 
-        <div id="quick-actions"></div>
+        <div id="proactive-actions"></div>
 
         `;
 
-    const container = document.getElementById("quick-actions");
+    const container = document.getElementById("proactive-actions");
 
     suggestions.forEach(item => {
 
@@ -594,7 +594,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 function quick(text, label = null) {
 
     const displayText = label || text;
-    
+
     sendMessage(text, displayText);
 
 }
