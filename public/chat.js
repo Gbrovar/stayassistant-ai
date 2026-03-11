@@ -174,15 +174,15 @@ async function showQuickActions() {
 
                     toggle.innerText =
                         selectedLanguage === "Español" ? "Ver más" :
-                        selectedLanguage === "Deutsch" ? "Mehr anzeigen" :
-                        "Show more";
+                            selectedLanguage === "Deutsch" ? "Mehr anzeigen" :
+                                "Show more";
 
                 } else {
 
                     toggle.innerText =
                         selectedLanguage === "Español" ? "Ver menos" :
-                        selectedLanguage === "Deutsch" ? "Weniger anzeigen" :
-                        "Show less";
+                            selectedLanguage === "Deutsch" ? "Weniger anzeigen" :
+                                "Show less";
 
                 }
 
@@ -220,10 +220,13 @@ async function showRecommendations(text) {
 
     let type = null;
 
+    /* --- INTENT DETECTION --- */
+
     if (
         text.includes("restaurant") ||
         text.includes("food") ||
         text.includes("dinner") ||
+        text.includes("eat") ||
         text.includes("restaurante")
     ) {
         type = "restaurants";
@@ -239,21 +242,25 @@ async function showRecommendations(text) {
 
     if (
         text.includes("bar") ||
-        text.includes("nightlife") ||
-        text.includes("drink")
+        text.includes("drink") ||
+        text.includes("nightlife")
     ) {
         type = "bars";
     }
 
     if (
         text.includes("supermarket") ||
-        text.includes("grocery")
+        text.includes("grocery") ||
+        text.includes("store") ||
+        text.includes("shop") ||
+        text.includes("market")
     ) {
         type = "supermarket";
     }
 
     if (
-        text.includes("pharmacy")
+        text.includes("pharmacy") ||
+        text.includes("pharmacie")
     ) {
         type = "pharmacy";
     }
@@ -266,6 +273,7 @@ async function showRecommendations(text) {
 
     if (
         text.includes("taxi") ||
+        text.includes("uber") ||
         text.includes("transport")
     ) {
         type = "transport";
@@ -296,27 +304,56 @@ async function showRecommendations(text) {
 
         const data = await response.json();
 
-        if (!data.items.length) return;
+        console.log("Places result:", data);
+
+        if (!data.items || !data.items.length) {
+
+            console.log("No places found");
+
+            return;
+
+        }
+
+        /* --- HEADER UX --- */
+
+        messages.innerHTML += `
+
+            <div class="bot-wrapper">
+
+            <div class="bot-avatar">📍</div>
+
+            <div class="bot-message">
+
+            <b>Nearby places you may like:</b>
+
+            </div>
+
+            </div>
+
+            `;
+
+        /* --- RENDER PLACES --- */
 
         data.items.forEach(place => {
 
             messages.innerHTML += `
 
-<div class="bot-wrapper">
+            <div class="bot-wrapper">
 
-<div class="bot-avatar">📍</div>
+            <div class="bot-avatar">📍</div>
 
-<div class="bot-message">
+            <div class="bot-message">
 
-<b>${place.name}</b><br>
-⭐ ${place.rating}<br>
-${place.address}
+            <b>${place.name}</b><br>
+            ⭐ ${place.rating}<br>
+            ${place.open === true ? "🟢 Open now<br>" : ""}
+            ${place.address}
 
-</div>
+            </div>
 
-</div>
+            </div>
 
-`;
+            `;
 
         });
 
@@ -327,6 +364,7 @@ ${place.address}
     }
 
 }
+
 
 /* SEND MESSAGE */
 
