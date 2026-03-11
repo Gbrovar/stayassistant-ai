@@ -76,6 +76,108 @@ app.get("/property/:id/suggestions", (req, res) => {
 
 });
 
+/* GOOGLE PLACES SUGGESTIONS */
+app.get("/property/:id/places/:type", async (req, res) => {
+
+  const propertyId = req.params.id;
+  const type = req.params.type;
+
+  const property = properties[propertyId];
+
+  if (!property || !property.coordinates) {
+    return res.json({ items: [] });
+  }
+
+  const { lat, lng } = property.coordinates;
+
+  const cacheKey = `places:${propertyId}:${type}`;
+
+  /* --- REDIS CACHE --- */
+
+  const cached = await redis.get(cacheKey);
+
+  if (cached) {
+
+    console.log("Places cache hit");
+
+    return res.json(JSON.parse(cached));
+
+  }
+
+  /* --- CATEGORY MAP --- */
+
+  const mapType = {
+
+    restaurants: "restaurant",
+
+    cafes: "cafe",
+
+    bars: "bar",
+
+    activities: "tourist_attraction",
+
+    parks: "park",
+
+    supermarket: "supermarket",
+
+    pharmacy: "pharmacy",
+
+    transport: "taxi_stand",
+
+    public_transport: "transit_station"
+
+  };
+
+  const placeType = mapType[type];
+
+  if (!placeType) {
+    return res.json({ items: [] });
+  }
+
+  try {
+
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1200&type=${placeType}&key=${process.env.GOOGLE_PLACES_KEY}`;
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    const items = data.results.slice(0, 4).map(place => ({
+
+      name: place.name,
+
+      rating: place.rating || "4+",
+
+      address: place.vicinity,
+
+      open: place.opening_hours?.open_now ?? null
+
+    }));
+
+    const result = { items };
+
+    /* --- SAVE CACHE 24H --- */
+
+    await redis.set(cacheKey, JSON.stringify(result), {
+
+      EX: 60 * 60 * 24
+
+    });
+
+    console.log("Places cache saved");
+
+    res.json(result);
+
+  } catch (error) {
+
+    console.error("Places API error", error);
+
+    res.json({ items: [] });
+
+  }
+
+});
+
 function translateSuggestion(text, language) {
 
   const translations = {
@@ -182,48 +284,48 @@ app.post("/chat", async (req, res) => {
       normalizedMessage.includes(f.question.toLowerCase())
     );
 
-   if (faqMatch) {
+    if (faqMatch) {
 
-  console.log("FAQ auto-answer triggered");
+      console.log("FAQ auto-answer triggered");
 
-  let answer = faqMatch.answer;
+      let answer = faqMatch.answer;
 
-  // traducir si el usuario no usa inglés
-  if (userLanguage && userLanguage !== "English") {
+      // traducir si el usuario no usa inglés
+      if (userLanguage && userLanguage !== "English") {
 
-    const translation = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `Translate the following text to ${userLanguage}. Only return the translated text.`
-        },
-        {
-          role: "user",
-          content: answer
-        }
-      ]
-    });
+        const translation = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: `Translate the following text to ${userLanguage}. Only return the translated text.`
+            },
+            {
+              role: "user",
+              content: answer
+            }
+          ]
+        });
 
-    answer = translation.choices[0].message.content;
+        answer = translation.choices[0].message.content;
 
-  }
+      }
 
-  history.push({
-    role: "assistant",
-    content: answer
-  });
+      history.push({
+        role: "assistant",
+        content: answer
+      });
 
-  await redis.set(historyKey, JSON.stringify(history), {
-    EX: 60 * 60 * 6
-  });
+      await redis.set(historyKey, JSON.stringify(history), {
+        EX: 60 * 60 * 6
+      });
 
-  return res.json({
-    reply: answer,
-    language: userLanguage
-  });
+      return res.json({
+        reply: answer,
+        language: userLanguage
+      });
 
-}
+    }
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
