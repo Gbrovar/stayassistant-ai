@@ -231,26 +231,31 @@ async function showRecommendations(text) {
         text.includes("restaurante") ||
         text.includes("restaurantes")
     ) {
-        type = "restaurants";
-    }
 
-    if (
+        type = "restaurants";
+
+    } else if (
+
         text.includes("coffee") ||
         text.includes("breakfast") ||
         text.includes("cafe")
-    ) {
-        type = "cafes";
-    }
 
-    if (
+    ) {
+
+        type = "cafes";
+
+    } else if (
+
         text.includes("bar") ||
         text.includes("drink") ||
         text.includes("nightlife")
-    ) {
-        type = "bars";
-    }
 
-    if (
+    ) {
+
+        type = "bars";
+
+    } else if (
+
         text.includes("supermarket") ||
         text.includes("grocery") ||
         text.includes("store") ||
@@ -258,46 +263,58 @@ async function showRecommendations(text) {
         text.includes("market") ||
         text.includes("supermercado") ||
         text.includes("supermercados")
+
     ) {
+
         type = "supermarket";
-    }
 
-    if (
-        text.includes("pharmacy") ||
-        text.includes("pharmacie")
+    } else if (
+
+        text.includes("pharmacy")
+
     ) {
+
         type = "pharmacy";
-    }
 
-    if (
+    } else if (
+
         text.includes("park")
-    ) {
-        type = "parks";
-    }
 
-    if (
+    ) {
+
+        type = "parks";
+
+    } else if (
+
         text.includes("taxi") ||
         text.includes("uber") ||
         text.includes("transport")
-    ) {
-        type = "transport";
-    }
 
-    if (
+    ) {
+
+        type = "transport";
+
+    } else if (
+
         text.includes("bus") ||
         text.includes("metro") ||
         text.includes("train") ||
         text.includes("public transport")
-    ) {
-        type = "public_transport";
-    }
 
-    if (
+    ) {
+
+        type = "public_transport";
+
+    } else if (
+
         text.includes("activity") ||
         text.includes("things to do") ||
         text.includes("activities")
+
     ) {
+
         type = "activities";
+
     }
 
     if (!type) return;
@@ -310,31 +327,30 @@ async function showRecommendations(text) {
 
         console.log("Places result:", data);
 
-        if (!data.items || !data.items.length) {
+        if (!data.items || !data.items.length) return;
 
-            console.log("No places found");
+        /* --- HEADER (MULTI LANGUAGE) --- */
 
-            return;
+        let title = "Nearby places you may like:";
 
+        if (selectedLanguage === "Español") {
+            title = "Lugares cercanos que podrían interesarte:";
         }
 
-        /* --- HEADER UX --- */
+        if (selectedLanguage === "Deutsch") {
+            title = "Orte in der Nähe:";
+        }
 
         messages.innerHTML += `
 
-            <div class="bot-wrapper">
-
+        <div class="bot-wrapper">
             <div class="bot-avatar">📍</div>
-
             <div class="bot-message">
-
-            <b>Nearby places you may like:</b>
-
+            <b>${title}</b>
             </div>
+        </div>
 
-            </div>
-
-            `;
+        `;
 
         /* --- RENDER PLACES --- */
 
@@ -344,16 +360,18 @@ async function showRecommendations(text) {
 
             <div class="bot-wrapper">
 
-            <div class="bot-avatar">📍</div>
+                <div class="bot-avatar">📍</div>
 
-            <div class="bot-message">
+                <div class="bot-message">
 
-            <b>${place.name}</b><br>
-            ⭐ ${place.rating}<br>
-            ${place.open === true ? "🟢 Open now<br>" : ""}
-            ${place.address}
+                    <b>${place.name}</b><br>
 
-            </div>
+                    ⭐ ${place.rating}
+                    ${place.open === true ? " 🟢 Open" : ""}<br>
+
+                    📍 ${place.address}
+
+                </div>
 
             </div>
 
@@ -368,7 +386,6 @@ async function showRecommendations(text) {
     }
 
 }
-
 
 /* SEND MESSAGE */
 
