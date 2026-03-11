@@ -210,6 +210,124 @@ async function showQuickActions() {
 
 }
 
+/* SMART RECOMMENDATIONS */
+
+async function showRecommendations(text) {
+
+    const messages = document.getElementById("messages");
+
+    text = text.toLowerCase();
+
+    let type = null;
+
+    if (
+        text.includes("restaurant") ||
+        text.includes("food") ||
+        text.includes("dinner") ||
+        text.includes("restaurante")
+    ) {
+        type = "restaurants";
+    }
+
+    if (
+        text.includes("coffee") ||
+        text.includes("breakfast") ||
+        text.includes("cafe")
+    ) {
+        type = "cafes";
+    }
+
+    if (
+        text.includes("bar") ||
+        text.includes("nightlife") ||
+        text.includes("drink")
+    ) {
+        type = "bars";
+    }
+
+    if (
+        text.includes("supermarket") ||
+        text.includes("grocery")
+    ) {
+        type = "supermarket";
+    }
+
+    if (
+        text.includes("pharmacy")
+    ) {
+        type = "pharmacy";
+    }
+
+    if (
+        text.includes("park")
+    ) {
+        type = "parks";
+    }
+
+    if (
+        text.includes("taxi") ||
+        text.includes("transport")
+    ) {
+        type = "transport";
+    }
+
+    if (
+        text.includes("bus") ||
+        text.includes("metro") ||
+        text.includes("train") ||
+        text.includes("public transport")
+    ) {
+        type = "public_transport";
+    }
+
+    if (
+        text.includes("activity") ||
+        text.includes("things to do") ||
+        text.includes("activities")
+    ) {
+        type = "activities";
+    }
+
+    if (!type) return;
+
+    try {
+
+        const response = await fetch(`/property/${propertyId}/places/${type}`);
+
+        const data = await response.json();
+
+        if (!data.items.length) return;
+
+        data.items.forEach(place => {
+
+            messages.innerHTML += `
+
+<div class="bot-wrapper">
+
+<div class="bot-avatar">📍</div>
+
+<div class="bot-message">
+
+<b>${place.name}</b><br>
+⭐ ${place.rating}<br>
+${place.address}
+
+</div>
+
+</div>
+
+`;
+
+        });
+
+    } catch (error) {
+
+        console.error("Recommendation error", error);
+
+    }
+
+}
+
 /* SEND MESSAGE */
 
 async function sendMessage(forcedText = null, displayLabel = null) {
@@ -228,22 +346,22 @@ async function sendMessage(forcedText = null, displayLabel = null) {
     input.value = "";
 
     messages.innerHTML += `
-<div class="bot-wrapper" id="typing">
+        <div class="bot-wrapper" id="typing">
 
-<div class="bot-avatar">🤖</div>
+        <div class="bot-avatar">🤖</div>
 
-<div class="bot-message">
+        <div class="bot-message">
 
-<div class="typing-dots">
-<span></span>
-<span></span>
-<span></span>
-</div>
+        <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+        </div>
 
-</div>
+        </div>
 
-</div>
-`;
+        </div>
+        `;
 
     messages.scrollTop = messages.scrollHeight;
 
