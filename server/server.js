@@ -26,21 +26,6 @@ const publicPath = path.resolve(__dirname, "../public");
 
 console.log("Serving static files from:", publicPath);
 
-/* PRUEBA GOOGLE API */
-app.get("/test-google", async (req, res) => {
-
-    const lat = 28.1416;
-    const lng = -15.4314;
-
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1200&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`;
-
-    const response = await fetch(url);
-
-    const data = await response.json();
-
-    res.json(data);
-
-});
 
 /* --- static files --- */
 
