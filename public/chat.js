@@ -66,6 +66,8 @@ function selectLanguage(lang) {
 
     showQuickActions();
 
+    showProactiveSuggestions();
+
 }
 
 
@@ -383,6 +385,63 @@ async function showRecommendations(text) {
         console.error("Recommendation error", error);
 
     }
+
+}
+
+function showProactiveSuggestions() {
+
+    const messages = document.getElementById("messages");
+
+    let text = `
+Welcome 👋<br><br>
+Since you just arrived, here are some useful things nearby:
+`;
+
+    if (selectedLanguage === "Español") {
+
+        text = `
+Bienvenido 👋<br><br>
+Si acabas de llegar, aquí tienes algunos lugares útiles cerca:
+`;
+
+    }
+
+    if (selectedLanguage === "Deutsch") {
+
+        text = `
+Willkommen 👋<br><br>
+Falls Sie gerade angekommen sind, hier sind einige nützliche Orte in der Nähe:
+`;
+
+    }
+
+    messages.innerHTML += `
+
+<div class="bot-wrapper">
+
+<div class="bot-avatar">🤖</div>
+
+<div class="bot-message">
+
+${text}
+
+</div>
+
+</div>
+
+<div id="quick-actions">
+
+<button onclick="quick('Where is the nearest supermarket?')">🛒 Supermarket</button>
+
+<button onclick="quick('Recommend restaurants nearby')">🍽 Restaurants</button>
+
+<button onclick="quick('How can I get a taxi?')">🚕 Taxi</button>
+
+<button onclick="quick('Where is the nearest pharmacy?')">💊 Pharmacy</button>
+
+</div>
+
+`;
 
 }
 
