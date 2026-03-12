@@ -7,6 +7,7 @@
     window.StayAssistantWidgetLoaded = true;
 
     let iframe = null;
+    let button = null;
 
     /* --- detectar script --- */
 
@@ -44,7 +45,7 @@
 
         /* botón flotante */
 
-        let button = document.createElement("button");
+        button = document.createElement("button");
 
 
         button.innerText = branding.button_text || "💬 Concierge";
@@ -178,8 +179,13 @@
     window.addEventListener("message", function (event) {
 
         if (event.data === "stayassistant-close") {
+
             if (iframe) iframe.style.display = "none";
+
             if (button) button.style.display = "block";
+
+            document.body.style.overflow = "auto";
+
         }
 
     });
