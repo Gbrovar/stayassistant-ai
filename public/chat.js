@@ -465,7 +465,7 @@ async function showRecommendations(text) {
                     target="_blank"
                     class="maps-btn"
                     >
-                    Open in Google Maps
+                    ${labels.maps}
                     </a>
 
                 </div>
