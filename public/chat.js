@@ -320,7 +320,7 @@ async function showRecommendations(text) {
 
     if (!type) return;
 
-    
+
 
     try {
 
@@ -359,6 +359,10 @@ async function showRecommendations(text) {
 
         data.items.forEach(place => {
 
+            const distance = place.distance
+                ? `📍 ${place.distance} m<br>`
+                : "";
+
             messages.innerHTML += `
 
             <div class="bot-wrapper">
@@ -372,8 +376,8 @@ async function showRecommendations(text) {
             ⭐ ${place.rating}
             ${place.open === true ? " 🟢 Open" : ""}<br>
 
-            ${distance}
-            
+            ${distance}<br><br>
+
             📍 ${place.address}<br><br>
 
             <a 
