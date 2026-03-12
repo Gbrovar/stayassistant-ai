@@ -244,6 +244,53 @@ app.get("/property/:id", (req, res) => {
 
 });
 
+/* --- deteccion y adaptacion de intent --- */
+function detectIntent(text) {
+
+  text = text.toLowerCase()
+
+  if (
+    text.includes("wifi")
+  ) return "wifi"
+
+  if (
+    text.includes("restaurant") ||
+    text.includes("food") ||
+    text.includes("eat") ||
+    text.includes("dinner")
+  ) return "restaurants"
+
+  if (
+    text.includes("supermarket") ||
+    text.includes("grocery") ||
+    text.includes("market") ||
+    text.includes("supermercado")
+  ) return "supermarket"
+
+  if (
+    text.includes("taxi") ||
+    text.includes("uber")
+  ) return "taxi"
+
+  if (
+    text.includes("check in") ||
+    text.includes("check-in")
+  ) return "checkin"
+
+  if (
+    text.includes("check out") ||
+    text.includes("checkout")
+  ) return "checkout"
+
+  if (
+    text.includes("pharmacy") ||
+    text.includes("farmacia")
+  ) return "pharmacy"
+
+  return "other"
+
+}
+
 /* --- chat endpoint --- */
 
 app.post("/chat", async (req, res) => {
