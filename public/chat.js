@@ -105,7 +105,6 @@ function translateUI() {
 /* QUICK ACTIONS */
 
 async function showQuickActions() {
-    
 
     const messages = document.getElementById("messages");
 
