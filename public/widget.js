@@ -113,7 +113,10 @@
         }
 
         iframe.style.boxShadow = "0 20px 40px rgba(0,0,0,0.45)";
-        iframe.style.display = "none";
+        iframe.style.opacity = "0";
+        iframe.style.transform = "translateY(20px) scale(.95)";
+        iframe.style.pointerEvents = "none";
+        iframe.style.transition = "opacity .25s ease, transform .25s ease";
 
         document.body.appendChild(iframe);
 
