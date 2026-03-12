@@ -632,11 +632,17 @@ app.get("/analytics/:propertyId", async (req, res) => {
 
 app.get("/clear-cache", async (req, res) => {
   try {
-    await redis.flushall();
+
+    await redis.flushAll();
+
     res.send("Redis cache cleared");
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error clearing cache");
+
+    console.error("REDIS ERROR:", err);
+
+    res.status(500).send(err.message);
+
   }
 });
 
