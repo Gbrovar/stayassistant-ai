@@ -360,7 +360,9 @@ async function showRecommendations(text) {
         data.items.forEach(place => {
 
             const distance = place.distance
-                ? `📍 ${place.distance} m<br>`
+                ? (place.distance > 1000
+                    ? `📍 ${(place.distance / 1000).toFixed(1)} km<br>`
+                    : `📍 ${place.distance} m<br>`)
                 : "";
 
             messages.innerHTML += `
