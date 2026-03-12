@@ -435,11 +435,11 @@ async function showRecommendations(text) {
 
             if (place.open === true) {
 
-                openStatus = "🟢 Open";
+                openStatus = `🟢 ${labels.open}`;
 
             } else if (place.open === false) {
 
-                openStatus = "🔴 Closed";
+                openStatus = `🔴 ${labels.closed}`;
 
             }
 
