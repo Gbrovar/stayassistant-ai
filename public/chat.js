@@ -359,19 +359,47 @@ async function showRecommendations(text) {
 
         data.items.forEach(place => {
 
-            let distanceText = ""
+            /* --- DISTANCE --- */
+
+            let distanceText = "";
 
             if (place.distance) {
 
                 if (place.distance > 1000) {
 
-                    distanceText = `📍 ${(place.distance / 1000).toFixed(1)} km<br>`
+                    distanceText = `📍 ${(place.distance / 1000).toFixed(1)} km<br>`;
 
                 } else {
 
-                    distanceText = `📍 ${place.distance} m<br>`
+                    distanceText = `📍 ${place.distance} m<br>`;
 
                 }
+
+            }
+
+            /* --- ETA WALKING --- */
+
+            let etaText = "";
+
+            if (place.distance) {
+
+                const minutes = Math.max(1, Math.round(place.distance / 84));
+
+                etaText = `🚶 ${minutes} min walk<br>`;
+
+            }
+
+            /* --- OPEN / CLOSED STATUS --- */
+
+            let openStatus = "";
+
+            if (place.open === true) {
+
+                openStatus = "🟢 Open";
+
+            } else if (place.open === false) {
+
+                openStatus = "🔴 Closed";
 
             }
 
@@ -379,28 +407,28 @@ async function showRecommendations(text) {
 
             <div class="bot-wrapper">
 
-            <div class="bot-avatar">📍</div>
+                <div class="bot-avatar">📍</div>
 
-            <div class="bot-message">
+                <div class="bot-message">
 
             <b>${place.name}</b><br>
 
-            ⭐ ${place.rating}
-            ${place.open === true ? " 🟢 Open" : ""}<br>
+            ⭐ ${place.rating} ${openStatus}<br>
 
-            ${distance}<br>
+            ${distanceText}
+            ${etaText}
 
             📍 ${place.address}<br><br>
 
-            <a 
-            href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + place.address)}"
-            target="_blank"
-            class="maps-btn"
-            >
-            Open in Google Maps
-            </a>
+                    <a 
+                    href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + place.address)}"
+                    target="_blank"
+                    class="maps-btn"
+                    >
+                    Open in Google Maps
+                    </a>
 
-            </div>
+                </div>
 
             </div>
 
