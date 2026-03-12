@@ -320,9 +320,7 @@ async function showRecommendations(text) {
 
     if (!type) return;
 
-    const distance = place.distance
-        ? (place.distance * 1000).toFixed(0) + " m"
-        : ""
+    
 
     try {
 
@@ -373,7 +371,7 @@ async function showRecommendations(text) {
 
             ⭐ ${place.rating}
             ${place.open === true ? " 🟢 Open" : ""}<br>
-            
+
             📍 ${place.address}<br><br>
 
             <a 
