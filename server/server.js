@@ -287,6 +287,17 @@ function detectIntent(text) {
     text.includes("farmacia")
   ) return "pharmacy"
 
+  if (
+    text.includes("bus") ||
+    text.includes("metro") ||
+    text.includes("train")
+  ) return "transport"
+
+  if (
+    text.includes("activity") ||
+    text.includes("things to do")
+  ) return "activities"
+
   return "other"
 
 }
