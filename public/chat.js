@@ -563,7 +563,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         /* luego quick actions */
 
-        //await showQuickActions();
+        await showQuickActions();
 
     } catch (error) {
 
