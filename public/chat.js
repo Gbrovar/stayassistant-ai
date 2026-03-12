@@ -361,17 +361,17 @@ async function showRecommendations(text) {
 
             /* --- DISTANCE --- */
 
-            let distance = ""
+            let distanceText = "";
 
             if (place.distance) {
 
-                if (place.distance < 1000) {
+                if (place.distance > 1000) {
 
-                    distance = `📍 ${place.distance} m`
+                    distanceText = `📍 ${(place.distance / 1000).toFixed(1)} km<br>`;
 
                 } else {
 
-                    distance = `📍 ${(place.distance / 1000).toFixed(1)} km`
+                    distanceText = `📍 ${place.distance} m<br>`;
 
                 }
 
