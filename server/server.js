@@ -360,6 +360,27 @@ app.post("/chat", async (req, res) => {
     const normalizedMessage = userMessage.toLowerCase();
 
     /* --- FAQ AUTO ANSWER --- */
+    if (
+      normalizedMessage.includes("check in") ||
+      normalizedMessage.includes("checkin") ||
+      normalizedMessage.includes("check-in") ||
+      normalizedMessage.includes("check out") ||
+      normalizedMessage.includes("checkout") ||
+      normalizedMessage.includes("checkout")
+    ) {
+
+      const answer = `
+        Check-in: ${property.knowledge.property_info.checkin}
+
+        Check-out: ${property.knowledge.property_info.checkout}
+        `
+
+      return res.json({
+        reply: answer,
+        language: userLanguage
+      })
+
+    }
 
     const faqMatch = property.knowledge.faq.find(f =>
       normalizedMessage.includes(f.question.toLowerCase())
