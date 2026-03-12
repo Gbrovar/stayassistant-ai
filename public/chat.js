@@ -139,7 +139,7 @@ async function showQuickActions() {
 
         const data = await response.json();
 
-        const container = document.getElementById("quick-actions");
+        const container = document.getElementById("quick-actions-bar");
 
         const suggestions = data.suggestions;
 
