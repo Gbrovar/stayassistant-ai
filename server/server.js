@@ -383,10 +383,10 @@ app.post("/chat", async (req, res) => {
     ) {
 
       let answer = `
-Check-in: ${property.knowledge.property_info.checkin}
+      Check-in: ${property.knowledge.property_info.checkin}
 
-Check-out: ${property.knowledge.property_info.checkout}
-`
+      Check-out: ${property.knowledge.property_info.checkout}
+      `
 
       /* traducir si idioma ≠ inglés */
 
