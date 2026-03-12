@@ -361,19 +361,17 @@ async function showRecommendations(text) {
 
             /* --- DISTANCE --- */
 
-            let distance = ""
+            let distanceText = "";
 
-            if (place.distance !== null && place.distance !== undefined) {
+            if (place.distance) {
 
-                const meters = Math.round(place.distance)
+                if (place.distance > 1000) {
 
-                if (meters < 1000) {
-
-                    distance = `📍 ${meters} m`
+                    distanceText = `📍 ${(place.distance / 1000).toFixed(1)} km<br>`;
 
                 } else {
 
-                    distance = `📍 ${(meters / 1000).toFixed(1)} km`
+                    distanceText = `📍 ${place.distance} m<br>`;
 
                 }
 
