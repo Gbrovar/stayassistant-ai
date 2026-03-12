@@ -264,7 +264,7 @@ app.post("/chat", async (req, res) => {
       await redis.zIncrBy(
         analyticsKey,
         1,
-        message.toLowerCase()
+        userMessage.toLowerCase()
       );
 
     } catch (err) {
@@ -272,6 +272,7 @@ app.post("/chat", async (req, res) => {
       console.log("Analytics error:", err);
 
     }
+
     console.log("Property:", propertyId);
 
     const property = properties[propertyId] || properties["demo_property"];
