@@ -150,6 +150,8 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
       address: place.vicinity,
 
+      place_id: place.place_id,
+
       open: place.opening_hours?.open_now ?? null
 
     }));

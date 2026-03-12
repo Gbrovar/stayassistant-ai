@@ -344,14 +344,32 @@ async function showRecommendations(text) {
 
         messages.innerHTML += `
 
-        <div class="bot-wrapper">
-            <div class="bot-avatar">📍</div>
-            <div class="bot-message">
-            <b>${title}</b>
-            </div>
-        </div>
+            <div class="bot-wrapper">
 
-        `;
+            <div class="bot-avatar">📍</div>
+
+            <div class="bot-message">
+
+            <b>${place.name}</b><br>
+
+            ⭐ ${place.rating}
+            ${place.open === true ? " 🟢 Open" : ""}<br>
+
+            📍 ${place.address}<br><br>
+
+            <a 
+            href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + place.address)}"
+            target="_blank"
+            class="maps-btn"
+            >
+            Open in Google Maps
+            </a>
+
+            </div>
+
+            </div>
+
+            `;
 
         /* --- RENDER PLACES --- */
 
