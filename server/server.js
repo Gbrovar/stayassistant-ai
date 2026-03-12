@@ -414,26 +414,17 @@ app.get("/analytics/:propertyId", async (req, res) => {
 
     const key = `stayassistant:analytics:${propertyId}:questions`;
 
-    const data = await redis.zRange(
+    const data = await redis.zRangeWithScores(
       key,
       0,
       9,
-      {
-        REV: true,
-        WITHSCORES: true
-      }
+      { REV: true }
     );
 
-    const results = [];
-
-    for (let i = 0; i < data.length; i += 2) {
-
-      results.push({
-        question: data[i],
-        count: Number(data[i + 1] || 0)
-      });
-
-    }
+    const results = data.map(item => ({
+      question: item.value,
+      count: item.score
+    }));
 
     res.json({
       top_questions: results
