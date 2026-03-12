@@ -376,7 +376,7 @@ async function showRecommendations(text) {
             ⭐ ${place.rating}
             ${place.open === true ? " 🟢 Open" : ""}<br>
 
-            ${distance}<br><br>
+            ${distance}
 
             📍 ${place.address}<br><br>
 
