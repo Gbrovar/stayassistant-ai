@@ -166,6 +166,22 @@
 
     };
 
+    window.addEventListener("message", function (event) {
+
+        if (event.data === "stayassistant-close") {
+
+            iframe.style.display = "none";
+
+            const button = document.querySelector("button");
+
+            if (button) {
+                button.style.display = "block";
+            }
+
+        }
+
+    });
+
     /* --- auto init widget --- */
 
     let branding = {
