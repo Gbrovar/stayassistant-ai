@@ -403,6 +403,53 @@ app.post("/chat", async (req, res) => {
 
 });
 
+/* --- ANALYTICS API --- */
+
+app.get("/analytics/:propertyId", async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId;
+
+    const key = `stayassistant:analytics:${propertyId}:questions`;
+
+    const data = await redis.zRange(
+      key,
+      0,
+      9,
+      {
+        REV: true,
+        WITHSCORES: true
+      }
+    );
+
+    const results = [];
+
+    for (let i = 0; i < data.length; i += 2) {
+
+      results.push({
+        question: data[i],
+        count: data[i + 1]
+      });
+
+    }
+
+    res.json({
+      top_questions: results
+    });
+
+  } catch (err) {
+
+    console.error("Analytics error", err);
+
+    res.status(500).json({
+      error: "Analytics failed"
+    });
+
+  }
+
+});
+
 /* --- server port --- */
 
 const PORT = process.env.PORT || 3000;
