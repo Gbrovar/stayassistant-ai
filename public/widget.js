@@ -87,15 +87,31 @@
 
         iframe.src = `/chat.html?embed=true&property=${propertyId}`;
 
+        const isMobile = window.innerWidth < 600;
+
         iframe.style.position = "fixed";
-        iframe.style.bottom = "90px";
-        iframe.style.right = "25px";
-        iframe.style.width = "380px";
-        iframe.style.height = "560px";
         iframe.style.border = "none";
-        iframe.style.borderRadius = "14px";
-        iframe.style.boxShadow = "0 20px 40px rgba(0,0,0,0.45)";
         iframe.style.zIndex = "9998";
+
+        if (isMobile) {
+
+            iframe.style.bottom = "0";
+            iframe.style.right = "0";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.borderRadius = "0";
+
+        } else {
+
+            iframe.style.bottom = "90px";
+            iframe.style.right = "25px";
+            iframe.style.width = "380px";
+            iframe.style.height = "560px";
+            iframe.style.borderRadius = "14px";
+
+        }
+
+        iframe.style.boxShadow = "0 20px 40px rgba(0,0,0,0.45)";
         iframe.style.display = "none";
 
         document.body.appendChild(iframe);
