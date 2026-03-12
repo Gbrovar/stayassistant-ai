@@ -131,7 +131,7 @@ async function showQuickActions() {
 
     }
 
-    messages.innerHTML += `<div id="quick-actions"></div>`;
+    //messages.innerHTML += `<div id="quick-actions"></div>`;
 
     try {
 
