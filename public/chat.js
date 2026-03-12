@@ -123,7 +123,7 @@ async function showQuickActions() {
     if (!document.querySelector(".help-message")) {
 
         messages.innerHTML += `
-            <div class="bot-wrapper">
+            <div class="bot-wrapper help-message">
             <div class="bot-avatar">🤖</div>
             <div class="bot-message">${title}</div>
             </div>
