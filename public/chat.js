@@ -105,6 +105,7 @@ function translateUI() {
 /* QUICK ACTIONS */
 
 async function showQuickActions() {
+    
 
     const messages = document.getElementById("messages");
 
@@ -131,7 +132,7 @@ async function showQuickActions() {
 
     }
 
-    //messages.innerHTML += `<div id="quick-actions"></div>`;
+    messages.innerHTML += `<div id="quick-actions"></div>`;
 
     try {
 
@@ -139,7 +140,7 @@ async function showQuickActions() {
 
         const data = await response.json();
 
-        const container = document.getElementById("quick-actions-bar");
+        const container = document.getElementById("quick-actions");
 
         const suggestions = data.suggestions;
 
@@ -566,7 +567,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         /* luego quick actions */
 
-        //await showQuickActions();
+        await showQuickActions();
 
     } catch (error) {
 
