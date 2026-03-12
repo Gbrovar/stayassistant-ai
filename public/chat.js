@@ -381,11 +381,16 @@ async function showRecommendations(text) {
 
             let etaText = "";
 
-            if (place.distance) {
+            if (place.distance !== null && place.distance !== undefined) {
 
                 const minutes = Math.max(1, Math.round(place.distance / 84));
 
-                etaText = `🚶 ${minutes} min walk<br>`;
+                let walkLabel = "min walk";
+
+                if (selectedLanguage === "Español") walkLabel = "min caminando";
+                if (selectedLanguage === "Deutsch") walkLabel = "Min zu Fuß";
+
+                etaText = `🚶 ${minutes} ${walkLabel}<br>`;
 
             }
 
