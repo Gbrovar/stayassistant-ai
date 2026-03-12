@@ -1,4 +1,4 @@
-export function buildPrompt(property, userLanguage) {
+export function buildPrompt(property, userLanguage, context = "day") {
 
   const k = property.knowledge;
 
@@ -42,7 +42,18 @@ Total units: ${property.units}
 
 ----------------------------------
 
-Time context: ${context}
+TIME CONTEXT
+
+Current guest time context: ${context}
+
+If context is:
+
+morning → suggest breakfast, cafes, supermarkets  
+afternoon → suggest restaurants, activities, parks  
+evening → suggest restaurants, bars, nightlife  
+night → help with late check-in, taxi, nearby open food
+
+Use this context naturally when assisting the guest.
 
 ----------------------------------
 
