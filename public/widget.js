@@ -166,6 +166,13 @@
 
     };
 
+    /* --- auto init widget --- */
+
+    let branding = {
+        button_text: "💬 Concierge",
+        primary_color: "#22c55e"
+    };
+
     window.addEventListener("message", function (event) {
 
         if (event.data === "stayassistant-close") {
@@ -181,13 +188,6 @@
         }
 
     });
-
-    /* --- auto init widget --- */
-
-    let branding = {
-        button_text: "💬 Concierge",
-        primary_color: "#22c55e"
-    };
 
     fetch(`/property/${propertyId}`)
         .then(res => res.json())
@@ -205,5 +205,8 @@
             createWidget();
 
         });
+
+
+
 
 })();
