@@ -255,6 +255,23 @@ app.post("/chat", async (req, res) => {
     const conversationId = req.body.conversationId || "default";
     const propertyId = req.body.propertyId || "demo_property";
 
+    /* --- ANALYTICS TRACKING --- */
+
+    try {
+
+      const analyticsKey = `stayassistant:analytics:${propertyId}:questions`;
+
+      await redis.zIncrBy(
+        analyticsKey,
+        1,
+        message.toLowerCase()
+      );
+
+    } catch (err) {
+
+      console.log("Analytics error:", err);
+
+    }
     console.log("Property:", propertyId);
 
     const property = properties[propertyId] || properties["demo_property"];
