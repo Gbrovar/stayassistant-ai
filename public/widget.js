@@ -127,6 +127,7 @@
                 iframe.style.display = "block";
 
                 if (isMobile) {
+                    document.body.style.overflow = "hidden";
                     button.style.display = "none";
                 }
 
@@ -137,6 +138,7 @@
                 iframe.style.display = "none";
 
                 if (isMobile) {
+                    document.body.style.overflow = "auto";
                     button.style.display = "block";
                 }
 
