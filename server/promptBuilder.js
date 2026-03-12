@@ -42,6 +42,10 @@ Total units: ${property.units}
 
 ----------------------------------
 
+Time context: ${context}
+
+----------------------------------
+
 CHECK-IN / CHECK-OUT
 
 ${k.property_info.checkin}
