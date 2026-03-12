@@ -359,11 +359,21 @@ async function showRecommendations(text) {
 
         data.items.forEach(place => {
 
-            const distance = place.distance
-                ? (place.distance > 1000
-                    ? `📍 ${(place.distance / 1000).toFixed(1)} km<br>`
-                    : `📍 ${place.distance} m<br>`)
-                : "";
+            let distanceText = ""
+
+            if (place.distance) {
+
+                if (place.distance > 1000) {
+
+                    distanceText = `📍 ${(place.distance / 1000).toFixed(1)} km<br>`
+
+                } else {
+
+                    distanceText = `📍 ${place.distance} m<br>`
+
+                }
+
+            }
 
             messages.innerHTML += `
 
