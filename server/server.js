@@ -406,12 +406,13 @@ app.post("/chat", async (req, res) => {
 
     }
 
+    const context = detectContext(hour);
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: buildPrompt(property, userLanguage)
+          content: buildPrompt(property, userLanguage, context)
         },
 
         ...history
