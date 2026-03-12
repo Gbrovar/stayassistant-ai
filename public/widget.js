@@ -176,11 +176,8 @@
     window.addEventListener("message", function (event) {
 
         if (event.data === "stayassistant-close") {
-
             if (iframe) iframe.style.display = "none";
-
             if (button) button.style.display = "block";
-
         }
 
     });
