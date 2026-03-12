@@ -312,6 +312,7 @@ app.post("/chat", async (req, res) => {
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
     const propertyId = req.body.propertyId || "demo_property";
+    const hour = req.body.hour || null;
 
     /* --- ANALYTICS TRACKING --- */
 
@@ -463,6 +464,25 @@ app.post("/chat", async (req, res) => {
   }
 
 });
+
+/* -- CONTEXT DETECTION --- */
+function detectContext(hour) {
+
+  if (!hour) return "day"
+
+  if (hour >= 22 || hour <= 5)
+    return "night"
+
+  if (hour >= 6 && hour <= 11)
+    return "morning"
+
+  if (hour >= 12 && hour <= 18)
+    return "afternoon"
+
+  return "evening"
+
+}
+
 
 /* --- ANALYTICS API --- */
 
