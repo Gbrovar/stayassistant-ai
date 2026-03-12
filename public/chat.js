@@ -355,6 +355,41 @@ async function showRecommendations(text) {
 
         `;
 
+        let labels = {
+
+            open: "Open",
+            closed: "Closed",
+            maps: "Open in Google Maps",
+            walk: "min walk"
+
+        }
+
+        if (selectedLanguage === "Español") {
+
+            labels = {
+
+                open: "Abierto",
+                closed: "Cerrado",
+                maps: "Abrir en Google Maps",
+                walk: "min caminando"
+
+            }
+
+        }
+
+        if (selectedLanguage === "Deutsch") {
+
+            labels = {
+
+                open: "Geöffnet",
+                closed: "Geschlossen",
+                maps: "In Google Maps öffnen",
+                walk: "Min zu Fuß"
+
+            }
+
+        }
+
         /* --- RENDER PLACES --- */
 
         data.items.forEach(place => {
