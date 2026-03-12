@@ -177,11 +177,13 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
       lng: place.geometry.location.lng,
 
-      distance: getDistance(
-        lat,
-        lng,
-        place.geometry.location.lat,
-        place.geometry.location.lng
+      distance: Math.round(
+        getDistance(
+          lat,
+          lng,
+          place.geometry.location.lat,
+          place.geometry.location.lng
+        ) * 1000
       ),
 
       place_id: place.place_id,
