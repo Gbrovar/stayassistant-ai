@@ -79,6 +79,69 @@
 
         let pulseInterval = setInterval(pulseButton, 9000);
 
+        /* --- auto hint after 7 seconds --- */
+
+        setTimeout(() => {
+
+            // si el chat ya está abierto no mostrar hint
+            if (iframe && iframe.style.opacity === "1") return;
+
+            const hint = document.createElement("div");
+
+            hint.innerText = "Need help with check-in or local recommendations?";
+
+            hint.style.position = "fixed";
+            hint.style.bottom = "85px";
+            hint.style.right = "25px";
+            hint.style.background = "#111827";
+            hint.style.color = "#e5e7eb";
+            hint.style.padding = "10px 14px";
+            hint.style.borderRadius = "10px";
+            hint.style.fontSize = "13px";
+            hint.style.boxShadow = "0 10px 25px rgba(0,0,0,0.35)";
+            hint.style.zIndex = "9999";
+            hint.style.cursor = "pointer";
+
+            hint.style.opacity = "0";
+            hint.style.transform = "translateY(10px)";
+            hint.style.transition = "all .25s ease";
+
+            document.body.appendChild(hint);
+
+            /* animación */
+
+            requestAnimationFrame(() => {
+
+                hint.style.opacity = "1";
+                hint.style.transform = "translateY(0)";
+
+            });
+
+            /* click abre el chat */
+
+            hint.onclick = () => {
+
+                button.click();
+                hint.remove();
+
+            };
+
+            /* desaparecer después de 8 segundos */
+
+            setTimeout(() => {
+
+                hint.style.opacity = "0";
+
+                setTimeout(() => {
+
+                    if (hint) hint.remove();
+
+                }, 300);
+
+            }, 8000);
+
+        }, 7000);
+
         /* iframe del chat */
 
         iframe = document.createElement("iframe");
