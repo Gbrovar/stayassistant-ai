@@ -711,3 +711,19 @@ document.getElementById("input").addEventListener("keypress", function (e) {
     }
 
 });
+
+
+/* CLOSE CHAT (X) */
+const closeBtn = document.getElementById("close-chat");
+
+if (closeBtn) {
+
+    closeBtn.onclick = function () {
+
+        if (window.parent) {
+            window.parent.postMessage("stayassistant-close", "*");
+        }
+
+    }
+
+}
