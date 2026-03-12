@@ -27,7 +27,7 @@
         .item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #1f2937;
         }
     </style>
@@ -49,11 +49,13 @@
     <script>
 
         const params = new URLSearchParams(window.location.search);
+
         const property = params.get("property") || "demo_property";
 
-        async function load() {
+        async function loadAnalytics() {
 
             const res = await fetch(`/analytics/${property}`);
+
             const data = await res.json();
 
             const list = document.getElementById("list");
@@ -61,17 +63,17 @@
             data.top_questions.forEach(item => {
 
                 list.innerHTML += `
-                <div class="item">
-                <span>${item.question}</span>
-                <b>${item.count}</b>
-                </div>
-                `;
+                    <div class="item">
+                    <span>${item.question}</span>
+                    <b>${item.count}</b>
+                    </div>
+                    `;
 
             });
 
         }
 
-        load();
+        loadAnalytics();
 
     </script>
 
