@@ -16,7 +16,6 @@
     if (!script) {
 
         const scripts = document.getElementsByTagName("script");
-
         script = scripts[scripts.length - 1];
 
     }
@@ -28,7 +27,6 @@
     try {
 
         const url = new URL(script.src);
-
         const params = new URLSearchParams(url.search);
 
         propertyId = params.get("property") || "demo_property";
@@ -47,7 +45,6 @@
 
         button = document.createElement("button");
 
-
         button.innerText = branding.button_text || "💬 Concierge";
 
         button.style.position = "fixed";
@@ -64,7 +61,7 @@
         button.style.zIndex = "9999";
         button.style.transition = "transform 0.2s ease";
 
-        /* --- pulse animation --- */
+        /* pulse animation */
 
         function pulseButton() {
 
@@ -113,35 +110,53 @@
         }
 
         iframe.style.boxShadow = "0 20px 40px rgba(0,0,0,0.45)";
-        
-        iframe.style.display = "none";
+
+        /* estado inicial (animable) */
+
+        iframe.style.opacity = "0";
+        iframe.style.transform = "translateY(30px) scale(.96)";
+        iframe.style.pointerEvents = "none";
+        iframe.style.transition = "opacity .25s ease, transform .25s ease";
 
         document.body.appendChild(iframe);
 
-        /* abrir/cerrar chat */
+        /* abrir / cerrar chat */
 
         button.onclick = function () {
 
             const isMobile = window.innerWidth < 600;
 
-            if (iframe.style.display === "none") {
+            if (iframe.style.opacity === "0") {
 
-                iframe.style.display = "block";
+                iframe.style.pointerEvents = "auto";
+
+                requestAnimationFrame(() => {
+
+                    iframe.style.opacity = "1";
+                    iframe.style.transform = "translateY(0) scale(1)";
+
+                });
 
                 if (isMobile) {
+
                     document.body.style.overflow = "hidden";
                     button.style.display = "none";
+
                 }
 
                 clearInterval(pulseInterval);
 
             } else {
 
-                iframe.style.display = "none";
+                iframe.style.opacity = "0";
+                iframe.style.transform = "translateY(30px) scale(.96)";
+                iframe.style.pointerEvents = "none";
 
                 if (isMobile) {
+
                     document.body.style.overflow = "auto";
                     button.style.display = "block";
+
                 }
 
             }
@@ -157,7 +172,6 @@
             if (!config || !config.propertyId) {
 
                 console.error("StayAssistant: apartmentId is required");
-
                 return;
 
             }
@@ -170,18 +184,28 @@
 
     };
 
-    /* --- auto init widget --- */
+    /* branding default */
 
     let branding = {
+
         button_text: "💬 Concierge",
         primary_color: "#22c55e"
+
     };
+
+    /* cerrar desde iframe */
 
     window.addEventListener("message", function (event) {
 
         if (event.data === "stayassistant-close") {
 
-            if (iframe) iframe.style.display = "none";
+            if (iframe) {
+
+                iframe.style.opacity = "0";
+                iframe.style.transform = "translateY(30px) scale(.96)";
+                iframe.style.pointerEvents = "none";
+
+            }
 
             if (button) button.style.display = "block";
 
@@ -190,6 +214,8 @@
         }
 
     });
+
+    /* cargar branding desde backend */
 
     fetch(`/property/${propertyId}`)
         .then(res => res.json())
@@ -207,8 +233,5 @@
             createWidget();
 
         });
-
-
-
 
 })();
