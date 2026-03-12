@@ -430,7 +430,7 @@ app.get("/analytics/:propertyId", async (req, res) => {
 
       results.push({
         question: data[i],
-        count: data[i + 1]
+        count: Number(data[i + 1] || 0)
       });
 
     }
