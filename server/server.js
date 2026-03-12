@@ -630,6 +630,16 @@ app.get("/analytics/:propertyId", async (req, res) => {
 
 });
 
+app.get("/clear-cache", async (req, res) => {
+  try {
+    await redis.flushall();
+    res.send("Redis cache cleared");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error clearing cache");
+  }
+});
+
 /* --- server port --- */
 
 const PORT = process.env.PORT || 3000;
