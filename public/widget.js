@@ -120,15 +120,25 @@
 
         button.onclick = function () {
 
+            const isMobile = window.innerWidth < 600;
+
             if (iframe.style.display === "none") {
 
                 iframe.style.display = "block";
+
+                if (isMobile) {
+                    button.style.display = "none";
+                }
 
                 clearInterval(pulseInterval);
 
             } else {
 
                 iframe.style.display = "none";
+
+                if (isMobile) {
+                    button.style.display = "block";
+                }
 
             }
 
