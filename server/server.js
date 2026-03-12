@@ -308,11 +308,13 @@ app.post("/chat", async (req, res) => {
 
       const analyticsKey = `stayassistant:analytics:${propertyId}:questions`;
 
+      const intent = detectIntent(userMessage)
+
       await redis.zIncrBy(
         analyticsKey,
         1,
-        userMessage.toLowerCase()
-      );
+        intent
+      )
 
     } catch (err) {
 
