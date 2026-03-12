@@ -120,7 +120,7 @@ async function showQuickActions() {
     if (selectedLanguage === "English") title = "How can I help you?";
     if (selectedLanguage === "Deutsch") title = "Wie kann ich helfen?";
 
-    if (!document.querySelector("#quick-actions")) {
+    if (!document.querySelector(".help-message")) {
 
         messages.innerHTML += `
             <div class="bot-wrapper">
