@@ -359,21 +359,59 @@ app.post("/chat", async (req, res) => {
 
     const normalizedMessage = userMessage.toLowerCase();
 
-    /* --- FAQ AUTO ANSWER --- */
+    /* --- CHECKIN / CHECKOUT SMART FAQ --- */
+
     if (
+
       normalizedMessage.includes("check in") ||
-      normalizedMessage.includes("checkin") ||
       normalizedMessage.includes("check-in") ||
+      normalizedMessage.includes("checkin") ||
+
       normalizedMessage.includes("check out") ||
       normalizedMessage.includes("checkout") ||
+      normalizedMessage.includes("check-out") ||
+
+      normalizedMessage.includes("arrival") ||
+      normalizedMessage.includes("departure") ||
+
+      normalizedMessage.includes("llegada") ||
+      normalizedMessage.includes("salida") ||
+
+      normalizedMessage.includes("checkin") ||
       normalizedMessage.includes("checkout")
+
     ) {
 
-      const answer = `
-        Check-in: ${property.knowledge.property_info.checkin}
+      let answer = `
+Check-in: ${property.knowledge.property_info.checkin}
 
-        Check-out: ${property.knowledge.property_info.checkout}
-        `
+Check-out: ${property.knowledge.property_info.checkout}
+`
+
+      /* traducir si idioma ≠ inglés */
+
+      if (userLanguage && userLanguage !== "English") {
+
+        const translation = await openai.chat.completions.create({
+
+          model: "gpt-4o-mini",
+
+          messages: [
+            {
+              role: "system",
+              content: `Translate the following text to ${userLanguage}. Only return the translated text.`
+            },
+            {
+              role: "user",
+              content: answer
+            }
+          ]
+
+        })
+
+        answer = translation.choices[0].message.content
+
+      }
 
       return res.json({
         reply: answer,
@@ -381,6 +419,8 @@ app.post("/chat", async (req, res) => {
       })
 
     }
+
+    /* --- FAQ AUTO ANSWER --- */
 
     const faqMatch = property.knowledge.faq.find(f =>
       normalizedMessage.includes(f.question.toLowerCase())
