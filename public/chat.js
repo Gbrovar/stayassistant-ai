@@ -495,6 +495,15 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     const hour = new Date().getHours()
 
+    body: JSON.stringify({
+        message: userText,
+        language: selectedLanguage,
+        conversationId: conversationId,
+        propertyId: propertyId,
+        hour: hour
+
+    })
+
     let userText = forcedText || input.value.trim();
 
     if (!userText) return;
