@@ -165,32 +165,40 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
     const data = await response.json();
 
-    const items = data.results.slice(0, 4).map(place => ({
+    const items = data.results.slice(0, 4).map(place => {
 
-      name: place.name,
+      let distance = null
 
-      rating: place.rating || "4+",
+      if (place.geometry?.location) {
 
-      address: place.vicinity,
+        distance = Math.round(
+          getDistance(
+            lat,
+            lng,
+            place.geometry.location.lat,
+            place.geometry.location.lng
+          ) * 1000
+        )
 
-      lat: place.geometry.location.lat,
+      }
 
-      lng: place.geometry.location.lng,
+      return {
 
-      distance: Math.round(
-        getDistance(
-          lat,
-          lng,
-          place.geometry.location.lat,
-          place.geometry.location.lng
-        ) * 1000
-      ),
+        name: place.name,
 
-      place_id: place.place_id,
+        rating: place.rating || "4+",
 
-      open: place.opening_hours?.open_now ?? null
+        address: place.vicinity,
 
-    }));
+        distance: distance,
+
+        place_id: place.place_id,
+
+        open: place.opening_hours?.open_now ?? null
+
+      }
+
+    });
 
     const result = { items };
 
