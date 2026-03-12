@@ -251,17 +251,6 @@ app.post("/chat", async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
-
-    /* --- ANALYTICS TRACKING --- */
-
-    const analyticsKey = `stayassistant:analytics:${propertyId}`;
-
-    await redis.zIncrBy(
-      `${analyticsKey}:questions`,
-      1,
-      userMessage.toLowerCase()
-    );
-
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
     const propertyId = req.body.propertyId || "demo_property";
