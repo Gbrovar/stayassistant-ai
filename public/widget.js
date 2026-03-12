@@ -44,7 +44,7 @@
 
         /* botón flotante */
 
-        const button = document.createElement("button");
+        let button = document.createElement("button");
 
 
         button.innerText = branding.button_text || "💬 Concierge";
@@ -177,13 +177,9 @@
 
         if (event.data === "stayassistant-close") {
 
-            iframe.style.display = "none";
+            if (iframe) iframe.style.display = "none";
 
-            const button = document.querySelector("button");
-
-            if (button) {
-                button.style.display = "block";
-            }
+            if (button) button.style.display = "block";
 
         }
 
