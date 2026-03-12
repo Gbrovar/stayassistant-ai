@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>StayAssistant Analytics</title>
+
+    <style>
+        body {
+            font-family: system-ui;
+            background: #0b1220;
+            color: white;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #111827;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1f2937;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Hotel Analytics</h1>
+
+    <div class="card">
+
+        <h3>Top guest questions</h3>
+
+        <div id="list"></div>
+
+    </div>
+
+    <script>
+
+        const params = new URLSearchParams(window.location.search);
+        const property = params.get("property") || "demo_property";
+
+        async function load() {
+
+            const res = await fetch(`/analytics/${property}`);
+            const data = await res.json();
+
+            const list = document.getElementById("list");
+
+            data.top_questions.forEach(item => {
+
+                list.innerHTML += `
+                <div class="item">
+                <span>${item.question}</span>
+                <b>${item.count}</b>
+                </div>
+                `;
+
+            });
+
+        }
+
+        load();
+
+    </script>
+
+</body>
+
+</html>

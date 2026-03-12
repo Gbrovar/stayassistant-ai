@@ -251,6 +251,17 @@ app.post("/chat", async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
+
+    /* --- ANALYTICS TRACKING --- */
+
+    const analyticsKey = `stayassistant:analytics:${propertyId}`;
+
+    await redis.zIncrBy(
+      `${analyticsKey}:questions`,
+      1,
+      userMessage.toLowerCase()
+    );
+
     const userLanguage = req.body.language || null;
     const conversationId = req.body.conversationId || "default";
     const propertyId = req.body.propertyId || "demo_property";
@@ -277,6 +288,36 @@ app.post("/chat", async (req, res) => {
     });
 
     const normalizedMessage = userMessage.toLowerCase();
+
+    /* --- ANALYTICS ENDPOINT --- */
+
+    app.get("/analytics/:propertyId", async (req, res) => {
+
+      const propertyId = req.params.propertyId;
+
+      const key = `stayassistant:analytics:${propertyId}:questions`;
+
+      const top = await redis.zRange(key, 0, 9, {
+        REV: true,
+        WITHSCORES: true
+      });
+
+      const results = [];
+
+      for (let i = 0; i < top.length; i += 2) {
+
+        results.push({
+          question: top[i],
+          count: top[i + 1]
+        });
+
+      }
+
+      res.json({
+        top_questions: results
+      });
+
+    });
 
     /* --- FAQ AUTO ANSWER --- */
 
