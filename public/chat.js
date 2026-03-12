@@ -493,6 +493,8 @@ async function sendMessage(forcedText = null, displayLabel = null) {
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
 
+    const hour = new Date().getHours()
+
     let userText = forcedText || input.value.trim();
 
     if (!userText) return;
