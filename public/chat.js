@@ -720,8 +720,22 @@ if (closeBtn) {
 
     closeBtn.onclick = function () {
 
-        if (window.parent) {
+        // si está dentro de iframe
+        if (window.parent !== window) {
+
             window.parent.postMessage("stayassistant-close", "*");
+
+        }
+
+        // si está abierto directamente
+        else {
+
+            const widget = document.getElementById("chat-widget");
+
+            if (widget) {
+                widget.classList.remove("open");
+            }
+
         }
 
     }
