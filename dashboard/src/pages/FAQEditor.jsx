@@ -21,7 +21,6 @@ export default function FAQEditor() {
             const data = await res.json()
 
             setFaq(data.faq || [])
-            setItems(data.recommendations || [])
 
         }
 

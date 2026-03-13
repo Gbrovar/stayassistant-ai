@@ -1,77 +1,87 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import {useState,useEffect} from "react"
+import {useNavigate} from "react-router-dom"
 
-export default function Login() {
+export default function Login(){
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+  const [email,setEmail]=useState("")
+  const [password,setPassword]=useState("")
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    async function login() {
+  useEffect(()=>{
 
-        const res = await fetch("http://localhost:3000/auth/login", {
+    const token = localStorage.getItem("token")
 
-            method: "POST",
+    if(token){
+      navigate("/analytics")
+    }
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+  },[])
 
-            body: JSON.stringify({
-                email,
-                password
-            })
+  async function login(){
 
-        })
+    const res = await fetch("http://localhost:3000/auth/login",{
 
-        const data = await res.json()
+      method:"POST",
 
-        if (data.token) {
+      headers:{
+        "Content-Type":"application/json"
+      },
 
-            localStorage.setItem("token", data.token)
-            localStorage.setItem("propertyId", data.propertyId)
+      body:JSON.stringify({
+        email,
+        password
+      })
 
-            window.location.href = "/analytics"
+    })
 
-        } else {
+    const data = await res.json()
 
-            alert("Invalid login")
+    if(data.token){
 
-        }
+      localStorage.setItem("token",data.token)
+      localStorage.setItem("propertyId",data.propertyId)
+
+      navigate("/analytics")
+
+    }else{
+
+      alert("Invalid login")
 
     }
 
-    return (
+  }
 
-        <div className="login-page">
+  return(
 
-            <h1>StayAssistant Login</h1>
+    <div className="login-page">
 
-            <input
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
+      <h1>StayAssistant Login</h1>
 
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={(e)=>setEmail(e.target.value)}
+      />
 
-            <button onClick={login}>
-                Login
-            </button>
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e)=>setPassword(e.target.value)}
+      />
 
-            <p>
-                Don't have an account?
-                <a href="/register">Create property</a>
-            </p>
+      <button onClick={login}>
+        Login
+      </button>
 
-        </div>
+      <p>
+        Don't have an account?
+        <a href="/register">Create property</a>
+      </p>
 
-    )
+    </div>
+
+  )
 
 }

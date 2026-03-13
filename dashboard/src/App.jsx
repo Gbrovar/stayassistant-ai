@@ -1,3 +1,5 @@
+import {Routes,Route,Navigate,useLocation} from "react-router-dom"
+
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
 
@@ -10,14 +12,13 @@ import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 
-import {Routes,Route} from "react-router-dom"
 
-export default function App(){
+function ProtectedLayout({children}){
 
   const token = localStorage.getItem("token")
 
   if(!token){
-    return <Login/>
+    return <Navigate to="/login"/>
   }
 
   return(
@@ -31,32 +32,53 @@ export default function App(){
         <Topbar/>
 
         <div className="content">
-
-          <Routes>
-
-            <Route path="/" element={<Analytics/>}/>
-
-            <Route path="/register" element={<Register/>}/>
-
-            <Route path="/analytics" element={<Analytics/>}/>
-
-            <Route path="/faq" element={<FAQEditor/>}/>
-
-            <Route path="/recommendations" element={<Recommendations/>}/>
-
-            <Route path="/branding" element={<Branding/>}/>
-
-            <Route path="/preview" element={<Preview/>}/>
-
-            <Route path="/install" element={<Install/>}/>
-
-          </Routes>
-
+          {children}
         </div>
 
       </div>
 
     </div>
+
+  )
+
+}
+
+
+export default function App(){
+
+  return(
+
+    <Routes>
+
+      {/* PUBLIC ROUTES */}
+
+      <Route path="/login" element={<Login/>}/>
+
+      <Route path="/register" element={<Register/>}/>
+
+
+      {/* PROTECTED ROUTES */}
+
+      <Route path="/" element={<ProtectedLayout><Analytics/></ProtectedLayout>}/>
+
+      <Route path="/analytics" element={<ProtectedLayout><Analytics/></ProtectedLayout>}/>
+
+      <Route path="/faq" element={<ProtectedLayout><FAQEditor/></ProtectedLayout>}/>
+
+      <Route path="/recommendations" element={<ProtectedLayout><Recommendations/></ProtectedLayout>}/>
+
+      <Route path="/branding" element={<ProtectedLayout><Branding/></ProtectedLayout>}/>
+
+      <Route path="/preview" element={<ProtectedLayout><Preview/></ProtectedLayout>}/>
+
+      <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
+
+
+      {/* FALLBACK */}
+
+      <Route path="*" element={<Navigate to="/login"/>}/>
+
+    </Routes>
 
   )
 
