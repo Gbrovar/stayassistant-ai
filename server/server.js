@@ -13,8 +13,8 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-//import { createUser, getUser } from "./db/users.js"
-//import { createProperty, getProperty } from "./db/properties.js"
+import { createUser, getUser } from "./db/users.js"
+import { createProperty, getProperty } from "./db/properties.js"
 
 /******* *********** */
 
@@ -333,6 +333,7 @@ app.post("/auth/login", async (req, res) => {
 
 /* --- REGISTER PROPERTY --- */
 
+/*
 app.post("/auth/register", async (req, res) => {
 
   const { property_name, email, password } = req.body
@@ -402,6 +403,7 @@ app.post("/auth/register", async (req, res) => {
   })
 
 });
+*/
 
 /* --- GET FAQ --- */
 
