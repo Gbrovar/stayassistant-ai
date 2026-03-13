@@ -209,3 +209,45 @@ body{
   color:white;
 
 }
+
+/* BRANDING */
+
+.branding-field{
+
+  display:flex;
+
+  flex-direction:column;
+
+  margin-bottom:15px;
+
+}
+
+.branding-field input{
+
+  padding:8px;
+
+  background:#0f172a;
+
+  border:1px solid #1f2937;
+
+  color:white;
+
+  border-radius:6px;
+
+}
+
+.save-btn{
+
+  background:#22c55e;
+
+  border:none;
+
+  padding:10px 16px;
+
+  border-radius:8px;
+
+  cursor:pointer;
+
+  color:white;
+
+}
