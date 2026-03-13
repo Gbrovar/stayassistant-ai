@@ -7,8 +7,15 @@ import Install from "./pages/Install"
 import Branding from "./pages/Branding"
 import Recommendations from "./pages/Recommendations"
 import Preview from "./pages/Preview"
+import Login from "./pages/Login"
 
 import {Routes,Route} from "react-router-dom"
+
+const token = localStorage.getItem("token")
+
+if(!token){
+  return <Login/>
+}
 
 export default function App(){
 
@@ -25,6 +32,8 @@ export default function App(){
         <div className="content">
 
           <Routes>
+
+            <Route path="/login" element={<Login/>}/>
 
             <Route path="/" element={<Analytics/>}/>
 
