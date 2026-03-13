@@ -378,6 +378,48 @@ app.post("/property/:id/branding",(req,res)=>{
 });
 
 
+/* --- GET RECOMMENDATIONS --- */
+
+app.get("/property/:id/recommendations",(req,res)=>{
+
+  const propertyId=req.params.id
+
+  const property=properties[propertyId]
+
+  if(!property){
+    return res.json({recommendations:[]})
+  }
+
+  res.json({
+    recommendations: property.knowledge.local_recommendations
+  })
+
+});
+
+
+/* --- UPDATE RECOMMENDATIONS --- */
+
+app.post("/property/:id/recommendations",(req,res)=>{
+
+  const propertyId=req.params.id
+
+  const {recommendations}=req.body
+
+  const property=properties[propertyId]
+
+  if(!property){
+    return res.status(404).json({error:"property not found"})
+  }
+
+  property.knowledge.local_recommendations = recommendations
+
+  res.json({
+    success:true
+  })
+
+});
+
+
 
 /* --- deteccion y adaptacion de intent --- */
 function detectIntent(text) {
