@@ -3,9 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
-import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
-import {users} from "./users.js"
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { authenticate } from "./authMiddleware.js";
+import { users } from "./users.js"
 import { fileURLToPath } from "url";
 import { createClient } from "redis";
 import { properties } from "./properties.js";
@@ -296,45 +297,49 @@ app.get("/property/:id", (req, res) => {
 
 /* --- LOGIN --- */
 
-app.post("/auth/login", async (req,res)=>{
+app.post("/auth/login", async (req, res) => {
 
-  const {email,password} = req.body
+  const { email, password } = req.body
 
   const user = Object.values(users).find(u => u.email === email)
 
-  if(!user){
-    return res.status(401).json({error:"invalid credentials"})
+  if (!user) {
+    return res.status(401).json({ error: "invalid credentials" })
   }
 
   const valid = password === "test123"
 
-  if(!valid){
-    return res.status(401).json({error:"invalid credentials"})
+  if (!valid) {
+    return res.status(401).json({ error: "invalid credentials" })
   }
 
   const token = jwt.sign(
-    {propertyId:user.propertyId},
+    { propertyId: user.propertyId },
     process.env.JWT_SECRET || "stayassistant_secret",
-    {expiresIn:"7d"}
+    { expiresIn: "7d" }
   )
 
   res.json({
     token,
-    propertyId:user.propertyId
+    propertyId: user.propertyId
   })
 
 });
 
 /* --- GET FAQ --- */
 
-app.get("/property/:id/faq", (req,res)=>{
+app.get("/property/:id/faq", authenticate, (req, res) => {
 
   const propertyId = req.params.id
 
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
   const property = properties[propertyId]
 
-  if(!property){
-    return res.json({faq:[]})
+  if (!property) {
+    return res.json({ faq: [] })
   }
 
   res.json({
@@ -345,36 +350,44 @@ app.get("/property/:id/faq", (req,res)=>{
 
 /* --- UPDATE FAQ --- */
 
-app.post("/property/:id/faq",(req,res)=>{
+app.post("/property/:id/faq", authenticate, (req, res) => {
 
   const propertyId = req.params.id
 
-  const {faq} = req.body
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const { faq } = req.body
 
   const property = properties[propertyId]
 
-  if(!property){
-    return res.status(404).json({error:"property not found"})
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
   }
 
   property.knowledge.faq = faq
 
   res.json({
-    success:true
+    success: true
   })
 
 });
 
 /* --- GET BRANDING --- */
 
-app.get("/property/:id/branding",(req,res)=>{
+app.get("/property/:id/branding", authenticate, (req, res) => {
 
   const propertyId = req.params.id
 
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
   const property = properties[propertyId]
 
-  if(!property){
-    return res.status(404).json({error:"property not found"})
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
   }
 
   res.json({
@@ -387,16 +400,20 @@ app.get("/property/:id/branding",(req,res)=>{
 
 /* --- UPDATE BRANDING --- */
 
-app.post("/property/:id/branding",(req,res)=>{
+app.post("/property/:id/branding", authenticate, (req, res) => {
 
   const propertyId = req.params.id
 
-  const {property_name,button_text,primary_color} = req.body
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const { property_name, button_text, primary_color } = req.body
 
   const property = properties[propertyId]
 
-  if(!property){
-    return res.status(404).json({error:"property not found"})
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
   }
 
   property.name = property_name
@@ -407,7 +424,7 @@ app.post("/property/:id/branding",(req,res)=>{
   }
 
   res.json({
-    success:true
+    success: true
   })
 
 });
@@ -415,14 +432,18 @@ app.post("/property/:id/branding",(req,res)=>{
 
 /* --- GET RECOMMENDATIONS --- */
 
-app.get("/property/:id/recommendations",(req,res)=>{
+app.get("/property/:id/recommendations", authenticate, (req, res) => {
 
-  const propertyId=req.params.id
+  const propertyId = req.params.id
 
-  const property=properties[propertyId]
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
 
-  if(!property){
-    return res.json({recommendations:[]})
+  const property = properties[propertyId]
+
+  if (!property) {
+    return res.json({ recommendations: [] })
   }
 
   res.json({
@@ -434,22 +455,26 @@ app.get("/property/:id/recommendations",(req,res)=>{
 
 /* --- UPDATE RECOMMENDATIONS --- */
 
-app.post("/property/:id/recommendations",(req,res)=>{
+app.post("/property/:id/recommendations", authenticate, (req, res) => {
 
-  const propertyId=req.params.id
+  const propertyId = req.params.id
 
-  const {recommendations}=req.body
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
 
-  const property=properties[propertyId]
+  const { recommendations } = req.body
 
-  if(!property){
-    return res.status(404).json({error:"property not found"})
+  const property = properties[propertyId]
+
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
   }
 
   property.knowledge.local_recommendations = recommendations
 
   res.json({
-    success:true
+    success: true
   })
 
 });
@@ -760,11 +785,15 @@ function detectContext(hour) {
 
 /* --- ANALYTICS API --- */
 
-app.get("/analytics/:propertyId", async (req, res) => {
+app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
   try {
 
     const propertyId = req.params.propertyId;
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
 
     const key = `stayassistant:analytics:${propertyId}:questions`;
 

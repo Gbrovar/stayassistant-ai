@@ -35,7 +35,8 @@ export default function Branding(){
       method:"POST",
 
       headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        "Authorization":"Bearer " + localStorage.getItem("token")
       },
 
       body:JSON.stringify({
