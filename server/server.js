@@ -38,6 +38,10 @@ async function loadProperty(propertyId){
 
 dotenv.config();
 
+await redis.connect()
+
+console.log("Redis connected successfully")
+
 const app = express();
 
 /* --- DISTANCE HELPER --- */
