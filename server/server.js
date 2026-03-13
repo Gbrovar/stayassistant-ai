@@ -6,11 +6,11 @@ import path from "path";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authenticate } from "./authMiddleware.js";
-import { users } from "./users.js"
 import { fileURLToPath } from "url";
 import { createClient } from "redis";
-import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
+import { createUser, getUser } from "./db/users.js"
+import { createProperty, getProperty } from "./db/properties.js"
 
 
 dotenv.config();
@@ -281,11 +281,15 @@ console.log("Redis connected successfully");
 
 /* --- property config endpoint --- */
 
-app.get("/property/:id", (req, res) => {
+app.get("/property/:id", async (req, res) => {
 
   const propertyId = req.params.id;
 
-  const property = properties[propertyId] || properties["demo_property"];
+  let property = await getProperty(propertyId);
+
+  if (!property) {
+    property = await getProperty("demo_property");
+  }
 
   res.json({
     id: property.id,
@@ -301,13 +305,13 @@ app.post("/auth/login", async (req, res) => {
 
   const { email, password } = req.body
 
-  const user = Object.values(users).find(u => u.email === email)
+  const user = await getUser(email)
 
   if (!user) {
     return res.status(401).json({ error: "invalid credentials" })
   }
 
-  const valid = password === "test123"
+  const valid = password === user.password
 
   if (!valid) {
     return res.status(401).json({ error: "invalid credentials" })
@@ -338,7 +342,7 @@ app.post("/auth/register", async (req,res)=>{
 
   const propertyId = "property_" + Date.now()
 
-  properties[propertyId] = {
+  const property = {
 
     id:propertyId,
 
@@ -361,21 +365,22 @@ app.post("/auth/register", async (req,res)=>{
       },
 
       faq:[],
-
       services:[],
-
       local_recommendations:[]
     }
 
   }
 
-  users[propertyId] = {
+  const user = {
 
     email,
     password,
     propertyId
 
   }
+
+  await createProperty(property)
+  await createUser(user)
 
   const token = jwt.sign(
     {propertyId},
