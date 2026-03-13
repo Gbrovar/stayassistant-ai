@@ -1,7 +1,7 @@
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
 
-import Install from "./pages/Install"
+import FAQEditor from "./pages/FAQEditor"
 
 export default function App(){
 
@@ -17,7 +17,7 @@ export default function App(){
 
         <div className="content">
 
-          <Install />
+          <FAQEditor />
 
         </div>
 
