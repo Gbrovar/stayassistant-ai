@@ -306,6 +306,28 @@ app.get("/property/:id/faq", (req,res)=>{
     faq: property.knowledge.faq
   })
 
+});
+
+/* --- UPDATE FAQ --- */
+
+app.post("/property/:id/faq",(req,res)=>{
+
+  const propertyId = req.params.id
+
+  const {faq} = req.body
+
+  const property = properties[propertyId]
+
+  if(!property){
+    return res.status(404).json({error:"property not found"})
+  }
+
+  property.knowledge.faq = faq
+
+  res.json({
+    success:true
+  })
+
 })
 
 /* --- deteccion y adaptacion de intent --- */
