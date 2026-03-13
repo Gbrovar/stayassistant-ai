@@ -36,6 +36,8 @@ export default function App(){
 
             <Route path="/" element={<Analytics/>}/>
 
+            <Route path="/register" element={<Register/>}/>
+
             <Route path="/analytics" element={<Analytics/>}/>
 
             <Route path="/faq" element={<FAQEditor/>}/>
@@ -47,8 +49,6 @@ export default function App(){
             <Route path="/preview" element={<Preview/>}/>
 
             <Route path="/install" element={<Install/>}/>
-
-            <Route path="/register" element={<Register/>}/>
 
           </Routes>
 
