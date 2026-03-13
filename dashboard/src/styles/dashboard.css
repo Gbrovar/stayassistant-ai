@@ -251,3 +251,63 @@ body{
   color:white;
 
 }
+
+/* RECOMMENDATIONS */
+
+.rec-row{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-bottom:10px;
+
+}
+
+.rec-row input{
+
+  flex:1;
+
+  padding:8px;
+
+  background:#0f172a;
+
+  border:1px solid #1f2937;
+
+  color:white;
+
+  border-radius:6px;
+
+}
+
+.rec-row button{
+
+  background:#ef4444;
+
+  border:none;
+
+  padding:6px 10px;
+
+  border-radius:6px;
+
+  cursor:pointer;
+
+  color:white;
+
+}
+
+/* PREVIEW */
+
+.preview-frame{
+
+  width:100%;
+
+  height:600px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:white;
+
+}

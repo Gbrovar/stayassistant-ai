@@ -14,7 +14,11 @@ export default function Sidebar(){
 
         <Link to="/faq">FAQ</Link>
 
+        <Link to="/recommendations">Recommendations</Link>
+
         <Link to="/branding">Branding</Link>
+
+        <Link to="/preview">Preview</Link>
 
         <Link to="/install">Install</Link>
 

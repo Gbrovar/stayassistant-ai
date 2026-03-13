@@ -5,6 +5,8 @@ import Analytics from "./pages/Analytics"
 import FAQEditor from "./pages/FAQEditor"
 import Install from "./pages/Install"
 import Branding from "./pages/Branding"
+import Recommendations from "./pages/Recommendations"
+import Preview from "./pages/Preview"
 
 import {Routes,Route} from "react-router-dom"
 
@@ -30,7 +32,11 @@ export default function App(){
 
             <Route path="/faq" element={<FAQEditor/>}/>
 
+            <Route path="/recommendations" element={<Recommendations/>}/>
+
             <Route path="/branding" element={<Branding/>}/>
+
+            <Route path="/preview" element={<Preview/>}/>
 
             <Route path="/install" element={<Install/>}/>
 
