@@ -1,6 +1,7 @@
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
-import Analytics from "./pages/Analytics"
+
+import Install from "./pages/Install"
 
 export default function App(){
 
@@ -16,7 +17,7 @@ export default function App(){
 
         <div className="content">
 
-          <Analytics />
+          <Install />
 
         </div>
 

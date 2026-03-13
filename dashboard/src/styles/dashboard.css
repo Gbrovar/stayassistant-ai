@@ -116,3 +116,45 @@ body{
   color:#22c55e;
 
 }
+
+/* INSTALL PAGE STYLE */
+
+.install-script{
+
+  background:#0f172a;
+
+  border:1px solid #1f2937;
+
+  padding:15px;
+
+  border-radius:8px;
+
+  margin:15px 0;
+
+  font-size:13px;
+
+  overflow:auto;
+
+}
+
+.copy-btn{
+
+  background:#22c55e;
+
+  border:none;
+
+  padding:10px 16px;
+
+  border-radius:8px;
+
+  cursor:pointer;
+
+  color:white;
+
+}
+
+.copy-btn:hover{
+
+  background:#16a34a;
+
+}

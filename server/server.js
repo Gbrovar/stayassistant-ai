@@ -290,6 +290,24 @@ app.get("/property/:id", (req, res) => {
 
 });
 
+/* --- GET FAQ --- */
+
+app.get("/property/:id/faq", (req,res)=>{
+
+  const propertyId = req.params.id
+
+  const property = properties[propertyId]
+
+  if(!property){
+    return res.json({faq:[]})
+  }
+
+  res.json({
+    faq: property.knowledge.faq
+  })
+
+})
+
 /* --- deteccion y adaptacion de intent --- */
 function detectIntent(text) {
 
