@@ -32,7 +32,7 @@ export default function Login(){
       localStorage.setItem("token",data.token)
       localStorage.setItem("propertyId",data.propertyId)
 
-      navigate("/analytics")
+      window.location.href = "/analytics"
 
     }else{
 
