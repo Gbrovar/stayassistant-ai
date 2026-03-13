@@ -3,10 +3,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
+import {users} from "./users.js"
 import { fileURLToPath } from "url";
 import { createClient } from "redis";
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
+
 
 dotenv.config();
 
@@ -287,6 +291,37 @@ app.get("/property/:id", (req, res) => {
     name: property.name,
     branding: property.branding
   });
+
+});
+
+/* --- LOGIN --- */
+
+app.post("/auth/login", async (req,res)=>{
+
+  const {email,password} = req.body
+
+  const user = Object.values(users).find(u => u.email === email)
+
+  if(!user){
+    return res.status(401).json({error:"invalid credentials"})
+  }
+
+  const valid = await bcrypt.compare(password,user.password)
+
+  if(!valid){
+    return res.status(401).json({error:"invalid credentials"})
+  }
+
+  const token = jwt.sign(
+    {propertyId:user.propertyId},
+    process.env.JWT_SECRET || "stayassistant_secret",
+    {expiresIn:"7d"}
+  )
+
+  res.json({
+    token,
+    propertyId:user.propertyId
+  })
 
 });
 
