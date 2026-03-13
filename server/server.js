@@ -17,10 +17,18 @@ import { createProperty, getProperty } from "./db/properties.js"
 
 async function loadProperty(propertyId){
 
-  const redisProperty = await getProperty(propertyId)
+  try{
 
-  if(redisProperty){
-    return redisProperty
+    const redisProperty = await getProperty(propertyId)
+
+    if(redisProperty){
+      return redisProperty
+    }
+
+  }catch(err){
+
+    console.log("Redis property load failed:", err.message)
+
   }
 
   return properties[propertyId]
