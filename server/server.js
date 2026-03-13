@@ -337,7 +337,7 @@ app.post("/auth/login", async (req, res) => {
 
 /* --- REGISTER PROPERTY --- */
 
-/*
+
 app.post("/auth/register", async (req, res) => {
 
   const { property_name, email, password } = req.body
@@ -407,7 +407,7 @@ app.post("/auth/register", async (req, res) => {
   })
 
 });
-*/
+
 
 /* --- GET FAQ --- */
 
