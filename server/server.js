@@ -349,7 +349,7 @@ app.post("/auth/register", async (req, res) => {
 
   const propertyId = "property_" + Date.now()
 
-  const property = {
+  properties[propertyId] = {
 
     id: propertyId,
 
@@ -372,13 +372,15 @@ app.post("/auth/register", async (req, res) => {
       },
 
       faq: [],
+
       services: [],
+
       local_recommendations: []
     }
 
   }
 
-  const user = {
+  users[propertyId] = {
 
     email,
     password,
@@ -386,8 +388,13 @@ app.post("/auth/register", async (req, res) => {
 
   }
 
-  await createProperty(property)
-  await createUser(user)
+  await createProperty(properties[propertyId])
+
+  await createUser({
+    email,
+    password,
+    propertyId
+  })
 
   const token = jwt.sign(
     { propertyId },
@@ -401,6 +408,7 @@ app.post("/auth/register", async (req, res) => {
   })
 
 });
+
 
 /* --- GET FAQ --- */
 
