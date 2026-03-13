@@ -15,23 +15,23 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-//import { createUser, getUser } from "./db/users.js";
-//import { createProperty, getProperty } from "./db/properties.js";
+import { createUser, getUser } from "./db/users.js";
+import { createProperty, getProperty } from "./db/properties.js";
 import redis from "./db/redis.js";
 
 console.log("Redis status:", redis.isOpen)
 
-async function loadProperty(propertyId){
+async function loadProperty(propertyId) {
 
-  try{
+  try {
 
     const redisProperty = await getProperty(propertyId)
 
-    if(redisProperty){
+    if (redisProperty) {
       return redisProperty
     }
 
-  }catch(err){
+  } catch (err) {
 
     console.log("Redis property load failed:", err.message)
 
@@ -681,9 +681,10 @@ app.post("/chat", async (req, res) => {
       await loadProperty(propertyId) ||
       properties["demo_property"];
 
-    if (!property) {
+    if (!property || !property.knowledge) {
+      console.error("Invalid property configuration:", propertyId);
       return res.json({
-        reply: "Property configuration not found."
+        reply: "Property configuration error."
       });
     }
 
@@ -763,7 +764,9 @@ app.post("/chat", async (req, res) => {
 
     /* --- FAQ AUTO ANSWER --- */
 
-    const faqMatch = property.knowledge.faq.find(f =>
+    const faqList = property.knowledge?.faq || []
+
+    const faqMatch = faqList.find(f =>
       normalizedMessage.includes(f.question.toLowerCase())
     );
 
