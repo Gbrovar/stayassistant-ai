@@ -15,11 +15,11 @@ import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js"
 import { createProperty, getProperty } from "./db/properties.js"
 
-async function loadProperty(propertyId) {
+async function loadProperty(propertyId){
 
   const redisProperty = await getProperty(propertyId)
 
-  if (redisProperty) {
+  if(redisProperty){
     return redisProperty
   }
 
