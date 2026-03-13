@@ -8,6 +8,7 @@ import Branding from "./pages/Branding"
 import Recommendations from "./pages/Recommendations"
 import Preview from "./pages/Preview"
 import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 import {Routes,Route} from "react-router-dom"
 
@@ -46,6 +47,8 @@ export default function App(){
             <Route path="/preview" element={<Preview/>}/>
 
             <Route path="/install" element={<Install/>}/>
+
+            <Route path="/register" element={<Register/>}/>
 
           </Routes>
 

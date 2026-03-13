@@ -1,137 +1,142 @@
-import {useEffect,useState} from "react"
+import { useEffect, useState } from "react"
 import Card from "../components/Card"
-import {getToken,getPropertyId} from "../api/auth"
+import { getToken, getPropertyId } from "../api/auth"
 
-export default function FAQEditor(){
+export default function FAQEditor() {
 
-  const propertyId=getPropertyId()
+    const propertyId = getPropertyId()
 
-  const [faq,setFaq]=useState([])
+    const [faq, setFaq] = useState([])
 
-  useEffect(()=>{
+    useEffect(() => {
 
-    async function load(){
+        async function load() {
 
-      const res = await fetch(`http://localhost:3000/property/${propertyId}/faq`)
+            const res = await fetch(`http://localhost:3000/property/${propertyId}/faq`, {
+                headers: {
+                    "Authorization": "Bearer " + getToken()
+                }
+            })
 
-      const data = await res.json()
+            const data = await res.json()
 
-      setFaq(data.faq)
+            setFaq(data.faq || [])
+            setItems(data.recommendations || [])
+
+        }
+
+        load()
+
+    }, [])
+
+
+    function updateQuestion(index, value) {
+
+        const copy = [...faq]
+
+        copy[index].question = value
+
+        setFaq(copy)
 
     }
 
-    load()
 
-  },[])
+    function updateAnswer(index, value) {
 
+        const copy = [...faq]
 
-  function updateQuestion(index,value){
+        copy[index].answer = value
 
-    const copy=[...faq]
+        setFaq(copy)
 
-    copy[index].question=value
-
-    setFaq(copy)
-
-  }
+    }
 
 
-  function updateAnswer(index,value){
+    function addFaq() {
 
-    const copy=[...faq]
+        setFaq([
+            ...faq,
+            { question: "", answer: "" }
+        ])
 
-    copy[index].answer=value
-
-    setFaq(copy)
-
-  }
-
-
-  function addFaq(){
-
-    setFaq([
-      ...faq,
-      {question:"",answer:""}
-    ])
-
-  }
+    }
 
 
-  function removeFaq(index){
+    function removeFaq(index) {
 
-    const copy=[...faq]
+        const copy = [...faq]
 
-    copy.splice(index,1)
+        copy.splice(index, 1)
 
-    setFaq(copy)
+        setFaq(copy)
 
-  }
-
-
-  async function save(){
-
-    await fetch(`http://localhost:3000/property/${propertyId}/faq`,{
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization":"Bearer " + getToken()
-      },
-
-      body:JSON.stringify({faq})
-
-    })
-
-    alert("FAQ saved")
-
-  }
+    }
 
 
-  return(
+    async function save() {
 
-    <div>
+        await fetch(`http://localhost:3000/property/${propertyId}/faq`, {
 
-      <h1>FAQ Editor</h1>
+            method: "POST",
 
-      <Card>
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getToken()
+            },
 
-        {faq.map((item,index)=>(
+            body: JSON.stringify({ faq })
 
-          <div key={index} className="faq-row">
+        })
 
-            <input
-              value={item.question}
-              onChange={(e)=>updateQuestion(index,e.target.value)}
-              placeholder="Question"
-            />
+        alert("FAQ saved")
 
-            <input
-              value={item.answer}
-              onChange={(e)=>updateAnswer(index,e.target.value)}
-              placeholder="Answer"
-            />
+    }
 
-            <button onClick={()=>removeFaq(index)}>
-              Delete
-            </button>
 
-          </div>
+    return (
 
-        ))}
+        <div>
 
-        <button onClick={addFaq}>
-          Add Question
-        </button>
+            <h1>FAQ Editor</h1>
 
-        <button onClick={save}>
-          Save FAQ
-        </button>
+            <Card>
 
-      </Card>
+                {faq.map((item, index) => (
 
-    </div>
+                    <div key={index} className="faq-row">
 
-  )
+                        <input
+                            value={item.question}
+                            onChange={(e) => updateQuestion(index, e.target.value)}
+                            placeholder="Question"
+                        />
+
+                        <input
+                            value={item.answer}
+                            onChange={(e) => updateAnswer(index, e.target.value)}
+                            placeholder="Answer"
+                        />
+
+                        <button onClick={() => removeFaq(index)}>
+                            Delete
+                        </button>
+
+                    </div>
+
+                ))}
+
+                <button onClick={addFaq}>
+                    Add Question
+                </button>
+
+                <button onClick={save}>
+                    Save FAQ
+                </button>
+
+            </Card>
+
+        </div>
+
+    )
 
 }

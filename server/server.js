@@ -326,6 +326,70 @@ app.post("/auth/login", async (req, res) => {
 
 });
 
+/* --- REGISTER PROPERTY --- */
+
+app.post("/auth/register", async (req,res)=>{
+
+  const {property_name,email,password} = req.body
+
+  if(!property_name || !email || !password){
+    return res.status(400).json({error:"missing fields"})
+  }
+
+  const propertyId = "property_" + Date.now()
+
+  properties[propertyId] = {
+
+    id:propertyId,
+
+    name:property_name,
+
+    coordinates:{
+      lat:0,
+      lng:0
+    },
+
+    branding:{
+      button_text:"Ask concierge",
+      primary_color:"#22c55e"
+    },
+
+    knowledge:{
+      property_info:{
+        checkin:"15:00",
+        checkout:"11:00"
+      },
+
+      faq:[],
+
+      services:[],
+
+      local_recommendations:[]
+    }
+
+  }
+
+  users[propertyId] = {
+
+    email,
+    password,
+    propertyId
+
+  }
+
+  const token = jwt.sign(
+    {propertyId},
+    process.env.JWT_SECRET || "stayassistant_secret",
+    {expiresIn:"7d"}
+  )
+
+  res.json({
+    token,
+    propertyId
+  })
+
+});
+
 /* --- GET FAQ --- */
 
 app.get("/property/:id/faq", authenticate, (req, res) => {

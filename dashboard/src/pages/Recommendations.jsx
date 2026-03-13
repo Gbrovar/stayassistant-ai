@@ -1,139 +1,143 @@
-import {useEffect,useState} from "react"
+import { useEffect, useState } from "react"
 import Card from "../components/Card"
-import {getToken,getPropertyId} from "../api/auth"
+import { getToken, getPropertyId } from "../api/auth"
 
-export default function Recommendations(){
+export default function Recommendations() {
 
-  const propertyId=getPropertyId()
+    const propertyId = getPropertyId()
 
-  const [items,setItems]=useState([])
+    const [items, setItems] = useState([])
 
-  useEffect(()=>{
+    useEffect(() => {
 
-    async function load(){
+        async function load() {
 
-      const res=await fetch(`http://localhost:3000/property/${propertyId}/recommendations`)
+            const res = await fetch(`http://localhost:3000/property/${propertyId}/recommendations`, {
+                headers: {
+                    "Authorization": "Bearer " + getToken()
+                }
+            })
 
-      const data=await res.json()
+            const data = await res.json()
 
-      setItems(data.recommendations)
+            setItems(data.recommendations || [])
+
+        }
+
+        load()
+
+    }, [])
+
+
+    function updateName(index, value) {
+
+        const copy = [...items]
+
+        copy[index].name = value
+
+        setItems(copy)
 
     }
 
-    load()
 
-  },[])
+    function updateDescription(index, value) {
 
+        const copy = [...items]
 
-  function updateName(index,value){
+        copy[index].description = value
 
-    const copy=[...items]
+        setItems(copy)
 
-    copy[index].name=value
-
-    setItems(copy)
-
-  }
+    }
 
 
-  function updateDescription(index,value){
+    function addItem() {
 
-    const copy=[...items]
+        setItems([
+            ...items,
+            { name: "", description: "" }
+        ])
 
-    copy[index].description=value
-
-    setItems(copy)
-
-  }
-
-
-  function addItem(){
-
-    setItems([
-      ...items,
-      {name:"",description:""}
-    ])
-
-  }
+    }
 
 
-  function removeItem(index){
+    function removeItem(index) {
 
-    const copy=[...items]
+        const copy = [...items]
 
-    copy.splice(index,1)
+        copy.splice(index, 1)
 
-    setItems(copy)
+        setItems(copy)
 
-  }
-
-
-  async function save(){
-
-    await fetch(`http://localhost:3000/property/${propertyId}/recommendations`,{
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization":"Bearer " + getToken()
-      },
-
-      body:JSON.stringify({
-        recommendations:items
-      })
-
-    })
-
-    alert("Recommendations saved")
-
-  }
+    }
 
 
-  return(
+    async function save() {
 
-    <div>
+        await fetch(`http://localhost:3000/property/${propertyId}/recommendations`, {
 
-      <h1>Local Recommendations</h1>
+            method: "POST",
 
-      <Card>
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getToken()
+            },
 
-        {items.map((item,index)=>(
+            body: JSON.stringify({
+                recommendations: items
+            })
 
-          <div key={index} className="rec-row">
+        })
 
-            <input
-              value={item.name}
-              placeholder="Name"
-              onChange={(e)=>updateName(index,e.target.value)}
-            />
+        alert("Recommendations saved")
 
-            <input
-              value={item.description}
-              placeholder="Description"
-              onChange={(e)=>updateDescription(index,e.target.value)}
-            />
+    }
 
-            <button onClick={()=>removeItem(index)}>
-              Delete
-            </button>
 
-          </div>
+    return (
 
-        ))}
+        <div>
 
-        <button onClick={addItem}>
-          Add recommendation
-        </button>
+            <h1>Local Recommendations</h1>
 
-        <button onClick={save}>
-          Save
-        </button>
+            <Card>
 
-      </Card>
+                {items.map((item, index) => (
 
-    </div>
+                    <div key={index} className="rec-row">
 
-  )
+                        <input
+                            value={item.name}
+                            placeholder="Name"
+                            onChange={(e) => updateName(index, e.target.value)}
+                        />
+
+                        <input
+                            value={item.description}
+                            placeholder="Description"
+                            onChange={(e) => updateDescription(index, e.target.value)}
+                        />
+
+                        <button onClick={() => removeItem(index)}>
+                            Delete
+                        </button>
+
+                    </div>
+
+                ))}
+
+                <button onClick={addItem}>
+                    Add recommendation
+                </button>
+
+                <button onClick={save}>
+                    Save
+                </button>
+
+            </Card>
+
+        </div>
+
+    )
 
 }
