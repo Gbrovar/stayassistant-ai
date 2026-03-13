@@ -158,3 +158,47 @@ body{
   background:#16a34a;
 
 }
+
+/* FAQ EDITOR */
+
+.faq-row{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-bottom:10px;
+
+}
+
+.faq-row input{
+
+  flex:1;
+
+  padding:8px;
+
+  background:#0f172a;
+
+  border:1px solid #1f2937;
+
+  color:white;
+
+  border-radius:6px;
+
+}
+
+.faq-row button{
+
+  background:#ef4444;
+
+  border:none;
+
+  padding:6px 10px;
+
+  border-radius:6px;
+
+  cursor:pointer;
+
+  color:white;
+
+}
