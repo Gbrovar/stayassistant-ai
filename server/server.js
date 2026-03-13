@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-import fetch from "node-fetch";
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -15,33 +12,12 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-import { createUser, getUser } from "./db/users.js";
-import { createProperty, getProperty } from "./db/properties.js";
-import redis from "./db/redis.js";
-
-console.log("Redis status:", redis.isOpen)
-
-async function loadProperty(propertyId) {
-
-  try {
-
-    const redisProperty = await getProperty(propertyId)
-
-    if (redisProperty) {
-      return redisProperty
-    }
-
-  } catch (err) {
-
-    console.log("Redis property load failed:", err.message)
-
-  }
-
-  return properties[propertyId]
-
-}
+//import { createUser, getUser } from "./db/users.js"
+//import { createProperty, getProperty } from "./db/properties.js"
 
 
+
+dotenv.config();
 
 const app = express();
 
@@ -297,7 +273,6 @@ const openai = new OpenAI({
 
 /* --- Redis client --- */
 
-/*
 const redis = createClient({
   url: process.env.REDIS_URL
 });
@@ -307,17 +282,14 @@ redis.on("error", (err) => console.error("Redis error", err));
 await redis.connect();
 
 console.log("Redis connected successfully");
-*/
 
 /* --- property config endpoint --- */
 
-app.get("/property/:id", async (req, res) => {
+app.get("/property/:id", (req, res) => {
 
   const propertyId = req.params.id;
 
-  const property =
-    await loadProperty(propertyId) ||
-    properties["demo_property"];
+  const property = properties[propertyId] || properties["demo_property"];
 
   res.json({
     id: property.id,
@@ -677,14 +649,11 @@ app.post("/chat", async (req, res) => {
 
     console.log("Property:", propertyId);
 
-    const property =
-      await loadProperty(propertyId) ||
-      properties["demo_property"];
+    const property = properties[propertyId] || properties["demo_property"];
 
-    if (!property || !property.knowledge) {
-      console.error("Invalid property configuration:", propertyId);
+    if (!property) {
       return res.json({
-        reply: "Property configuration error."
+        reply: "Property configuration not found."
       });
     }
 
@@ -764,9 +733,7 @@ app.post("/chat", async (req, res) => {
 
     /* --- FAQ AUTO ANSWER --- */
 
-    const faqList = property.knowledge?.faq || []
-
-    const faqMatch = faqList.find(f =>
+    const faqMatch = property.knowledge.faq.find(f =>
       normalizedMessage.includes(f.question.toLowerCase())
     );
 
