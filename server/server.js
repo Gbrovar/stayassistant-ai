@@ -20,8 +20,6 @@ import { buildPrompt } from "./promptBuilder.js";
 
 dotenv.config();
 
-import { connectRedis } from "./db/redis.js"
-
 const app = express();
 
 /* --- DISTANCE HELPER --- */
