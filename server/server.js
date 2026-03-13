@@ -8,11 +8,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authenticate } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
+
 //import { createClient } from "redis";
 import { users } from "./users.js"
 import { properties } from "./properties.js";
-import { buildPrompt } from "./promptBuilder.js";
 
+import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js"
 import { createProperty, getProperty } from "./db/properties.js"
 
@@ -310,13 +311,13 @@ app.post("/auth/login", async (req, res) => {
 
   const { email, password } = req.body
 
-  const user = Object.values(users).find(u => u.email === email)
+  const user = await getUser(email)
 
   if (!user) {
     return res.status(401).json({ error: "invalid credentials" })
   }
 
-  const valid = password === "test123"
+  const valid = password === user.password
 
   if (!valid) {
     return res.status(401).json({ error: "invalid credentials" })
