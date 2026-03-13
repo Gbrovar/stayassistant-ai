@@ -10,8 +10,8 @@ export default function CopyButton({text}){
 
   return(
 
-    <button className="copy-btn" onClick={copy}>
-      Copy Script
+    <button onClick={copy} className="copy-btn">
+      Copy script
     </button>
 
   )

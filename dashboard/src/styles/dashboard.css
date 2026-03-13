@@ -126,20 +126,15 @@ body{
 
 /* INSTALL PAGE STYLE */
 
-.install-script{
+.install-code{
 
-  background:#0f172a;
-
+  background:#0b1220;
   border:1px solid #1f2937;
-
-  padding:15px;
-
+  padding:16px;
   border-radius:8px;
-
-  margin:15px 0;
-
-  font-size:13px;
-
+  margin:16px 0;
+  font-family:monospace;
+  color:#22c55e;
   overflow:auto;
 
 }
@@ -147,22 +142,18 @@ body{
 .copy-btn{
 
   background:#22c55e;
-
   border:none;
-
   padding:10px 16px;
-
-  border-radius:8px;
-
+  border-radius:6px;
   cursor:pointer;
-
-  color:white;
+  font-weight:600;
+  color: white;
 
 }
 
 .copy-btn:hover{
 
-  background:#16a34a;
+  opacity:0.9;
 
 }
 

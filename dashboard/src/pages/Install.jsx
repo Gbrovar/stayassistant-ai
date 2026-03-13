@@ -1,32 +1,36 @@
+import { getPropertyId } from "../api/auth"
 import Card from "../components/Card"
 import CopyButton from "../components/CopyButton"
 
-export default function Install(){
+export default function Install() {
 
-  const propertyId = "demo_property"
+    const propertyId = getPropertyId()
 
-  const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}"></script>`
+    const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}"></script>`
 
-  return(
+    return (
 
-    <div>
+        <div>
 
-      <h1>Install Widget</h1>
+            <h1>Install StayAssistant</h1>
 
-      <Card>
+            <Card>
 
-        <p>Copy and paste this script into your website:</p>
+                <p>
+                    Copy and paste this script into your website before the closing
+                    <code>{" </body> "}</code> tag.
+                </p>
 
-        <pre className="install-script">
-          {script}
-        </pre>
+                <pre className="install-code">
+                    {script}
+                </pre>
 
-        <CopyButton text={script} />
+                <CopyButton text={script} />
 
-      </Card>
+            </Card>
 
-    </div>
+        </div>
 
-  )
+    )
 
 }
