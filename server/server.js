@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { connectRedis } from "./db/redis.js"
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -17,7 +18,6 @@ import { buildPrompt } from "./promptBuilder.js";
 
 dotenv.config();
 
-import { connectRedis } from "./db/redis.js"
 
 const app = express();
 
