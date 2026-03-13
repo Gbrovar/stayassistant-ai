@@ -1,13 +1,18 @@
-import {createClient} from "redis"
+import { createClient } from "redis"
 
 const redis = createClient({
-  url:process.env.REDIS_PUBLIC_URL
+  url: process.env.REDIS_PUBLIC_URL
 })
 
-redis.on("error",(err)=>{
-  console.log("Redis error",err)
+redis.on("error", (err) => {
+  console.error("Redis error:", err)
 })
 
-await redis.connect()
+export async function connectRedis(){
+  if(!redis.isOpen){
+    await redis.connect()
+    console.log("Redis connected")
+  }
+}
 
 export default redis

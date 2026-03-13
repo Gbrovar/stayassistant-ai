@@ -15,9 +15,9 @@ import { buildPrompt } from "./promptBuilder.js";
 //import { createUser, getUser } from "./db/users.js"
 //import { createProperty, getProperty } from "./db/properties.js"
 
-
-
 dotenv.config();
+
+import { connectRedis } from "./db/redis.js"
 
 const app = express();
 
