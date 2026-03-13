@@ -281,15 +281,11 @@ console.log("Redis connected successfully");
 
 /* --- property config endpoint --- */
 
-app.get("/property/:id", async (req, res) => {
+app.get("/property/:id", (req, res) => {
 
   const propertyId = req.params.id;
 
-  let property = await getProperty(propertyId);
-
-  if (!property) {
-    property = await getProperty("demo_property");
-  }
+  const property = properties[propertyId] || properties["demo_property"];
 
   res.json({
     id: property.id,
