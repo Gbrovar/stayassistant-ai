@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import fetch from "node-fetch";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -15,6 +18,8 @@ import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
 import redis from "./db/redis.js";
+
+console.log("Redis status:", redis.isOpen)
 
 async function loadProperty(propertyId){
 
@@ -36,7 +41,7 @@ async function loadProperty(propertyId){
 
 }
 
-dotenv.config();
+
 
 const app = express();
 
