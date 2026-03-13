@@ -328,7 +328,56 @@ app.post("/property/:id/faq",(req,res)=>{
     success:true
   })
 
-})
+});
+
+/* --- GET BRANDING --- */
+
+app.get("/property/:id/branding",(req,res)=>{
+
+  const propertyId = req.params.id
+
+  const property = properties[propertyId]
+
+  if(!property){
+    return res.status(404).json({error:"property not found"})
+  }
+
+  res.json({
+    property_name: property.name,
+    button_text: property.branding?.button_text || "Ask concierge",
+    primary_color: property.branding?.primary_color || "#22c55e"
+  })
+
+});
+
+/* --- UPDATE BRANDING --- */
+
+app.post("/property/:id/branding",(req,res)=>{
+
+  const propertyId = req.params.id
+
+  const {property_name,button_text,primary_color} = req.body
+
+  const property = properties[propertyId]
+
+  if(!property){
+    return res.status(404).json({error:"property not found"})
+  }
+
+  property.name = property_name
+
+  property.branding = {
+    button_text,
+    primary_color
+  }
+
+  res.json({
+    success:true
+  })
+
+});
+
+
 
 /* --- deteccion y adaptacion de intent --- */
 function detectIntent(text) {

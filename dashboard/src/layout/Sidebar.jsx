@@ -1,6 +1,8 @@
-export default function Sidebar() {
+import {Link} from "react-router-dom"
 
-  return (
+export default function Sidebar(){
+
+  return(
 
     <aside className="sidebar">
 
@@ -8,11 +10,11 @@ export default function Sidebar() {
 
       <nav>
 
-        <a>Analytics</a>
-        <a>FAQ</a>
-        <a>Recommendations</a>
-        <a>Branding</a>
-        <a>Install</a>
+        <Link to="/analytics">Analytics</Link>
+
+        <Link to="/faq">FAQ</Link>
+
+        <Link to="/install">Install</Link>
 
       </nav>
 

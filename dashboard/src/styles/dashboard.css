@@ -26,7 +26,8 @@ body{
   margin-bottom:30px;
 }
 
-.sidebar nav a{
+.sidebar nav a,
+.sidebar nav a:visited{
 
   display:block;
 
@@ -37,11 +38,17 @@ body{
   border-radius:8px;
 
   cursor:pointer;
+
+  color:#e5e7eb;
+
+  text-decoration:none;
+
 }
 
 .sidebar nav a:hover{
 
   background:#1f2937;
+
 }
 
 .main{
