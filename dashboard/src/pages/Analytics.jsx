@@ -12,7 +12,7 @@ export default function Analytics(){
 
     async function load(){
 
-      const res = await fetch(`/analytics/${propertyId}`)
+      const res = await fetch(`http://localhost:3000/analytics/${propertyId}`)
 
       const data = await res.json()
 
