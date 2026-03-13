@@ -70,3 +70,49 @@ body{
 
   padding:30px;
 }
+
+/* STATISTICS STYLE */
+
+.card{
+
+  background:#111827;
+
+  border:1px solid #1f2937;
+
+  border-radius:12px;
+
+  padding:20px;
+
+  max-width:500px;
+
+}
+
+.stat-item{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  padding:10px 0;
+
+  border-bottom:1px solid #1f2937;
+
+}
+
+.stat-item:last-child{
+
+  border-bottom:none;
+
+}
+
+.stat-item b{
+
+  background:#1f2937;
+
+  padding:4px 10px;
+
+  border-radius:8px;
+
+  color:#22c55e;
+
+}

@@ -1,9 +1,10 @@
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
+import Analytics from "./pages/Analytics"
 
-export default function App() {
+export default function App(){
 
-  return (
+  return(
 
     <div className="dashboard">
 
@@ -15,7 +16,7 @@ export default function App() {
 
         <div className="content">
 
-          <h1>Dashboard</h1>
+          <Analytics />
 
         </div>
 
