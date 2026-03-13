@@ -11,8 +11,6 @@ import { fileURLToPath } from "url";
 import { createClient } from "redis";
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
-import {createUser} from "./db/users.js"
-import {createProperty} from "./db/properties.js"
 
 
 dotenv.config();
@@ -390,7 +388,7 @@ app.post("/auth/register", async (req,res)=>{
     propertyId
   })
 
-});
+})
 
 /* --- GET FAQ --- */
 
