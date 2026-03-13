@@ -12,9 +12,9 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-import { createUser, getUser } from "./db/users.js"
-import { createProperty, getProperty } from "./db/properties.js"
-import { redis } from "./db/redis.js"
+import { createUser, getUser } from "./db/users.js";
+import { createProperty, getProperty } from "./db/properties.js";
+import redis from "./db/redis.js";
 
 async function loadProperty(propertyId){
 
@@ -37,10 +37,6 @@ async function loadProperty(propertyId){
 }
 
 dotenv.config();
-
-await redis.connect()
-
-console.log("Redis connected successfully")
 
 const app = express();
 
