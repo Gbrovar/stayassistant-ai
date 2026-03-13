@@ -12,10 +12,20 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-//import { createUser, getUser } from "./db/users.js"
-//import { createProperty, getProperty } from "./db/properties.js"
+import { createUser, getUser } from "./db/users.js"
+import { createProperty, getProperty } from "./db/properties.js"
 
+async function loadProperty(propertyId){
 
+  const redisProperty = await getProperty(propertyId)
+
+  if(redisProperty){
+    return redisProperty
+  }
+
+  return properties[propertyId]
+
+}
 
 dotenv.config();
 
@@ -285,11 +295,13 @@ console.log("Redis connected successfully");
 
 /* --- property config endpoint --- */
 
-app.get("/property/:id", (req, res) => {
+app.get("/property/:id", async (req, res) => {
 
   const propertyId = req.params.id;
 
-  const property = properties[propertyId] || properties["demo_property"];
+  const property =
+    await loadProperty(propertyId) ||
+    properties["demo_property"];
 
   res.json({
     id: property.id,
