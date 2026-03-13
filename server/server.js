@@ -1,23 +1,26 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { connectRedis } from "./db/redis.js"
+import redis, { connectRedis } from "./db/redis.js"
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authenticate } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
-import { createClient } from "redis";
+//import { createClient } from "redis";
 import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
+import { createUser, getUser } from "./db/users.js"
+import { createProperty, getProperty } from "./db/properties.js"
 
 
 /******* *********** */
 
 dotenv.config();
+await connectRedis()
 
 const app = express();
 
@@ -273,6 +276,7 @@ const openai = new OpenAI({
 
 /* --- Redis client --- */
 
+/*
 const redis = createClient({
   url: process.env.REDIS_URL
 });
@@ -282,6 +286,7 @@ redis.on("error", (err) => console.error("Redis error", err));
 await redis.connect();
 
 console.log("Redis connected successfully");
+*/
 
 /* --- property config endpoint --- */
 
