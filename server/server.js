@@ -411,7 +411,7 @@ app.post("/auth/register", async (req, res) => {
 
 /* --- GET FAQ --- */
 
-app.get("/property/:id/faq", authenticate, (req, res) => {
+app.get("/property/:id/faq", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -419,7 +419,7 @@ app.get("/property/:id/faq", authenticate, (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
-  const property = properties[propertyId]
+  const property = await getProperty(propertyId)
 
   if (!property) {
     return res.json({ faq: [] })
@@ -433,7 +433,7 @@ app.get("/property/:id/faq", authenticate, (req, res) => {
 
 /* --- UPDATE FAQ --- */
 
-app.post("/property/:id/faq", authenticate, (req, res) => {
+app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -443,7 +443,7 @@ app.post("/property/:id/faq", authenticate, (req, res) => {
 
   const { faq } = req.body
 
-  const property = properties[propertyId]
+  const property = await getProperty(propertyId)
 
   if (!property) {
     return res.status(404).json({ error: "property not found" })
