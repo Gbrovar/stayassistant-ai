@@ -11,13 +11,13 @@ import Login from "./pages/Login"
 
 import {Routes,Route} from "react-router-dom"
 
-const token = localStorage.getItem("token")
-
-if(!token){
-  return <Login/>
-}
-
 export default function App(){
+
+  const token = localStorage.getItem("token")
+
+  if(!token){
+    return <Login/>
+  }
 
   return(
 
@@ -32,8 +32,6 @@ export default function App(){
         <div className="content">
 
           <Routes>
-
-            <Route path="/login" element={<Login/>}/>
 
             <Route path="/" element={<Analytics/>}/>
 
