@@ -12,8 +12,9 @@ import { users } from "./users.js"
 import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 
-//import { createUser, getUser } from "./db/users.js"
-//import { createProperty, getProperty } from "./db/properties.js"
+import { createUser, getUser } from "./db/users.js"
+import { createProperty, getProperty } from "./db/properties.js"
+import { redis } from "./db/redis.js"
 
 async function loadProperty(propertyId){
 
@@ -291,6 +292,7 @@ const openai = new OpenAI({
 
 /* --- Redis client --- */
 
+/*
 const redis = createClient({
   url: process.env.REDIS_URL
 });
@@ -300,6 +302,7 @@ redis.on("error", (err) => console.error("Redis error", err));
 await redis.connect();
 
 console.log("Redis connected successfully");
+*/
 
 /* --- property config endpoint --- */
 
