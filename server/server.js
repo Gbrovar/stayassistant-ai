@@ -907,24 +907,6 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-/*
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
-*/
-
-async function startServer(){
-
-  try{
-    await connectRedis()
-    app.listen(PORT, () => {
-      console.log("Server running on port " + PORT)
-    })
-  }catch(err){
-    console.error("Startup error:", err)
-    process.exit(1)
-
-  }
-}
-
-startServer()
