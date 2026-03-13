@@ -1,9 +1,10 @@
 import {useEffect,useState} from "react"
 import Card from "../components/Card"
+import {getToken,getPropertyId} from "../api/auth"
 
 export default function Branding(){
 
-  const propertyId="demo_property"
+  const propertyId=getPropertyId()
 
   const [propertyName,setPropertyName]=useState("")
   const [buttonText,setButtonText]=useState("")
@@ -36,7 +37,7 @@ export default function Branding(){
 
       headers:{
         "Content-Type":"application/json",
-        "Authorization":"Bearer " + localStorage.getItem("token")
+        "Authorization":"Bearer " + getToken()
       },
 
       body:JSON.stringify({

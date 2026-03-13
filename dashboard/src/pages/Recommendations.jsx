@@ -1,9 +1,10 @@
 import {useEffect,useState} from "react"
 import Card from "../components/Card"
+import {getToken,getPropertyId} from "../api/auth"
 
 export default function Recommendations(){
 
-  const propertyId="demo_property"
+  const propertyId=getPropertyId()
 
   const [items,setItems]=useState([])
 
@@ -75,7 +76,7 @@ export default function Recommendations(){
 
       headers:{
         "Content-Type":"application/json",
-        "Authorization":"Bearer " + localStorage.getItem("token")
+        "Authorization":"Bearer " + getToken()
       },
 
       body:JSON.stringify({
