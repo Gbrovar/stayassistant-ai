@@ -654,6 +654,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let property = await loadProperty(propertyId)
 
+    /* --- MONTHLY USAGE BUCKET --- */
+
+    const month = new Date().toISOString().slice(0, 7)
+
     /* --- DEMO VISITOR LIMIT --- */
 
     if (propertyId === "demo_property") {
@@ -714,9 +718,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       // 2️⃣ message usage counter (nuevo)
 
-      const usageKey = `stayassistant:usage:${propertyId}:messages`;
+      const usageKey = `stayassistant:usage:${propertyId}:${month}`;
 
       await redis.incr(usageKey);
+
+      await redis.expire(usageKey, 60 * 60 * 24 * 90)
 
       // 3️⃣ hourly analytics (nuevo)
 
@@ -1070,7 +1076,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
     const intentKey = `stayassistant:analytics:${propertyId}:questions`;
     const hourKey = `stayassistant:analytics:${propertyId}:hours`;
-    const usageKey = `stayassistant:usage:${propertyId}:messages`;
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`;
 
     const intents = await redis.zRangeWithScores(intentKey, 0, 9, { REV: true });
 
