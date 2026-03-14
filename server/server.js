@@ -680,15 +680,31 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const propertyId = req.body.propertyId || "demo_property";
     const hour = req.body.hour || null;
 
+    console.log("Property:", propertyId);
+
+    /* --- LOAD PROPERTY --- */
+
+    let property = await loadProperty(propertyId)
+
+    if (!property) {
+      return res.json({
+        reply: "Property configuration not found."
+      });
+    }
+
+    /* --- INTENT DETECTION --- */
+
+    const intent = detectIntent(userMessage)
+
+    /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
+
+    const knowledge = selectKnowledge(property, intent)
+
     /* --- ANALYTICS TRACKING --- */
 
     try {
 
       const analyticsKey = `stayassistant:analytics:${propertyId}:questions`;
-
-      const intent = detectIntent(userMessage)
-
-      const knowledge = selectKnowledge(property, intent)
 
       await redis.zIncrBy(
         analyticsKey,
@@ -702,25 +718,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    console.log("Property:", propertyId);
-
-
-    /* VERSION ANTERIOR */
-    /* 
-      let property = await getProperty(propertyId)
-  
-      if (!property) {
-        property = await getProperty("demo_property")
-      }
-    */
-
-    let property = await loadProperty(propertyId)
-
-    if (!property) {
-      return res.json({
-        reply: "Property configuration not found."
-      });
-    }
+    /* --- CHAT HISTORY --- */
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
 
@@ -751,20 +749,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
       normalizedMessage.includes("departure") ||
 
       normalizedMessage.includes("llegada") ||
-      normalizedMessage.includes("salida") ||
-
-      normalizedMessage.includes("checkin") ||
-      normalizedMessage.includes("checkout")
+      normalizedMessage.includes("salida")
 
     ) {
 
       let answer = `
-      Check-in: ${property.knowledge.property_info.checkin}
+Check-in: ${property.knowledge.property_info.checkin}
 
-      Check-out: ${property.knowledge.property_info.checkout}
-      `
-
-      /* traducir si idioma ≠ inglés */
+Check-out: ${property.knowledge.property_info.checkout}
+`
 
       if (userLanguage && userLanguage !== "English") {
 
@@ -808,7 +801,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       let answer = faqMatch.answer;
 
-      // traducir si el usuario no usa inglés
       if (userLanguage && userLanguage !== "English") {
 
         const translation = await openai.chat.completions.create({
@@ -845,9 +837,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
+    /* --- AI COMPLETION --- */
+
     const context = detectContext(hour);
+
     const completion = await openai.chat.completions.create({
+
       model: "gpt-4o-mini",
+
       messages: [
         {
           role: "system",
@@ -857,6 +854,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
         ...history
 
       ]
+
     });
 
     const reply = completion.choices[0].message.content;
@@ -873,7 +871,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    const cleanReply = reply.replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "").trim();
+    const cleanReply = reply
+      .replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "")
+      .trim();
 
     history.push({
       role: "assistant",
