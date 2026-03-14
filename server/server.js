@@ -698,6 +698,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
       });
     }
 
+    const usageKey = `stayassistant:usage:${propertyId}:messages`
+
+    await redis.incr(usageKey)
+
     /* --- INTENT DETECTION --- */
 
     const intent = detectIntent(userMessage)
