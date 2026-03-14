@@ -698,10 +698,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       });
     }
 
-    const usageKey = `stayassistant:usage:${propertyId}:messages`
-
-    await redis.incr(usageKey)
-
     /* --- INTENT DETECTION --- */
 
     const intent = detectIntent(userMessage)
@@ -714,13 +710,29 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
 
+      // 1️⃣ intent analytics (ya existente)
+
       const analyticsKey = `stayassistant:analytics:${propertyId}:questions`;
 
       await redis.zIncrBy(
         analyticsKey,
         1,
         intent
-      )
+      );
+
+      // 2️⃣ message usage counter (nuevo)
+
+      const usageKey = `stayassistant:usage:${propertyId}:messages`;
+
+      await redis.incr(usageKey);
+
+      // 3️⃣ hourly analytics (nuevo)
+
+      const hourKey = `stayassistant:analytics:${propertyId}:hours`;
+
+      const hourNow = new Date().getHours();
+
+      await redis.hIncrBy(hourKey, hourNow, 1);
 
     } catch (err) {
 
