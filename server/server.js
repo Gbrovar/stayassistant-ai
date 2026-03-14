@@ -10,7 +10,7 @@ import { authenticate } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
 
 //import { createClient } from "redis";
-import { users } from "./users.js"
+//import { users } from "./users.js"
 import { properties } from "./properties.js";
 
 import { buildPrompt } from "./promptBuilder.js";
