@@ -654,6 +654,36 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let property = await loadProperty(propertyId)
 
+    /* --- DEMO VISITOR LIMIT --- */
+
+    if (propertyId === "demo_property") {
+
+      const visitorId = req.body.visitorId || "anonymous"
+
+      const demoKey = `stayassistant:demo:${visitorId}`
+
+      const demoUsage = await redis.get(demoKey)
+
+      const currentDemoUsage = Number(demoUsage || 0)
+
+      const DEMO_LIMIT = 30
+
+      if (currentDemoUsage >= DEMO_LIMIT) {
+
+        return res.json({
+          reply:
+            "Thanks for trying StayAssistant. This demo allows a limited number of questions.",
+          demo_limit: true
+        })
+
+      }
+
+      await redis.incr(demoKey)
+
+      await redis.expire(demoKey, 60 * 60 * 24) // 24h
+
+    }
+
     if (!property) {
       return res.json({
         reply: "Property configuration not found."
