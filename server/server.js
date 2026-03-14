@@ -755,10 +755,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const normalizedMessage = userMessage.toLowerCase();
 
+    /* --- NORMALIZACION DE PREGUNTAS --- */
     const normalizedQuestion = normalizedMessage
       .replace(/[^\w\s]/g, "")
       .replace(/\s+/g, " ")
       .trim();
+
+    /* --- AISLAMIENTO MULTI-TENANT --- */
+    const cacheKey = `stayassistant:cache:${propertyId}:${normalizedQuestion}`;
 
     /* --- CHECKIN / CHECKOUT SMART FAQ --- */
 
@@ -864,6 +868,30 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
+    /* --- AI RESPONSE CACHE --- */
+
+    const cachedReply = await redis.get(cacheKey);
+
+    if (cachedReply) {
+
+      console.log("AI cache hit");
+
+      history.push({
+        role: "assistant",
+        content: cachedReply
+      });
+
+      await redis.set(historyKey, JSON.stringify(history), {
+        EX: 60 * 60 * 6
+      });
+
+      return res.json({
+        reply: cachedReply,
+        language: userLanguage
+      });
+
+    }
+
     /* --- AI COMPLETION --- */
 
     const context = detectContext(hour);
@@ -901,6 +929,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const cleanReply = reply
       .replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "")
       .trim();
+
+    /* --- SAVE AI RESPONSE CACHE --- */
+
+    try {
+
+      await redis.set(cacheKey, cleanReply, {
+        EX: 60 * 60 * 24
+      });
+
+    } catch (err) {
+
+      console.log("Cache save error:", err);
+
+    }
 
     history.push({
       role: "assistant",
