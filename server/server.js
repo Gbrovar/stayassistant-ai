@@ -15,7 +15,9 @@ import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
-import redis, { connectRedis } from "./db/redis.js"
+import redis, { connectRedis } from "./db/redis.js";
+
+const propertyCache = new Map()
 
 async function loadProperty(propertyId){
 
@@ -36,7 +38,7 @@ async function loadProperty(propertyId){
   return property
 }
 
-const propertyCache = new Map()
+
 
 dotenv.config();
 
