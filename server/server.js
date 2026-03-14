@@ -19,16 +19,24 @@ import redis, { connectRedis } from "./db/redis.js"
 
 async function loadProperty(propertyId){
 
+  if(propertyCache.has(propertyId)){
+    return propertyCache.get(propertyId)
+  }
+
   let property = await getProperty(propertyId)
 
   if(!property){
     property = properties[propertyId]
   }
 
-  return property
+  if(property){
+    propertyCache.set(propertyId, property)
+  }
 
+  return property
 }
 
+const propertyCache = new Map()
 
 dotenv.config();
 
