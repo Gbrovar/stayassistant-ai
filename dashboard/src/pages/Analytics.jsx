@@ -3,6 +3,7 @@ import Card from "../components/Card"
 import StatItem from "../components/StatItem"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
+import { data } from "react-router-dom"
 
 export default function Analytics() {
 
@@ -38,7 +39,7 @@ export default function Analytics() {
 
   }, [])
 
-  if (!loading && totalMessages === 0) {
+  if (!loading && !data.has_data) {
 
     return (
 
