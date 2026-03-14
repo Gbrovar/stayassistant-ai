@@ -27,7 +27,7 @@ ${k.property_info.checkout}
             return `
 RESTAURANTS
 ${k.local_recommendations
-                .slice(0,3)
+                .slice(0,5)
                 .map(r => `${r.name} — ${r.description}`)
                 .join("\n")}
 `
@@ -50,10 +50,10 @@ PROPERTY
 ${k.property_info.description || ""}
 
 SERVICES
-${k.services.slice(0,5).join("\n")}
+${k.services.slice(0,7).join("\n")}
 
 AMENITIES
-${k.amenities.slice(0,5).join("\n")}
+${k.amenities.slice(0,7).join("\n")}
 `
     }
 
