@@ -19,19 +19,19 @@ import redis, { connectRedis } from "./db/redis.js";
 
 const propertyCache = new Map()
 
-async function loadProperty(propertyId){
+async function loadProperty(propertyId) {
 
-  if(propertyCache.has(propertyId)){
+  if (propertyCache.has(propertyId)) {
     return propertyCache.get(propertyId)
   }
 
   let property = await getProperty(propertyId)
 
-  if(!property){
+  if (!property) {
     property = properties[propertyId]
   }
 
-  if(property){
+  if (property) {
     propertyCache.set(propertyId, property)
   }
 
@@ -44,11 +44,11 @@ dotenv.config();
 
 await connectRedis();
 
-async function seedDatabase(){
+async function seedDatabase() {
 
   const demo = await getProperty("demo_property")
 
-  if(!demo){
+  if (!demo) {
 
     console.log("Seeding demo property")
 
@@ -327,8 +327,8 @@ app.get("/property/:id", async (req, res) => {
 
   const property = await loadProperty(propertyId)
 
-  if(!property){
-    return res.status(404).json({error:"property not found"})
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
   }
 
   res.json({
@@ -351,7 +351,7 @@ app.post("/auth/login", async (req, res) => {
     return res.status(401).json({ error: "invalid credentials" })
   }
 
-  const valid = password === user.password
+  const valid = await bcrypt.compare(password, user.password)
 
   if (!valid) {
     return res.status(401).json({ error: "invalid credentials" })
@@ -396,9 +396,11 @@ app.post("/auth/register", async (req, res) => {
 
   /* --- CREATE USER --- */
 
+  const hashedPassword = await bcrypt.hash(password, 10)
+
   const user = {
     email,
-    password,
+    password: hashedPassword,
     propertyId
   }
 
