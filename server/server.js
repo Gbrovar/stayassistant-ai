@@ -383,45 +383,35 @@ app.post("/auth/register", async (req, res) => {
 
   const propertyId = "property_" + Date.now()
 
-  const property = {
+  /* --- CLONE DEMO PROPERTY TEMPLATE --- */
 
-    id: propertyId,
+  const base = properties.demo_property
 
-    name: property_name,
+  const property = JSON.parse(JSON.stringify(base))
 
-    coordinates: {
-      lat: 0,
-      lng: 0
-    },
+  /* --- PERSONALIZE PROPERTY --- */
 
-    branding: {
-      button_text: "Ask concierge",
-      primary_color: "#22c55e"
-    },
+  property.id = propertyId
+  property.name = property_name
 
-    knowledge: {
-      property_info: {
-        checkin: "15:00",
-        checkout: "11:00"
-      },
-
-      faq: [],
-      services: [],
-      local_recommendations: []
-    }
-
-  }
+  /* --- CREATE USER --- */
 
   const user = {
-
     email,
     password,
     propertyId
-
   }
+
+  /* --- SAVE IN REDIS --- */
 
   await createProperty(property)
   await createUser(user)
+
+  /* --- CLEAR CACHE --- */
+
+  propertyCache.delete(propertyId)
+
+  /* --- CREATE TOKEN --- */
 
   const token = jwt.sign(
     { propertyId },
