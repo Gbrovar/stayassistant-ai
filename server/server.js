@@ -730,7 +730,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const hourKey = `stayassistant:analytics:${propertyId}:hours`;
 
-      const hourNow = new Date().getHours();
+      const hourNow = hour !== null ? Number(hour) : new Date().getHours();
 
       await redis.hIncrBy(hourKey, hourNow, 1);
 
