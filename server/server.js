@@ -687,11 +687,22 @@ app.post("/chat", async (req, res) => {
 
     console.log("Property:", propertyId);
 
-    let property = await getProperty(propertyId)
+
+    /* VERSION ANTERIOR */
+    /* 
+      let property = await getProperty(propertyId)
+  
+      if (!property) {
+        property = await getProperty("demo_property")
+      }
+    */
+
+    let property = await loadProperty(propertyId)
 
     if (!property) {
-      property = await getProperty("demo_property")
+      property = await loadProperty("demo_property")
     }
+
 
     if (!property) {
       return res.json({
