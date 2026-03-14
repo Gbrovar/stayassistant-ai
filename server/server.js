@@ -512,7 +512,7 @@ app.post("/property/:id/branding", authenticate, async(req, res) => {
 
 /* --- GET RECOMMENDATIONS --- */
 
-app.get("/property/:id/recommendations", authenticate, (req, res) => {
+app.get("/property/:id/recommendations", authenticate, async(req, res) => {
 
   const propertyId = req.params.id
 
@@ -520,7 +520,7 @@ app.get("/property/:id/recommendations", authenticate, (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
-  const property = properties[propertyId]
+  const property = await getProperty(propertyId)
 
   if (!property) {
     return res.json({ recommendations: [] })
@@ -535,7 +535,7 @@ app.get("/property/:id/recommendations", authenticate, (req, res) => {
 
 /* --- UPDATE RECOMMENDATIONS --- */
 
-app.post("/property/:id/recommendations", authenticate, (req, res) => {
+app.post("/property/:id/recommendations", authenticate, async(req, res) => {
 
   const propertyId = req.params.id
 
@@ -545,7 +545,7 @@ app.post("/property/:id/recommendations", authenticate, (req, res) => {
 
   const { recommendations } = req.body
 
-  const property = properties[propertyId]
+  const property = await getProperty(propertyId)
 
   if (!property) {
     return res.status(404).json({ error: "property not found" })
