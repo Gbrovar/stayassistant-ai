@@ -943,6 +943,16 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
 });
 
+app.get("/debug/redis", async (req, res) => {
+
+  const keys = await redis.keys("*")
+
+  res.json({
+    keys
+  })
+
+})
+
 
 /* --- server port --- */
 
