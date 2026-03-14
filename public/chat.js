@@ -1,5 +1,25 @@
 const conversationId = crypto.randomUUID();
 
+/* DEMO VISITOR ID */
+
+function getVisitorId() {
+
+    let visitorId = localStorage.getItem("stayassistant_visitor")
+
+    if (!visitorId) {
+
+        visitorId = crypto.randomUUID()
+
+        localStorage.setItem("stayassistant_visitor", visitorId)
+
+    }
+
+    return visitorId
+
+}
+
+const visitorId = getVisitorId()
+
 const urlParams = new URLSearchParams(window.location.search);
 
 const propertyId = urlParams.get("property") || "demo_property";
