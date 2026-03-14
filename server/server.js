@@ -45,6 +45,32 @@ async function loadProperty(propertyId) {
   return property
 }
 
+/* --- SAAS PLAN LIMITS --- */
+
+const PLAN_LIMITS = {
+
+  free: 100,          // hoteles nuevos
+  pro: 2000,          // plan pago futuro
+  enterprise: Infinity
+
+}
+
+/* --- GET PROPERTY USAGE LIMIT --- */
+
+function getUsageLimit(property) {
+
+  // demo nunca se bloquea
+  if (property.id === "demo_property") {
+    return Infinity
+  }
+
+  // por ahora todos los hoteles son plan free
+  const plan = property.plan || "free"
+
+  return PLAN_LIMITS[plan] || PLAN_LIMITS.free
+
+}
+
 
 
 dotenv.config();
@@ -608,70 +634,6 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   })
 
 });
-
-
-
-/* --- deteccion y adaptacion de intent --- */
-/*
-function detectIntent(text) {
-
-  text = text.toLowerCase()
-
-  if (
-    text.includes("wifi")
-  ) return "wifi"
-
-  if (
-    text.includes("restaurant") ||
-    text.includes("food") ||
-    text.includes("eat") ||
-    text.includes("dinner")
-  ) return "restaurants"
-
-  if (
-    text.includes("supermarket") ||
-    text.includes("grocery") ||
-    text.includes("market") ||
-    text.includes("supermercado")
-  ) return "supermarket"
-
-  if (
-    text.includes("taxi") ||
-    text.includes("uber")
-  ) return "taxi"
-
-  if (
-    text.includes("check in") ||
-    text.includes("check-in")
-  ) return "checkin"
-
-  if (
-    text.includes("check out") ||
-    text.includes("checkout")
-  ) return "checkout"
-
-  if (
-    text.includes("pharmacy") ||
-    text.includes("farmacia")
-  ) return "pharmacy"
-
-  if (
-    text.includes("bus") ||
-    text.includes("metro") ||
-    text.includes("train")
-  ) return "transport"
-
-  if (
-    text.includes("activity") ||
-    text.includes("things to do")
-  ) return "activities"
-
-  return "other"
-
-}
-
-*/
-
 
 
 /* --- chat endpoint --- */
