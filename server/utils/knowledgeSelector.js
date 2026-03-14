@@ -1,3 +1,32 @@
+function rankRecommendations(recommendations, intent) {
+
+    if (!recommendations || !recommendations.length) return []
+
+    const keywordMap = {
+        restaurants: ["restaurant", "food", "eat", "dinner", "lunch", "pizza", "cafe"]
+    }
+
+    const keywords = keywordMap[intent] || []
+
+    return recommendations
+        .map(r => {
+
+            const text = `${r.name} ${r.description}`.toLowerCase()
+
+            let score = 0
+
+            keywords.forEach(k => {
+                if (text.includes(k)) score++
+            })
+
+            return { ...r, score }
+
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
+
+}
+
 export function selectKnowledge(property, intent) {
 
     const k = property.knowledge
@@ -24,12 +53,17 @@ ${k.property_info.checkout}
 `
 
         case "restaurants":
+
+            const rankedRestaurants = rankRecommendations(
+                k.local_recommendations,
+                intent
+            )
+
             return `
 RESTAURANTS
-${k.local_recommendations
-                .slice(0,5)
-                .map(r => `${r.name} — ${r.description}`)
-                .join("\n")}
+${rankedRestaurants
+                    .map(r => `${r.name} — ${r.description}`)
+                    .join("\n")}
 `
 
         case "transport":
@@ -50,10 +84,10 @@ PROPERTY
 ${k.property_info.description || ""}
 
 SERVICES
-${k.services.slice(0,7).join("\n")}
+${k.services.slice(0,5).join("\n")}
 
 AMENITIES
-${k.amenities.slice(0,7).join("\n")}
+${k.amenities.slice(0,5).join("\n")}
 `
     }
 
