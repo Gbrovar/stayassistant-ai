@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import redis, { connectRedis } from "./db/redis.js"
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -16,7 +15,7 @@ import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
-
+import redis, { connectRedis } from "./db/redis.js"
 
 async function loadProperty(propertyId){
 
