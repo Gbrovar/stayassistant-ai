@@ -665,7 +665,7 @@ function detectIntent(text) {
 
 /* --- chat endpoint --- */
 
-app.post("/chat", async (req, res) => {
+app.post("/chat", chatLimiter, async (req, res) => {
 
   try {
 
