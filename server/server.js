@@ -456,7 +456,7 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
 /* --- GET BRANDING --- */
 
-app.get("/property/:id/branding", authenticate, async(req, res) => {
+app.get("/property/:id/branding", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -480,7 +480,7 @@ app.get("/property/:id/branding", authenticate, async(req, res) => {
 
 /* --- UPDATE BRANDING --- */
 
-app.post("/property/:id/branding", authenticate, async(req, res) => {
+app.post("/property/:id/branding", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -512,7 +512,7 @@ app.post("/property/:id/branding", authenticate, async(req, res) => {
 
 /* --- GET RECOMMENDATIONS --- */
 
-app.get("/property/:id/recommendations", authenticate, async(req, res) => {
+app.get("/property/:id/recommendations", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -535,7 +535,7 @@ app.get("/property/:id/recommendations", authenticate, async(req, res) => {
 
 /* --- UPDATE RECOMMENDATIONS --- */
 
-app.post("/property/:id/recommendations", authenticate, async(req, res) => {
+app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
 
@@ -653,7 +653,11 @@ app.post("/chat", async (req, res) => {
 
     console.log("Property:", propertyId);
 
-    const property = properties[propertyId] || properties["demo_property"];
+    let property = await getProperty(propertyId)
+
+    if (!property) {
+      property = await getProperty("demo_property")
+    }
 
     if (!property) {
       return res.json({
