@@ -504,7 +504,7 @@ app.get("/property/:id/branding", authenticate, async (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
-  const property = await getProperty(propertyId)
+  const property = await loadProperty(propertyId)
 
   if (!property) {
     return res.status(404).json({ error: "property not found" })
