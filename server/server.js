@@ -714,11 +714,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let property = await loadProperty(propertyId)
 
     if (!property) {
-      property = await loadProperty("demo_property")
-    }
-
-
-    if (!property) {
       return res.json({
         reply: "Property configuration not found."
       });
