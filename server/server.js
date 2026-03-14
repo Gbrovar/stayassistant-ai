@@ -17,6 +17,7 @@ import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
 import redis, { connectRedis } from "./db/redis.js";
+import { selectKnowledge } from "./utils/knowledgeSelector.js"
 
 const propertyCache = new Map()
 
@@ -687,6 +688,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const intent = detectIntent(userMessage)
 
+      const knowledge = selectKnowledge(property, intent)
+
       await redis.zIncrBy(
         analyticsKey,
         1,
@@ -848,7 +851,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       messages: [
         {
           role: "system",
-          content: buildPrompt(property, userLanguage, context)
+          content: buildPrompt(property, userLanguage, context, knowledge)
         },
 
         ...history

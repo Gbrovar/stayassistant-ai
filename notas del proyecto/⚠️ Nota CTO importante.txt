@@ -9,3 +9,25 @@ Para el widget es perfecto porque:
 Más adelante podremos hacer rate limit por propertyId.
 
 Pero no ahora (evitar overengineering).
+
+-------------------------------------------
+
+🧠 Nivel 2 (futuro) — Embeddings
+
+Cuando escales a muchos hoteles deberás usar:
+
+vector embeddings
+
+Arquitectura:
+
+guest message
+     ↓
+embedding search
+     ↓
+retrieve best knowledge
+     ↓
+AI
+
+Pero esto no es necesario todavía.
+
+Tu sistema puede escalar a miles de hoteles sin embeddings.
