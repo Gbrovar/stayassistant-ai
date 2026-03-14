@@ -1056,16 +1056,29 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
     const usage = await redis.get(usageKey);
 
+    const totalMessages = Number(usage || 0);
+
+    const topIntents = intents.map(i => ({
+      intent: i.value,
+      count: i.score
+    }));
+
+    /* --- DETECT IF ANALYTICS EXISTS --- */
+
+    const hasData =
+      totalMessages > 0 ||
+      topIntents.length > 0 ||
+      Object.keys(hours).length > 0;
+
     res.json({
 
-      total_messages: Number(usage || 0),
+      total_messages: totalMessages,
 
-      top_intents: intents.map(i => ({
-        intent: i.value,
-        count: i.score
-      })),
+      top_intents: topIntents,
 
-      peak_hours: hours
+      peak_hours: hours,
+
+      has_data: hasData
 
     });
 
