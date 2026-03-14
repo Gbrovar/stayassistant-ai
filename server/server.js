@@ -564,7 +564,7 @@ app.get("/property/:id/recommendations", authenticate, async (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
-  const property = await getProperty(propertyId)
+  const property = await loadProperty(propertyId)
 
   if (!property) {
     return res.json({ recommendations: [] })
