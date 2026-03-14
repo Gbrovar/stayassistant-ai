@@ -15,7 +15,7 @@ export default function Analytics() {
 
     async function load() {
 
-      const res = await fetch(`https://www.stayassistantai.com/analytics/${propertyId}/advanced`, {
+      const res = await fetch(`http://localhost:3000/analytics/${propertyId}/advanced`, {
 
         headers: {
           "Authorization": "Bearer " + getToken()
