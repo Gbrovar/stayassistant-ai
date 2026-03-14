@@ -720,10 +720,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const usageKey = `stayassistant:usage:${propertyId}:${month}`;
 
-      await redis.expire(usageKey, 60 * 60 * 24 * 90)
-
-      await redis.incr(usageKey);
-
       // 3️⃣ hourly analytics (nuevo)
 
       const hourKey = `stayassistant:analytics:${propertyId}:hours`;
@@ -767,6 +763,22 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("Usage check error:", err)
 
     }
+
+    /* --- INCREMENT MONTHLY USAGE --- */
+
+    try {
+
+      await redis.incr(usageKey)
+
+      await redis.expire(usageKey, 60 * 60 * 24 * 90)
+
+    } catch (err) {
+
+      console.log("Usage increment error:", err)
+
+    }
+
+    
     /* --- CHAT HISTORY --- */
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
