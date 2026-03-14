@@ -34,6 +34,22 @@ dotenv.config();
 
 await connectRedis();
 
+async function seedDatabase(){
+
+  const demo = await getProperty("demo_property")
+
+  if(!demo){
+
+    console.log("Seeding demo property")
+
+    await createProperty(properties.demo_property)
+
+  }
+
+}
+
+await seedDatabase()
+
 if (!(await getProperty("demo_property"))) {
 
   console.log("Seeding demo_property into Redis")
