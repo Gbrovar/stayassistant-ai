@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authenticate } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
 
 //import { createClient } from "redis";
 //import { users } from "./users.js"
@@ -98,6 +99,15 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 app.use(cors());
 app.use(express.json());
+
+/* --- chat limiter ---*/
+
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 /* --- paths --- */
 
