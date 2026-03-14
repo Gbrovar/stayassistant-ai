@@ -755,6 +755,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const normalizedMessage = userMessage.toLowerCase();
 
+    const normalizedQuestion = normalizedMessage
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
     /* --- CHECKIN / CHECKOUT SMART FAQ --- */
 
     if (
@@ -776,10 +781,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
     ) {
 
       let answer = `
-Check-in: ${property.knowledge.property_info.checkin}
+        Check-in: ${property.knowledge.property_info.checkin}
 
-Check-out: ${property.knowledge.property_info.checkout}
-`
+        Check-out: ${property.knowledge.property_info.checkout}
+        `
 
       if (userLanguage && userLanguage !== "English") {
 
