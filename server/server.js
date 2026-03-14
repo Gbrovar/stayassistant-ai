@@ -732,7 +732,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const hourNow = hour !== null ? Number(hour) : new Date().getHours();
 
-      await redis.hIncrBy(hourKey, hourNow, 1);
+      await redis.hIncrBy(hourKey, String(hourNow), 1);
 
     } catch (err) {
 
