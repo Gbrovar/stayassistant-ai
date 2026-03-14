@@ -16,7 +16,7 @@ import { properties } from "./properties.js";
 import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
-import redis, { connectRedis } from "./db/redis.js";
+
 
 async function loadProperty(propertyId){
 
@@ -30,7 +30,7 @@ async function loadProperty(propertyId){
 
 }
 
-/******* *********** */
+/*********************/
 
 dotenv.config();
 
