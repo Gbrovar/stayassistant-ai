@@ -702,6 +702,38 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const knowledge = selectKnowledge(property, intent)
 
+    /* --- INTENT DIRECT RESPONSE (COST SHIELD) --- */
+
+    if (intent === "taxi") {
+
+      return res.json({
+        reply:
+          "You can easily order a taxi using Uber or a local taxi service. Let me know if you need help with directions.",
+        language: userLanguage
+      })
+
+    }
+
+    if (intent === "pharmacy") {
+
+      return res.json({
+        reply:
+          "You can find nearby pharmacies using Google Maps. Let me know if you want recommendations.",
+        language: userLanguage
+      })
+
+    }
+
+    if (intent === "transport") {
+
+      return res.json({
+        reply:
+          "Public transport options such as bus or metro are available nearby. Let me know your destination and I can help.",
+        language: userLanguage
+      })
+
+    }
+
     /* --- ANALYTICS TRACKING --- */
 
     try {
