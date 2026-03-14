@@ -118,7 +118,7 @@ app.get("/property/:id/places/:type", async (req, res) => {
   const propertyId = req.params.id;
   const type = req.params.type;
 
-  const property = properties[propertyId];
+  const property = await loadProperty(propertyId);
 
   if (!property || !property.coordinates) {
     return res.json({ items: [] });
