@@ -14,9 +14,20 @@ import { fileURLToPath } from "url";
 import { properties } from "./properties.js";
 
 import { buildPrompt } from "./promptBuilder.js";
-import { createUser, getUser } from "./db/users.js"
-import { createProperty, getProperty } from "./db/properties.js"
+import { createUser, getUser } from "./db/users.js";
+import { createProperty, getProperty } from "./db/properties.js";
 
+async function loadProperty(propertyId){
+
+  let property = await getProperty(propertyId)
+
+  if(!property){
+    property = properties[propertyId]
+  }
+
+  return property
+
+}
 
 /******* *********** */
 
@@ -908,17 +919,6 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
   }
 
 });
-
-async function loadProperty(propertyId){
-
-  let property = await getProperty(propertyId)
-
-  if(!property){
-    property = properties[propertyId]
-  }
-
-  return property
-}
 
 
 /* --- server port --- */
