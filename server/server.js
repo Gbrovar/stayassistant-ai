@@ -1035,7 +1035,7 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
 });
 
-/*
+/*  DEBUGS TEMPORALES */
 app.get("/debug/redis", async (req, res) => {
 
   const keys = await redis.keys("*")
@@ -1045,7 +1045,7 @@ app.get("/debug/redis", async (req, res) => {
   })
 
 })
-*/
+
 
 app.get("/debug/hours/:propertyId", async (req, res) => {
 
