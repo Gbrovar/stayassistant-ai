@@ -466,6 +466,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   property.knowledge.faq = faq
 
+  await createProperty(property)
+
   res.json({
     success: true
   })
