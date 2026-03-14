@@ -84,41 +84,37 @@ app.get("/health", (req, res) => {
 });
 
 
-app.get("/property/:id/suggestions", async(req, res) => {
+app.get("/property/:id/suggestions", async (req, res) => {
 
-  const propertyId = req.params.id;
-  const language = req.query.lang || "English";
+  const propertyId = req.params.id
+  const language = req.query.lang || "English"
 
-  const property = await loadProperty(propertyId);
+  const property = await loadProperty(propertyId)
 
   if (!property) {
-    return res.json({ suggestions: [] });
+    return res.json({ suggestions: [] })
   }
 
-  const faq = property.knowledge.faq.slice(0, 2);
-  const services = property.knowledge.services.slice(0, 2);
+  const faq = property.knowledge.faq.slice(0, 2)
+  const services = property.knowledge.services.slice(0, 2)
 
-  const suggestions = [];
+  const suggestions = []
 
   faq.forEach(f => {
-
     suggestions.push({
       label: translateSuggestion(f.question, language),
       value: f.question
-    });
-
-  });
+    })
+  })
 
   services.forEach(s => {
-
     suggestions.push({
       label: translateSuggestion(s, language),
       value: s
-    });
+    })
+  })
 
-  });
-
-  res.json({ suggestions });
+  res.json({ suggestions })
 
 });
 
