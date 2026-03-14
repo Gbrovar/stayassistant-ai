@@ -50,6 +50,7 @@ async function seedDatabase(){
 
 await seedDatabase()
 
+/*
 if (!(await getProperty("demo_property"))) {
 
   console.log("Seeding demo_property into Redis")
@@ -57,6 +58,7 @@ if (!(await getProperty("demo_property"))) {
   await createProperty(properties["demo_property"])
 
 }
+*/
 
 const app = express();
 
