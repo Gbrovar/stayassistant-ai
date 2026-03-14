@@ -1,5 +1,6 @@
 import {useState,useEffect} from "react"
 import {useNavigate} from "react-router-dom"
+import { API_URL } from "../api/config"
 
 export default function Login(){
 
@@ -20,7 +21,7 @@ export default function Login(){
 
   async function login(){
 
-    const res = await fetch("http://localhost:3000/auth/login",{
+    const res = await fetch(`${API_URL}/auth/login`,{
 
       method:"POST",
 

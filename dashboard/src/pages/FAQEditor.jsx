@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
+import { API_URL } from "../api/config"
 
 export default function FAQEditor() {
 
@@ -12,7 +13,7 @@ export default function FAQEditor() {
 
         async function load() {
 
-            const res = await fetch(`http://localhost:3000/property/${propertyId}/faq`, {
+            const res = await fetch(`${API_URL}/property/${propertyId}/faq`, {
                 headers: {
                     "Authorization": "Bearer " + getToken()
                 }
@@ -74,7 +75,7 @@ export default function FAQEditor() {
 
     async function save() {
 
-        await fetch(`http://localhost:3000/property/${propertyId}/faq`, {
+        await fetch(`${API_URL}/property/${propertyId}/faq`, {
 
             method: "POST",
 
