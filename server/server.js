@@ -17,7 +17,8 @@ import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
 import redis, { connectRedis } from "./db/redis.js";
-import { selectKnowledge } from "./utils/knowledgeSelector.js"
+import { selectKnowledge } from "./utils/knowledgeSelector.js";
+import { detectIntent } from "./utils/intentEngine.js"
 
 const propertyCache = new Map()
 
@@ -611,6 +612,7 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
 
 /* --- deteccion y adaptacion de intent --- */
+/*
 function detectIntent(text) {
 
   text = text.toLowerCase()
@@ -667,6 +669,10 @@ function detectIntent(text) {
   return "other"
 
 }
+
+*/
+
+
 
 /* --- chat endpoint --- */
 
