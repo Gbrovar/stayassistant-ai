@@ -293,7 +293,7 @@ const openai = new OpenAI({
 
 /* --- Redis client --- */
 
-/*
+
 const redis = createClient({
   url: process.env.REDIS_URL
 });
@@ -303,7 +303,7 @@ redis.on("error", (err) => console.error("Redis error", err));
 await redis.connect();
 
 console.log("Redis connected successfully");
-*/
+
 
 /* --- property config endpoint --- */
 
