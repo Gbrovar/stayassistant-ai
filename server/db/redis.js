@@ -4,12 +4,6 @@ const redis = createClient({
   url: process.env.REDIS_URL
 })
 
-/*
-if (!process.env.REDIS_URL) {
-  throw new Error("REDIS_URL not configured")
-}
-*/
-
 redis.on("error", (err) => {
   console.error("Redis error:", err)
 })
