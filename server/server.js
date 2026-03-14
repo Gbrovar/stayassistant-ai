@@ -1035,6 +1035,50 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
 });
 
+/* --- ANALYTICS ADVANCED --- */
+app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId;
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" });
+    }
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`;
+    const hourKey = `stayassistant:analytics:${propertyId}:hours`;
+    const usageKey = `stayassistant:usage:${propertyId}:messages`;
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 9, { REV: true });
+
+    const hours = await redis.hGetAll(hourKey);
+
+    const usage = await redis.get(usageKey);
+
+    res.json({
+
+      total_messages: Number(usage || 0),
+
+      top_intents: intents.map(i => ({
+        intent: i.value,
+        count: i.score
+      })),
+
+      peak_hours: hours
+
+    });
+
+  } catch (err) {
+
+    console.error("Advanced analytics error", err);
+
+    res.status(500).json({ error: "analytics failed" });
+
+  }
+
+});
+
 /*  DEBUGS TEMPORALES */
 app.get("/debug/redis", async (req, res) => {
 
