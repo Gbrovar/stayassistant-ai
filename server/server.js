@@ -32,7 +32,16 @@ async function loadProperty(propertyId){
 /******* *********** */
 
 dotenv.config();
-await connectRedis()
+
+await connectRedis();
+
+if (!(await getProperty("demo_property"))) {
+
+  console.log("Seeding demo_property into Redis")
+
+  await createProperty(properties["demo_property"])
+
+}
 
 const app = express();
 
