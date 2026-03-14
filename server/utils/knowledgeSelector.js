@@ -27,8 +27,9 @@ ${k.property_info.checkout}
             return `
 RESTAURANTS
 ${k.local_recommendations
-                    .map(r => `${r.name} — ${r.description}`)
-                    .join("\n")}
+                .slice(0,3)
+                .map(r => `${r.name} — ${r.description}`)
+                .join("\n")}
 `
 
         case "transport":
@@ -45,11 +46,14 @@ ${k.emergency}
 
         default:
             return `
+PROPERTY
+${k.property_info.description || ""}
+
 SERVICES
-${k.services.join("\n")}
+${k.services.slice(0,5).join("\n")}
 
 AMENITIES
-${k.amenities.join("\n")}
+${k.amenities.slice(0,5).join("\n")}
 `
     }
 
