@@ -1,50 +1,77 @@
-import {useEffect,useState} from "react"
+import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import StatItem from "../components/StatItem"
-import {getToken,getPropertyId} from "../api/auth"
+import { getToken, getPropertyId } from "../api/auth"
 
-export default function Analytics(){
+export default function Analytics() {
 
-  const [stats,setStats] = useState([])
+  const [stats, setStats] = useState([])
+  const [totalMessages, setTotalMessages] = useState(0)
+  const [peakHours, setPeakHours] = useState({})
 
   const propertyId = getPropertyId()
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    async function load(){
+    async function load() {
 
-      const res = await fetch(`http://localhost:3000/analytics/${propertyId}`,{
+      const res = await fetch(`http://localhost:3000/analytics/${propertyId}/advanced`, {
 
-        headers:{
-          "Authorization":"Bearer "+getToken()
+        headers: {
+          "Authorization": "Bearer " + getToken()
         }
 
       })
 
       const data = await res.json()
 
-      setStats(data.top_questions || [])
+      setStats(data.top_intents || [])
+      setTotalMessages(data.total_messages || 0)
+      setPeakHours(data.peak_hours || {})
 
     }
 
     load()
 
-  },[])
+  }, [])
 
-  return(
+  return (
 
     <div>
 
       <h1>Analytics</h1>
 
       <Card>
+        <StatItem
+          label="Total Messages"
+          value={totalMessages}
+        />
+      </Card>
 
-        {stats.map(item=>(
+      <Card>
+
+        {stats.map(item => (
 
           <StatItem
-            key={item.question}
-            label={item.question}
+            key={item.intent}
+            label={item.intent}
             value={item.count}
+          />
+
+        ))}
+
+      </Card>
+
+      <Card>
+
+        <h3>Peak Hours</h3>
+
+        {Object.entries(peakHours).map(([hour, count]) => (
+
+          <StatItem
+            key={hour}
+            label={`${hour}:00`}
+            value={count}
           />
 
         ))}
