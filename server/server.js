@@ -478,6 +478,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   await createProperty(property)
 
+  propertyCache.delete(propertyId)
+
   res.json({
     success: true
   })
@@ -535,6 +537,8 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
 
   await createProperty(property)
 
+  propertyCache.delete(propertyId)
+
   res.json({
     success: true
   })
@@ -586,6 +590,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   property.knowledge.local_recommendations = recommendations
 
   await createProperty(property)
+
+  propertyCache.delete(propertyId)
 
   res.json({
     success: true
