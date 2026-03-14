@@ -720,7 +720,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         return res.json({
           reply:
-            "The assistant has reached its usage limit. Please contact the property owner.",
+            "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
           limit_reached: true
         })
 
