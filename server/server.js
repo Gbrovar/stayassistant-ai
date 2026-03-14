@@ -523,6 +523,8 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
     primary_color
   }
 
+  await createProperty(property)
+
   res.json({
     success: true
   })
@@ -572,6 +574,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   }
 
   property.knowledge.local_recommendations = recommendations
+
+  await createProperty(property)
 
   res.json({
     success: true
