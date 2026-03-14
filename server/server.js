@@ -702,6 +702,36 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
+    /* --- USAGE LIMIT PROTECTION --- */
+
+    try {
+
+      const usageKey = `stayassistant:usage:${propertyId}:messages`
+
+      const usage = await redis.get(usageKey)
+
+      const currentUsage = Number(usage || 0)
+
+      const limit = getUsageLimit(property)
+
+      if (currentUsage >= limit) {
+
+        console.log("Usage limit reached:", propertyId)
+
+        return res.json({
+          reply:
+            "The assistant has reached its usage limit. Please contact the property owner.",
+          limit_reached: true
+        })
+
+      }
+
+    } catch (err) {
+
+      console.log("Usage check error:", err)
+
+    }
+
     /* --- CHAT HISTORY --- */
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
