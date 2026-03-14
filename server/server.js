@@ -770,7 +770,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       await redis.incr(usageKey)
 
-      await redis.expire(usageKey, 60 * 60 * 24 * 90)
+      const ttl = await redis.ttl(usageKey)
+
+      if (ttl === -1) {
+        await redis.expire(usageKey, 60 * 60 * 24 * 90)
+      }
 
     } catch (err) {
 
@@ -778,7 +782,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    
+
     /* --- CHAT HISTORY --- */
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
@@ -1087,7 +1091,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
     const intentKey = `stayassistant:analytics:${propertyId}:questions`;
     const hourKey = `stayassistant:analytics:${propertyId}:hours`;
-    const usageKey = `stayassistant:usage:${propertyId}:${month}`;
+
 
     const intents = await redis.zRangeWithScores(intentKey, 0, 9, { REV: true });
 
