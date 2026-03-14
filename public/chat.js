@@ -657,7 +657,8 @@ async function sendMessage(forcedText = null, displayLabel = null) {
                 language: selectedLanguage,
                 conversationId: conversationId,
                 propertyId: propertyId,
-                hour: hour
+                hour: hour,
+                visitorId: visitorId
 
             })
 
