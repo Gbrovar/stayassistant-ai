@@ -304,21 +304,21 @@ console.log("Redis connected successfully");
 
 app.get("/property/:id", async (req, res) => {
 
-  const propertyId = req.params.id;
+  const propertyId = req.params.id
 
-  let property = await getProperty(propertyId);
+  const property = await loadProperty(propertyId)
 
-  if (!property) {
-    property = await getProperty("demo_property");
+  if(!property){
+    return res.status(404).json({error:"property not found"})
   }
 
   res.json({
     id: property.id,
     name: property.name,
     branding: property.branding
-  });
+  })
 
-});
+})
 
 /* --- LOGIN --- */
 
