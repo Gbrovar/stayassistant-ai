@@ -22,16 +22,20 @@ const propertyCache = new Map()
 
 async function loadProperty(propertyId) {
 
+  // 1️⃣ memory cache
   if (propertyCache.has(propertyId)) {
     return propertyCache.get(propertyId)
   }
 
+  // 2️⃣ Redis
   let property = await getProperty(propertyId)
 
+  // 3️⃣ fallback demo property
   if (!property) {
-    property = properties[propertyId]
+    property = await getProperty("demo_property") || properties["demo_property"]
   }
 
+  // 4️⃣ cache result
   if (property) {
     propertyCache.set(propertyId, property)
   }

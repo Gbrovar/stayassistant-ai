@@ -1,0 +1,11 @@
+⚠️ Nota CTO importante
+
+Este rate limit funciona por IP.
+
+Para el widget es perfecto porque:
+
+1 huésped ≈ 1 IP
+
+Más adelante podremos hacer rate limit por propertyId.
+
+Pero no ahora (evitar overengineering).
