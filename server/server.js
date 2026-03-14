@@ -73,12 +73,12 @@ app.get("/health", (req, res) => {
 });
 
 
-app.get("/property/:id/suggestions", (req, res) => {
+app.get("/property/:id/suggestions", async(req, res) => {
 
   const propertyId = req.params.id;
   const language = req.query.lang || "English";
 
-  const property = properties[propertyId];
+  const property = await loadProperty(propertyId);
 
   if (!property) {
     return res.json({ suggestions: [] });
@@ -908,6 +908,17 @@ app.get("/analytics/:propertyId", authenticate, async (req, res) => {
   }
 
 });
+
+async function loadProperty(propertyId){
+
+  let property = await getProperty(propertyId)
+
+  if(!property){
+    property = properties[propertyId]
+  }
+
+  return property
+}
 
 
 /* --- server port --- */
