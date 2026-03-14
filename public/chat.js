@@ -602,6 +602,20 @@ function showProactiveSuggestions() {
 
 }
 
+function getPreResponse() {
+
+    if (selectedLanguage === "Español") {
+        return "Déjame comprobar eso para ti...";
+    }
+
+    if (selectedLanguage === "Deutsch") {
+        return "Einen Moment, ich prüfe das für dich...";
+    }
+
+    return "Let me check that for you...";
+
+}
+
 /* SEND MESSAGE */
 
 async function sendMessage(forcedText = null, displayLabel = null) {
@@ -618,6 +632,20 @@ async function sendMessage(forcedText = null, displayLabel = null) {
     const displayText = displayLabel || userText;
 
     messages.innerHTML += `<div class="message user">You: ${displayText}</div>`;
+
+    /* PRE RESPONSE (LATENCY OPTIMIZATION) */
+
+    messages.innerHTML += `
+        <div class="bot-wrapper pre-response">
+
+        <div class="bot-avatar">🤖</div>
+
+        <div class="bot-message">
+        ${getPreResponse()}
+        </div>
+
+        </div>
+        `;
 
     input.value = "";
 
