@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import StatItem from "../components/StatItem"
 import { getToken, getPropertyId } from "../api/auth"
+import { API_URL } from "../api/config"
 
 export default function Analytics() {
 
@@ -15,7 +16,7 @@ export default function Analytics() {
 
     async function load() {
 
-      const res = await fetch(`http://localhost:3000/analytics/${propertyId}/advanced`, {
+      const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
 
         headers: {
           "Authorization": "Bearer " + getToken()
