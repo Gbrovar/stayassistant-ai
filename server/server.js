@@ -30,7 +30,6 @@ async function loadProperty(propertyId){
 
 }
 
-/*********************/
 
 dotenv.config();
 
