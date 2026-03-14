@@ -9,6 +9,7 @@ export default function Analytics() {
   const [stats, setStats] = useState([])
   const [totalMessages, setTotalMessages] = useState(0)
   const [peakHours, setPeakHours] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const propertyId = getPropertyId()
 
@@ -30,11 +31,36 @@ export default function Analytics() {
       setTotalMessages(data.total_messages || 0)
       setPeakHours(data.peak_hours || {})
 
+      setLoading(false)
     }
 
     load()
 
   }, [])
+
+  if (!loading && totalMessages === 0) {
+
+    return (
+
+      <div>
+
+        <h1>Analytics</h1>
+
+        <Card>
+
+          <p style={{ opacity: 0.8 }}>
+
+            Analytics will appear once guests start using the assistant.
+
+          </p>
+
+        </Card>
+
+      </div>
+
+    )
+
+  }
 
   return (
 
