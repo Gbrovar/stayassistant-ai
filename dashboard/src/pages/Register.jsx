@@ -1,7 +1,10 @@
 import {useState} from "react"
+import {useNavigate} from "react-router-dom"
 import { API_URL } from "../api/config"
 
 export default function Register(){
+
+  const navigate = useNavigate()
 
   const [propertyName,setPropertyName]=useState("")
   const [email,setEmail]=useState("")
@@ -32,7 +35,7 @@ export default function Register(){
       localStorage.setItem("token",data.token)
       localStorage.setItem("propertyId",data.propertyId)
 
-      window.location.href="/analytics"
+      navigate("/onboarding")
 
     }else{
 

@@ -12,6 +12,7 @@ import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Billing from "./pages/Billing"
+import Onboarding from "./pages/Onboarding"
 
 
 function ProtectedLayout({children}){
@@ -75,6 +76,8 @@ export default function App(){
       <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
 
       <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+
+      <Route path="/onboarding" element={<ProtectedLayout><Onboarding/></ProtectedLayout>}/>
 
 
       {/* FALLBACK */}
