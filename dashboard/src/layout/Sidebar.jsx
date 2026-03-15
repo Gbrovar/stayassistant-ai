@@ -22,6 +22,8 @@ export default function Sidebar(){
 
         <Link to="/install">Install</Link>
 
+        <Link to="/billing">Billing</Link>
+
       </nav>
 
     </aside>

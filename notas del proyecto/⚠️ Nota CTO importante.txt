@@ -75,3 +75,25 @@ stripe trigger checkout.session.completed
 Esto nos permitirá verificar que Redis guarda:
 
 stayassistant:subscription:property_x
+
+--------------------------------------------
+
+🚀 Y después viene algo muy potente
+
+El último gran bloque antes de escalar:
+
+AI Cost Shield System
+
+Esto reduce el coste OpenAI hasta 70-80%.
+
+Incluye:
+
+intent routing
+semantic caching
+response compression
+fallback answers
+
+Es lo que permite escalar a 10k hoteles sin pagar 20k€ en OpenAI.
+
+----------------------------------------------
+

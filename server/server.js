@@ -1404,6 +1404,32 @@ app.get("/billing/subscription", authenticate, async (req, res) => {
 
 })
 
+/* --- STRIPE BILLING PORTAL --- */
+
+app.post("/billing/portal", authenticate, async (req, res) => {
+
+  const propertyId = req.propertyId
+
+  const key = `stayassistant:subscription:${propertyId}`
+
+  const sub = JSON.parse(await redis.get(key))
+
+  if (!sub?.stripeCustomer) {
+    return res.status(400).json({ error: "no customer" })
+  }
+
+  const session = await stripe.billingPortal.sessions.create({
+
+    customer: sub.stripeCustomer,
+
+    return_url: "https://www.stayassistantai.com/dashboard"
+
+  })
+
+  res.json({ url: session.url })
+
+})
+
 /*  DEBUGS TEMPORALES */
 app.get("/debug/redis", async (req, res) => {
 

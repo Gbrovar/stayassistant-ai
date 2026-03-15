@@ -11,6 +11,7 @@ import Recommendations from "./pages/Recommendations"
 import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Billing from "./pages/Billing"
 
 
 function ProtectedLayout({children}){
@@ -72,6 +73,8 @@ export default function App(){
       <Route path="/preview" element={<ProtectedLayout><Preview/></ProtectedLayout>}/>
 
       <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
+
+      <Route path="/billing" element={<Billing />} />
 
 
       {/* FALLBACK */}
