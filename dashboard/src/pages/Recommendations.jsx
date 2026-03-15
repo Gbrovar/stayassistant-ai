@@ -21,7 +21,13 @@ export default function Recommendations() {
 
             const data = await res.json()
 
-            setItems(data.recommendations || [])
+            setItems(
+                (data.recommendations || []).map(r =>
+                    typeof r === "string"
+                        ? { name: r, description: "" }
+                        : r
+                )
+            )
 
         }
 

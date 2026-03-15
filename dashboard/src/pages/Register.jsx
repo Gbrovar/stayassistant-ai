@@ -35,7 +35,7 @@ export default function Register(){
       localStorage.setItem("token",data.token)
       localStorage.setItem("propertyId",data.propertyId)
 
-      navigate("/onboarding")
+      navigate("/setupwizard")
 
     }else{
 
