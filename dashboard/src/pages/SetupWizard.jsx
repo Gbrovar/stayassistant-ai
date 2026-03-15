@@ -1,92 +1,185 @@
 import { useState } from "react"
 import { API_URL } from "../api/config"
 
-export default function SetupWizard(){
+export default function SetupWizard() {
 
-  const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
-  const [city,setCity] = useState("")
-  const [checkin,setCheckin] = useState("15:00")
-  const [checkout,setCheckout] = useState("11:00")
+    const [address, setAddress] = useState("")
+    const [city, setCity] = useState("")
+    const [country, setCountry] = useState("")
 
-  const [loading,setLoading] = useState(false)
+    const [checkin, setCheckin] = useState("15:00")
+    const [checkout, setCheckout] = useState("11:00")
 
-  async function generate(){
+    const [amenities, setAmenities] = useState("")
+    const [services, setServices] = useState("")
 
-    setLoading(true)
+    const [loading, setLoading] = useState(false)
 
-    await fetch(`${API_URL}/ai/setup`,{
+    async function generate() {
 
-      method:"POST",
+        setLoading(true)
 
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`
-      },
+        if (!address || !city) {
 
-      body:JSON.stringify({
-        city,
-        checkin,
-        checkout
-      })
+            alert("Please enter property address and city")
 
-    })
+            setLoading(false)
 
-    setLoading(false)
+            return
+        }
 
-    window.location.href="/dashboard/faq"
+        const amenitiesList =
+            amenities.split(",").map(a => a.trim()).filter(Boolean)
 
-  }
+        const servicesList =
+            services.split(",").map(s => s.trim()).filter(Boolean)
 
-  return(
+        /* STEP 1 — PROPERTY SETUP */
 
-    <div>
+        await fetch(`${API_URL}/property/setup`, {
 
-      <h1>AI Setup Wizard</h1>
+            method: "POST",
 
-      <p>Configure your AI concierge in seconds.</p>
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
 
-      <div className="wizard-field">
+            body: JSON.stringify({
+                address,
+                city,
+                country,
+                amenities: amenitiesList,
+                services: servicesList
+            })
 
-        <label>City</label>
+        })
 
-        <input
-          value={city}
-          onChange={(e)=>setCity(e.target.value)}
-        />
+        /* STEP 2 — AI SETUP */
 
-      </div>
+        await fetch(`${API_URL}/ai/setup`, {
 
-      <div className="wizard-field">
+            method: "POST",
 
-        <label>Check-in</label>
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
 
-        <input
-          value={checkin}
-          onChange={(e)=>setCheckin(e.target.value)}
-        />
+            body: JSON.stringify({
+                city,
+                checkin,
+                checkout
+            })
 
-      </div>
+        })
 
-      <div className="wizard-field">
+        setLoading(false)
 
-        <label>Check-out</label>
+        /* STEP 3 — REDIRECT */
 
-        <input
-          value={checkout}
-          onChange={(e)=>setCheckout(e.target.value)}
-        />
+        window.location.href = "/preview"
 
-      </div>
+    }
 
-      <button onClick={generate} disabled={loading}>
+    return (
 
-        {loading ? "Generating..." : "Generate AI Concierge"}
+        <div>
 
-      </button>
+            <h1>AI Setup Wizard</h1>
 
-    </div>
+            <p>Configure your AI concierge in seconds.</p>
 
-  )
+            <div className="wizard-field">
+
+                <label>Property address</label>
+
+                <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Street address"
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>City</label>
+
+                <input
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>Country</label>
+
+                <input
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>Check-in</label>
+
+                <input
+                    value={checkin}
+                    onChange={(e) => setCheckin(e.target.value)}
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>Check-out</label>
+
+                <input
+                    value={checkout}
+                    onChange={(e) => setCheckout(e.target.value)}
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>Amenities (comma separated)</label>
+
+                <input
+                    value={amenities}
+                    onChange={(e) => setAmenities(e.target.value)}
+                    placeholder="wifi,pool,parking"
+                />
+
+            </div>
+
+            <div className="wizard-field">
+
+                <label>Services (comma separated)</label>
+
+                <input
+                    value={services}
+                    onChange={(e) => setServices(e.target.value)}
+                    placeholder="airport transfer,bike rental"
+                />
+
+            </div>
+
+            <button onClick={generate} disabled={loading}>
+
+                {loading ? "Generating..." : "Generate AI Concierge"}
+
+            </button>
+
+        </div>
+
+    )
 
 }
