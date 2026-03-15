@@ -1,6 +1,7 @@
+import "dotenv/config"
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
@@ -68,9 +69,8 @@ function getUsageLimit(property) {
 
 }
 
-dotenv.config();
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+console.log("Stripe loaded:", !!process.env.STRIPE_SECRET_KEY)
 
 await connectRedis();
 
