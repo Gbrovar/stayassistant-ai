@@ -149,6 +149,10 @@ console.log("Serving static files from:", publicPath);
 
 app.use(express.static(publicPath));
 
+/* --- DASHBOARD STATIC (React build) --- */
+
+app.use("/dashboard", express.static(path.join(publicPath, "dashboard")));
+
 /* --- health check --- */
 
 app.get("/health", (req, res) => {
