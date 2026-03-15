@@ -1,6 +1,7 @@
 import {useState,useEffect} from "react"
 import {useNavigate} from "react-router-dom"
 import { API_URL } from "../api/config"
+import { Link } from "react-router-dom"
 
 export default function Login(){
 
@@ -78,7 +79,7 @@ export default function Login(){
 
       <p>
         Don't have an account?
-        <a href="/register">Create property</a>
+        <Link to="/register">Create property</Link>
       </p>
 
     </div>
