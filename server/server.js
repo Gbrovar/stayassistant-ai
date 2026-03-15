@@ -855,6 +855,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
 
+    /* --- REGISTER CONVERSATION --- */
+
+    try {
+
+      const listKey = `stayassistant:conversations:${propertyId}`
+
+      await redis.sAdd(listKey, conversationId)
+
+    } catch (err) {
+
+      console.log("Conversation index error:", err)
+
+    }
+
     let history = await redis.get(historyKey);
 
     history = history ? JSON.parse(history) : [];
@@ -1084,6 +1098,51 @@ app.post("/chat", chatLimiter, async (req, res) => {
   }
 
 });
+
+/* --- LIST CONVERSATIONS --- */
+
+app.get("/conversations/:propertyId", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const listKey = `stayassistant:conversations:${propertyId}`
+
+    const ids = await redis.sMembers(listKey)
+
+    const conversations = []
+
+    for (const id of ids.slice(0, 20)) {
+
+      const key = `stayassistant:chat:${propertyId}:${id}`
+
+      const history = await redis.get(key)
+
+      if (!history) continue
+
+      conversations.push({
+        id,
+        messages: JSON.parse(history)
+      })
+
+    }
+
+    res.json({ conversations })
+
+  } catch (err) {
+
+    console.error("Conversations error:", err)
+
+    res.status(500).json({ error: "failed" })
+
+  }
+
+})
 
 /* -- CONTEXT DETECTION --- */
 function detectContext(hour) {

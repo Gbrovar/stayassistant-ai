@@ -12,6 +12,8 @@ export default function Sidebar(){
 
         <Link to="/analytics">Analytics</Link>
 
+        <Link to="/conversations">Conversations</Link>
+
         <Link to="/faq">FAQ</Link>
 
         <Link to="/recommendations">Recommendations</Link>
