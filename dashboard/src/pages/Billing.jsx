@@ -18,14 +18,11 @@ export default function Billing() {
 
   async function loadSubscription() {
 
-    const res = await fetch(
-      `http://localhost:3000/billing/subscription`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    const res = await fetch(`${API_URL}/billing/subscription`, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    )
+    })
 
     const data = await res.json()
 
@@ -35,12 +32,11 @@ export default function Billing() {
 
   async function loadUsage() {
 
-    const res = await fetch(`${API_URL}/billing/create-checkout`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    )
+    })
 
     const data = await res.json()
 
@@ -51,14 +47,13 @@ export default function Billing() {
   async function upgrade(plan) {
 
     const res = await fetch(`${API_URL}/billing/create-checkout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ plan })
-      }
-    )
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ plan })
+    })
 
     const data = await res.json()
 
