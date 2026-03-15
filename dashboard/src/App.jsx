@@ -74,7 +74,7 @@ export default function App(){
 
       <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
 
-      <Route path="/billing" element={<Billing />} />
+      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
 
 
       {/* FALLBACK */}
