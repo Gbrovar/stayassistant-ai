@@ -5,14 +5,11 @@ import OpenAI from "openai";
 import path from "path";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import Stripe from "stripe";
 import { authenticate } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
-
-//import { createClient } from "redis";
-//import { users } from "./users.js"
 import { properties } from "./properties.js";
-
 import { buildPrompt } from "./promptBuilder.js";
 import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
@@ -21,10 +18,6 @@ import { selectKnowledge } from "./utils/knowledgeSelector.js";
 import { detectIntent } from "./utils/intentEngine.js"
 
 const propertyCache = new Map()
-
-const Stripe = require("stripe")
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 async function loadProperty(propertyId) {
 
@@ -75,9 +68,9 @@ function getUsageLimit(property) {
 
 }
 
-
-
 dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 await connectRedis();
 
