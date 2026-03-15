@@ -1222,6 +1222,16 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
 
 })
 
+/* --- SAVE SUBSCRIPTION HELPER --- */
+
+async function saveSubscription(propertyId, data) {
+
+  const key = `stayassistant:subscription:${propertyId}`
+
+  await redis.set(key, JSON.stringify(data))
+
+}
+
 /* --- STRIPE WEBHOOK --- */
 
 app.post("/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
@@ -1248,6 +1258,8 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
   try {
 
+    /* --- CHECKOUT COMPLETED (NEW SUBSCRIPTION) --- */
+
     if (event.type === "checkout.session.completed") {
 
       const session = event.data.object
@@ -1255,19 +1267,99 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
       const propertyId = session.metadata.propertyId
       const plan = session.metadata.plan
 
-      const subscriptionKey = `stayassistant:subscription:${propertyId}`
-
-      await redis.set(
-        subscriptionKey,
-        JSON.stringify({
-          plan: plan,
-          status: "active",
-          stripeCustomer: session.customer,
-          stripeSubscription: session.subscription
-        })
-      )
+      await saveSubscription(propertyId, {
+        plan,
+        status: "active",
+        stripeCustomer: session.customer,
+        stripeSubscription: session.subscription
+      })
 
       console.log("Subscription activated:", propertyId)
+
+    }
+
+    /* --- SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE) --- */
+
+    if (event.type === "customer.subscription.updated") {
+
+      const subscription = event.data.object
+
+      const stripeSubId = subscription.id
+
+      const keys = await redis.keys("stayassistant:subscription:*")
+
+      for (const key of keys) {
+
+        const sub = JSON.parse(await redis.get(key))
+
+        if (sub.stripeSubscription === stripeSubId) {
+
+          sub.status = subscription.status
+
+          await redis.set(key, JSON.stringify(sub))
+
+          console.log("Subscription updated:", key)
+
+        }
+
+      }
+
+    }
+
+    /* --- SUBSCRIPTION CANCELLED --- */
+
+    if (event.type === "customer.subscription.deleted") {
+
+      const subscription = event.data.object
+
+      const stripeSubId = subscription.id
+
+      const keys = await redis.keys("stayassistant:subscription:*")
+
+      for (const key of keys) {
+
+        const sub = JSON.parse(await redis.get(key))
+
+        if (sub.stripeSubscription === stripeSubId) {
+
+          await redis.set(key, JSON.stringify({
+            plan: "free",
+            status: "cancelled"
+          }))
+
+          console.log("Subscription cancelled:", key)
+
+        }
+
+      }
+
+    }
+
+    /* --- PAYMENT FAILED --- */
+
+    if (event.type === "invoice.payment_failed") {
+
+      const invoice = event.data.object
+
+      const stripeSubId = invoice.subscription
+
+      const keys = await redis.keys("stayassistant:subscription:*")
+
+      for (const key of keys) {
+
+        const sub = JSON.parse(await redis.get(key))
+
+        if (sub.stripeSubscription === stripeSubId) {
+
+          sub.status = "payment_failed"
+
+          await redis.set(key, JSON.stringify(sub))
+
+          console.log("Payment failed:", key)
+
+        }
+
+      }
 
     }
 

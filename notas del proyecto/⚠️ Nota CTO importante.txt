@@ -50,3 +50,28 @@ JWT refresh
 API abuse protection
 
 Pero para early SaaS está bien.
+
+-----------------------------------------------
+
+5️⃣ Mejora CTO recomendada (muy importante)
+
+Más adelante conviene guardar también el plan en Redis Property para evitar consultar Stripe.
+
+Ejemplo futuro:
+
+property.plan = pro
+
+Así getUsageLimit() será instantáneo.
+
+🚀 Siguiente paso después de esto
+
+Cuando hagas deploy, el siguiente paso es probar el webhook real con Stripe CLI, porque ahora mismo Stripe no está enviando eventos a tu servidor.
+
+El siguiente paso será:
+
+stripe listen
+stripe trigger checkout.session.completed
+
+Esto nos permitirá verificar que Redis guarda:
+
+stayassistant:subscription:property_x
