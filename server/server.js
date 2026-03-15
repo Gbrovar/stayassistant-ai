@@ -520,6 +520,22 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   propertyCache.delete(propertyId)
 
+  /* --- ONBOARDING STEP COMPLETE --- */
+
+  const onboardingKey = `stayassistant:onboarding:${propertyId}`
+
+  let onboarding = await redis.get(onboardingKey)
+
+  if (!onboarding) {
+    onboarding = {}
+  } else {
+    onboarding = JSON.parse(onboarding)
+  }
+
+  onboarding.faq = true
+
+  await redis.set(onboardingKey, JSON.stringify(onboarding))
+
   res.json({
     success: true
   })
@@ -632,6 +648,22 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   await createProperty(property)
 
   propertyCache.delete(propertyId)
+
+  /* --- ONBOARDING STEP COMPLETE --- */
+
+  const onboardingKey = `stayassistant:onboarding:${propertyId}`
+
+  let onboarding = await redis.get(onboardingKey)
+
+  if (!onboarding) {
+    onboarding = {}
+  } else {
+    onboarding = JSON.parse(onboarding)
+  }
+
+  onboarding.recommendations = true
+
+  await redis.set(onboardingKey, JSON.stringify(onboarding))
 
   res.json({
     success: true
@@ -1203,26 +1235,26 @@ app.get("/onboarding/status", authenticate, async (req, res) => {
 })
 
 /* --- STEPS ONBOARDING --- */
-app.post("/onboarding/complete", authenticate, async (req,res)=>{
+app.post("/onboarding/complete", authenticate, async (req, res) => {
 
-  const {step} = req.body
+  const { step } = req.body
   const propertyId = req.propertyId
 
   const key = `stayassistant:onboarding:${propertyId}`
 
   let data = await redis.get(key)
 
-  if(!data){
-    data={}
-  }else{
-    data=JSON.parse(data)
+  if (!data) {
+    data = {}
+  } else {
+    data = JSON.parse(data)
   }
 
-  data[step]=true
+  data[step] = true
 
-  await redis.set(key,JSON.stringify(data))
+  await redis.set(key, JSON.stringify(data))
 
-  res.json({success:true})
+  res.json({ success: true })
 
 })
 
