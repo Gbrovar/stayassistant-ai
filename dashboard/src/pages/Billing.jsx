@@ -72,6 +72,13 @@ export default function Billing() {
 
         const data = await res.json()
 
+        if (!res.ok) {
+
+            alert("You don't have an active subscription yet. Please upgrade to access billing management.")
+
+            return
+        }
+
         window.location.href = data.url
 
     }

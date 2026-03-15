@@ -97,3 +97,31 @@ Es lo que permite escalar a 10k hoteles sin pagar 20k€ en OpenAI.
 
 ----------------------------------------------
 
+💡 Mejora UX recomendada
+
+Además, solo deberías mostrar el botón si existe una suscripción real.
+
+Ejemplo:
+
+{subscription.plan !== "free" && (
+  <button onClick={openPortal}>
+    Open billing portal
+  </button>
+)}
+
+O mejor aún:
+
+Free plan → mostrar "Upgrade"
+Paid plan → mostrar "Manage billing"
+🚀 Mejor UX SaaS (recomendado)
+
+Tu sección final debería verse así:
+
+Si FREE
+Upgrade your plan
+[Upgrade to Pro]
+Si PRO/BUSINESS
+Manage billing
+[Open billing portal]
+
+Esto evita confusión al usuario.
