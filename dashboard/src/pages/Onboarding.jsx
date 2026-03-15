@@ -10,17 +10,25 @@ export default function Onboarding() {
 
     useEffect(() => {
 
+        loadStatus()
+
+    }, [])
+
+    async function loadStatus() {
+
         const token = localStorage.getItem("token")
 
-        fetch(`${API_URL}/onboarding/status`, {
+        const res = await fetch(`${API_URL}/onboarding/status`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-            .then(res => res.json())
-            .then(data => setProgress(data))
 
-    }, [])
+        const data = await res.json()
+
+        setProgress(data)
+
+    }
 
     function finishSetup() {
         navigate("/analytics")
