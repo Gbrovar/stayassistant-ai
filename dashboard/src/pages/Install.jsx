@@ -83,9 +83,24 @@ export default function Install() {
                 </p>
 
                 <button
-                    onClick={() =>
+                    onClick={async () => {
+
+                        const token = localStorage.getItem("token")
+
+                        await fetch(`${API_URL}/onboarding/complete`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                step: "widget"
+                            })
+                        })
+
                         window.open(`/chat.html?property=${propertyId}`, "_blank")
-                    }
+
+                    }}
                 >
                     Open test chat
                 </button>
