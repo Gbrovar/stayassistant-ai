@@ -1017,6 +1017,39 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
+    /* --- LOAD NEARBY RESTAURANTS --- */
+
+    let nearbyContext = ""
+
+    try {
+
+      if (property.coordinates) {
+
+        const { lat, lng } = property.coordinates
+
+        const url =
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
+
+        const response = await fetch(url)
+
+        const data = await response.json()
+
+        const restaurants =
+          data.results.slice(0, 3).map(p =>
+            `${p.name} (${p.rating || "4+"}⭐)`
+          )
+
+        nearbyContext =
+          `Nearby restaurants: ${restaurants.join(", ")}`
+
+      }
+
+    } catch (err) {
+
+      console.log("Nearby context error", err)
+
+    }
+
     /* --- AI COMPLETION --- */
 
     const context = detectContext(hour);
@@ -1028,7 +1061,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       messages: [
         {
           role: "system",
-          content: buildPrompt(property, userLanguage, context, knowledge)
+          content: buildPrompt(property, userLanguage, context, knowledge) + "\n" + nearbyContext
         },
 
         ...history
