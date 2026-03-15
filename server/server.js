@@ -354,7 +354,7 @@ app.get("/", (req, res) => {
 
 /* --- DASHBOARD SPA ROUTING --- */
 
-app.get("/dashboard/:path(*)", (req, res) => {
+app.get(/^\/dashboard(\/.*)?$/, (req, res) => {
   res.sendFile(path.join(publicPath, "dashboard/index.html"));
 });
 
