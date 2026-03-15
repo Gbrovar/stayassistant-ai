@@ -1174,7 +1174,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 });
 
 /* --- GET ONBOARDING --- */
-app.get("/onboarding/status", authMiddleware, async (req, res) => {
+app.get("/onboarding/status", authenticate, async (req, res) => {
 
   const propertyId = req.propertyId
 
@@ -1203,33 +1203,32 @@ app.get("/onboarding/status", authMiddleware, async (req, res) => {
 })
 
 /* --- STEPS ONBOARDING --- */
+app.post("/onboarding/complete", authenticate, async (req,res)=>{
 
-app.get("/onboarding/status", authenticate, async (req, res) => {
-
-  const { step } = req.body
+  const {step} = req.body
   const propertyId = req.propertyId
 
   const key = `stayassistant:onboarding:${propertyId}`
 
   let data = await redis.get(key)
 
-  if (!data) {
-    data = {}
-  } else {
-    data = JSON.parse(data)
+  if(!data){
+    data={}
+  }else{
+    data=JSON.parse(data)
   }
 
-  data[step] = true
+  data[step]=true
 
-  await redis.set(key, JSON.stringify(data))
+  await redis.set(key,JSON.stringify(data))
 
-  res.json({ success: true })
+  res.json({success:true})
 
 })
 
 /* --- CREATE STRIPE CHECKOUT --- */
 
-app.post("/onboarding/complete", authenticate, async (req, res) => {
+app.post("/billing/create-checkout", authenticate, async (req, res) => {
 
   try {
 
