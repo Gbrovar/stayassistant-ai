@@ -1203,7 +1203,8 @@ app.get("/onboarding/status", authMiddleware, async (req, res) => {
 })
 
 /* --- STEPS ONBOARDING --- */
-app.post("/onboarding/complete", authMiddleware, async (req, res) => {
+
+app.get("/onboarding/status", authenticate, async (req, res) => {
 
   const { step } = req.body
   const propertyId = req.propertyId
@@ -1228,7 +1229,7 @@ app.post("/onboarding/complete", authMiddleware, async (req, res) => {
 
 /* --- CREATE STRIPE CHECKOUT --- */
 
-app.post("/billing/create-checkout", authenticate, async (req, res) => {
+app.post("/onboarding/complete", authenticate, async (req, res) => {
 
   try {
 
