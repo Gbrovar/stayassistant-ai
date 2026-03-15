@@ -1,64 +1,102 @@
 import { useEffect, useState } from "react"
-import Card from "../components/Card"
-import StatItem from "../components/StatItem"
-import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
-import { data } from "react-router-dom"
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts"
 
 export default function Analytics() {
 
-  const [stats, setStats] = useState([])
-  const [totalMessages, setTotalMessages] = useState(0)
-  const [peakHours, setPeakHours] = useState({})
+  const propertyId = localStorage.getItem("propertyId")
+  const token = localStorage.getItem("token")
+
   const [loading, setLoading] = useState(true)
 
-  const propertyId = getPropertyId()
+  const [totalMessages, setTotalMessages] = useState(0)
+  const [topIntents, setTopIntents] = useState([])
+  const [peakHours, setPeakHours] = useState({})
+  const [hasData, setHasData] = useState(false)
 
   useEffect(() => {
 
-    async function load() {
+    async function loadAnalytics() {
 
-      const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
+      try {
 
-        headers: {
-          "Authorization": "Bearer " + getToken()
-        }
+        const res = await fetch(
+          `${API_URL}/analytics/${propertyId}/advanced`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
 
-      })
+        const data = await res.json()
 
-      const data = await res.json()
+        setTotalMessages(data.total_messages || 0)
 
-      setStats(data.top_intents || [])
-      setTotalMessages(data.total_messages || 0)
-      setPeakHours(data.peak_hours || {})
+        setTopIntents(data.top_intents || [])
+
+        setPeakHours(data.peak_hours || {})
+
+        setHasData(data.has_data || false)
+
+      } catch (err) {
+
+        console.error("Analytics load error:", err)
+
+      }
 
       setLoading(false)
+
     }
 
-    load()
+    loadAnalytics()
 
-  }, [])
+  }, [propertyId, token])
 
-  if (!loading && !data.has_data) {
+  /* --- PREPARE CHART DATA --- */
+
+  const intentData = topIntents.map(i => ({
+    name: i.intent,
+    value: i.count
+  }))
+
+  const hourData = Object.keys(peakHours).map(h => ({
+    hour: h,
+    messages: Number(peakHours[h])
+  }))
+
+  if (loading) {
 
     return (
-
       <div>
+        <h1>Analytics</h1>
+        <p>Loading analytics...</p>
+      </div>
+    )
 
+  }
+
+  if (!hasData) {
+
+    return (
+      <div>
         <h1>Analytics</h1>
 
-        <Card>
+        <div className="analytics-card">
 
-          <p style={{ opacity: 0.8 }}>
+          Analytics will appear once guests start using the assistant.
 
-            Analytics will appear once guests start using the assistant.
-
-          </p>
-
-        </Card>
+        </div>
 
       </div>
-
     )
 
   }
@@ -69,42 +107,83 @@ export default function Analytics() {
 
       <h1>Analytics</h1>
 
-      <Card>
-        <StatItem
-          label="Total Messages"
-          value={totalMessages}
-        />
-      </Card>
+      {/* TOTAL MESSAGES */}
 
-      <Card>
+      <div style={{ marginTop: 30 }}>
 
-        {stats.map(item => (
+        <h3>Total messages</h3>
 
-          <StatItem
-            key={item.intent}
-            label={item.intent}
-            value={item.count}
-          />
+        <div className="analytics-card">
 
-        ))}
+          {totalMessages}
 
-      </Card>
+        </div>
 
-      <Card>
+      </div>
 
-        <h3>Peak Hours</h3>
 
-        {Object.entries(peakHours).map(([hour, count]) => (
+      {/* TOP INTENTS */}
 
-          <StatItem
-            key={hour}
-            label={`${hour}:00`}
-            value={count}
-          />
+      <div style={{ marginTop: 50 }}>
 
-        ))}
+        <h3>Top guest requests</h3>
 
-      </Card>
+        <div style={{ width: "100%", height: 300 }}>
+
+          <ResponsiveContainer>
+
+            <BarChart data={intentData}>
+
+              <XAxis dataKey="name" />
+
+              <YAxis />
+
+              <Tooltip />
+
+              <Bar
+                dataKey="value"
+                fill="#22c55e"
+              />
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </div>
+
+      </div>
+
+
+      {/* PEAK HOURS */}
+
+      <div style={{ marginTop: 50 }}>
+
+        <h3>Peak hours</h3>
+
+        <div style={{ width: "100%", height: 300 }}>
+
+          <ResponsiveContainer>
+
+            <BarChart data={hourData}>
+
+              <XAxis dataKey="hour" />
+
+              <YAxis />
+
+              <Tooltip />
+
+              <Bar
+                dataKey="messages"
+                fill="#3b82f6"
+              />
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </div>
+
+      </div>
 
     </div>
 
