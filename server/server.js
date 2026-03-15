@@ -55,13 +55,24 @@ const PLAN_LIMITS = {
 
 /* --- GET PROPERTY USAGE LIMIT --- */
 
-function getUsageLimit(subscription){
+async function getUsageLimit(propertyId) {
 
- if(subscription.plan === "free") return 100
- if(subscription.plan === "pro") return 1500
- if(subscription.plan === "business") return 5000
+  const key = `stayassistant:subscription:${propertyId}`
 
- return 100
+  const sub = await redis.get(key)
+
+  if (!sub) {
+    return 100
+  }
+
+  const subscription = JSON.parse(sub)
+
+  if (subscription.plan === "pro") return 1500
+
+  if (subscription.plan === "business") return 5000
+
+  return 100
+
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -768,7 +779,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const currentUsage = Number(usage || 0)
 
-      const limit = getUsageLimit(property)
+      const limit = await getUsageLimit(propertyId)
 
       if (currentUsage >= limit) {
 
