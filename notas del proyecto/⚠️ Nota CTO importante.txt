@@ -31,3 +31,22 @@ AI
 Pero esto no es necesario todavía.
 
 Tu sistema puede escalar a miles de hoteles sin embeddings.
+
+----------------------------------------------
+
+7️⃣ SEGURIDAD
+
+Tu backend tiene:
+
+Sistema	Estado
+Rate limit	✅
+Property isolation	✅
+Demo protection	✅
+Usage limits	✅
+
+Falta añadir más adelante:
+
+JWT refresh
+API abuse protection
+
+Pero para early SaaS está bien.
