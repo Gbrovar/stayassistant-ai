@@ -3,171 +3,175 @@ import { API_URL } from "../api/config"
 
 export default function Billing() {
 
-  const [subscription, setSubscription] = useState(null)
-  const [analytics, setAnalytics] = useState(null)
+    const [subscription, setSubscription] = useState(null)
+    const [analytics, setAnalytics] = useState(null)
 
-  const token = localStorage.getItem("token")
-  const propertyId = localStorage.getItem("propertyId")
+    const token = localStorage.getItem("token")
+    const propertyId = localStorage.getItem("propertyId")
 
-  useEffect(() => {
+    useEffect(() => {
 
-    loadSubscription()
-    loadUsage()
+        loadSubscription()
+        loadUsage()
 
-  }, [])
+    }, [])
 
-  async function loadSubscription() {
+    async function loadSubscription() {
 
-    const res = await fetch(`${API_URL}/billing/subscription`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        const res = await fetch(`${API_URL}/billing/subscription`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-    const data = await res.json()
+        const data = await res.json()
 
-    setSubscription(data)
+        setSubscription(data)
 
-  }
+    }
 
-  async function loadUsage() {
+    async function loadUsage() {
 
-    const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-    const data = await res.json()
+        const data = await res.json()
 
-    setAnalytics(data)
+        setAnalytics(data)
 
-  }
+    }
 
-  async function upgrade(plan) {
+    async function upgrade(plan) {
 
-    const res = await fetch(`${API_URL}/billing/create-checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ plan })
-    })
+        const res = await fetch(`${API_URL}/billing/create-checkout`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ plan })
+        })
 
-    const data = await res.json()
+        const data = await res.json()
 
-    window.location.href = data.url
+        window.location.href = data.url
 
-  }
+    }
 
-  async function openPortal() {
+    async function openPortal() {
 
-    const res = await fetch(`${API_URL}/billing/portal`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        const res = await fetch(`${API_URL}/billing/portal`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-    const data = await res.json()
+        const data = await res.json()
 
-    window.location.href = data.url
+        window.location.href = data.url
 
-  }
+    }
 
-  if (!subscription || !analytics) return <div>Loading...</div>
+    if (!subscription || !analytics) return <div>Loading...</div>
 
-  const limits = {
-    free: 100,
-    pro: 1500,
-    business: 5000
-  }
+    const limits = {
+        free: 100,
+        pro: 1500,
+        business: 5000
+    }
 
-  const limit = limits[subscription.plan] || 100
-  const usage = analytics.total_messages || 0
+    const limit = limits[subscription.plan] || 100
+    const usage = analytics.total_messages || 0
 
-  const percentage = Math.min((usage / limit) * 100, 100)
+    const percentage = Math.min((usage / limit) * 100, 100)
 
-  return (
+    return (
 
-    <div style={{ maxWidth: 700 }}>
+        <div style={{ maxWidth: 700 }}>
 
-      <h1>Billing</h1>
+            <h1>Billing</h1>
 
-      {/* CURRENT PLAN */}
+            {/* CURRENT PLAN */}
 
-      <div className="card">
+            <div className="card">
 
-        <h3>Current Plan</h3>
+                <h3>Current Plan</h3>
 
-        <p>
-          <strong>{subscription.plan.toUpperCase()}</strong>
-        </p>
+                <p>
+                    <strong>
+                        {subscription.plan === "free" && "Free Plan"}
+                        {subscription.plan === "pro" && "Pro Plan"}
+                        {subscription.plan === "business" && "Business Plan"}
+                    </strong>
+                </p>
 
-        <p>
-          {usage} / {limit} messages this month
-        </p>
+                <p>
+                    {usage} / {limit} messages this month
+                </p>
 
-        <div className="usage-bar">
-          <div
-            className="usage-fill"
-            style={{ width: `${percentage}%` }}
-          />
+                <div className="usage-bar">
+                    <div
+                        className="usage-fill"
+                        style={{ width: `${percentage}%` }}
+                    />
+                </div>
+
+            </div>
+
+            {/* UPGRADE */}
+
+            <h3 style={{ marginTop: 30 }}>Upgrade your plan</h3>
+
+            <div className="plans">
+
+                <div className="plan-card">
+
+                    <h4>PRO</h4>
+
+                    <p>1500 messages / month</p>
+
+                    <p className="price">€19 / month</p>
+
+                    <button onClick={() => upgrade("pro")}>
+                        Upgrade
+                    </button>
+
+                </div>
+
+                <div className="plan-card">
+
+                    <h4>BUSINESS</h4>
+
+                    <p>5000 messages / month</p>
+
+                    <p className="price">€49 / month</p>
+
+                    <button onClick={() => upgrade("business")}>
+                        Upgrade
+                    </button>
+
+                </div>
+
+            </div>
+
+            {/* BILLING PORTAL */}
+
+            <div style={{ marginTop: 40 }}>
+
+                <h3>Manage billing</h3>
+
+                <button onClick={openPortal}>
+                    Open billing portal
+                </button>
+
+            </div>
+
         </div>
 
-      </div>
-
-      {/* UPGRADE */}
-
-      <h3 style={{ marginTop: 30 }}>Upgrade your plan</h3>
-
-      <div className="plans">
-
-        <div className="plan-card">
-
-          <h4>PRO</h4>
-
-          <p>1500 messages / month</p>
-
-          <p className="price">€19 / month</p>
-
-          <button onClick={() => upgrade("pro")}>
-            Upgrade
-          </button>
-
-        </div>
-
-        <div className="plan-card">
-
-          <h4>BUSINESS</h4>
-
-          <p>5000 messages / month</p>
-
-          <p className="price">€49 / month</p>
-
-          <button onClick={() => upgrade("business")}>
-            Upgrade
-          </button>
-
-        </div>
-
-      </div>
-
-      {/* BILLING PORTAL */}
-
-      <div style={{ marginTop: 40 }}>
-
-        <h3>Manage billing</h3>
-
-        <button onClick={openPortal}>
-          Open billing portal
-        </button>
-
-      </div>
-
-    </div>
-
-  )
+    )
 
 }
