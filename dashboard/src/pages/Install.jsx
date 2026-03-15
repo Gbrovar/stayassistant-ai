@@ -6,23 +6,6 @@ import { useEffect } from "react"
 
 export default function Install() {
 
-    useEffect(() => {
-
-        const token = localStorage.getItem("token")
-
-        fetch(`${API_URL}/onboarding/complete`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                step: "widget"
-            })
-        })
-
-    }, [])
-
     const propertyId = getPropertyId()
 
     const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}"></script>`
