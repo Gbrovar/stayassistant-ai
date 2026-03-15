@@ -5,11 +5,17 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import "./styles/dashboard.css"
 
+
+const basename =
+  import.meta.env.MODE === "production"
+    ? "/dashboard"
+    : "/"
+
 ReactDOM.createRoot(document.getElementById("root")).render(
 
   <React.StrictMode>
 
-    <BrowserRouter basename="/dashboard">
+    <BrowserRouter basename={basename}>
 
       <App />
 
