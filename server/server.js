@@ -352,7 +352,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
+/* --- DASHBOARD SPA ROUTING --- */
 
+app.get("/dashboard/*", (req, res) => {
+  res.sendFile(path.join(publicPath, "dashboard/index.html"));
+});
 
 /* --- OpenAI client --- */
 
