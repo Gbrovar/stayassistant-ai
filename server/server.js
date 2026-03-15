@@ -55,18 +55,13 @@ const PLAN_LIMITS = {
 
 /* --- GET PROPERTY USAGE LIMIT --- */
 
-function getUsageLimit(property) {
+function getUsageLimit(subscription){
 
-  // demo nunca se bloquea
-  if (property.id === "demo_property") {
-    return Infinity
-  }
+ if(subscription.plan === "free") return 100
+ if(subscription.plan === "pro") return 1500
+ if(subscription.plan === "business") return 5000
 
-  // por ahora todos los hoteles son plan free
-  const plan = property.plan || "free"
-
-  return PLAN_LIMITS[plan] || PLAN_LIMITS.free
-
+ return 100
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
