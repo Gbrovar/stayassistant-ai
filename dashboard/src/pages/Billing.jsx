@@ -3,98 +3,108 @@ import { API_URL } from "../api/config"
 
 export default function Billing() {
 
-  const [subscription, setSubscription] = useState(null)
-  const [analytics, setAnalytics] = useState(null)
+    const [subscription, setSubscription] = useState(null)
+    const [analytics, setAnalytics] = useState(null)
 
-  const token = localStorage.getItem("token")
-  const propertyId = localStorage.getItem("propertyId")
+    const token = localStorage.getItem("token")
+    const propertyId = localStorage.getItem("propertyId")
 
-  useEffect(() => {
+    useEffect(() => {
 
-    loadSubscription()
-    loadUsage()
+        loadSubscription()
+        loadUsage()
 
-  }, [])
+    }, [])
 
-  async function loadSubscription() {
+    useEffect(() => {
 
-    const res = await fetch(`${API_URL}/billing/subscription`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        const params = new URLSearchParams(window.location.search)
 
-    const data = await res.json()
+        if (params.get("billing") === "success") {
+            alert("Subscription activated successfully")
+        }
 
-    setSubscription(data)
+    }, [])
 
-  }
+    async function loadSubscription() {
 
-  async function loadUsage() {
+        const res = await fetch(`${API_URL}/billing/subscription`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-    const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        const data = await res.json()
 
-    const data = await res.json()
+        setSubscription(data)
 
-    setAnalytics(data)
+    }
 
-  }
+    async function loadUsage() {
 
-  async function upgrade(plan) {
+        const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
-    const res = await fetch(`${API_URL}/billing/create-checkout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ plan })
-    })
+        const data = await res.json()
 
-    const data = await res.json()
+        setAnalytics(data)
 
-    window.location.href = data.url
+    }
 
-  }
+    async function upgrade(plan) {
 
-  if (!subscription || !analytics) return <div>Loading...</div>
+        const res = await fetch(`${API_URL}/billing/create-checkout`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ plan })
+        })
 
-  return (
+        const data = await res.json()
 
-    <div>
+        window.location.href = data.url
 
-      <h2>Billing</h2>
+    }
 
-      <p>
-        <strong>Current Plan:</strong> {subscription.plan}
-      </p>
+    if (!subscription || !analytics) return <div>Loading...</div>
 
-      <p>
-        <strong>Status:</strong> {subscription.status}
-      </p>
+    return (
 
-      <p>
-        <strong>Messages this month:</strong> {analytics.total_messages}
-      </p>
+        <div>
 
-      <hr/>
+            <h2>Billing</h2>
 
-      <h3>Upgrade</h3>
+            <p>
+                <strong>Current Plan:</strong> {subscription.plan}
+            </p>
 
-      <button onClick={() => upgrade("pro")}>
-        Upgrade to PRO
-      </button>
+            <p>
+                <strong>Status:</strong> {subscription.status}
+            </p>
 
-      <button onClick={() => upgrade("business")}>
-        Upgrade to Business
-      </button>
+            <p>
+                <strong>Messages this month:</strong> {analytics.total_messages}
+            </p>
 
-    </div>
+            <hr />
 
-  )
+            <h3>Upgrade</h3>
+
+            <button onClick={() => upgrade("pro")}>
+                Upgrade to PRO
+            </button>
+
+            <button onClick={() => upgrade("business")}>
+                Upgrade to Business
+            </button>
+
+        </div>
+
+    )
 
 }
