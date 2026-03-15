@@ -139,6 +139,18 @@ VITE_API_URL=https://stayassistantai.com
 y todo funcionará.
 
 -------------------------------------
+⚠️ Nota importante (muy SaaS)
 
+Cada vez que cambies el dashboard tendrás que hacer:
+
+npm run build
+
+y copiar a:
+
+public/dashboard
+
+En el siguiente paso te enseñaré a automatizar esto, para que Railway lo haga solo.
+
+--------------------------------------------
 
 
