@@ -24,6 +24,9 @@ export default function Sidebar(){
 
         <Link to="/billing">Billing</Link>
 
+        <Link to="/Onboarding">Onboarding</Link>
+
+
       </nav>
 
     </aside>
