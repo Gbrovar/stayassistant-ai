@@ -302,3 +302,43 @@ body{
   background:white;
 
 }
+
+/* BILLING */
+
+.card {
+  background: #0f1b2b;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.usage-bar {
+  height: 8px;
+  background: #1f2e44;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.usage-fill {
+  height: 8px;
+  background: #22c55e;
+  border-radius: 6px;
+}
+
+.plans {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.plan-card {
+  background: #0f1b2b;
+  padding: 20px;
+  border-radius: 12px;
+  flex: 1;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+}
