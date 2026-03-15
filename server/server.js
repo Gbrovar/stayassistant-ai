@@ -43,15 +43,6 @@ async function loadProperty(propertyId) {
   return property
 }
 
-/* --- SAAS PLAN LIMITS --- */
-
-const PLAN_LIMITS = {
-
-  free: 100,          // hoteles nuevos
-  pro: 2000,          // plan pago futuro
-  enterprise: Infinity
-
-}
 
 /* --- GET PROPERTY USAGE LIMIT --- */
 
