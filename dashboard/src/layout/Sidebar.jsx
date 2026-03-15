@@ -12,7 +12,7 @@ export default function Sidebar(){
 
         <Link to="/analytics">Analytics</Link>
 
-        <Link to="/insights">Analytics</Link>
+        <Link to="/insights">/Insights</Link>
 
         <Link to="/conversations">Conversations</Link>
 
