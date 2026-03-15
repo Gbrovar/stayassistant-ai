@@ -80,7 +80,7 @@ export default function SetupWizard() {
 
         /* STEP 3 — REDIRECT */
 
-        window.location.href = "/preview"
+        window.location.href = "/dashboard/preview"
 
     }
 
