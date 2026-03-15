@@ -134,7 +134,7 @@ export default function Billing() {
 
                     <p>1500 messages / month</p>
 
-                    <p className="price">€19 / month</p>
+                    <p className="price">€39 / month</p>
 
                     <button onClick={() => upgrade("pro")}>
                         Upgrade
@@ -148,7 +148,7 @@ export default function Billing() {
 
                     <p>5000 messages / month</p>
 
-                    <p className="price">€49 / month</p>
+                    <p className="price">€99 / month</p>
 
                     <button onClick={() => upgrade("business")}>
                         Upgrade
