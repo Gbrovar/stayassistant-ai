@@ -1342,6 +1342,87 @@ app.post("/onboarding/complete", authenticate, async (req, res) => {
 
 })
 
+/* --- AI SETUP WIZARD --- */
+
+app.post("/ai/setup", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+
+    const {
+      city,
+      checkin,
+      checkout
+    } = req.body
+
+    const property = await getProperty(propertyId)
+
+    if (!property) {
+      return res.status(404).json({ error: "property not found" })
+    }
+
+    const prompt = `
+      Create initial concierge setup for a vacation rental in ${city}.
+
+      Return JSON with:
+
+      faq
+      recommendations
+
+      Example format:
+
+      {
+      "faq":[
+        {"question":"How do I open the door?","answer":"..."},
+        {"question":"Where can I park?","answer":"..."}
+      ],
+      "recommendations":[
+        "Best local restaurant",
+        "Nearby supermarket",
+        "Taxi service"
+      ]
+      }
+      `
+
+    const completion = await openai.chat.completions.create({
+
+      model: "gpt-4o-mini",
+
+      messages: [
+        { role: "system", content: "You generate helpful concierge setup for hotels." },
+        { role: "user", content: prompt }
+      ]
+
+    })
+
+    const text = completion.choices[0].message.content
+
+    const json = JSON.parse(text)
+
+    property.knowledge.faq = json.faq
+
+    property.knowledge.local_recommendations = json.recommendations
+
+    property.knowledge.property_info.checkin = checkin
+    property.knowledge.property_info.checkout = checkout
+
+    await createProperty(property)
+
+    propertyCache.delete(propertyId)
+
+    res.json({ success: true })
+
+  } catch (err) {
+
+    console.error("AI setup error", err)
+
+    res.status(500).json({ error: "setup failed" })
+
+  }
+
+})
+
 /* --- CREATE STRIPE CHECKOUT --- */
 
 app.post("/billing/create-checkout", authenticate, async (req, res) => {

@@ -22,6 +22,8 @@ export default function Sidebar(){
 
         <Link to="/branding">Branding</Link>
 
+        <Link to="/setupwizard">Setup</Link>
+
         <Link to="/preview">Preview</Link>
 
         <Link to="/install">Install</Link>

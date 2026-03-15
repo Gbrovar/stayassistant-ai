@@ -15,6 +15,7 @@ import Billing from "./pages/Billing"
 import Onboarding from "./pages/Onboarding"
 import Conversations from "./pages/Conversations"
 import Insights from "./pages/Insights"
+import SetupWizard from "./pages/SetupWizard"
 
 
 function ProtectedLayout({children}){
@@ -76,6 +77,8 @@ export default function App(){
       <Route path="/recommendations" element={<ProtectedLayout><Recommendations/></ProtectedLayout>}/>
 
       <Route path="/branding" element={<ProtectedLayout><Branding/></ProtectedLayout>}/>
+
+      <Route path="/setupwizard" element={<ProtectedLayout><SetupWizard/></ProtectedLayout>}/>
 
       <Route path="/preview" element={<ProtectedLayout><Preview/></ProtectedLayout>}/>
 
