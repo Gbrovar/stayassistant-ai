@@ -125,3 +125,20 @@ Manage billing
 [Open billing portal]
 
 Esto evita confusión al usuario.
+
+------------------------------------
+
+config.js también está correcto
+export const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000"
+
+En producción pondrás en Railway:
+
+VITE_API_URL=https://stayassistantai.com
+
+y todo funcionará.
+
+-------------------------------------
+
+
+
