@@ -22,6 +22,10 @@ import { detectIntent } from "./utils/intentEngine.js"
 
 const propertyCache = new Map()
 
+const Stripe = require("stripe")
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
 async function loadProperty(propertyId) {
 
   // 1️⃣ memory cache
@@ -1166,6 +1170,155 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
   }
 
 });
+
+/* --- CREATE STRIPE CHECKOUT --- */
+
+app.post("/billing/create-checkout", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+    const { plan } = req.body
+
+    let priceId
+
+    if (plan === "pro") {
+      priceId = process.env.STRIPE_PRO_PRICE_ID
+    }
+
+    if (plan === "business") {
+      priceId = process.env.STRIPE_BUSINESS_PRICE_ID
+    }
+
+    if (!priceId) {
+      return res.status(400).json({ error: "invalid plan" })
+    }
+
+    const session = await stripe.checkout.sessions.create({
+
+      mode: "subscription",
+
+      payment_method_types: ["card"],
+
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1
+        }
+      ],
+
+      success_url: "https://stayassistantai.com/dashboard?billing=success",
+
+      cancel_url: "https://stayassistantai.com/dashboard?billing=cancel",
+
+      metadata: {
+        propertyId: propertyId,
+        plan: plan
+      }
+
+    })
+
+    res.json({ url: session.url })
+
+  } catch (err) {
+
+    console.error("Stripe checkout error:", err)
+
+    res.status(500).json({ error: "stripe failed" })
+
+  }
+
+})
+
+/* --- STRIPE WEBHOOK --- */
+
+app.post("/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+
+  const sig = req.headers["stripe-signature"]
+
+  let event
+
+  try {
+
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    )
+
+  } catch (err) {
+
+    console.log("Webhook signature failed", err)
+
+    return res.status(400).send(`Webhook Error: ${err.message}`)
+
+  }
+
+  try {
+
+    if (event.type === "checkout.session.completed") {
+
+      const session = event.data.object
+
+      const propertyId = session.metadata.propertyId
+      const plan = session.metadata.plan
+
+      const subscriptionKey = `stayassistant:subscription:${propertyId}`
+
+      await redis.set(
+        subscriptionKey,
+        JSON.stringify({
+          plan: plan,
+          status: "active",
+          stripeCustomer: session.customer,
+          stripeSubscription: session.subscription
+        })
+      )
+
+      console.log("Subscription activated:", propertyId)
+
+    }
+
+  } catch (err) {
+
+    console.error("Webhook processing error", err)
+
+  }
+
+  res.json({ received: true })
+
+})
+
+/* --- GET SUBSCRIPTION --- */
+
+app.get("/billing/subscription", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+
+    const key = `stayassistant:subscription:${propertyId}`
+
+    const sub = await redis.get(key)
+
+    if (!sub) {
+
+      return res.json({
+        plan: "free",
+        status: "active"
+      })
+
+    }
+
+    res.json(JSON.parse(sub))
+
+  } catch (err) {
+
+    res.status(500).json({ error: "subscription failed" })
+
+  }
+
+})
 
 /*  DEBUGS TEMPORALES */
 app.get("/debug/redis", async (req, res) => {
