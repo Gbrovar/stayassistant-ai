@@ -79,7 +79,7 @@ export default function Login(){
 
       <p>
         Don't have an account?
-        <Link to="/register">Create property</Link>
+        <Link to="../register">Create property</Link>
       </p>
 
     </div>
