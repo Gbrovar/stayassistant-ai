@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { API_URL } from "../api/config"
 
 export default function Billing() {
 
@@ -34,9 +35,7 @@ export default function Billing() {
 
   async function loadUsage() {
 
-    const res = await fetch(
-      `http://localhost:3000/analytics/${propertyId}/advanced`,
-      {
+    const res = await fetch(`${API_URL}/billing/create-checkout`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -51,10 +50,7 @@ export default function Billing() {
 
   async function upgrade(plan) {
 
-    //const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-    const res = await fetch(
-      `http://localhost:3000/billing/create-checkout`,
-      {
+    const res = await fetch(`${API_URL}/billing/create-checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
