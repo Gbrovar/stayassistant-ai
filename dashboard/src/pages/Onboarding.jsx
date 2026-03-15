@@ -1,49 +1,67 @@
 import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { API_URL } from "../api/config"
 
-export default function Onboarding(){
+export default function Onboarding() {
 
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  function finishSetup(){
-    navigate("/analytics")
-  }
+    const [progress, setProgress] = useState({})
 
-  return(
+    useEffect(() => {
 
-    <div className="onboarding">
+        const token = localStorage.getItem("token")
 
-      <h1>Welcome to StayAssistant</h1>
+        fetch(`${API_URL}/onboarding/status`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => setProgress(data))
 
-      <p>
-        Your AI concierge is almost ready.
-        Complete these steps to activate it.
-      </p>
+    }, [])
 
-      <div className="onboarding-steps">
+    function finishSetup() {
+        navigate("/analytics")
+    }
 
-        <div className="step">
-          <h3>1. Add FAQ</h3>
-          <p>Tell the assistant about your property.</p>
+    return (
+
+        <div className="onboarding">
+
+            <h1>Welcome to StayAssistant</h1>
+
+            <p>
+                Your AI concierge is almost ready.
+                Complete these steps to activate it.
+            </p>
+
+            <div className="onboarding-steps">
+
+                <div className="step">
+                    <h3>1. Add FAQ {progress.faq ? "✅" : "⬜"}</h3>
+                    <p>Tell the assistant about your property.</p>
+                </div>
+
+                <div className="step">
+                    <h3>2. Add recommendations {progress.recommendations ? "✅" : "⬜"}</h3>
+                    <p>Restaurants, transport, pharmacies.</p>
+                </div>
+
+                <div className="step">
+                    <h3>3. Install widget {progress.widget ? "✅" : "⬜"}</h3>
+                    <p>Add the assistant to your website.</p>
+                </div>
+
+            </div>
+
+            <button onClick={finishSetup}>
+                Go to Dashboard
+            </button>
+
         </div>
 
-        <div className="step">
-          <h3>2. Add recommendations</h3>
-          <p>Restaurants, transport, pharmacies.</p>
-        </div>
-
-        <div className="step">
-          <h3>3. Install widget</h3>
-          <p>Add the assistant to your website.</p>
-        </div>
-
-      </div>
-
-      <button onClick={finishSetup}>
-        Go to Dashboard
-      </button>
-
-    </div>
-
-  )
+    )
 
 }

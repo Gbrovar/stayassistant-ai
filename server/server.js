@@ -1173,6 +1173,59 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
 });
 
+/* --- GET ONBOARDING --- */
+app.get("/onboarding/status", authMiddleware, async (req, res) => {
+
+  const propertyId = req.propertyId
+
+  const key = `stayassistant:onboarding:${propertyId}`
+
+  let data = await redis.get(key)
+
+  if (!data) {
+
+    data = {
+      faq: false,
+      recommendations: false,
+      widget: false
+    }
+
+    await redis.set(key, JSON.stringify(data))
+
+  } else {
+
+    data = JSON.parse(data)
+
+  }
+
+  res.json(data)
+
+})
+
+/* --- STEPS ONBOARDING --- */
+app.post("/onboarding/complete", authMiddleware, async (req, res) => {
+
+  const { step } = req.body
+  const propertyId = req.propertyId
+
+  const key = `stayassistant:onboarding:${propertyId}`
+
+  let data = await redis.get(key)
+
+  if (!data) {
+    data = {}
+  } else {
+    data = JSON.parse(data)
+  }
+
+  data[step] = true
+
+  await redis.set(key, JSON.stringify(data))
+
+  res.json({ success: true })
+
+})
+
 /* --- CREATE STRIPE CHECKOUT --- */
 
 app.post("/billing/create-checkout", authenticate, async (req, res) => {
