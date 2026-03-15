@@ -5,7 +5,8 @@ export default function Preview(){
 
   const propertyId = getPropertyId()
 
-  const previewUrl = `http://localhost:3000/chat.html?embed=true&property=${propertyId}`
+  const previewUrl =
+    `${window.location.origin}/chat.html?embed=true&property=${propertyId}`
 
   return(
 

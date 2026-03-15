@@ -1264,6 +1264,31 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
 });
 
+/* --- FAQ SUGGESTIONS --- */
+
+app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res) => {
+
+  const propertyId = req.params.propertyId
+
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const key = `stayassistant:analytics:${propertyId}:questions`
+
+  const data = await redis.zRangeWithScores(key, 0, 9, { REV: true })
+
+  const suggestions = data
+    .filter(i => i.score >= 3)
+    .map(i => ({
+      question: i.value,
+      count: i.score
+    }))
+
+  res.json({ suggestions })
+
+})
+
 /* --- GET ONBOARDING --- */
 app.get("/onboarding/status", authenticate, async (req, res) => {
 
