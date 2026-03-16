@@ -1137,15 +1137,25 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 /* --- LIST CONVERSATIONS --- */
 
-app.get("/conversations", authenticate, async (req, res) => {
+app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
   try {
 
-    const propertyId = req.propertyId
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRangeWithScores(listKey, 0, 19, { REV: true })
+    // obtener últimos 20 ids ordenados por score
+    const ids = await redis.zRange(
+      listKey,
+      0,
+      19,
+      { REV: true }
+    )
 
     const conversations = []
 
@@ -1157,14 +1167,7 @@ app.get("/conversations", authenticate, async (req, res) => {
 
       if (!history) continue
 
-      let parsed
-
-      try {
-        parsed = JSON.parse(history)
-      } catch (e) {
-        console.log("Invalid conversation JSON:", key)
-        continue
-      }
+      const parsed = JSON.parse(history)
 
       const preview =
         parsed.find(m => m.role === "user")?.content || ""
