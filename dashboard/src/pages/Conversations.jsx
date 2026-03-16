@@ -14,7 +14,7 @@ export default function Conversations() {
 
     async function load() {
 
-      const res = await fetch(`${API_URL}/conversations`, {
+      const res = await fetch(`${API_URL}/conversations/${propertyId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
