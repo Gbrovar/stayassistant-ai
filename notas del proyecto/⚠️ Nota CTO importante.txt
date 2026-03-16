@@ -153,4 +153,36 @@ En el siguiente paso te enseñaré a automatizar esto, para que Railway lo haga 
 
 --------------------------------------------
 
+🧠 Mejora adicional (muy importante)
+
+Ahora mismo cada chat se guarda con TTL 6h:
+
+En tu chat endpoint:
+
+await redis.set(historyKey, JSON.stringify(history), {
+  EX: 60 * 60 * 6
+})
+
+Eso significa que:
+
+conversation index
+≠
+conversation history
+
+Resultado:
+
+id existe
+pero chat ya expiró
+
+→ lista vacía
+→ posibles errores
+
+Te recomiendo cambiar a:
+
+EX: 60 * 60 * 24 * 7
+
+o incluso sin TTL para analytics.
+
+---------------------------------------------------------
+
 
