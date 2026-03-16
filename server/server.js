@@ -31,6 +31,12 @@ async function loadProperty(propertyId) {
   // 2️⃣ Redis
   let property = await getProperty(propertyId)
 
+  /* FORCE REFRESH IF NO COORDINATES */
+
+  if (property && !property.coordinates) {
+    propertyCache.delete(propertyId)
+  }
+
   // 3️⃣ fallback demo property
   if (!property) {
     property = await getProperty("demo_property") || properties["demo_property"]
