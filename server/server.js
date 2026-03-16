@@ -1154,7 +1154,7 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRange(listKey, 0, 19, { REV: true })
+    const ids = await redis.zRange(listKey, 0, 19, { REV: true }) || []
 
     const conversations = []
 
@@ -1164,28 +1164,22 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
       const history = await redis.get(key)
 
-      if (!history) {
-        continue
-      }
+      if (!history) continue
 
       let parsed
 
       try {
         parsed = JSON.parse(history)
-      } catch (err) {
-        console.log("Invalid history:", key)
+      } catch {
         continue
       }
 
-      if (!Array.isArray(parsed)) {
-        continue
-      }
-
-      const firstUserMessage = parsed.find(m => m.role === "user")
+      const preview =
+        parsed.find(m => m.role === "user")?.content || ""
 
       conversations.push({
         id,
-        preview: firstUserMessage?.content || "",
+        preview,
         messages: parsed
       })
 
@@ -1197,7 +1191,7 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
     console.error("Conversations error:", err)
 
-    res.status(500).json({ error: "failed" })
+    res.json({ conversations: [] })   // <- nunca 500
 
   }
 
