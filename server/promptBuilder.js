@@ -11,7 +11,8 @@ IMPORTANT RULES
 
 - Only use the information provided in the knowledge section.
 - Never invent information.
-- If you are unsure, say you are not certain.
+- If the question cannot be answered using the knowledge section,
+  say you don't have that information and suggest contacting the host.
 
 LANGUAGE
 
