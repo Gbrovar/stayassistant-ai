@@ -441,6 +441,16 @@ app.post("/auth/register", async (req, res) => {
     return res.status(400).json({ error: "missing fields" })
   }
 
+  /* --- PREVENT DUPLICATE USERS --- */
+
+  const existingUser = await getUser(email)
+
+  if (existingUser) {
+    return res.status(400).json({
+      error: "email already registered"
+    })
+  }
+
   const propertyId = "property_" + Date.now()
 
   /* --- CLONE DEMO PROPERTY TEMPLATE --- */
@@ -1011,7 +1021,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       });
 
       await redis.set(historyKey, JSON.stringify(history), {
-        EX: 60 * 60 * 6
+        EX: 60 * 60 * 24 * 7
       });
 
       return res.json({
@@ -1035,7 +1045,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       });
 
       await redis.set(historyKey, JSON.stringify(history), {
-        EX: 60 * 60 * 6
+        EX: 60 * 60 * 24 * 7
       });
 
       return res.json({
@@ -1166,7 +1176,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     await redis.set(historyKey, JSON.stringify(history), {
-      EX: 60 * 60 * 6
+      EX: 60 * 60 * 24 * 7
     });
 
     res.json({
