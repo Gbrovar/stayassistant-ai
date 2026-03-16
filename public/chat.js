@@ -62,7 +62,7 @@ window.onload = async function () {
 <div class="bot-avatar">🤖</div>
 
 <div class="bot-message">
-Hello 👋 Welcome to ${propertyName}.<br><br>
+Welcome 👋 to ${propertyName}.<br><br>
 Please choose your language:
 </div>
 
@@ -183,13 +183,13 @@ async function showQuickActions() {
 
     try {
 
-        let langCode = "en"
+        let langParam = "English"
 
-        if (selectedLanguage === "Español") langCode = "es"
-        if (selectedLanguage === "Deutsch") langCode = "de"
+        if (selectedLanguage === "Español") langParam = "Español"
+        if (selectedLanguage === "Deutsch") langParam = "Deutsch"
 
         const response = await fetch(
-            `${API_BASE}/property/${propertyId}/suggestions?lang=${langCode}`
+            `${API_BASE}/property/${propertyId}/suggestions?lang=${encodeURIComponent(langParam)}`
         );
 
         const data = await response.json();
@@ -318,7 +318,8 @@ async function showRecommendations(text) {
         text.includes("shop") ||
         text.includes("market") ||
         text.includes("supermercado") ||
-        text.includes("supermercados")
+        text.includes("supermercados") ||
+        text.includes("mercado")
 
     ) {
 
@@ -666,7 +667,12 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     const displayText = displayLabel || userText;
 
-    messages.innerHTML += `<div class="message user">You: ${displayText}</div>`;
+    let youText = "You"
+
+    if (selectedLanguage === "Español") youText = "Tú"
+    if (selectedLanguage === "Deutsch") youText = "Du"
+
+    messages.innerHTML += `<div class="message user">${youText}: ${displayText}</div>`;
 
     /* PRE RESPONSE (LATENCY OPTIMIZATION) */
 
@@ -717,7 +723,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
             body: JSON.stringify({
 
                 message: userText,
-                language: selectedLanguage,
+                language: selectedLanguage || "English",
                 conversationId: conversationId,
                 propertyId: propertyId,
                 hour: hour,
