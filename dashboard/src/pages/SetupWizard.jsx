@@ -38,7 +38,7 @@ export default function SetupWizard() {
 
         /* STEP 1 — PROPERTY SETUP */
 
-        await fetch(`${API_URL}/property/setup`, {
+        const res = await fetch(`${API_URL}/property/setup`, {
 
             method: "POST",
 
@@ -56,6 +56,19 @@ export default function SetupWizard() {
             })
 
         })
+
+        const data = await res.json()
+
+        if (!data.success) {
+
+            alert("Property setup failed")
+
+            setLoading(false)
+
+            return
+        }
+
+        console.log("Coordinates saved:", data.coordinates)
 
         /* STEP 2 — AI SETUP */
 
@@ -177,6 +190,7 @@ export default function SetupWizard() {
                 {loading ? "Generating..." : "Generate AI Concierge"}
 
             </button>
+            {loading && <p>Setting up your AI concierge...</p>}
 
         </div>
 

@@ -33,7 +33,14 @@ async function loadProperty(propertyId) {
 
   /* FORCE REFRESH IF NO COORDINATES */
 
-  if (property && !property.coordinates) {
+  if (
+    property &&
+    (
+      !property.coordinates ||
+      !property.address ||
+      !property.city
+    )
+  ) {
     propertyCache.delete(propertyId)
   }
 
@@ -1665,8 +1672,10 @@ app.post("/property/setup", authenticate, async (req, res) => {
 
     /* --- GOOGLE GEOCODING --- */
 
+    const fullAddress = `${address}, ${city}, ${country}`
+
     const geoUrl =
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_GEOCODING_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${process.env.GOOGLE_GEOCODING_KEY}`
 
     const controller = new AbortController()
 
