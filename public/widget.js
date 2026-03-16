@@ -1,5 +1,7 @@
 (function () {
 
+    const API_BASE = "https://www.stayassistantai.com"
+
     if (window.StayAssistantWidgetLoaded) {
         return;
     }
@@ -146,7 +148,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = `/chat.html?embed=true&property=${propertyId}`;
+        iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}`;
 
         const isMobile = window.innerWidth < 600;
 
@@ -280,7 +282,7 @@
 
     /* cargar branding desde backend */
 
-    fetch(`/property/${propertyId}`)
+    fetch(`${API_BASE}/property/${propertyId}`)
         .then(res => res.json())
         .then(data => {
 

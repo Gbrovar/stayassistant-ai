@@ -1838,6 +1838,8 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
     if (event.type === "customer.subscription.deleted") {
 
+      const subscription = event.data.object
+
       const stripeSubId = subscription.id
 
       const propertyId = await redis.get(
@@ -1862,6 +1864,8 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
     /* --- PAYMENT FAILED --- */
 
     if (event.type === "invoice.payment_failed") {
+
+      const invoice = event.data.object
 
       const stripeSubId = invoice.subscription
 
