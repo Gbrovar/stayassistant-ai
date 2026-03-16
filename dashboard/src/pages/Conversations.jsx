@@ -6,17 +6,17 @@ export default function Conversations() {
   const propertyId = localStorage.getItem("propertyId")
   const token = localStorage.getItem("token")
 
-  const [conversations,setConversations] = useState([])
-  const [selected,setSelected] = useState(null)
-  const [loading,setLoading] = useState(true)
+  const [conversations, setConversations] = useState([])
+  const [selected, setSelected] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    async function load(){
+    async function load() {
 
-      const res = await fetch(`${API_URL}/conversations/${propertyId}`,{
-        headers:{
-          Authorization:`Bearer ${token}`
+      const res = await fetch(`${API_URL}/conversations/${propertyId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
       })
 
@@ -29,14 +29,14 @@ export default function Conversations() {
 
     load()
 
-  },[propertyId,token])
+  }, [propertyId, token])
 
 
-  if(loading){
+  if (loading) {
     return <div>Loading conversations...</div>
   }
 
-  return(
+  return (
 
     <div className="conversations-page">
 
@@ -46,13 +46,25 @@ export default function Conversations() {
 
         <div className="conversations-list">
 
-          {conversations.map(c=>(
+          {conversations.map(c => (
             <div
               key={c.id}
               className="conversation-item"
-              onClick={()=>setSelected(c)}
+              onClick={() => setSelected(c)}
             >
-              Conversation {c.id}
+              <div
+                key={c.id}
+                className="conversation-item"
+                onClick={() => setSelected(c)}
+              >
+
+                <strong>Guest</strong>
+
+                <p className="conversation-preview">
+                  {c.preview}
+                </p>
+
+              </div>
             </div>
           ))}
 
@@ -68,12 +80,12 @@ export default function Conversations() {
 
               <h3>Conversation {selected.id}</h3>
 
-              {selected.messages.map((m,i)=>(
+              {selected.messages.map((m, i) => (
 
                 <div
                   key={i}
                   className={
-                    m.role==="user"
+                    m.role === "user"
                       ? "message-user"
                       : "message-ai"
                   }

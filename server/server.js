@@ -861,7 +861,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const listKey = `stayassistant:conversations:${propertyId}`
 
-      await redis.sAdd(listKey, conversationId)
+      await redis.zAdd(listKey, {
+        score: Date.now(),
+        value: conversationId
+      })
 
     } catch (err) {
 
@@ -1146,7 +1149,12 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.sMembers(listKey)
+    const ids = await redis.zRange(
+      listKey,
+      0,
+      20,
+      { REV: true }
+    )
 
     const conversations = []
 
@@ -1158,9 +1166,15 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
       if (!history) continue
 
+      const parsed = JSON.parse(history)
+
+      const preview =
+        parsed.find(m => m.role === "user")?.content || ""
+
       conversations.push({
         id,
-        messages: JSON.parse(history)
+        preview,
+        messages: parsed
       })
 
     }
