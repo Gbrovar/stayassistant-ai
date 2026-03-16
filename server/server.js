@@ -722,16 +722,32 @@ app.post("/chat", chatLimiter, async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
-    const userLanguage = req.body.language || null;
-    //const conversationId = req.body.conversationId || "default";
-    //const conversationId = req.body.conversationId || "conv_" + Date.now()
+    let userLanguage = req.body.language || null
+
+    if (!userLanguage) {
+
+      const msg = userMessage.toLowerCase()
+
+      if (msg.match(/[ñáéíóú]/)) {
+        userLanguage = "Español"
+      }
+
+      else if (msg.match(/[äöüß]/)) {
+        userLanguage = "Deutsch"
+      }
+
+      else {
+        userLanguage = "English"
+      }
+
+    }
+
 
     let conversationId = req.body.conversationId
 
     if (!conversationId) {
       conversationId = crypto.randomUUID()
     }
-    /**************/
 
     const propertyId = req.body.propertyId || "demo_property";
     const hour = req.body.hour || null;
