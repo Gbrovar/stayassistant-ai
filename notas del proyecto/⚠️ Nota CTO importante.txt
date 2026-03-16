@@ -185,4 +185,18 @@ o incluso sin TTL para analytics.
 
 ---------------------------------------------------------
 
+RESPUESTA API
+
+Si el usuario ya existe:
+
+{
+  "error": "email already registered"
+}
+
+El frontend puede mostrar:
+
+"This email is already registered"
+
+----------------------------------------------------
+
 

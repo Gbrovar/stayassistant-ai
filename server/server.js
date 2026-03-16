@@ -111,6 +111,8 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 
+app.set("trust proxy", 1)
+
 /* --- DISTANCE HELPER --- */
 
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -145,7 +147,14 @@ const chatLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
-});
+
+  handler: (req, res) => {
+    res.status(429).json({
+      reply: "Too many requests. Please wait a moment."
+    })
+  }
+
+})
 
 /* --- paths --- */
 
@@ -1070,7 +1079,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const { lat, lng } = property.coordinates
 
         const url =
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
 
         const controller = new AbortController()
 
