@@ -17,6 +17,7 @@ import { createProperty, getProperty } from "./db/properties.js";
 import redis, { connectRedis } from "./db/redis.js";
 import { selectKnowledge } from "./utils/knowledgeSelector.js";
 import { detectIntent } from "./utils/intentEngine.js"
+import crypto from "crypto"
 
 const propertyCache = new Map()
 
@@ -681,7 +682,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const userMessage = req.body.message || "";
     const userLanguage = req.body.language || null;
     //const conversationId = req.body.conversationId || "default";
-    const conversationId = req.body.conversationId || "conv_" + Date.now()
+    //const conversationId = req.body.conversationId || "conv_" + Date.now()
+
+    let conversationId = req.body.conversationId
+
+    if (!conversationId) {
+      conversationId = crypto.randomUUID()
+    }
     /**************/
 
     const propertyId = req.body.propertyId || "demo_property";
