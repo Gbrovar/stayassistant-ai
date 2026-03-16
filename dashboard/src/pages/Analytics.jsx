@@ -88,7 +88,7 @@ export default function Analytics() {
 
     return (
       <div>
-        <h1>Analytics</h1>
+        <h2>Analytics</h2>
 
         <div className="analytics-card">
 
@@ -105,7 +105,7 @@ export default function Analytics() {
 
     <div>
 
-      <h1>Analytics</h1>
+      <h2>Analytics</h2>
 
       {/* TOTAL MESSAGES */}
 

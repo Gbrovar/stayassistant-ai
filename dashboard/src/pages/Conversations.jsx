@@ -40,7 +40,7 @@ export default function Conversations() {
 
     <div className="conversations-page">
 
-      <h1>Guest Conversations</h1>
+      <h2>Guest Conversations</h2>
 
       <div className="conversations-layout">
 

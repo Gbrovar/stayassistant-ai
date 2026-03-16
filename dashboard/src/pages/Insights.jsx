@@ -33,7 +33,7 @@ export default function Insights(){
 
     <div>
 
-      <h1>AI Insights</h1>
+      <h2>AI Insights</h2>
 
       {suggestions.map(s=>(
 
