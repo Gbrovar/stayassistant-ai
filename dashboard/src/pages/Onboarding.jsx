@@ -38,7 +38,7 @@ export default function Onboarding() {
 
         <div className="onboarding">
 
-            <h1>Welcome to StayAssistant</h1>
+            <h2>Setup Progress</h2>
 
             <p>
                 Your AI concierge is almost ready.

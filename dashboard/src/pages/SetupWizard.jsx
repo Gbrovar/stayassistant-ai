@@ -88,7 +88,7 @@ export default function SetupWizard() {
 
         <div>
 
-            <h1>AI Setup Wizard</h1>
+            <h2>Property Information</h2>
 
             <p>Configure your AI concierge in seconds.</p>
 

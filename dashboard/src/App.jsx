@@ -17,6 +17,7 @@ import Conversations from "./pages/Conversations"
 import Insights from "./pages/Insights"
 import SetupWizard from "./pages/SetupWizard"
 import Guide from "./pages/Guide"
+import Property from "./pages/Property"
 
 
 function ProtectedLayout({children}){
@@ -90,6 +91,8 @@ export default function App(){
       <Route path="/onboarding" element={<ProtectedLayout><Onboarding/></ProtectedLayout>}/>
 
       <Route path="/guide" element={<ProtectedLayout><Guide /></ProtectedLayout>} />
+
+      <Route path="/property" element={<ProtectedLayout><Property /></ProtectedLayout>} />
 
 
       {/* FALLBACK */}
