@@ -68,7 +68,11 @@ export default function SetupWizard() {
             return
         }
 
-        console.log("Coordinates saved:", data.coordinates)
+        alert(`Location saved ✔
+
+        Coordinates:
+        ${data.coordinates.lat},
+        ${data.coordinates.lng}`)
 
         /* STEP 2 — AI SETUP */
 

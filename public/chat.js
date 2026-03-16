@@ -26,12 +26,27 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const propertyId = urlParams.get("property") || "demo_property";
 
+let propertyName = "StayAssistant";
+
 let selectedLanguage = null;
 
 
 /* INIT */
 
 window.onload = async function () {
+
+    try {
+
+        const res = await fetch(`${API_BASE}/property/${propertyId}`);
+        const data = await res.json();
+
+        if (data && data.name) {
+            propertyName = data.name;
+        }
+
+    } catch (e) {
+        console.log("Property load failed");
+    }
 
     const messages = document.getElementById("messages");
 
@@ -41,7 +56,7 @@ window.onload = async function () {
 <div class="bot-avatar">🤖</div>
 
 <div class="bot-message">
-Hello 👋 Welcome to Ocean View Apartment.<br><br>
+Hello 👋 Welcome to ${propertyName}.<br><br>
 Please choose your language:
 </div>
 
