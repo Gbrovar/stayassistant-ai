@@ -1,3 +1,5 @@
+const API_BASE = window.location.origin
+
 const conversationId = crypto.randomUUID();
 
 /* DEMO VISITOR ID */
@@ -155,7 +157,7 @@ async function showQuickActions() {
 
     try {
 
-        const response = await fetch(`/property/${propertyId}/suggestions?lang=${selectedLanguage}`);
+        const response = await fetch(`${API_BASE}/property/${propertyId}/suggestions?lang=${selectedLanguage}`);
 
         const data = await response.json();
 
@@ -344,7 +346,7 @@ async function showRecommendations(text) {
 
     try {
 
-        const response = await fetch(`/property/${propertyId}/places/${type}`);
+        const response = await fetch(`${API_BASE}/property/${propertyId}/places/${type}`);
 
         const data = await response.json();
 
@@ -671,7 +673,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     try {
 
-        const response = await fetch("/chat", {
+        const response = await fetch(`${API_BASE}/chat`, {
 
             method: "POST",
 
