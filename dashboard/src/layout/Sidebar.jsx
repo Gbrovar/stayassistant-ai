@@ -1,3 +1,34 @@
+import { Link } from "react-router-dom"
+
+export default function Sidebar(){
+
+  return(
+
+    <aside className="sidebar">
+
+      <h2 className="logo">StayAssistant</h2>
+
+      <nav>
+
+        <Link to="/analytics">Analytics</Link>
+
+        <Link to="/conversations">Conversations</Link>
+
+        <Link to="/faq">FAQ</Link>
+
+        <Link to="/preview">Widget</Link>
+
+        <Link to="/billing">Billing</Link>
+
+      </nav>
+
+    </aside>
+
+  )
+
+}
+
+/*
 import {Link} from "react-router-dom"
 
 export default function Sidebar(){
@@ -40,3 +71,5 @@ export default function Sidebar(){
   )
 
 }
+
+*/
