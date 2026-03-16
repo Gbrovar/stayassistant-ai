@@ -36,9 +36,16 @@ async function loadProperty(propertyId) {
     property = await getProperty("demo_property") || properties["demo_property"]
   }
 
-  // 4️⃣ cache result
+  // 4️⃣ cache result with size protection
   if (property) {
+
+    if (propertyCache.size > 500) {
+      propertyCache.clear()
+      console.log("Property cache cleared")
+    }
+
     propertyCache.set(propertyId, property)
+
   }
 
   return property
