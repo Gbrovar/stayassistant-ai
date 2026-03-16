@@ -72,14 +72,6 @@ export default function App(){
 
       <Route path="/analytics" element={<ProtectedLayout><AnalyticsDashboard /></ProtectedLayout>}/>
 
-      <Route path="/insights" element={<ProtectedLayout><Insights/></ProtectedLayout>}/>
-
-      <Route path="/conversations" element={<ProtectedLayout><Conversations/></ProtectedLayout>}/>
-
-      <Route path="/faq" element={<ProtectedLayout><FAQEditor/></ProtectedLayout>}/>
-
-      <Route path="/recommendations" element={<ProtectedLayout><Recommendations/></ProtectedLayout>}/>
-
       <Route path="/branding" element={<ProtectedLayout><Branding/></ProtectedLayout>}/>
 
       <Route path="/setupwizard" element={<ProtectedLayout><SetupWizard/></ProtectedLayout>}/>
@@ -101,7 +93,7 @@ export default function App(){
 
       {/* FALLBACK */}
 
-      <Route path="*" element={<Navigate to="/login"/>}/>
+      <Route path="*" element={<Navigate to="/analytics"/>}/>
 
     </Routes>
 
