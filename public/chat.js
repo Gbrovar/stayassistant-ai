@@ -44,6 +44,12 @@ window.onload = async function () {
             propertyName = data.name;
         }
 
+        const header = document.getElementById("chat-property-name")
+
+        if (header) {
+            header.innerText = propertyName
+        }
+
     } catch (e) {
         console.log("Property load failed");
     }
@@ -93,7 +99,12 @@ function selectLanguage(lang) {
 
     const messages = document.getElementById("messages");
 
-    messages.innerHTML += `<div class="message user">You: ${lang}</div>`;
+    let youText = "You"
+
+    if (lang === "Español") youText = "Tú"
+    if (lang === "Deutsch") youText = "Du"
+
+    messages.innerHTML += `<div class="message user">${youText}: ${lang}</div>`;
 
     const buttons = document.getElementById("languageButtons");
 
@@ -172,7 +183,14 @@ async function showQuickActions() {
 
     try {
 
-        const response = await fetch(`${API_BASE}/property/${propertyId}/suggestions?lang=${selectedLanguage}`);
+        let langCode = "en"
+
+        if (selectedLanguage === "Español") langCode = "es"
+        if (selectedLanguage === "Deutsch") langCode = "de"
+
+        const response = await fetch(
+            `${API_BASE}/property/${propertyId}/suggestions?lang=${langCode}`
+        );
 
         const data = await response.json();
 

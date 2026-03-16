@@ -1684,7 +1684,7 @@ app.post("/property/setup", authenticate, async (req, res) => {
     const geoRes = await fetch(geoUrl, {
       signal: controller.signal
     })
-    
+
     const geoData = await geoRes.json()
 
     if (!geoData.results?.length) {
@@ -1708,6 +1708,27 @@ app.post("/property/setup", authenticate, async (req, res) => {
     property.services = services || []
 
     await createProperty(property)
+
+    /* CLEAR PLACES CACHE AFTER LOCATION CHANGE */
+
+    const placeTypes = [
+      "restaurants",
+      "cafes",
+      "bars",
+      "activities",
+      "parks",
+      "pharmacy",
+      "transport",
+      "supermarket"
+    ]
+
+    for (const type of placeTypes) {
+
+      const key = `stayassistant:places:${propertyId}:${type}`
+
+      await redis.del(key)
+
+    }
 
     propertyCache.delete(propertyId)
 
