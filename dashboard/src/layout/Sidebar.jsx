@@ -1,7 +1,4 @@
-
-
-
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export default function Sidebar(){
 
@@ -15,26 +12,15 @@ export default function Sidebar(){
 
         <Link to="/analytics">Analytics</Link>
 
-        <Link to="/insights">Insights</Link>
+        <Link to="/guide">Guide</Link>
 
-        <Link to="/conversations">Conversations</Link>
+        <Link to="/property">Property</Link>
 
-        <Link to="/faq">FAQ</Link>
-
-        <Link to="/recommendations">Recommendations</Link>
-
-        <Link to="/branding">Branding</Link>
-
-        <Link to="/setupwizard">Setup</Link>
-
-        <Link to="/preview">Preview</Link>
+        <Link to="/assistant">Assistant</Link>
 
         <Link to="/install">Install</Link>
 
         <Link to="/billing">Billing</Link>
-
-        <Link to="/Onboarding">Onboarding</Link>
-
 
       </nav>
 

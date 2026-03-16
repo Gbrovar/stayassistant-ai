@@ -97,7 +97,7 @@ export default function FAQEditor() {
 
         <div>
 
-            <h1>FAQ Editor</h1>
+            <h2>FAQ</h2>
             
 
             <Card>
