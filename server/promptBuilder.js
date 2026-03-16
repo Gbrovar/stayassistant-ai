@@ -22,8 +22,10 @@ Respond in: ${userLanguage || "English"}
 PROPERTY
 
 Property name: ${property.name}
-Location: ${property.location}
-Type: ${property.type}
+Address: ${property.address || "Unknown"}
+City: ${property.city || ""}
+Country: ${property.country || ""}
+Type: ${property.type || "accommodation"}
 
 TIME CONTEXT
 
