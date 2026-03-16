@@ -1,39 +1,42 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { API_URL } from "../api/config"
 
-export default function Insights(){
+export default function Insights() {
 
   const propertyId = localStorage.getItem("propertyId")
   const token = localStorage.getItem("token")
 
-  const [suggestions,setSuggestions] = useState([])
+  const [suggestions, setSuggestions] = useState([])
 
-  async function addToFAQ(question){
+  const navigate = useNavigate()
 
-    await fetch(`${API_URL}/property/${propertyId}/faq`,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`
+  async function addToFAQ(question, answer) {
+
+    await fetch(`${API_URL}/property/${propertyId}/faq`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
-      body:JSON.stringify({
+      body: JSON.stringify({
         question,
-        answer:""
+        answer
       })
     })
 
-    alert("Added to FAQ")
+    navigate("/guide")
 
   }
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    async function load(){
+    async function load() {
 
       const res = await fetch(
-        `${API_URL}/analytics/${propertyId}/faq-suggestions`,
+        `${API_URL}/analytics/${propertyId}/faq-suggestions-ai`,
         {
-          headers:{Authorization:`Bearer ${token}`}
+          headers: { Authorization: `Bearer ${token}` }
         }
       )
 
@@ -45,10 +48,10 @@ export default function Insights(){
 
     load()
 
-  },[propertyId,token])
+  }, [propertyId, token])
 
 
-  return(
+  return (
 
     <div>
 
@@ -58,7 +61,7 @@ export default function Insights(){
         The AI detected questions guests frequently ask but are not yet covered in your FAQ.
       </p>
 
-      {suggestions.length===0 && (
+      {suggestions.length === 0 && (
 
         <div className="analytics-card">
           No new suggestions yet.
@@ -66,7 +69,7 @@ export default function Insights(){
 
       )}
 
-      {suggestions.map(s=>(
+      {suggestions.map(s => (
 
         <div key={s.question} className="analytics-card">
 
@@ -76,9 +79,13 @@ export default function Insights(){
 
           <h3>{s.question}</h3>
 
+          <p className="suggested-answer">
+            {s.suggested_answer}
+          </p>
+
           <button
             className="action-btn"
-            onClick={()=>addToFAQ(s.question)}
+            onClick={() => addToFAQ(s.question, s.suggested_answer)}
           >
             Add to FAQ
           </button>

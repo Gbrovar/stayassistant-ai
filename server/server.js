@@ -1322,6 +1322,58 @@ app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res)
 
 })
 
+/* --- FAQ SUGGESTIONS AI --- */
+app.get("/analytics/:propertyId/faq-suggestions-ai", async (req, res) => {
+
+  const { propertyId } = req.params
+
+  try {
+
+    const suggestions = await getFaqSuggestions(propertyId)
+
+    const enhanced = []
+
+    for (const s of suggestions) {
+
+      const completion = await openai.chat.completions.create({
+
+        model: "gpt-4o-mini",
+
+        messages: [
+          {
+            role: "system",
+            content: "You are a hotel concierge assistant."
+          },
+          {
+            role: "user",
+            content: `Guests often ask: "${s.question}". 
+            Write a helpful concierge style answer.`
+          }
+        ]
+
+      })
+
+      enhanced.push({
+
+        question: s.question,
+        count: s.count,
+        suggested_answer: completion.choices[0].message.content
+
+      })
+
+    }
+
+    res.json({ suggestions: enhanced })
+
+  } catch (err) {
+
+    console.error(err)
+    res.status(500).json({ error: "AI suggestions failed" })
+
+  }
+
+})
+
 /* --- GET ONBOARDING --- */
 app.get("/onboarding/status", authenticate, async (req, res) => {
 
