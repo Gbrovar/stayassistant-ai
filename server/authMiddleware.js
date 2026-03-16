@@ -14,7 +14,7 @@ export function authenticate(req,res,next){
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "stayassistant_secret"
+      process.env.JWT_SECRET
     )
 
     req.propertyId = decoded.propertyId
