@@ -1693,6 +1693,16 @@ async function saveSubscription(propertyId, data) {
 
   await redis.set(key, JSON.stringify(data))
 
+  /* --- CREATE SUBSCRIPTION INDEX --- */
+
+  if (data.stripeSubscription) {
+
+    const indexKey = `stayassistant:subscription_index:${data.stripeSubscription}`
+
+    await redis.set(indexKey, propertyId)
+
+  }
+
 }
 
 /* --- STRIPE WEBHOOK --- */
@@ -1749,21 +1759,21 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
       const stripeSubId = subscription.id
 
-      const keys = await redis.keys("stayassistant:subscription:*")
+      const propertyId = await redis.get(
+        `stayassistant:subscription_index:${stripeSubId}`
+      )
 
-      for (const key of keys) {
+      if (propertyId) {
+
+        const key = `stayassistant:subscription:${propertyId}`
 
         const sub = JSON.parse(await redis.get(key))
 
-        if (sub.stripeSubscription === stripeSubId) {
+        sub.status = subscription.status
 
-          sub.status = subscription.status
+        await redis.set(key, JSON.stringify(sub))
 
-          await redis.set(key, JSON.stringify(sub))
-
-          console.log("Subscription updated:", key)
-
-        }
+        console.log("Subscription updated:", propertyId)
 
       }
 
@@ -1773,26 +1783,22 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
     if (event.type === "customer.subscription.deleted") {
 
-      const subscription = event.data.object
-
       const stripeSubId = subscription.id
 
-      const keys = await redis.keys("stayassistant:subscription:*")
+      const propertyId = await redis.get(
+        `stayassistant:subscription_index:${stripeSubId}`
+      )
 
-      for (const key of keys) {
+      if (propertyId) {
 
-        const sub = JSON.parse(await redis.get(key))
+        const key = `stayassistant:subscription:${propertyId}`
 
-        if (sub.stripeSubscription === stripeSubId) {
+        await redis.set(key, JSON.stringify({
+          plan: "free",
+          status: "cancelled"
+        }))
 
-          await redis.set(key, JSON.stringify({
-            plan: "free",
-            status: "cancelled"
-          }))
-
-          console.log("Subscription cancelled:", key)
-
-        }
+        console.log("Subscription cancelled:", propertyId)
 
       }
 
@@ -1802,25 +1808,23 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
     if (event.type === "invoice.payment_failed") {
 
-      const invoice = event.data.object
-
       const stripeSubId = invoice.subscription
 
-      const keys = await redis.keys("stayassistant:subscription:*")
+      const propertyId = await redis.get(
+        `stayassistant:subscription_index:${stripeSubId}`
+      )
 
-      for (const key of keys) {
+      if (propertyId) {
+
+        const key = `stayassistant:subscription:${propertyId}`
 
         const sub = JSON.parse(await redis.get(key))
 
-        if (sub.stripeSubscription === stripeSubId) {
+        sub.status = "payment_failed"
 
-          sub.status = "payment_failed"
+        await redis.set(key, JSON.stringify(sub))
 
-          await redis.set(key, JSON.stringify(sub))
-
-          console.log("Payment failed:", key)
-
-        }
+        console.log("Payment failed:", propertyId)
 
       }
 
