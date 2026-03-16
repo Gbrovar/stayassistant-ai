@@ -1336,6 +1336,28 @@ app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res)
 
 })
 
+async function getFaqSuggestions(propertyId) {
+
+  const key = `stayassistant:analytics:${propertyId}:questions`
+
+  const data = await redis.zRangeWithScores(
+    key,
+    0,
+    9,
+    { REV: true }
+  )
+
+  const suggestions = data
+    .filter(i => i.score >= 3)
+    .map(i => ({
+      question: i.value,
+      count: i.score
+    }))
+
+  return suggestions
+
+}
+
 /* --- FAQ SUGGESTIONS AI --- */
 app.get("/analytics/:propertyId/faq-suggestions-ai", async (req, res) => {
 

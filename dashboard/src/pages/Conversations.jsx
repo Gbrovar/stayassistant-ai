@@ -36,6 +36,18 @@ export default function Conversations() {
     return <div>Loading conversations...</div>
   }
 
+  if (conversations.length === 0) {
+    return (
+      <div>
+        <h2>Guest Conversations</h2>
+
+        <div className="analytics-card">
+          No guest conversations yet.
+        </div>
+      </div>
+    )
+  }
+
   return (
 
     <div className="conversations-page">
@@ -47,25 +59,21 @@ export default function Conversations() {
         <div className="conversations-list">
 
           {conversations.map(c => (
+
             <div
               key={c.id}
               className="conversation-item"
               onClick={() => setSelected(c)}
             >
-              <div
-                key={c.id}
-                className="conversation-item"
-                onClick={() => setSelected(c)}
-              >
 
-                <strong>Guest</strong>
+              <strong>Guest</strong>
 
-                <p className="conversation-preview">
-                  {c.preview}
-                </p>
+              <p className="conversation-preview">
+                {c.preview}
+              </p>
 
-              </div>
             </div>
+
           ))}
 
         </div>
