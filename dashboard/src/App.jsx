@@ -18,6 +18,7 @@ import Insights from "./pages/Insights"
 import SetupWizard from "./pages/SetupWizard"
 import Guide from "./pages/Guide"
 import Property from "./pages/Property"
+import Assistant from "./pages/Assistant"
 
 
 function ProtectedLayout({children}){
@@ -86,15 +87,15 @@ export default function App(){
 
       <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
 
-      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+      <Route path="/billing" element={<ProtectedLayout><Billing/></ProtectedLayout>} />
 
       <Route path="/onboarding" element={<ProtectedLayout><Onboarding/></ProtectedLayout>}/>
 
-      <Route path="/guide" element={<ProtectedLayout><Guide /></ProtectedLayout>} />
+      <Route path="/guide" element={<ProtectedLayout><Guide/></ProtectedLayout>} />
 
-      <Route path="/property" element={<ProtectedLayout><Property /></ProtectedLayout>} />
+      <Route path="/property" element={<ProtectedLayout><Property/></ProtectedLayout>} />
 
-      <Route path="/assistant" element={<ProtectedLayout><Assistant /></ProtectedLayout>} />
+      <Route path="/assistant" element={<ProtectedLayout><Assistant/></ProtectedLayout>} />
 
       {/* FALLBACK */}
 
