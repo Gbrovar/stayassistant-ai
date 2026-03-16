@@ -6,6 +6,8 @@ export default function Conversations() {
   const propertyId = localStorage.getItem("propertyId")
   const token = localStorage.getItem("token")
 
+  console.log(token)
+
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
