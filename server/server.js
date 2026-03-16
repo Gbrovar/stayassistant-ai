@@ -1149,16 +1149,15 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRange(
+    const ids = await redis.zRevRange(
       listKey,
       0,
-      20,
-      { REV: true }
+      20
     )
 
     const conversations = []
 
-    for (const id of ids.slice(0, 20)) {
+    for (const id of ids) {
 
       const key = `stayassistant:chat:${propertyId}:${id}`
 
@@ -1359,7 +1358,7 @@ async function getFaqSuggestions(propertyId) {
 }
 
 /* --- FAQ SUGGESTIONS AI --- */
-app.get("/analytics/:propertyId/faq-suggestions-ai", async (req, res) => {
+app.get("/analytics/:propertyId/faq-suggestions-ai", authenticate, async (req, res) => {
 
   const { propertyId } = req.params
 
