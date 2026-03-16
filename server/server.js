@@ -1069,22 +1069,42 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const context = detectContext(hour);
 
-    const completion = await openai.chat.completions.create({
+    let completion;
 
-      model: "gpt-4o-mini",
+    try {
 
-      messages: [
-        {
-          role: "system",
-          content: buildPrompt(property, userLanguage, context, knowledge) + "\n" + nearbyContext
-        },
+      completion = await Promise.race([
 
-        ...history
+        openai.chat.completions.create({
 
-      ]
+          model: "gpt-4o-mini",
 
-    });
+          messages: [
+            {
+              role: "system",
+              content: buildPrompt(property, userLanguage, context, knowledge) + "\n" + nearbyContext
+            },
+            ...history
+          ]
 
+        }),
+
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("AI timeout")), 8000)
+        )
+
+      ])
+
+    } catch (err) {
+
+      console.log("OpenAI timeout or error:", err.message)
+
+      return res.json({
+        reply: "I'm sorry, I'm having trouble answering right now. Please try again in a moment."
+      })
+
+    }
+    
     const reply = completion.choices[0].message.content;
 
     let detectedLanguage = userLanguage;
