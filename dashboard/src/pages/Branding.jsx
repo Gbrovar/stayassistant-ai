@@ -16,7 +16,7 @@ export default function Branding() {
 
         async function load() {
 
-            const res = await fetch(`${API_URL}/property/${propertyId}/branding` , {
+            const res = await fetch(`${API_URL}/property/${propertyId}/branding`, {
                 headers: {
                     "Authorization": "Bearer " + getToken()
                 }
@@ -37,7 +37,7 @@ export default function Branding() {
 
     async function save() {
 
-        await fetch(`${API_URL}/property/${propertyId}/branding` , {
+        await fetch(`${API_URL}/property/${propertyId}/branding`, {
 
             method: "POST",
 
@@ -55,6 +55,8 @@ export default function Branding() {
         })
 
         alert("Branding saved")
+
+        window.location.reload()
 
     }
 
