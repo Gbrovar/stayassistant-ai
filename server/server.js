@@ -423,7 +423,7 @@ app.post("/auth/login", async (req, res) => {
 
   const token = jwt.sign(
     { propertyId: user.propertyId },
-    process.env.JWT_SECRET || "stayassistant_secret",
+    process.env.JWT_SECRET,
     { expiresIn: "7d" }
   )
 
@@ -491,7 +491,7 @@ app.post("/auth/register", async (req, res) => {
 
   const token = jwt.sign(
     { propertyId },
-    process.env.JWT_SECRET || "stayassistant_secret",
+    process.env.JWT_SECRET,
     { expiresIn: "7d" }
   )
 
