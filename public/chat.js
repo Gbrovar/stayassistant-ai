@@ -28,7 +28,21 @@ const propertyId = urlParams.get("property") || "demo_property";
 
 let propertyName = "StayAssistant";
 
-let selectedLanguage = null;
+let selectedLanguage = detectBrowserLanguage();
+
+function detectBrowserLanguage() {
+
+    const lang = navigator.language || navigator.userLanguage;
+
+    if (!lang) return "English";
+
+    if (lang.startsWith("es")) return "Español";
+
+    if (lang.startsWith("de")) return "Deutsch";
+
+    return "English";
+
+}
 
 
 /* INIT */
@@ -56,67 +70,31 @@ window.onload = async function () {
 
     const messages = document.getElementById("messages");
 
+    let welcomeText = "Hello 👋 Welcome to " + propertyName
+
+    if (selectedLanguage === "Español")
+        welcomeText = "Hola 👋 Bienvenido a " + propertyName
+
+    if (selectedLanguage === "Deutsch")
+        welcomeText = "Hallo 👋 Willkommen bei " + propertyName
+
     messages.innerHTML += `
-<div class="bot-wrapper">
+        <div class="bot-wrapper">
 
-<div class="bot-avatar">🤖</div>
+        <div class="bot-avatar">🤖</div>
 
-<div class="bot-message">
-Welcome 👋 to ${propertyName}.<br><br>
-Please choose your language:
-</div>
+        <div class="bot-message">
+        ${welcomeText}
+        </div>
 
-</div>
-
-<div id="languageButtons">
-
-<div class="language-card" onclick="selectLanguage('English')">
-<img class="flag" src="https://flagcdn.com/gb.svg">
-<div class="language-name">English</div>
-</div>
-
-<div class="language-card" onclick="selectLanguage('Español')">
-<img class="flag" src="https://flagcdn.com/es.svg">
-<div class="language-name">Español</div>
-</div>
-
-<div class="language-card" onclick="selectLanguage('Deutsch')">
-<img class="flag" src="https://flagcdn.com/de.svg">
-<div class="language-name">Deutsch</div>
-</div>
-
-</div>
-`;
-
-};
-
-
-/* SELECT LANGUAGE */
-
-function selectLanguage(lang) {
-
-    selectedLanguage = lang;
-
-    const messages = document.getElementById("messages");
-
-    let youText = "You"
-
-    if (lang === "Español") youText = "Tú"
-    if (lang === "Deutsch") youText = "Du"
-
-    messages.innerHTML += `<div class="message user">${youText}: ${lang}</div>`;
-
-    const buttons = document.getElementById("languageButtons");
-
-    if (buttons) buttons.remove();
+        </div>
+        `;
 
     translateUI();
-
     showQuickActions();
-
     showProactiveSuggestions();
 
-}
+};
 
 
 /* TRANSLATE UI */
@@ -537,10 +515,19 @@ async function showRecommendations(text) {
         console.error("Recommendation error", error);
 
     }
-
+    
+    messages.scrollTop = messages.scrollHeight;
+ 
 }
 
 /* PROACTIVE SUGGESTIONS */
+const hour = new Date().getHours()
+
+let context = "day"
+
+if (hour >= 22 || hour <= 5) context = "night"
+if (hour >= 6 && hour <= 11) context = "morning"
+if (hour >= 12 && hour <= 18) context = "afternoon"
 
 function showProactiveSuggestions() {
 
@@ -550,17 +537,33 @@ function showProactiveSuggestions() {
 
     if (selectedLanguage === "Español") {
 
-        suggestions = [
+        if (context === "night") {
 
-            { label: "🛒 Supermercado cercano", value: "Where is the nearest supermarket?" },
+            suggestions = [
 
-            { label: "🍽 Restaurantes cercanos", value: "Recommend restaurants nearby" },
+                { label: "🍽 Restaurantes abiertos", value: "Restaurants open now" },
 
-            { label: "🚕 Pedir un taxi", value: "How can I get a taxi?" },
+                { label: "🍸 Bares cercanos", value: "Nearby bars" },
 
-            { label: "💊 Farmacia cercana", value: "Where is the nearest pharmacy?" }
+                { label: "🚕 Pedir taxi", value: "Call a taxi" }
 
-        ];
+            ];
+
+        } else {
+
+            suggestions = [
+
+                { label: "🛒 Supermercado cercano", value: "Where is the nearest supermarket?" },
+
+                { label: "🍽 Restaurantes cercanos", value: "Recommend restaurants nearby" },
+
+                { label: "🚕 Pedir un taxi", value: "How can I get a taxi?" },
+
+                { label: "💊 Farmacia cercana", value: "Where is the nearest pharmacy?" }
+
+            ];
+
+        }
 
     }
 
@@ -727,7 +730,12 @@ async function sendMessage(forcedText = null, displayLabel = null) {
                 conversationId: conversationId,
                 propertyId: propertyId,
                 hour: hour,
-                visitorId: visitorId
+                visitorId: visitorId,
+
+                guestContext: {
+                    arrival: localStorage.getItem("stayassistant_arrival"),
+                    departure: localStorage.getItem("stayassistant_departure")
+                }
 
             })
 
