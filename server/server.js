@@ -1145,7 +1145,7 @@ app.get("/conversations", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRange(listKey, 0, 19, { REV: true })
+    const ids = await redis.zRangeWithScores(listKey, 0, 19, { REV: true })
 
     const conversations = []
 
