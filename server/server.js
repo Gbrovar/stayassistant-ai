@@ -1170,7 +1170,8 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
       try {
         parsed = JSON.parse(history)
-      } catch {
+      } catch (err) {
+        console.log("Invalid conversation history:", key)
         continue
       }
 
