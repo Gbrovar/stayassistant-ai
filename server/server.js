@@ -258,7 +258,13 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${placeType}&key=${process.env.GOOGLE_PLACES_KEY}`;
 
-    const response = await fetch(url);
+    const controller = new AbortController()
+
+    setTimeout(() => controller.abort(), 5000)
+
+    const response = await fetch(url, {
+      signal: controller.signal
+    })
 
     const data = await response.json();
 
@@ -1045,7 +1051,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const url =
           `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
 
-        const response = await fetch(url)
+        const controller = new AbortController()
+
+        setTimeout(() => controller.abort(), 5000)
+
+        const response = await fetch(url, {
+          signal: controller.signal
+        })
 
         const data = await response.json()
 
@@ -1104,7 +1116,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       })
 
     }
-    
+
     const reply = completion.choices[0].message.content;
 
     let detectedLanguage = userLanguage;
@@ -1604,7 +1616,13 @@ app.post("/property/setup", authenticate, async (req, res) => {
     const geoUrl =
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.GOOGLE_GEOCODING_KEY}`
 
-    const geoRes = await fetch(geoUrl)
+    const controller = new AbortController()
+
+    setTimeout(() => controller.abort(), 5000)
+
+    const geoRes = await fetch(geoUrl, {
+      signal: controller.signal
+    })
     const geoData = await geoRes.json()
 
     if (!geoData.results?.length) {
