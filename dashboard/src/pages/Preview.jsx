@@ -1,5 +1,6 @@
 import Card from "../components/Card"
 import { getPropertyId } from "../api/auth"
+import { Link } from "react-router-dom"
 
 export default function Preview() {
 
@@ -15,8 +16,7 @@ export default function Preview() {
       <h2>Preview</h2>
 
       <p className="setup-success">
-        Your AI concierge has been automatically configured.
-        You can edit FAQ and recommendations anytime in the dashboard.
+        Your AI concierge is ready. Test the widget and customize its appearance below.
       </p>
 
       <Card>
@@ -28,6 +28,22 @@ export default function Preview() {
         />
 
       </Card>
+
+      <div className="preview-actions">
+
+        <Link to="/assistant">
+          <button className="action-btn">
+            Customize appearance
+          </button>
+        </Link>
+
+        <Link to="/install">
+          <button className="action-btn">
+            Install widget
+          </button>
+        </Link>
+
+      </div>
 
     </div>
 
