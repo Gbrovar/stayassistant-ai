@@ -1684,6 +1684,7 @@ app.post("/property/setup", authenticate, async (req, res) => {
     const geoRes = await fetch(geoUrl, {
       signal: controller.signal
     })
+    
     const geoData = await geoRes.json()
 
     if (!geoData.results?.length) {
