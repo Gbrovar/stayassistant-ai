@@ -12,7 +12,7 @@ export default function Preview() {
 
     <div>
 
-      <h1>Widget Preview</h1>
+      <h2>Preview</h2>
 
       <p className="setup-success">
         Your AI concierge has been automatically configured.

@@ -63,7 +63,7 @@ export default function Branding() {
 
         <div>
 
-            <h1>Branding</h1>
+            <h2>Branding</h2>
 
             <Card>
 

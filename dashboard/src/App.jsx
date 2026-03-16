@@ -94,6 +94,7 @@ export default function App(){
 
       <Route path="/property" element={<ProtectedLayout><Property /></ProtectedLayout>} />
 
+      <Route path="/assistant" element={<ProtectedLayout><Assistant /></ProtectedLayout>} />
 
       {/* FALLBACK */}
 
