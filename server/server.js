@@ -210,7 +210,7 @@ app.get("/property/:id/places/:type", async (req, res) => {
 
   const { lat, lng } = property.coordinates;
 
-  const cacheKey = `places:${propertyId}:${type}`;
+  const cacheKey = `stayassistant:places:${propertyId}:${type}`;
 
   /* --- REDIS CACHE --- */
 
