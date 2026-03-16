@@ -680,7 +680,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const userMessage = req.body.message || "";
     const userLanguage = req.body.language || null;
-    const conversationId = req.body.conversationId || "default";
+    //const conversationId = req.body.conversationId || "default";
+    const conversationId = req.body.conversationId || "conv_" + Date.now()
+    /**************/
+
     const propertyId = req.body.propertyId || "demo_property";
     const hour = req.body.hour || null;
 
@@ -865,6 +868,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
         score: Date.now(),
         value: conversationId
       })
+
+      await redis.zRemRangeByRank(listKey, 0, -201)
 
     } catch (err) {
 
@@ -1149,12 +1154,7 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRange(
-      listKey,
-      0,
-      19,
-      { REV: true }
-    )
+    const ids = await redis.zRange(listKey, 0, 19, { REV: true })
 
     const conversations = []
 
@@ -1166,7 +1166,13 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
       if (!history) continue
 
-      const parsed = JSON.parse(history)
+      let parsed
+
+      try {
+        parsed = JSON.parse(history)
+      } catch {
+        continue
+      }
 
       const preview =
         parsed.find(m => m.role === "user")?.content || ""
