@@ -1150,12 +1150,7 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
     const listKey = `stayassistant:conversations:${propertyId}`
 
     // obtener últimos 20 ids ordenados por score
-    const ids = await redis.zRange(
-      listKey,
-      0,
-      19,
-      { REV: true }
-    )
+    const ids = await redis.zRevRange(listKey, 0, 19)
 
     const conversations = []
 
