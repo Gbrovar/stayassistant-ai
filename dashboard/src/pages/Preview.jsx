@@ -1,13 +1,37 @@
+import { useEffect, useState } from "react"
 import Card from "../components/Card"
-import { getPropertyId } from "../api/auth"
+import { getPropertyId, getToken } from "../api/auth"
+import { API_URL } from "../api/config"
 import { Link } from "react-router-dom"
 
 export default function Preview() {
 
   const propertyId = getPropertyId()
 
+  const [widgetInstalled, setWidgetInstalled] = useState(true)
+
   const previewUrl =
     `${window.location.origin}/chat.html?embed=true&property=${propertyId}`
+
+  useEffect(() => {
+
+    async function loadStatus(){
+
+      const res = await fetch(`${API_URL}/onboarding/status`,{
+        headers:{
+          Authorization:`Bearer ${getToken()}`
+        }
+      })
+
+      const data = await res.json()
+
+      setWidgetInstalled(data.widget)
+
+    }
+
+    loadStatus()
+
+  },[])
 
   return (
 
@@ -15,9 +39,21 @@ export default function Preview() {
 
       <h2>Preview</h2>
 
-      <p className="setup-success">
-        Your AI concierge is ready. Test the widget and customize its appearance below.
-      </p>
+      {!widgetInstalled && (
+
+        <div className="activation-banner">
+
+          ⚠ Install the widget on your website to start assisting guests.
+
+          <Link to="/install">
+            <button className="install-btn">
+              Install now
+            </button>
+          </Link>
+
+        </div>
+
+      )}
 
       <Card>
 

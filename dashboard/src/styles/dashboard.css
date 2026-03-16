@@ -317,6 +317,26 @@ body {
 
 }
 
+.activation-banner {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.install-btn {
+  padding: 8px 14px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 /* BILLING */
 
 .card {
