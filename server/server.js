@@ -1164,23 +1164,28 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
       const history = await redis.get(key)
 
-      if (!history) continue
+      if (!history) {
+        continue
+      }
 
       let parsed
 
       try {
         parsed = JSON.parse(history)
       } catch (err) {
-        console.log("Invalid conversation history:", key)
+        console.log("Invalid history:", key)
         continue
       }
 
-      const preview =
-        parsed.find(m => m.role === "user")?.content || ""
+      if (!Array.isArray(parsed)) {
+        continue
+      }
+
+      const firstUserMessage = parsed.find(m => m.role === "user")
 
       conversations.push({
         id,
-        preview,
+        preview: firstUserMessage?.content || "",
         messages: parsed
       })
 
