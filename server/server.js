@@ -1137,19 +1137,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 /* --- LIST CONVERSATIONS --- */
 
-app.get("/conversations/:propertyId", authenticate, async (req, res) => {
+app.get("/conversations", authenticate, async (req, res) => {
 
   try {
 
-    const propertyId = req.params.propertyId
-
-    if (req.propertyId !== propertyId) {
-      return res.status(403).json({ error: "forbidden" })
-    }
+    const propertyId = req.propertyId
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    // obtener últimos 20 ids ordenados por score
     const ids = await redis.zRange(
       listKey,
       0,
