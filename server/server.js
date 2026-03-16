@@ -1145,12 +1145,7 @@ app.get("/conversations", authenticate, async (req, res) => {
 
     const listKey = `stayassistant:conversations:${propertyId}`
 
-    const ids = await redis.zRange(
-      listKey,
-      0,
-      19,
-      { REV: true }
-    )
+    const ids = await redis.zRange(listKey, 0, 19, { REV: true })
 
     const conversations = []
 
@@ -1162,7 +1157,14 @@ app.get("/conversations", authenticate, async (req, res) => {
 
       if (!history) continue
 
-      const parsed = JSON.parse(history)
+      let parsed
+
+      try {
+        parsed = JSON.parse(history)
+      } catch (e) {
+        console.log("Invalid conversation JSON:", key)
+        continue
+      }
 
       const preview =
         parsed.find(m => m.role === "user")?.content || ""
