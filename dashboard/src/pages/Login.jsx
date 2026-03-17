@@ -15,7 +15,7 @@ export default function Login(){
     const token = localStorage.getItem("token")
 
     if(token){
-      navigate("/analytics")
+      navigate("/")
     }
 
   },[])
@@ -44,7 +44,7 @@ export default function Login(){
       localStorage.setItem("token",data.token)
       localStorage.setItem("propertyId",data.propertyId)
 
-      navigate("/analytics")
+      navigate("/")
 
     }else{
 

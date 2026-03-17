@@ -25,7 +25,7 @@ export default function Insights() {
       })
     })
 
-    navigate("/guide")
+    navigate("/property")
 
   }
 

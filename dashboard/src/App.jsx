@@ -3,11 +3,10 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
 
-import Analytics from "./pages/Analytics"
-import FAQEditor from "./pages/FAQEditor"
+
 import Install from "./pages/Install"
 import Branding from "./pages/Branding"
-import Recommendations from "./pages/Recommendations"
+
 import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
@@ -15,16 +14,16 @@ import Billing from "./pages/Billing"
 import Onboarding from "./pages/Onboarding"
 import Conversations from "./pages/Conversations"
 import Insights from "./pages/Insights"
-import SetupWizard from "./pages/SetupWizard"
-import Guide from "./pages/Guide"
-import Property from "./pages/Property"
-import Assistant from "./pages/Assistant"
-//import AnalyticsDashboard from "./pages/AnalyticsDashboard"
+import Recommendations from "./pages/Recommendations"
+import Analytics from "./pages/Analytics"
+import FAQEditor from "./pages/FAQEditor"
 
+import Property from "./pages/Property"
 import ConversationsPage from "./pages/ConversationsPage"
 import AnalyticsPage from "./pages/AnalyticsPage"
 import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
+import OverviewPage from "./pages/OverviewPage"
 
 
 function ProtectedLayout({ children }) {
@@ -73,13 +72,13 @@ export default function App() {
 
       {/* PROTECTED ROUTES */}
 
-      <Route path="/" element={<ProtectedLayout><div>Overview (coming soon)</div></ProtectedLayout>} />
+      <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
 
 
 
       <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
 
-      <Route path="/setupwizard" element={<ProtectedLayout><SetupWizard /></ProtectedLayout>} />
+
 
       <Route path="/preview" element={<ProtectedLayout><Preview /></ProtectedLayout>} />
 
@@ -89,11 +88,11 @@ export default function App() {
 
       <Route path="/onboarding" element={<ProtectedLayout><Onboarding /></ProtectedLayout>} />
 
-      <Route path="/guide" element={<ProtectedLayout><Guide /></ProtectedLayout>} />
+ 
 
       <Route path="/propertyOld" element={<ProtectedLayout><Property /></ProtectedLayout>} />
 
-      <Route path="/assistant" element={<ProtectedLayout><Assistant /></ProtectedLayout>} />
+
 
 
       <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />

@@ -10,21 +10,19 @@ export default function Sidebar() {
 
       <nav>
 
+        <Link to="/">Overview</Link>
+
+        <Link to="/conversations">Conversations</Link>
+
         <Link to="/analytics">Analytics</Link>
+
         <Link to="/insights">AI Insights</Link>
 
-        <Link to="/guide">Guide</Link>
-
         <Link to="/property">Property Setup</Link>
-
-        <Link to="/assistant">Assistant</Link>
 
         <Link to="/install">Install</Link>
 
         <Link to="/billing">Billing</Link>
-
-
-        <Link to="/conversations">Conversations</Link>
 
       </nav>
 
