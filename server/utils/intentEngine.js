@@ -1,16 +1,29 @@
 export function detectIntent(text) {
 
-  text = text.toLowerCase()
+  function normalize(text) {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  }
+
+  text = normalize(text)
 
   const intents = {
 
     wifi: [
       "wifi",
-      "wi-fi",
+      "wi fi",
       "internet",
       "connection",
-      "contraseña wifi",
-      "internet password"
+      "password",
+      "wifi password",
+      "internet password",
+      "clave wifi",
+      "contraseña",
+      "passwort",
+      "wlan"
     ],
 
     restaurants: [
@@ -41,16 +54,25 @@ export function detectIntent(text) {
 
     checkin: [
       "check in",
+      "checkin",
       "check-in",
       "arrival",
-      "llegada"
+      "arrive",
+      "when can i arrive",
+      "llegada",
+      "hora llegada",
+      "ankunft"
     ],
 
     checkout: [
       "check out",
       "checkout",
+      "check-out",
       "departure",
-      "salida"
+      "leave",
+      "salida",
+      "hora salida",
+      "abreise"
     ],
 
     pharmacy: [
@@ -77,17 +99,25 @@ export function detectIntent(text) {
 
   }
 
-  for (const intent in intents) {
+  const priorityOrder = [
+    "checkin",
+    "checkout",
+    "wifi",
+    "taxi",
+    "transport",
+    "restaurants",
+    "supermarket",
+    "pharmacy",
+    "activities"
+  ]
 
-    for (const keyword of intents[intent]) {
-
+  for (const intent of priorityOrder) {
+    for (const keyword of intents[intent] || []) {
       if (text.includes(keyword)) {
         return intent
       }
-
     }
-
   }
-
+  
   return "other"
 }

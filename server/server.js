@@ -890,6 +890,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const intent = detectIntent(userMessage)
 
+    console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
+    
     const allowedAIIntents = ["other", "restaurants", "activities"]
 
     if (!allowedAIIntents.includes(intent)) {
