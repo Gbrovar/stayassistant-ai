@@ -91,7 +91,7 @@ export default function App() {
 
       <Route path="/guide" element={<ProtectedLayout><Guide /></ProtectedLayout>} />
 
-      <Route path="/property" element={<ProtectedLayout><Property /></ProtectedLayout>} />
+      <Route path="/propertyOld" element={<ProtectedLayout><Property /></ProtectedLayout>} />
 
       <Route path="/assistant" element={<ProtectedLayout><Assistant /></ProtectedLayout>} />
 
