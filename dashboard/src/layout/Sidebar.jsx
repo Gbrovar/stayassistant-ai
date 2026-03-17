@@ -15,7 +15,7 @@ export default function Sidebar() {
 
         <Link to="/guide">Guide</Link>
 
-        <Link to="/property">Property</Link>
+        <Link to="/property">Property Setup</Link>
 
         <Link to="/assistant">Assistant</Link>
 

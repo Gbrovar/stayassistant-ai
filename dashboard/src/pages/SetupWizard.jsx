@@ -97,7 +97,7 @@ export default function SetupWizard() {
 
         /* STEP 3 — REDIRECT */
 
-        window.location.href = "/dashboard/preview"
+        window.location.reload()
 
     }
 
