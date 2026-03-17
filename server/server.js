@@ -855,15 +855,38 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     if (intent === "wifi") {
+      const info = property.knowledge.property_info
+
+      if (info.wifi_name && info.wifi_password) {
+        return res.json({
+          reply: `WiFi network: ${info.wifi_name}. Password: ${info.wifi_password}.`,
+          language: userLanguage
+        })
+      }
+
       return res.json({
-        reply: "WiFi is available at the property. You can find the network details in your check-in instructions.",
+        reply: "WiFi is available at the property. You can find the details in your check-in instructions.",
         language: userLanguage
       })
     }
 
+
+
     if (intent === "checkin") {
+      const info = property.knowledge.property_info
+
+      let answer = `Check-in: ${info.checkin}.`
+
+      if (info.late_checkin && info.checkin_instructions) {
+        answer += ` Late check-in: ${info.checkin_instructions}`
+      }
+
+      if (info.checkout) {
+        answer += ` Check-out: ${info.checkout}.`
+      }
+
       return res.json({
-        reply: `Check-in starts at ${property.knowledge.property_info.checkin}.`,
+        reply: answer,
         language: userLanguage
       })
     }
@@ -984,51 +1007,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
     const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}`;
-
-    /* --- CHECKIN / CHECKOUT SMART FAQ --- */
-
-    if (
-
-      normalizedMessage.includes("check in") ||
-      normalizedMessage.includes("check-in") ||
-      normalizedMessage.includes("checkin") ||
-
-      normalizedMessage.includes("check out") ||
-      normalizedMessage.includes("checkout") ||
-      normalizedMessage.includes("check-out") ||
-
-      normalizedMessage.includes("arrival") ||
-      normalizedMessage.includes("departure") ||
-
-      normalizedMessage.includes("llegada") ||
-      normalizedMessage.includes("salida")
-
-    ) {
-
-      let answer = `
-        Check-in: ${property.knowledge.property_info.checkin}
-
-        Check-out: ${property.knowledge.property_info.checkout}
-        `
-
-      // simple language adaptation (no AI cost)
-
-      if (userLanguage === "Español") {
-        answer = `Check-in: ${property.knowledge.property_info.checkin}
-        Check-out: ${property.knowledge.property_info.checkout}`
-      }
-
-      if (userLanguage === "Deutsch") {
-        answer = `Check-in: ${property.knowledge.property_info.checkin}
-        Check-out: ${property.knowledge.property_info.checkout}`
-      }
-
-      return res.json({
-        reply: answer,
-        language: userLanguage
-      })
-
-    }
 
     /* --- FAQ AUTO ANSWER --- */
 
