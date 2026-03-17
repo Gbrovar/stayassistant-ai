@@ -966,7 +966,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       })
     }
 
-    const normalizedMessage = userMessage.toLowerCase();
+    const normalizedMessage = userMessage.toLowerCase().trim();
 
     /* --- NORMALIZACION DE PREGUNTAS --- */
     function normalizeMessage(message) {
