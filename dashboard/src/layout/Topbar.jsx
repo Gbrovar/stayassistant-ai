@@ -1,14 +1,31 @@
 export default function Topbar() {
 
+  const propertyName = localStorage.getItem("propertyName") || "My Property"
+
   return (
 
     <div className="topbar">
 
-      <h3>{localStorage.getItem("propertyId")}</h3>
+      <div className="topbar-left">
+        <h3 className="topbar-title">{propertyName}</h3>
+      </div>
 
-    
-      <div className="property-name">
-        Ocean View Apartments
+      <div className="topbar-right">
+
+        <div className="plan-badge">
+          Free Plan
+        </div>
+
+        <button
+          className="btn btn-secondary"
+          onClick={() => {
+            localStorage.clear()
+            window.location.href = "/login"
+          }}
+        >
+          Logout
+        </button>
+
       </div>
 
     </div>

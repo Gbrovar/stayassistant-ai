@@ -34,6 +34,7 @@ export default function Register(){
 
       localStorage.setItem("token",data.token)
       localStorage.setItem("propertyId",data.propertyId)
+      localStorage.setItem("propertyName", propertyName)
 
       navigate("/property")
 
