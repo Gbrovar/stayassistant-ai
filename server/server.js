@@ -825,6 +825,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const intent = detectIntent(userMessage)
 
+    const allowedAIIntents = ["other", "restaurants", "activities"]
+
+    if (!allowedAIIntents.includes(intent)) {
+      console.log("🚫 AI BLOCKED FOR INTENT:", intent)
+    }
+
     if (intent === "other" && userMessage.length < 20) {
       return res.json({
         reply: "Could you please provide more details so I can assist you better?",
@@ -949,16 +955,35 @@ app.post("/chat", chatLimiter, async (req, res) => {
       content: userMessage
     });
 
+    const lastUserMessage = history
+      .filter(m => m.role === "user")
+      .slice(-2)[0]?.content
+
+    if (lastUserMessage && lastUserMessage === userMessage) {
+      return res.json({
+        reply: "You've already asked that. Let me know if you need more details.",
+        language: userLanguage
+      })
+    }
+
     const normalizedMessage = userMessage.toLowerCase();
 
     /* --- NORMALIZACION DE PREGUNTAS --- */
-    const normalizedQuestion = normalizedMessage
-      .replace(/[^\w\s]/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+    function normalizeMessage(message) {
+
+      return message
+        .toLowerCase()
+        .replace(/[^\w\s]/g, "")
+        .replace(/\b(what|is|the|please|can|you|tell|me)\b/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+
+    }
+
+    const normalizedQuestion = normalizeMessage(userMessage)
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
-    const cacheKey = `stayassistant:cache:${propertyId}:${normalizedQuestion}`;
+    const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}`;
 
     /* --- CHECKIN / CHECKOUT SMART FAQ --- */
 
@@ -1040,6 +1065,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     if (cachedReply) {
 
       console.log("AI cache hit");
+      console.log("✅ AI CACHE HIT:", intent)
 
       history.push({
         role: "assistant",
@@ -1190,9 +1216,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
 
-      await redis.set(cacheKey, shortReply, {
-        EX: 60 * 60 * 24
-      });
+      if (shortReply.length > 20) {
+        await redis.set(cacheKey, shortReply, {
+          EX: 60 * 60 * 24
+        });
+      }
 
     } catch (err) {
 
