@@ -22,6 +22,9 @@ export default function Sidebar(){
 
         <Link to="/billing">Billing</Link>
 
+
+        <Link to="/conversations">Conversations</Link>
+
       </nav>
 
     </aside>

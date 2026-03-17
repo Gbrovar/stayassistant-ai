@@ -44,6 +44,14 @@ function detectBrowserLanguage() {
 
 }
 
+const savedLang = localStorage.getItem("stayassistant_lang");
+
+if (savedLang) {
+    selectedLanguage = savedLang;
+} else {
+    localStorage.setItem("stayassistant_lang", selectedLanguage);
+}
+
 
 /* INIT */
 
@@ -174,7 +182,31 @@ async function showQuickActions() {
 
         const container = document.getElementById("quick-actions");
 
-        const suggestions = data.suggestions;
+        let suggestions = data.suggestions || [];
+
+        /* fallback translation if backend fails */
+
+        if (selectedLanguage === "Español") {
+
+            suggestions = suggestions.map(s => {
+
+                if (s.label === "How do I check in?")
+                    return { label: "¿Cómo hago el check-in?", value: s.value };
+
+                if (s.label === "Is there Wi-Fi available?")
+                    return { label: "¿Hay Wi-Fi disponible?", value: s.value };
+
+                if (s.label === "Airport transfer service")
+                    return { label: "Servicio de traslado al aeropuerto", value: s.value };
+
+                if (s.label === "Bike rental near the beach")
+                    return { label: "Alquiler de bicicletas cerca de la playa", value: s.value };
+
+                return s;
+
+            });
+
+        }
 
         const MAX_VISIBLE = 4;
 
@@ -515,9 +547,9 @@ async function showRecommendations(text) {
         console.error("Recommendation error", error);
 
     }
-    
+
     messages.scrollTop = messages.scrollHeight;
- 
+
 }
 
 /* PROACTIVE SUGGESTIONS */

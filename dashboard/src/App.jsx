@@ -21,6 +21,8 @@ import Property from "./pages/Property"
 import Assistant from "./pages/Assistant"
 import AnalyticsDashboard from "./pages/AnalyticsDashboard"
 
+import ConversationsPage from "./pages/ConversationsPage"
+
 
 function ProtectedLayout({children}){
 
@@ -68,8 +70,10 @@ export default function App(){
 
       {/* PROTECTED ROUTES */}
 
-      <Route path="/" element={<ProtectedLayout><AnalyticsDashboard /></ProtectedLayout>}/>
+      <Route path="/" element={<ProtectedLayout><div>Overview (coming soon)</div></ProtectedLayout>} />
 
+      
+      
       <Route path="/analytics" element={<ProtectedLayout><AnalyticsDashboard /></ProtectedLayout>}/>
 
       <Route path="/branding" element={<ProtectedLayout><Branding/></ProtectedLayout>}/>
@@ -89,6 +93,9 @@ export default function App(){
       <Route path="/property" element={<ProtectedLayout><Property/></ProtectedLayout>} />
 
       <Route path="/assistant" element={<ProtectedLayout><Assistant/></ProtectedLayout>} />
+
+
+      <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
 
 
       {/* FALLBACK */}
