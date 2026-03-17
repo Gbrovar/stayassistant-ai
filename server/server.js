@@ -892,12 +892,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     if (intent === "checkout") {
+      const info = property.knowledge.property_info
+
+      let answer = `Check-out: ${info.checkout}.`
+
+      if (info.checkin) {
+        answer += ` Check-in starts at ${info.checkin}.`
+      }
+
       return res.json({
-        reply: `Check-out is at ${property.knowledge.property_info.checkout}.`,
+        reply: answer,
         language: userLanguage
       })
     }
-
+    
     if (intent === "pharmacy") {
 
       return res.json({
