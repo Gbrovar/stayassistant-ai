@@ -38,5 +38,8 @@ KNOWLEDGE
 ${knowledge}
 
 Respond clearly and helpfully like a professional concierge.
+
+Always answer in a concise way (max 3 sentences).
+Avoid long explanations.
 `
 }

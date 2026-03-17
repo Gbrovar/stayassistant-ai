@@ -200,3 +200,72 @@ El frontend puede mostrar:
 ----------------------------------------------------
 
 
+6️⃣ Mejora del sistema de idiomas (recomendado)
+
+Ahora mismo el chat soporta solo:
+
+English
+Español
+Deutsch
+
+Podemos ampliarlo fácilmente a:
+
+French
+Italian
+Portuguese
+Dutch
+
+y hacerlo 100% automático.
+
+Pero esto implica modificar:
+
+chat.js
+promptBuilder.js
+AI response cleaner
+
+Es una mejora que recomiendo hacer justo después de arreglar el problema de ubicación.
+
+
+--------------------------------------------------------
+
+⚠️ DETALLE 2 (FINO PERO IMPORTANTE)
+🔁 ESTO SIGUE CONSUMIENDO IA (SIN QUERER)
+
+Aquí:
+
+if (intent === "taxi") { ... }
+if (intent === "pharmacy") { ... }
+if (intent === "transport") { ... }
+
+✔ bien → no AI
+
+Pero aquí:
+
+// CHECKIN / CHECKOUT
+const translation = await openai.chat.completions.create(...)
+
+y
+
+// FAQ translation
+const translation = await openai.chat.completions.create(...)
+❌ PROBLEMA
+
+👉 ESTO TAMBIÉN USA OPENAI
+👉 pero NO incrementa usage
+
+👉 = fuga de coste
+
+💡 SOLUCIÓN PRO (FASE 7.3 PREVIEW)
+
+Tienes 2 opciones:
+
+OPCIÓN A (rápida)
+
+No traducir con AI → devolver en idioma base
+
+OPCIÓN B (pro)
+
+Solo traducir si:
+
+if (currentUsage < limit)
+

@@ -1103,6 +1103,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const context = detectContext(hour);
 
+    const trimmedHistory = history.map(m => ({
+      role: m.role,
+      content: m.content.slice(0, 300)
+    }))
+
     let completion;
 
     try {
@@ -1113,12 +1118,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           model: "gpt-4o-mini",
 
+          max_tokens: 120,
+          temperature: 0.4,
+
           messages: [
             {
               role: "system",
               content: buildPrompt(property, userLanguage, context, knowledge) + "\n" + nearbyContext
             },
-            ...history
+            ...trimmedHistory
           ]
 
         }),
@@ -1170,6 +1178,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       .replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "")
       .trim();
 
+    const shortReply = cleanReply.slice(0, 500)
+
     /* --- SAVE AI RESPONSE CACHE --- */
 
     try {
@@ -1189,8 +1199,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       content: cleanReply
     });
 
-    if (history.length > 10) {
-      history = history.slice(-10);
+    if (history.length > 6) {
+      history = history.slice(-6);
     }
 
     await redis.set(historyKey, JSON.stringify(history), {
@@ -1198,7 +1208,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     });
 
     res.json({
-      reply: cleanReply,
+      reply: shortReply,
       language: detectedLanguage
     });
 
