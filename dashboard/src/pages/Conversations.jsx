@@ -9,6 +9,7 @@ export default function Conversations() {
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [limitReached, setLimitReached] = useState(false)
 
   useEffect(() => {
 
@@ -48,7 +49,10 @@ export default function Conversations() {
     )
   }
 
+  const usage = 100 // simula límite alcanzado para test
+
   return (
+    
 
     <div className="conversations-page">
 
