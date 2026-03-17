@@ -651,6 +651,69 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
 
 });
 
+/* --- UPDATE PROPERTY INFO --- */
+
+app.post("/property/:id/property-info", authenticate, async (req, res) => {
+
+  const propertyId = req.params.id
+
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const {
+    checkin,
+    checkout,
+    checkin_instructions,
+    wifi_name,
+    wifi_password
+  } = req.body
+
+  const property = await getProperty(propertyId)
+
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
+  }
+
+  property.knowledge.property_info = {
+    ...property.knowledge.property_info,
+
+    checkin,
+    checkout,
+    checkin_instructions,
+    wifi_name,
+    wifi_password
+  }
+
+  await createProperty(property)
+
+  // limpiar cache
+  propertyCache.delete(propertyId)
+
+  res.json({ success: true })
+
+})
+
+app.get("/property/:id/property-info", authenticate, async (req, res) => {
+
+  const propertyId = req.params.id
+
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const property = await loadProperty(propertyId)
+
+  if (!property) {
+    return res.status(404).json({ error: "property not found" })
+  }
+
+  res.json({
+    property_info: property.knowledge.property_info
+  })
+
+})
+
 
 /* --- GET RECOMMENDATIONS --- */
 
@@ -905,7 +968,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
         language: userLanguage
       })
     }
-    
+
     if (intent === "pharmacy") {
 
       return res.json({
