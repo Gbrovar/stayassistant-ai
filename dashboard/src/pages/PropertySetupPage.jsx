@@ -4,6 +4,7 @@ import Recommendations from "./Recommendations"
 import Branding from "./Branding"
 import Personalization from "./Personalization"
 import Section from "../components/UI/Section"
+import PropertyInfo from "./PropertyInfo"
 
 export default function PropertySetupPage() {
 
@@ -22,6 +23,10 @@ export default function PropertySetupPage() {
 
                 <Section title="1. Property Information">
                     <SetupWizard />
+                </Section>
+
+                <Section title="1.1 Property Info (Editable)">
+                    <PropertyInfo />
                 </Section>
 
                 <Section title="2. FAQ">
