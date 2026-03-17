@@ -1,3 +1,5 @@
+let LIMIT_REACHED = false
+
 const API_BASE = window.location.origin
 
 const conversationId = crypto.randomUUID();
@@ -747,6 +749,21 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     try {
 
+        if (LIMIT_REACHED) {
+            const messages = document.getElementById("messages")
+
+            messages.innerHTML += `
+                <div class="bot-wrapper">
+                    <div class="bot-avatar">⚠️</div>
+                    <div class="bot-message">
+                        You reached your plan limit. Please upgrade.
+                    </div>
+                </div>
+            `
+
+            return
+        }
+
         const response = await fetch(`${API_BASE}/chat`, {
 
             method: "POST",
@@ -774,6 +791,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         });
 
         const data = await response.json();
+        if (data.limit_reached) {
+            LIMIT_REACHED = true
+        }
 
         const typing = document.getElementById("typing");
 

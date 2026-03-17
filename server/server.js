@@ -1361,9 +1361,21 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
     const hours = await redis.hGetAll(hourKey);
     const month = new Date().toISOString().slice(0, 7)
+    
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     const usage = await redis.get(usageKey)
+    const currentUsage = Number(usage || 0)
+    const limit = await getUsageLimit(propertyId)
+
+    if (currentUsage >= limit) {
+      console.log("⛔ HARD LIMIT BLOCK", propertyId)
+
+      return res.json({
+        reply: "Usage limit reached. Please upgrade your plan.",
+        limit_reached: true
+      })
+    }
 
     const totalMessages = Number(usage || 0);
 

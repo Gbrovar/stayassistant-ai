@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 import { AppProvider } from "./context/AppContext"
+import { useApp } from "./context/AppContext"
 
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
@@ -22,9 +23,20 @@ import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 
 
-
+{limitReached && (
+  <div style={{
+    background: "#ff3b30",
+    color: "white",
+    padding: "10px",
+    textAlign: "center",
+    fontWeight: "bold"
+  }}>
+    Usage limit reached — upgrade your plan
+  </div>
+)}
 
 function ProtectedLayout({ children }) {
+  const { limitReached } = useApp()
 
   const token = localStorage.getItem("token")
 

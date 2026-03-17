@@ -2,8 +2,6 @@ import { useApp } from "../context/AppContext"
 
 export default function OverviewPage() {
 
-  const token = localStorage.getItem("token")
-  const propertyId = localStorage.getItem("propertyId")
   const { subscription, usage, loading } = useApp()
 
   if (loading) return <div>Loading dashboard...</div>

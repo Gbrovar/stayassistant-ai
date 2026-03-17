@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
+import { useApp } from "../context/AppContext"
 
 export default function Conversations() {
 
@@ -9,7 +10,7 @@ export default function Conversations() {
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [limitReached, setLimitReached] = useState(false)
+  const { limitReached } = useApp()
 
   const usage = 100 // simula límite alcanzado para test
 
