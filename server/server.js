@@ -665,6 +665,7 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
     checkin,
     checkout,
     checkin_instructions,
+    late_checkin,
     wifi_name,
     wifi_password
   } = req.body
@@ -681,6 +682,7 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
     checkin,
     checkout,
     checkin_instructions,
+    late_checkin,
     wifi_name,
     wifi_password
   }
@@ -918,17 +920,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     if (intent === "wifi") {
+
       const info = property.knowledge.property_info
 
-      if (info.wifi_name && info.wifi_password) {
-        return res.json({
-          reply: `WiFi network: ${info.wifi_name}. Password: ${info.wifi_password}.`,
-          language: userLanguage
-        })
+      let answer = "WiFi information: "
+
+      if (info.wifi_name) {
+        answer += `Network: ${info.wifi_name}. `
+      }
+
+      if (info.wifi_password) {
+        answer += `Password: ${info.wifi_password}.`
       }
 
       return res.json({
-        reply: "WiFi is available at the property. You can find the details in your check-in instructions.",
+        reply: answer,
         language: userLanguage
       })
     }
@@ -936,20 +942,29 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     if (intent === "checkin") {
+
       const info = property.knowledge.property_info
 
-      let answer = `Check-in: ${info.checkin}.`
+      let answer = ""
 
-      if (info.late_checkin && info.checkin_instructions) {
-        answer += ` Late check-in: ${info.checkin_instructions}`
+      if (info.checkin) {
+        answer += `Check-in: from ${info.checkin}. `
+      }
+
+      if (info.late_checkin) {
+        answer += `Late check-in: ${info.late_checkin}. `
+      }
+
+      if (info.checkin_instructions) {
+        answer += `${info.checkin_instructions}. `
       }
 
       if (info.checkout) {
-        answer += ` Check-out: ${info.checkout}.`
+        answer += `Check-out: before ${info.checkout}.`
       }
 
       return res.json({
-        reply: answer,
+        reply: answer.trim(),
         language: userLanguage
       })
     }
