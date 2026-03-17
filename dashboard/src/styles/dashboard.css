@@ -64,27 +64,42 @@ body {
   flex-direction: column;
 }
 
-.topbar {
-
-  height: 60px;
-
-  border-bottom: 1px solid #1f2937;
-
-  display: flex;
-
-  align-items: center;
-
-  padding: 0 20px;
-}
-
 .content {
 
   padding: 30px;
 }
 
+/* --- TOPBAR PRO --- */
+
+.topbar {
+  height: 60px;
+  border-bottom: 1px solid #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.topbar-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.plan-badge {
+  background: #1f2937;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
 /* STATISTICS STYLE */
-
-
 
 .stat-item {
 
@@ -280,10 +295,10 @@ body {
 }
 
 /* CONVERSATION */
-.conversation-preview{
-  margin:4px 0 0 0;
-  color:#666;
-  font-size:14px;
+.conversation-preview {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 14px;
 }
 
 /* PREVIEW */
@@ -446,4 +461,3 @@ body {
   flex-direction: column;
   gap: 30px;
 }
-
