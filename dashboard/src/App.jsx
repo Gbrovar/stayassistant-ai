@@ -23,18 +23,6 @@ import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 
 
-{limitReached && (
-  <div style={{
-    background: "#ff3b30",
-    color: "white",
-    padding: "10px",
-    textAlign: "center",
-    fontWeight: "bold"
-  }}>
-    Usage limit reached — upgrade your plan
-  </div>
-)}
-
 function ProtectedLayout({ children }) {
   const { limitReached } = useApp()
 
@@ -54,6 +42,19 @@ function ProtectedLayout({ children }) {
 
         <Topbar />
 
+        {/* ✅ AQUÍ VA EL BLOQUE */}
+        {limitReached && (
+          <div style={{
+            background: "#ff3b30",
+            color: "white",
+            padding: "10px",
+            textAlign: "center",
+            fontWeight: "bold"
+          }}>
+            Usage limit reached — upgrade your plan
+          </div>
+        )}
+
         <div className="content">
           {children}
         </div>
@@ -63,9 +64,7 @@ function ProtectedLayout({ children }) {
     </div>
 
   )
-
 }
-
 
 export default function App() {
 

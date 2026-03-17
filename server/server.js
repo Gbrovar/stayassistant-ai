@@ -1092,32 +1092,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
 
-      try {
-
-        const usage = await redis.get(usageKey)
-
-        const currentUsage = Number(usage || 0)
-
-        const limit = await getUsageLimit(propertyId)
-
-        if (currentUsage >= limit) {
-
-          console.log("Usage limit reached:", propertyId)
-
-          return res.json({
-            reply:
-              "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
-            limit_reached: true
-          })
-
-        }
-
-      } catch (err) {
-
-        console.log("Usage check error:", err)
-
-      }
-
       completion = await Promise.race([
 
         openai.chat.completions.create({
@@ -1361,7 +1335,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
     const hours = await redis.hGetAll(hourKey);
     const month = new Date().toISOString().slice(0, 7)
-    
+
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     const usage = await redis.get(usageKey)
@@ -1372,7 +1346,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
       console.log("⛔ HARD LIMIT BLOCK", propertyId)
 
       return res.json({
-        reply: "Usage limit reached. Please upgrade your plan.",
+        reply:  "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
         limit_reached: true
       })
     }
