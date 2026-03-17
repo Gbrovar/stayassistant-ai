@@ -110,17 +110,15 @@ export const properties = {
 
             property_info: {
 
-                checkin: `
-                    Check-in from 15:00.
+                checkin: `15:00`,
+                checkout: `11:00`,
 
-                    Late check-in:
+                checkin_instructions: `Late check-in:
                     Guests arriving after 22:00 can use the self check-in system with a smart lock.
                     Instructions are sent automatically on the day of arrival.
                     `,
 
-                checkout: `
-                    Check-out before 11:00.
-                    `,
+                late_checkin: true,
 
                 wifi_name: "OceanViewWifi",
 
