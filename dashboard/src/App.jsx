@@ -1,4 +1,4 @@
-import {Routes,Route,Navigate,useLocation} from "react-router-dom"
+import { Routes, Route, Navigate, useLocation } from "react-router-dom"
 
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
@@ -19,28 +19,30 @@ import SetupWizard from "./pages/SetupWizard"
 import Guide from "./pages/Guide"
 import Property from "./pages/Property"
 import Assistant from "./pages/Assistant"
-import AnalyticsDashboard from "./pages/AnalyticsDashboard"
+//import AnalyticsDashboard from "./pages/AnalyticsDashboard"
 
 import ConversationsPage from "./pages/ConversationsPage"
+import AnalyticsPage from "./pages/AnalyticsPage"
+import InsightsPage from "./pages/InsightsPage"
 
 
-function ProtectedLayout({children}){
+function ProtectedLayout({ children }) {
 
   const token = localStorage.getItem("token")
 
-  if(!token){
-    return <Navigate to="/login"/>
+  if (!token) {
+    return <Navigate to="/login" />
   }
 
-  return(
+  return (
 
     <div className="dashboard">
 
-      <Sidebar/>
+      <Sidebar />
 
       <div className="main">
 
-        <Topbar/>
+        <Topbar />
 
         <div className="content">
           {children}
@@ -55,52 +57,51 @@ function ProtectedLayout({children}){
 }
 
 
-export default function App(){
+export default function App() {
 
-  return(
+  return (
 
     <Routes>
 
       {/* PUBLIC ROUTES */}
 
-      <Route path="/login" element={<Login/>}/>
+      <Route path="/login" element={<Login />} />
 
-      <Route path="/register" element={<Register/>}/>
+      <Route path="/register" element={<Register />} />
 
 
       {/* PROTECTED ROUTES */}
 
       <Route path="/" element={<ProtectedLayout><div>Overview (coming soon)</div></ProtectedLayout>} />
 
-      
-      
-      <Route path="/analytics" element={<ProtectedLayout><AnalyticsDashboard /></ProtectedLayout>}/>
 
-      <Route path="/branding" element={<ProtectedLayout><Branding/></ProtectedLayout>}/>
 
-      <Route path="/setupwizard" element={<ProtectedLayout><SetupWizard/></ProtectedLayout>}/>
+      <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
 
-      <Route path="/preview" element={<ProtectedLayout><Preview/></ProtectedLayout>}/>
+      <Route path="/setupwizard" element={<ProtectedLayout><SetupWizard /></ProtectedLayout>} />
 
-      <Route path="/install" element={<ProtectedLayout><Install/></ProtectedLayout>}/>
+      <Route path="/preview" element={<ProtectedLayout><Preview /></ProtectedLayout>} />
 
-      <Route path="/billing" element={<ProtectedLayout><Billing/></ProtectedLayout>} />
+      <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
 
-      <Route path="/onboarding" element={<ProtectedLayout><Onboarding/></ProtectedLayout>}/>
+      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
 
-      <Route path="/guide" element={<ProtectedLayout><Guide/></ProtectedLayout>} />
+      <Route path="/onboarding" element={<ProtectedLayout><Onboarding /></ProtectedLayout>} />
 
-      <Route path="/property" element={<ProtectedLayout><Property/></ProtectedLayout>} />
+      <Route path="/guide" element={<ProtectedLayout><Guide /></ProtectedLayout>} />
 
-      <Route path="/assistant" element={<ProtectedLayout><Assistant/></ProtectedLayout>} />
+      <Route path="/property" element={<ProtectedLayout><Property /></ProtectedLayout>} />
+
+      <Route path="/assistant" element={<ProtectedLayout><Assistant /></ProtectedLayout>} />
 
 
       <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
-
+      <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
+      <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
 
       {/* FALLBACK */}
 
-      <Route path="*" element={<Navigate to="/analytics"/>}/>
+      <Route path="*" element={<Navigate to="/analytics" />} />
 
     </Routes>
 
