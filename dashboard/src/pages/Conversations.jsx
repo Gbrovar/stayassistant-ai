@@ -11,6 +11,14 @@ export default function Conversations() {
   const [loading, setLoading] = useState(true)
   const [limitReached, setLimitReached] = useState(false)
 
+  const usage = 100 // simula límite alcanzado para test
+
+  useEffect(() => {
+    if (usage >= 100) {
+      setLimitReached(true)
+    }
+  }, [usage])
+
   useEffect(() => {
 
     async function load() {
@@ -48,14 +56,6 @@ export default function Conversations() {
       </div>
     )
   }
-
-  useEffect(() => {
-    if (usage >= 100) {
-      setLimitReached(true)
-    }
-  }, [usage])
-
-  const usage = 100 // simula límite alcanzado para test
 
   return (
 
