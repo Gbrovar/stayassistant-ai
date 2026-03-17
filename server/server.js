@@ -768,6 +768,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- MONTHLY USAGE BUCKET --- */
 
     const month = new Date().toISOString().slice(0, 7)
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     /* --- DEMO VISITOR LIMIT --- */
 
@@ -859,11 +860,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
         intent
       );
 
-      // 2️⃣ message usage counter (nuevo)
-
-      const usageKey = `stayassistant:usage:${propertyId}:${month}`;
-
-      // 3️⃣ hourly analytics (nuevo)
+      // hourly analytics
 
       const hourKey = `stayassistant:analytics:${propertyId}:hours`;
 
@@ -1094,10 +1091,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let completion;
 
     try {
-
-      /* --- USAGE LIMIT PROTECTION --- */
-
-      let usageKey = `stayassistant:usage:${propertyId}:${month}`
 
       try {
 
@@ -1364,12 +1357,11 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
     const intentKey = `stayassistant:analytics:${propertyId}:questions`;
     const hourKey = `stayassistant:analytics:${propertyId}:hours`;
 
-    const month = new Date().toISOString().slice(0, 7)
-    const usageKey = `stayassistant:usage:${propertyId}:${month}`
-
     const intents = await redis.zRangeWithScores(intentKey, 0, 9, { REV: true });
 
     const hours = await redis.hGetAll(hourKey);
+    const month = new Date().toISOString().slice(0, 7)
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     const usage = await redis.get(usageKey)
 
