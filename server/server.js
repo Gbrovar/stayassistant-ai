@@ -765,10 +765,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let property = await loadProperty(propertyId)
 
-    /* --- MONTHLY USAGE BUCKET --- */
-
-    const month = new Date().toISOString().slice(0, 7)
-    const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     /* --- DEMO VISITOR LIMIT --- */
 
@@ -799,6 +795,25 @@ app.post("/chat", chatLimiter, async (req, res) => {
       await redis.expire(demoKey, 60 * 60 * 24) // 24h
 
     }
+
+    /* --- MONTHLY USAGE BUCKET --- */
+
+    const month = new Date().toISOString().slice(0, 7)
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`
+
+    const usage = await redis.get(usageKey)
+    const currentUsage = Number(usage || 0)
+    const limit = await getUsageLimit(propertyId)
+
+    if (currentUsage >= limit) {
+      console.log("⛔ HARD LIMIT BLOCK", propertyId)
+
+      return res.json({
+        reply: "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
+        limit_reached: true
+      })
+    }
+
 
     if (!property) {
       return res.json({
@@ -1339,17 +1354,6 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     const usage = await redis.get(usageKey)
-    const currentUsage = Number(usage || 0)
-    const limit = await getUsageLimit(propertyId)
-
-    if (currentUsage >= limit) {
-      console.log("⛔ HARD LIMIT BLOCK", propertyId)
-
-      return res.json({
-        reply:  "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
-        limit_reached: true
-      })
-    }
 
     const totalMessages = Number(usage || 0);
 
