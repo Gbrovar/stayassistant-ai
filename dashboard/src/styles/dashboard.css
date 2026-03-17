@@ -461,3 +461,16 @@ body {
   flex-direction: column;
   gap: 30px;
 }
+
+/* TOAST */
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #22c55e;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}

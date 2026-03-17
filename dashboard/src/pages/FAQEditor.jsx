@@ -2,12 +2,15 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
+import Toast from "../components/UI/Toast"
 
 export default function FAQEditor() {
 
     const propertyId = getPropertyId()
 
     const [faq, setFaq] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [toast, setToast] = useState(null)
 
     useEffect(() => {
 
@@ -75,30 +78,41 @@ export default function FAQEditor() {
 
     async function save() {
 
-        await fetch(`${API_URL}/property/${propertyId}/faq`, {
+        setLoading(true)
 
-            method: "POST",
+        try {
 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getToken()
-            },
+            await fetch(`${API_URL}/property/${propertyId}/faq`, {
 
-            body: JSON.stringify({ faq })
+                method: "POST",
 
-        })
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + getToken()
+                },
 
-        alert("FAQ saved")
+                body: JSON.stringify({ faq })
+
+            })
+
+            setToast("FAQ saved successfully")
+
+        } catch (err) {
+
+            setToast("Error saving FAQ")
+
+        }
+
+        setLoading(false)
 
     }
-
 
     return (
 
         <div>
 
             <h2>FAQ</h2>
-            
+
 
             <Card>
 
@@ -130,13 +144,17 @@ export default function FAQEditor() {
                     Add Question
                 </button>
 
-                <button onClick={save}>
-                    Save FAQ
+                <button onClick={save} disabled={loading}>
+                    {loading ? "Saving..." : "Save FAQ"}
                 </button>
 
             </Card>
 
+            {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+
         </div>
+
+
 
     )
 

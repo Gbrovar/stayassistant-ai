@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 export default function Sidebar() {
 
@@ -10,19 +10,33 @@ export default function Sidebar() {
 
       <nav>
 
-        <Link to="/">Overview</Link>
+        <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
+          Overview
+        </NavLink>
 
-        <Link to="/conversations">Conversations</Link>
+        <NavLink to="/conversations" className={({ isActive }) => isActive ? "active" : ""}>
+          Conversations
+        </NavLink>
 
-        <Link to="/analytics">Analytics</Link>
+        <NavLink to="/analytics" className={({ isActive }) => isActive ? "active" : ""}>
+          Analytics
+        </NavLink>
 
-        <Link to="/insights">AI Insights</Link>
+        <NavLink to="/insights" className={({ isActive }) => isActive ? "active" : ""}>
+          AI Insights
+        </NavLink>
 
-        <Link to="/property">Property Setup</Link>
+        <NavLink to="/property" className={({ isActive }) => isActive ? "active" : ""}>
+          Property Setup
+        </NavLink>
 
-        <Link to="/install">Install</Link>
+        <NavLink to="/install" className={({ isActive }) => isActive ? "active" : ""}>
+          Install
+        </NavLink>
 
-        <Link to="/billing">Billing</Link>
+        <NavLink to="/billing" className={({ isActive }) => isActive ? "active" : ""}>
+          Billing
+        </NavLink>
 
       </nav>
 
