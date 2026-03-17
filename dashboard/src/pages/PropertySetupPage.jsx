@@ -9,39 +9,38 @@ export default function PropertySetupPage() {
 
     return (
 
-        <div>
+        <div className="page">
 
-            <h1>Property Setup</h1>
-            <p>Configure your AI concierge step by step.</p>
+            <div className="page-header">
+                <h1 className="page-title">Property Setup</h1>
+                <p className="page-subtitle">
+                    Configure your AI concierge step by step.
+                </p>
+            </div>
 
-            {/* STEP 1 — PROPERTY BASICS */}
+            <div className="stack">
 
-            <Section title="1. Property Information">
-                <SetupWizard />
-            </Section>
+                <Section title="1. Property Information">
+                    <SetupWizard />
+                </Section>
 
-            {/* STEP 2 — FAQ */}
+                <Section title="2. FAQ">
+                    <FAQEditor />
+                </Section>
 
-            <Section title="2. FAQ">
-                <FAQEditor />
-            </Section>
+                <Section title="3. Local Recommendations">
+                    <Recommendations />
+                </Section>
 
-            {/* STEP 3 — RECOMMENDATIONS */}
+                <Section title="4. Assistant Settings">
+                    <Personalization />
+                </Section>
 
-            <Section title="3. Local Recommendations">
-                <Recommendations />
-            </Section>
+                <Section title="5. Widget Branding">
+                    <Branding />
+                </Section>
 
-            {/* STEP 4 — ASSISTANT */}
-
-            <Section title="4. Assistant Settings">
-                <Personalization />
-            </Section>
-
-            {/* STEP 5 — BRANDING */}
-            <Section title="5. Widget Branding">
-                <Branding />
-            </Section>
+            </div>
 
         </div>
 
