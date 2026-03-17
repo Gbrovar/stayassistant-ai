@@ -91,6 +91,28 @@ body {
   gap: 15px;
 }
 
+.usage-topbar {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-right: 10px;
+}
+
+.topbar-warning {
+  background: #ffb020;
+  color: #000;
+  padding: 6px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.topbar-danger {
+  background: #ff4d4f;
+  color: white;
+  padding: 6px;
+  text-align: center;
+  font-size: 12px;
+}
+
 .plan-badge {
   background: #1f2937;
   padding: 6px 12px;
