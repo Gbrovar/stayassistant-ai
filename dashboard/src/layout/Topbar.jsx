@@ -1,35 +1,8 @@
-import { useEffect, useState } from "react"
-import { API_URL } from "../api/config"
+import { useApp } from "../context/AppContext"
 
 export default function Topbar() {
 
-  const [subscription, setSubscription] = useState(null)
-  const [usage, setUsage] = useState(0)
-
-  const token = localStorage.getItem("token")
-  const propertyId = localStorage.getItem("propertyId")
-
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  async function loadData() {
-
-    const subRes = await fetch(`${API_URL}/billing/subscription`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    const subData = await subRes.json()
-
-    const analyticsRes = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    const analyticsData = await analyticsRes.json()
-
-    setSubscription(subData)
-    setUsage(analyticsData.total_messages || 0)
-  }
+  const { subscription, usage } = useApp()
 
   if (!subscription) return null
 

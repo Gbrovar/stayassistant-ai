@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom"
+import { AppProvider } from "./context/AppContext"
 
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
@@ -19,6 +20,8 @@ import AnalyticsPage from "./pages/AnalyticsPage"
 import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
+
+
 
 
 function ProtectedLayout({ children }) {
@@ -56,41 +59,43 @@ export default function App() {
 
   return (
 
-    <Routes>
+    <AppProvider>
+      <Routes>
 
-      {/* PUBLIC ROUTES */}
+        {/* PUBLIC ROUTES */}
 
-      <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
-      <Route path="/register" element={<Register />} />
-
-
-      {/* PROTECTED ROUTES */}
-
-      <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
+        <Route path="/register" element={<Register />} />
 
 
-      {/* LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
-      <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
-      <Route path="/preview" element={<ProtectedLayout><Preview /></ProtectedLayout>} />
-      <Route path="/onboarding" element={<ProtectedLayout><Onboarding /></ProtectedLayout>} />
-      <Route path="/propertyOld" element={<ProtectedLayout><Property /></ProtectedLayout>} />
-      {/* END * LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
+        {/* PROTECTED ROUTES */}
+
+        <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
 
 
-      <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
-      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+        {/* LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
+        <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
+        <Route path="/preview" element={<ProtectedLayout><Preview /></ProtectedLayout>} />
+        <Route path="/onboarding" element={<ProtectedLayout><Onboarding /></ProtectedLayout>} />
+        <Route path="/propertyOld" element={<ProtectedLayout><Property /></ProtectedLayout>} />
+        {/* END * LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
 
-      <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
-      <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
-      <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
-      <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
 
-      {/* FALLBACK */}
+        <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
+        <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
 
-      <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
+        <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
+        <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
+        <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
 
-    </Routes>
+        {/* FALLBACK */}
+
+        <Route path="*" element={<Navigate to="/" />} />
+
+      </Routes>
+    </AppProvider>
 
   )
 

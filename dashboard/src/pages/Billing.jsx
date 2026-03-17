@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
+import { useApp } from "../context/AppContext"
 
 export default function Billing() {
 
-    const [subscription, setSubscription] = useState(null)
-    const [analytics, setAnalytics] = useState(null)
+    const { usage } = useApp()
 
+    const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
-    const propertyId = localStorage.getItem("propertyId")
 
     useEffect(() => {
 
         loadSubscription()
-        loadUsage()
 
     }, [])
 
@@ -30,19 +29,6 @@ export default function Billing() {
 
     }
 
-    async function loadUsage() {
-
-        const res = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-        const data = await res.json()
-
-        setAnalytics(data)
-
-    }
 
     async function upgrade(plan) {
 
@@ -83,7 +69,7 @@ export default function Billing() {
 
     }
 
-    if (!subscription || !analytics) return <div>Loading...</div>
+    if (!subscription) return <div>Loading...</div>
 
     const limits = {
         free: 100,
@@ -92,7 +78,7 @@ export default function Billing() {
     }
 
     const limit = limits[subscription.plan] || 100
-    const usage = analytics.total_messages || 0
+    // usage viene del contexto
 
     const percentage = Math.min((usage / limit) * 100, 100)
 
