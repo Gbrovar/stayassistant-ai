@@ -383,3 +383,47 @@ body {
   font-size: 20px;
   font-weight: bold;
 }
+
+/* --- DESIGN SYSTEM --- */
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-secondary {
+  background: #1e293b;
+  color: white;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+}
+
+.section {
+  margin-top: 50px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.section-content {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 12px;
+}

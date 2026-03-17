@@ -3,53 +3,48 @@ import FAQEditor from "./FAQEditor"
 import Recommendations from "./Recommendations"
 import Branding from "./Branding"
 import Personalization from "./Personalization"
+import Section from "../components/UI/Section"
 
 export default function PropertySetupPage() {
 
-  return (
+    return (
 
-    <div>
+        <div>
 
-      <h1>Property Setup</h1>
-      <p>Configure your AI concierge step by step.</p>
+            <h1>Property Setup</h1>
+            <p>Configure your AI concierge step by step.</p>
 
-      {/* STEP 1 — PROPERTY BASICS */}
+            {/* STEP 1 — PROPERTY BASICS */}
 
-      <section style={{ marginTop: 40 }}>
-        <h2>1. Property Information</h2>
-        <SetupWizard />
-      </section>
+            <Section title="1. Property Information">
+                <SetupWizard />
+            </Section>
 
-      {/* STEP 2 — FAQ */}
+            {/* STEP 2 — FAQ */}
 
-      <section style={{ marginTop: 60 }}>
-        <h2>2. FAQ</h2>
-        <FAQEditor />
-      </section>
+            <Section title="2. FAQ">
+                <FAQEditor />
+            </Section>
 
-      {/* STEP 3 — RECOMMENDATIONS */}
+            {/* STEP 3 — RECOMMENDATIONS */}
 
-      <section style={{ marginTop: 60 }}>
-        <h2>3. Local Recommendations</h2>
-        <Recommendations />
-      </section>
+            <Section title="3. Local Recommendations">
+                <Recommendations />
+            </Section>
 
-      {/* STEP 4 — ASSISTANT */}
+            {/* STEP 4 — ASSISTANT */}
 
-      <section style={{ marginTop: 60 }}>
-        <h2>4. Assistant Settings</h2>
-        <Personalization />
-      </section>
+            <Section title="4. Assistant Settings">
+                <Personalization />
+            </Section>
 
-      {/* STEP 5 — BRANDING */}
+            {/* STEP 5 — BRANDING */}
+            <Section title="5. Widget Branding">
+                <Branding />
+            </Section>
 
-      <section style={{ marginTop: 60 }}>
-        <h2>5. Widget Branding</h2>
-        <Branding />
-      </section>
+        </div>
 
-    </div>
-
-  )
+    )
 
 }
