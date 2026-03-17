@@ -877,55 +877,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    /* --- USAGE LIMIT PROTECTION --- */
-
-    let usageKey = `stayassistant:usage:${propertyId}:${month}`
-
-    try {
-
-      const usage = await redis.get(usageKey)
-
-      const currentUsage = Number(usage || 0)
-
-      const limit = await getUsageLimit(propertyId)
-
-      if (currentUsage >= limit) {
-
-        console.log("Usage limit reached:", propertyId)
-
-        return res.json({
-          reply:
-            "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
-          limit_reached: true
-        })
-
-      }
-
-    } catch (err) {
-
-      console.log("Usage check error:", err)
-
-    }
-
-    /* --- INCREMENT MONTHLY USAGE --- */
-
-    try {
-
-      await redis.incr(usageKey)
-
-      const ttl = await redis.ttl(usageKey)
-
-      if (ttl === -1) {
-        await redis.expire(usageKey, 60 * 60 * 24 * 90)
-      }
-
-    } catch (err) {
-
-      console.log("Usage increment error:", err)
-
-    }
-
-
     /* --- CHAT HISTORY --- */
 
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
@@ -1144,6 +1095,36 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
 
+      /* --- USAGE LIMIT PROTECTION --- */
+
+      let usageKey = `stayassistant:usage:${propertyId}:${month}`
+
+      try {
+
+        const usage = await redis.get(usageKey)
+
+        const currentUsage = Number(usage || 0)
+
+        const limit = await getUsageLimit(propertyId)
+
+        if (currentUsage >= limit) {
+
+          console.log("Usage limit reached:", propertyId)
+
+          return res.json({
+            reply:
+              "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
+            limit_reached: true
+          })
+
+        }
+
+      } catch (err) {
+
+        console.log("Usage check error:", err)
+
+      }
+
       completion = await Promise.race([
 
         openai.chat.completions.create({
@@ -1177,6 +1158,19 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     const reply = completion.choices[0].message.content;
+
+    try {
+      await redis.incr(usageKey)
+
+      const ttl = await redis.ttl(usageKey)
+
+      if (ttl === -1) {
+        await redis.expire(usageKey, 60 * 60 * 24 * 90)
+      }
+
+    } catch (err) {
+      console.log("Usage increment error:", err)
+    }
 
     let detectedLanguage = userLanguage;
 
