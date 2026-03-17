@@ -825,6 +825,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const intent = detectIntent(userMessage)
 
+    if (intent === "other" && userMessage.length < 20) {
+      return res.json({
+        reply: "Could you please provide more details so I can assist you better?",
+        language: userLanguage
+      })
+    }
+
     /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
 
     const knowledge = selectKnowledge(property, intent)
@@ -839,6 +846,27 @@ app.post("/chat", chatLimiter, async (req, res) => {
         language: userLanguage
       })
 
+    }
+
+    if (intent === "wifi") {
+      return res.json({
+        reply: "WiFi is available at the property. You can find the network details in your check-in instructions.",
+        language: userLanguage
+      })
+    }
+
+    if (intent === "checkin") {
+      return res.json({
+        reply: `Check-in starts at ${property.knowledge.property_info.checkin}.`,
+        language: userLanguage
+      })
+    }
+
+    if (intent === "checkout") {
+      return res.json({
+        reply: `Check-out is at ${property.knowledge.property_info.checkout}.`,
+        language: userLanguage
+      })
     }
 
     if (intent === "pharmacy") {
@@ -958,27 +986,16 @@ app.post("/chat", chatLimiter, async (req, res) => {
         Check-out: ${property.knowledge.property_info.checkout}
         `
 
-      if (userLanguage && userLanguage !== "English") {
+      // simple language adaptation (no AI cost)
 
-        const translation = await openai.chat.completions.create({
+      if (userLanguage === "Español") {
+        answer = `Check-in: ${property.knowledge.property_info.checkin}
+        Check-out: ${property.knowledge.property_info.checkout}`
+      }
 
-          model: "gpt-4o-mini",
-
-          messages: [
-            {
-              role: "system",
-              content: `Translate the following text to ${userLanguage}. Only return the translated text.`
-            },
-            {
-              role: "user",
-              content: answer
-            }
-          ]
-
-        })
-
-        answer = translation.choices[0].message.content
-
+      if (userLanguage === "Deutsch") {
+        answer = `Check-in: ${property.knowledge.property_info.checkin}
+        Check-out: ${property.knowledge.property_info.checkout}`
       }
 
       return res.json({
@@ -999,26 +1016,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("FAQ auto-answer triggered");
 
       let answer = faqMatch.answer;
-
-      if (userLanguage && userLanguage !== "English") {
-
-        const translation = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: `Translate the following text to ${userLanguage}. Only return the translated text.`
-            },
-            {
-              role: "user",
-              content: answer
-            }
-          ]
-        });
-
-        answer = translation.choices[0].message.content;
-
-      }
 
       history.push({
         role: "assistant",
@@ -1097,6 +1094,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("Nearby context error", err)
 
+    }
+
+    // FINAL AI GUARD
+
+    if (!knowledge || knowledge.length < 20) {
+      return res.json({
+        reply: "I'm not sure about that. Please contact the property directly.",
+        language: userLanguage
+      })
     }
 
     /* --- AI COMPLETION --- */
@@ -1184,7 +1190,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
 
-      await redis.set(cacheKey, cleanReply, {
+      await redis.set(cacheKey, shortReply, {
         EX: 60 * 60 * 24
       });
 
