@@ -1068,7 +1068,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const lastUserMessage = history
       .filter(m => m.role === "user")
-      .slice(-2)[0]?.content
+      .slice(-1)[0]?.content
 
     if (lastUserMessage && lastUserMessage === userMessage) {
       return res.json({
@@ -1156,52 +1156,54 @@ app.post("/chat", chatLimiter, async (req, res) => {
       intent !== "restaurants" &&
       intent !== "activities"
     ) {
+
+      /* --- LOAD NEARBY RESTAURANTS --- */
+
+      let nearbyContext = ""
+
+      try {
+
+        if (property.coordinates) {
+
+          const { lat, lng } = property.coordinates
+
+          const url =
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
+
+          const controller = new AbortController()
+
+          setTimeout(() => controller.abort(), 5000)
+
+          const response = await fetch(url, {
+            signal: controller.signal
+          })
+
+          const data = await response.json()
+
+          const restaurants =
+            data.results.slice(0, 3).map(p =>
+              `${p.name} (${p.rating || "4+"}⭐)`
+            )
+
+          nearbyContext =
+            `Nearby restaurants: ${restaurants.join(", ")}`
+
+        }
+
+      } catch (err) {
+
+        console.log("Nearby context error", err)
+
+      }
       console.log("🚫 AI BLOCKED (intent rule):", intent)
 
       return res.json({
-        reply: "I'm not sure about that. Please contact the property directly.",
+        reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
         language: userLanguage
       })
     }
 
-    /* --- LOAD NEARBY RESTAURANTS --- */
 
-    let nearbyContext = ""
-
-    try {
-
-      if (property.coordinates) {
-
-        const { lat, lng } = property.coordinates
-
-        const url =
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
-
-        const controller = new AbortController()
-
-        setTimeout(() => controller.abort(), 5000)
-
-        const response = await fetch(url, {
-          signal: controller.signal
-        })
-
-        const data = await response.json()
-
-        const restaurants =
-          data.results.slice(0, 3).map(p =>
-            `${p.name} (${p.rating || "4+"}⭐)`
-          )
-
-        nearbyContext =
-          `Nearby restaurants: ${restaurants.join(", ")}`
-
-      }
-
-    } catch (err) {
-
-      console.log("Nearby context error", err)
-
-    }
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
 
@@ -1210,7 +1212,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🚫 AI BLOCKED (low knowledge)")
 
       return res.json({
-        reply: "I'm not sure about that. Please contact the property directly.",
+        reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
         language: userLanguage
       })
     }
