@@ -1298,7 +1298,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const reply = completion.choices[0].message.content;
 
-    // --- AI COST TRACKING ---
+    /* --- AI COST TRACKING --- */
     try {
 
       const usageData = completion.usage
@@ -1323,6 +1323,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     } catch (err) {
       console.log("Cost tracking error:", err)
+    }
+
+    console.log("🧾 OPENAI USAGE:", completion.usage)
+
+    if (!usageData) {
+      console.log("⚠️ NO USAGE DATA RETURNED")
     }
 
     try {
