@@ -1077,8 +1077,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       })
     }
 
-    const normalizedMessage = userMessage.toLowerCase().trim();
-
     /* --- NORMALIZACION DE PREGUNTAS --- */
     function normalizeMessage(message) {
 
@@ -1099,7 +1097,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- FAQ AUTO ANSWER --- */
 
     const faqMatch = property.knowledge.faq.find(f =>
-      normalizedMessage.includes(f.question.toLowerCase())
+      normalizedQuestion.includes(f.question.toLowerCase())
     );
 
     if (faqMatch) {
@@ -1149,6 +1147,23 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
+
+
+    /* --- AI GUARD (SMART FALLBACK) --- */
+
+    if (
+      intent !== "other" &&
+      intent !== "restaurants" &&
+      intent !== "activities"
+    ) {
+      console.log("🚫 AI BLOCKED (intent rule):", intent)
+
+      return res.json({
+        reply: "I'm not sure about that. Please contact the property directly.",
+        language: userLanguage
+      })
+    }
+
     /* --- LOAD NEARBY RESTAURANTS --- */
 
     let nearbyContext = ""
@@ -1186,21 +1201,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("Nearby context error", err)
 
-    }
-
-    /* --- AI GUARD (SMART FALLBACK) --- */
-
-    if (
-      intent !== "other" &&
-      intent !== "restaurants" &&
-      intent !== "activities"
-    ) {
-      console.log("🚫 AI BLOCKED (intent rule):", intent)
-
-      return res.json({
-        reply: "I'm not sure about that. Please contact the property directly.",
-        language: userLanguage
-      })
     }
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
