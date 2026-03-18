@@ -1074,13 +1074,23 @@ app.post("/chat", chatLimiter, async (req, res) => {
       .filter(m => m.role === "user")
       .slice(-1)[0]?.content
 
+    // SOLO bloquea si el mensaje anterior es EXACTAMENTE igual
     if (lastUserMessage && lastUserMessage === userMessage) {
+
+      console.log("⚠️ DUPLICATE MESSAGE BLOCKED")
+
       return res.json({
-        reply: "You've already asked that. Let me know if you need more details.",
+        reply: "Let me add more details to help you 👇",
         language: userLanguage
       })
     }
 
+    // 👉 AHORA sí añadimos el mensaje
+    history.push({
+      role: "user",
+      content: userMessage
+    });
+    
     /* --- NORMALIZACION DE PREGUNTAS --- */
     function normalizeMessage(message) {
 
@@ -1298,17 +1308,24 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const reply = completion.choices[0].message.content;
 
-    /* --- AI COST TRACKING --- */
+    // --- AI COST TRACKING ---
+    let usageData = null
+
     try {
 
-      const usageData = completion.usage
+      usageData = completion.usage
+
+      console.log("🧾 OPENAI USAGE:", usageData)
+
+      if (!usageData) {
+        console.log("⚠️ NO USAGE DATA RETURNED")
+      }
 
       if (usageData) {
 
         const inputTokens = usageData.prompt_tokens || 0
         const outputTokens = usageData.completion_tokens || 0
 
-        // 💰 COST ESTIMATION (gpt-4o-mini aprox)
         const cost =
           (inputTokens * 0.00000015) +
           (outputTokens * 0.0000006)
@@ -1318,6 +1335,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
         await redis.hIncrByFloat(costKey, "cost", cost)
         await redis.hIncrBy(costKey, "input_tokens", inputTokens)
         await redis.hIncrBy(costKey, "output_tokens", outputTokens)
+
+        console.log("💰 COST SAVED:", costKey)
 
       }
 
