@@ -1298,6 +1298,33 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const reply = completion.choices[0].message.content;
 
+    // --- AI COST TRACKING ---
+    try {
+
+      const usageData = completion.usage
+
+      if (usageData) {
+
+        const inputTokens = usageData.prompt_tokens || 0
+        const outputTokens = usageData.completion_tokens || 0
+
+        // 💰 COST ESTIMATION (gpt-4o-mini aprox)
+        const cost =
+          (inputTokens * 0.00000015) +
+          (outputTokens * 0.0000006)
+
+        const costKey = `stayassistant:cost:${propertyId}:${month}`
+
+        await redis.hIncrByFloat(costKey, "cost", cost)
+        await redis.hIncrBy(costKey, "input_tokens", inputTokens)
+        await redis.hIncrBy(costKey, "output_tokens", outputTokens)
+
+      }
+
+    } catch (err) {
+      console.log("Cost tracking error:", err)
+    }
+
     try {
       await redis.incr(usageKey)
 
