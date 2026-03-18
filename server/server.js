@@ -1090,7 +1090,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       role: "user",
       content: userMessage
     });
-    
+
     /* --- NORMALIZACION DE PREGUNTAS --- */
     function normalizeMessage(message) {
 
@@ -1342,12 +1342,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     } catch (err) {
       console.log("Cost tracking error:", err)
-    }
-
-    console.log("🧾 OPENAI USAGE:", completion.usage)
-
-    if (!usageData) {
-      console.log("⚠️ NO USAGE DATA RETURNED")
     }
 
     try {
