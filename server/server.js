@@ -1096,9 +1096,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- FAQ AUTO ANSWER --- */
 
-    const faqMatch = property.knowledge.faq.find(f =>
-      normalizedQuestion.includes(f.question.toLowerCase())
-    );
+    function similarity(a, b) {
+      const aWords = a.split(" ")
+      const bWords = b.split(" ")
+
+      const matchCount = aWords.filter(word =>
+        bWords.includes(word)
+      ).length
+
+      return matchCount / Math.max(aWords.length, bWords.length)
+    }
+
+    const faqMatch = property.knowledge.faq.find(f => {
+      const normalizedFaq = normalizeMessage(f.question)
+      return similarity(normalizedQuestion, normalizedFaq) > 0.5
+    })
 
     if (faqMatch) {
 
@@ -1157,44 +1169,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       intent !== "activities"
     ) {
 
-      /* --- LOAD NEARBY RESTAURANTS --- */
-
-      let nearbyContext = ""
-
-      try {
-
-        if (property.coordinates) {
-
-          const { lat, lng } = property.coordinates
-
-          const url =
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=restaurant&key=${process.env.GOOGLE_PLACES_KEY}`
-
-          const controller = new AbortController()
-
-          setTimeout(() => controller.abort(), 5000)
-
-          const response = await fetch(url, {
-            signal: controller.signal
-          })
-
-          const data = await response.json()
-
-          const restaurants =
-            data.results.slice(0, 3).map(p =>
-              `${p.name} (${p.rating || "4+"}⭐)`
-            )
-
-          nearbyContext =
-            `Nearby restaurants: ${restaurants.join(", ")}`
-
-        }
-
-      } catch (err) {
-
-        console.log("Nearby context error", err)
-
-      }
       console.log("🚫 AI BLOCKED (intent rule):", intent)
 
       return res.json({
@@ -1215,6 +1189,55 @@ app.post("/chat", chatLimiter, async (req, res) => {
         reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
         language: userLanguage
       })
+    }
+
+    /* --- LOAD NEARBY CONTEXT (SMART) --- */
+
+    let nearbyContext = ""
+
+    if (intent === "restaurants" || intent === "activities") {
+
+      try {
+
+        if (property.coordinates) {
+
+          const { lat, lng } = property.coordinates
+
+          const typeMap = {
+            restaurants: "restaurant",
+            activities: "tourist_attraction"
+          }
+
+          const placeType = typeMap[intent] || "restaurant"
+
+          const url =
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=${placeType}&key=${process.env.GOOGLE_PLACES_KEY}`
+
+          const controller = new AbortController()
+          setTimeout(() => controller.abort(), 5000)
+
+          const response = await fetch(url, {
+            signal: controller.signal
+          })
+
+          const data = await response.json()
+
+          const places =
+            data.results.slice(0, 3).map(p =>
+              `${p.name} (${p.rating || "4+"}⭐)`
+            )
+
+          nearbyContext =
+            `Nearby ${intent}: ${places.join(", ")}`
+
+        }
+
+      } catch (err) {
+
+        console.log("Nearby context error", err)
+
+      }
+
     }
 
 
