@@ -101,6 +101,7 @@ async function seedDatabase() {
     console.log("Seeding demo property")
 
     await createProperty(properties.demo_property)
+    await redis.sAdd("stayassistant:properties", "demo_property")
 
   }
 
@@ -504,6 +505,9 @@ app.post("/auth/register", async (req, res) => {
 
   await createProperty(property)
   await createUser(user)
+
+  // --- GLOBAL PROPERTY INDEX ---
+  await redis.sAdd("stayassistant:properties", propertyId)
 
   /* --- CLEAR CACHE --- */
 
