@@ -891,7 +891,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const intent = detectIntent(userMessage)
 
     console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
-    
+
     const allowedAIIntents = ["other", "restaurants", "activities"]
 
     if (!allowedAIIntents.includes(intent)) {
@@ -1188,14 +1188,33 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    // FINAL AI GUARD
+    /* --- AI GUARD (SMART FALLBACK) --- */
 
-    if (!knowledge || knowledge.length < 20) {
+    if (
+      intent !== "other" &&
+      intent !== "restaurants" &&
+      intent !== "activities"
+    ) {
+      console.log("🚫 AI BLOCKED (intent rule):", intent)
+
       return res.json({
         reply: "I'm not sure about that. Please contact the property directly.",
         language: userLanguage
       })
     }
+
+    /* --- KNOWLEDGE QUALITY CHECK --- */
+
+    if (!knowledge || knowledge.length < 30) {
+
+      console.log("🚫 AI BLOCKED (low knowledge)")
+
+      return res.json({
+        reply: "I'm not sure about that. Please contact the property directly.",
+        language: userLanguage
+      })
+    }
+
 
     /* --- AI COMPLETION --- */
 
@@ -1209,6 +1228,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let completion;
 
     try {
+
+      console.log("🤖 CALLING OPENAI:", intent)
+      console.log("📊 KNOWLEDGE LENGTH:", knowledge?.length)
 
       completion = await Promise.race([
 
