@@ -269,3 +269,17 @@ Solo traducir si:
 
 if (currentUsage < limit)
 
+---------------------------------------------------
+
+📌 LO QUE QUEDA PENDIENTE (GUARDAMOS)
+
+❗ eliminar “I'm not sure…” en intents de places
+
+❗ sincronizar AI + tarjetas
+
+❗ mejorar UX fallback
+
+👉 esto será FASE 9 (UX polish)
+
+-------------------------------------------
+

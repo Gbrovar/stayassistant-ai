@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
+import useAnalytics from "../hooks/useAnalytics"
 
 import {
   BarChart,
@@ -12,54 +13,13 @@ import {
 
 export default function Analytics() {
 
-  const propertyId = localStorage.getItem("propertyId")
-  const token = localStorage.getItem("token")
-
-  const [loading, setLoading] = useState(true)
-
-  const [totalMessages, setTotalMessages] = useState(0)
-  const [topIntents, setTopIntents] = useState([])
-  const [peakHours, setPeakHours] = useState({})
-  const [hasData, setHasData] = useState(false)
-
-  useEffect(() => {
-
-    async function loadAnalytics() {
-
-      try {
-
-        const res = await fetch(
-          `${API_URL}/analytics/${propertyId}/advanced`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-
-        const data = await res.json()
-
-        setTotalMessages(data.total_messages || 0)
-
-        setTopIntents(data.top_intents || [])
-
-        setPeakHours(data.peak_hours || {})
-
-        setHasData(data.has_data || false)
-
-      } catch (err) {
-
-        console.error("Analytics load error:", err)
-
-      }
-
-      setLoading(false)
-
-    }
-
-    loadAnalytics()
-
-  }, [propertyId, token])
+  const {
+    loading,
+    totalMessages,
+    topIntents,
+    peakHours,
+    hasData
+  } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
 
