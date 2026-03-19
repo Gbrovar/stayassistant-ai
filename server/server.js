@@ -38,6 +38,167 @@ async function invalidateAnalyticsCache(propertyId) {
   }
 }
 
+async function shouldRecompute(propertyId) {
+
+  const key = `stayassistant:last_compute:${propertyId}`
+
+  const last = await redis.get(key)
+
+  const now = Date.now()
+
+  const COOLDOWN = 1000 * 60 * 5 // 5 minutos
+
+  if (!last) return true
+
+  return (now - Number(last)) > COOLDOWN
+}
+
+async function markRecomputed(propertyId) {
+
+  const key = `stayassistant:last_compute:${propertyId}`
+
+  await redis.set(key, Date.now())
+}
+
+async function precomputeInsights(propertyId) {
+
+  try {
+
+    console.log("⚙️ PRECOMPUTE START:", propertyId)
+
+    const listKey = `stayassistant:conversations:${propertyId}`
+
+    const ids = await redis.zRange(listKey, 0, 10, { REV: true }) || []
+
+    if (ids.length === 0) return
+
+    let allMessages = []
+
+    for (const id of ids) {
+
+      const key = `stayassistant:chat:${propertyId}:${id}`
+
+      const history = await redis.get(key)
+
+      if (!history) continue
+
+      try {
+        const parsed = JSON.parse(history)
+
+        parsed.forEach(m => {
+          if (m.role === "user") {
+            allMessages.push(m.content)
+          }
+        })
+
+      } catch { }
+    }
+
+    const sample = allMessages.slice(0, 20).join("\n")
+
+    if (!sample) return
+
+    /* ---------------------------
+       SEMANTIC INSIGHTS
+    ---------------------------- */
+
+    const semanticPrompt = `
+    Analyze these guest messages.
+
+    Detect:
+    - confusion
+    - repeated questions
+    - missing information
+    - opportunities to improve FAQ
+
+    Messages:
+    ${sample}
+
+    Return 3 short insights.
+    `
+
+    const semantic = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      max_tokens: 120,
+      temperature: 0.3,
+      messages: [
+        { role: "system", content: "You analyze customer conversations." },
+        { role: "user", content: semanticPrompt }
+      ]
+    })
+
+    const semanticInsights = semantic.choices[0].message.content
+      .split("\n")
+      .filter(line => line.trim().length > 10)
+
+    await redis.set(
+      `stayassistant:semantic:${propertyId}`,
+      JSON.stringify({ insights: semanticInsights }),
+      { EX: 60 * 10 }
+    )
+
+    /* ---------------------------
+       AI INSIGHTS
+    ---------------------------- */
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+    const hourKey = `stayassistant:analytics:${propertyId}:hours`
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 4, { REV: true })
+    const hours = await redis.hGetAll(hourKey)
+
+    const topIntents = intents.map(i => `${i.value} (${i.score})`).join(", ")
+    const hourSummary = Object.entries(hours)
+      .map(([h, v]) => `${h}:00 (${v})`)
+      .join(", ")
+
+    const aiPrompt = `
+    Analyze this property data and give 2-3 short business insights.
+
+    Top guest intents:
+    ${topIntents}
+
+    Peak hours:
+    ${hourSummary}
+
+    Be concise and actionable.
+    `
+
+    const ai = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      max_tokens: 120,
+      temperature: 0.4,
+      messages: [
+        { role: "system", content: "You analyze SaaS analytics." },
+        { role: "user", content: aiPrompt }
+      ]
+    })
+
+    const aiInsights = ai.choices[0].message.content
+      .split("\n")
+      .filter(line => line.trim().length > 10)
+
+    await redis.set(
+      `stayassistant:ai_insights:${propertyId}`,
+      JSON.stringify({ insights: aiInsights }),
+      { EX: 60 * 5 }
+    )
+
+    /* ---------------------------
+       DONE
+    ---------------------------- */
+
+    await markRecomputed(propertyId)
+
+    console.log("✅ PRECOMPUTE DONE:", propertyId)
+
+  } catch (err) {
+
+    console.log("Precompute error:", err)
+
+  }
+}
+
 const propertyCache = new Map()
 
 async function loadProperty(propertyId) {
@@ -1365,6 +1526,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
       // 🔥 INVALIDATE ANALYTICS CACHE (NEW DATA)
       await invalidateAnalyticsCache(propertyId)
 
+      // ⚙️ PRECOMPUTE (NON-BLOCKING)
+      shouldRecompute(propertyId).then(should => {
+        if (should) {
+          precomputeInsights(propertyId)
+        }
+      })
+
       const ttl = await redis.ttl(usageKey)
 
       if (ttl === -1) {
@@ -2536,6 +2704,8 @@ app.post("/property/setup", authenticate, async (req, res) => {
     }
 
     propertyCache.delete(propertyId)
+
+    await invalidateAnalyticsCache(propertyId)
 
     res.json({
       success: true,
