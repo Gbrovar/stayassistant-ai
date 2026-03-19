@@ -9,6 +9,8 @@ export default function Insights() {
 
   const [suggestions, setSuggestions] = useState([])
 
+  const insights = generateBusinessInsights(suggestions)
+
   const navigate = useNavigate()
 
   async function addToFAQ(question, answer) {
@@ -50,6 +52,37 @@ export default function Insights() {
 
   }, [propertyId, token])
 
+  function generateBusinessInsights(suggestions) {
+
+    const insights = []
+
+    const restaurants = suggestions.find(s => s.question === "restaurants")
+    const activities = suggestions.find(s => s.question === "activities")
+
+    if (restaurants && restaurants.count >= 5) {
+      insights.push({
+        type: "revenue",
+        text: "Guests are frequently asking about restaurants. Adding recommendations will improve guest satisfaction and reduce friction."
+      })
+    }
+
+    if (activities && activities.count >= 5) {
+      insights.push({
+        type: "experience",
+        text: "Guests are looking for activities. You can enhance their stay by suggesting local experiences."
+      })
+    }
+
+    if (suggestions.length === 0) {
+      insights.push({
+        type: "positive",
+        text: "Your FAQ is well optimized. Guests are not asking repetitive questions."
+      })
+    }
+
+    return insights
+  }
+
 
   return (
 
@@ -60,6 +93,21 @@ export default function Insights() {
       <p style={{ fontSize: 13, opacity: 0.7 }}>
         This question is not covered in your FAQ.
       </p>
+
+      {/* 🔥 AQUÍ VA BUSINESS INSIGHTS */}
+      {insights.length > 0 && (
+        <div className="card">
+
+          <h3>📊 Business Insights</h3>
+
+          {insights.map((i, idx) => (
+            <p key={idx} style={{ marginTop: 10 }}>
+              {i.text}
+            </p>
+          ))}
+
+        </div>
+      )}
 
       {suggestions.length === 0 && (
 
