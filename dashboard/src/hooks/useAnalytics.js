@@ -16,11 +16,23 @@ export default function useAnalytics() {
     const [conversationScore, setConversationScore] = useState(null)
     const [alerts, setAlerts] = useState([])
 
+    const [plan, setPlan] = useState("free")
+
     useEffect(() => {
 
         async function loadAnalytics() {
 
             try {
+
+                const resSub = await fetch(`${API_URL}/billing/subscription`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                const subData = await resSub.json()
+
+                setPlan(subData.plan || "free")
 
                 const res = await fetch(
                     `${API_URL}/analytics/${propertyId}/advanced`,
@@ -118,6 +130,7 @@ export default function useAnalytics() {
     }, [propertyId, token])
 
     return {
+        plan,
         loading,
         totalMessages,
         topIntents,

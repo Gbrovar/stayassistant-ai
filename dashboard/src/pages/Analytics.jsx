@@ -14,6 +14,7 @@ import {
 export default function Analytics() {
 
   const {
+    plan,
     loading,
     totalMessages,
     topIntents,
@@ -25,6 +26,8 @@ export default function Analytics() {
     conversationScore,
     alerts
   } = useAnalytics()
+
+  const isPro = plan !== "free"
 
   /* --- PREPARE CHART DATA --- */
 
@@ -70,26 +73,35 @@ export default function Analytics() {
 
       <h2>Analytics</h2>
 
-      {alerts.length > 0 && (
-        <div style={{ marginTop: 20 }}>
+      {isPro ? (
 
-          {alerts.map((a, idx) => (
+        alerts.length > 0 && (
+          <div style={{ marginTop: 20 }}>
+            {alerts.map((a, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: a.level === "critical" ? "#7f1d1d" : "#78350f",
+                  padding: 12,
+                  borderRadius: 8,
+                  marginBottom: 10
+                }}
+              >
+                ⚠️ {a.text}
+              </div>
+            ))}
+          </div>
+        )
 
-            <div
-              key={idx}
-              style={{
-                background: a.level === "critical" ? "#7f1d1d" : "#78350f",
-                padding: 12,
-                borderRadius: 8,
-                marginBottom: 10
-              }}
-            >
-              ⚠️ {a.text}
-            </div>
+      ) : (
 
-          ))}
-
+        <div className="analytics-card" style={{ marginTop: 20 }}>
+          <p>⚠️ Unlock alerts to detect issues automatically</p>
+          <button onClick={() => window.location.href = "/dashboard/billing"}>
+            Upgrade to Pro
+          </button>
         </div>
+
       )}
 
       {insights.length > 0 && (
@@ -106,51 +118,33 @@ export default function Analytics() {
         </div>
       )}
 
-      {aiInsights.length > 0 && (
+      {isPro ? (
+
+        aiInsights.length > 0 && (
+          <div className="analytics-card" style={{ marginTop: 20 }}>
+            <h3>🤖 AI Insights</h3>
+
+            {aiInsights.map((text, idx) => (
+              <div key={idx} style={{ marginTop: 15 }}>
+                <p>{text.replace(/\*\*/g, "")}</p>
+              </div>
+            ))}
+          </div>
+        )
+
+      ) : (
+
         <div className="analytics-card" style={{ marginTop: 20 }}>
-
           <h3>🤖 AI Insights</h3>
+          <p>Unlock AI-powered recommendations to improve your property</p>
 
-          {aiInsights.map((text, idx) => (
-
-            <div key={idx} style={{ marginTop: 15 }}>
-
-              <p>{text.replace(/\*\*/g, "")}</p>
-
-              {text.toLowerCase().includes("restaurant") && (
-                <button
-                  style={{ marginTop: 5 }}
-                  onClick={async () => {
-
-                    const propertyId = localStorage.getItem("propertyId")
-                    const token = localStorage.getItem("token")
-
-                    await fetch(`${API_URL}/analytics/${propertyId}/apply-action`, {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                      },
-                      body: JSON.stringify({
-                        action: "add_restaurant_faq"
-                      })
-                    })
-
-                    window.location.reload()
-
-                  }}
-                >
-                  Add restaurant FAQ
-                </button>
-              )}
-
-            </div>
-
-          ))}
-
+          <button onClick={() => window.location.href = "/dashboard/billing"}>
+            Upgrade to Pro
+          </button>
         </div>
-      )}
 
+      )}
+      
       {semanticInsights.length > 0 && (
         <div className="analytics-card" style={{ marginTop: 20 }}>
 
