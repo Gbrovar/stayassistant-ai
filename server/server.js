@@ -46,7 +46,8 @@ async function loadProperty(propertyId) {
 
   // 3️⃣ fallback demo property
   if (!property) {
-    property = await getProperty("demo_property") || properties["demo_property"]
+    console.log("❌ PROPERTY NOT FOUND:", propertyId)
+    return null
   }
 
   // 4️⃣ cache result with size protection
@@ -490,6 +491,8 @@ app.post("/auth/register", async (req, res) => {
 
   property.id = propertyId
   property.name = property_name
+
+  property.knowledge.local_recommendations = []
 
   /* --- CREATE USER --- */
 
@@ -1050,6 +1053,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const maxConversations = 200
 
+      await redis.zAdd(listKey, {
+        score: Date.now(),
+        value: conversationId
+      })
+
       const total = await redis.zCard(listKey)
 
       if (total > maxConversations) {
@@ -1237,7 +1245,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
             )
 
           nearbyContext =
-            `Nearby ${intent}: ${places.join(", ")}`
+            `LIVE ${intent.toUpperCase()} NEARBY:\n- ${places.join("\n- ")}`
 
         }
 
@@ -1278,7 +1286,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
           messages: [
             {
               role: "system",
-              content: buildPrompt(property, userLanguage, context, knowledge) + "\n" + nearbyContext
+              content:
+                buildPrompt(property, userLanguage, context, knowledge) +
+                "\n\n--- LIVE DATA (REAL-TIME, PRIORITY) ---\n" +
+                nearbyContext
             },
             ...trimmedHistory
           ]
