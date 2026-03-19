@@ -21,7 +21,8 @@ export default function Analytics() {
     hasData,
     insights,
     aiInsights,
-    semanticInsights
+    semanticInsights,
+    conversationScore
   } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
@@ -137,6 +138,18 @@ export default function Analytics() {
               <p>{text.replace(/\*\*/g, "")}</p>
             </div>
           ))}
+
+        </div>
+      )}
+
+      {conversationScore && (
+        <div className="analytics-card" style={{ marginTop: 20 }}>
+
+          <h3>📊 Conversation Quality</h3>
+
+          <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
+          <p>Satisfaction: {conversationScore.satisfaction?.toFixed(1)} / 10</p>
+          <p>Friction: {conversationScore.friction?.toFixed(1)} / 10</p>
 
         </div>
       )}

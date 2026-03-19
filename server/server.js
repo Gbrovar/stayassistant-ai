@@ -1492,6 +1492,110 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
 })
 
+/* --- CONVERSATION SCORING --- */
+
+app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const listKey = `stayassistant:conversations:${propertyId}`
+
+    const ids = await redis.zRange(listKey, 0, 10, { REV: true }) || []
+
+    let scores = []
+
+    for (const id of ids) {
+
+      const key = `stayassistant:chat:${propertyId}:${id}`
+
+      const history = await redis.get(key)
+
+      if (!history) continue
+
+      let parsed
+
+      try {
+        parsed = JSON.parse(history)
+      } catch {
+        continue
+      }
+
+      const messages = parsed
+        .map(m => `${m.role}: ${m.content}`)
+        .join("\n")
+
+      const prompt = `
+          Analyze this conversation:
+
+          ${messages}
+
+          Score from 0 to 10:
+          - clarity
+          - user satisfaction
+          - friction
+
+          Return JSON:
+          {
+            clarity: number,
+            satisfaction: number,
+            friction: number
+          }
+          `
+
+      const completion = await openai.chat.completions.create({
+
+        model: "gpt-4o-mini",
+        temperature: 0.2,
+        max_tokens: 100,
+
+        messages: [
+          { role: "system", content: "You analyze chat quality." },
+          { role: "user", content: prompt }
+        ]
+
+      })
+
+      let json
+
+      try {
+        json = JSON.parse(completion.choices[0].message.content)
+      } catch {
+        continue
+      }
+
+      scores.push(json)
+
+    }
+
+    if (scores.length === 0) {
+      return res.json({ score: null })
+    }
+
+    const avg = (key) =>
+      scores.reduce((sum, s) => sum + (s[key] || 0), 0) / scores.length
+
+    res.json({
+      clarity: avg("clarity"),
+      satisfaction: avg("satisfaction"),
+      friction: avg("friction")
+    })
+
+  } catch (err) {
+
+    console.error("Conversation score error", err)
+
+    res.json({ score: null })
+
+  }
+
+})
+
 /* --- SEMANTIC INSIGHTS (CONVERSATION LEVEL) --- */
 
 app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, res) => {
