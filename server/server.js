@@ -1951,6 +1951,8 @@ app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 /* --- AI INSIGHTS (GPT POWERED) --- */
 app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => {
 
+  const propertyId = req.params.propertyId  // ✅ PRIMERO
+
   const cacheKey = `stayassistant:ai_insights:${propertyId}`
 
   const cached = await redis.get(cacheKey)
