@@ -819,6 +819,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- LOAD PROPERTY --- */
     let property = await loadProperty(propertyId)
 
+    /* --- SAFETY PATCH (CRÍTICO) --- */
+    if (!property.knowledge) {
+      property.knowledge = {}
+    }
+
+    if (!Array.isArray(property.knowledge.faq)) {
+      property.knowledge.faq = []
+    }
+
 
     /* --- DEMO VISITOR LIMIT --- */
     if (propertyId === "demo_property") {
@@ -2231,41 +2240,31 @@ app.get("/analytics/:propertyId/faq-suggestions-ai", authenticate, async (req, r
 
     const suggestions = await getFaqSuggestions(propertyId)
 
-    const enhanced = []
+    const promises = suggestions.map(async (s) => {
 
-    for (const s of suggestions) {
-
-      const promises = suggestions.map(async (s) => {
-
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: "You are a hotel concierge assistant."
-            },
-            {
-              role: "user",
-              content: `Guests often ask: "${s.question}". Write a helpful concierge style answer.`
-            }
-          ]
-        })
-
-        return {
-          question: s.question,
-          count: s.count,
-          suggested_answer: completion.choices[0].message.content
-        }
-
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "You are a hotel concierge assistant."
+          },
+          {
+            role: "user",
+            content: `Guests often ask: "${s.question}". Write a helpful concierge style answer.`
+          }
+        ]
       })
 
-      const enhanced = await Promise.all(promises)
+      return {
+        question: s.question,
+        count: s.count,
+        suggested_answer: completion.choices[0].message.content
+      }
 
-    }
-
-    await redis.set(cacheKey, JSON.stringify({ suggestions: enhanced }), {
-      EX: 60 * 10
     })
+
+    const enhanced = await Promise.all(promises)
 
     res.json({ suggestions: enhanced })
 
