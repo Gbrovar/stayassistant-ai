@@ -88,7 +88,7 @@ export default function Analytics() {
 
           {aiInsights.map((text, idx) => (
             <p key={idx} style={{ marginTop: 10 }}>
-              {text}
+              {text.replace(/\*\*/g, "")}
             </p>
           ))}
 
