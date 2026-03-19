@@ -6,11 +6,40 @@ export default function Conversations() {
 
   const propertyId = localStorage.getItem("propertyId")
   const token = localStorage.getItem("token")
-
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
   const { limitReached } = useApp()
+
+
+  function analyzeConversation(messages) {
+    const userMessages = messages.filter(m => m.role === "user")
+    const aiMessages = messages.filter(m => m.role === "assistant")
+
+    const lastUser = userMessages.slice(-1)[0]?.content?.toLowerCase() || ""
+
+    let intent = "other"
+
+    if (lastUser.includes("eat") || lastUser.includes("comer"))
+      intent = "restaurants"
+
+    if (lastUser.includes("taxi"))
+      intent = "transport"
+
+    if (lastUser.includes("wifi"))
+      intent = "wifi"
+
+    const fallback = aiMessages.some(m =>
+      m.content.includes("I'm not sure") ||
+      m.content.includes("Could you rephrase")
+    )
+
+    return {
+      messagesCount: messages.length,
+      intent,
+      fallback
+    }
+  }
 
   useEffect(() => {
 
@@ -73,24 +102,39 @@ export default function Conversations() {
 
           <div className="conversations-list">
 
-            {conversations.map(c => (
+            {conversations.map(c => {
 
-              <div
-                key={c.id}
-                className="conversation-item"
-                style={{ opacity: limitReached ? 0.5 : 1 }}  // 👈 AQUÍ VA
-                onClick={() => !limitReached && setSelected(c)}
-              >
+              const analysis = analyzeConversation(c.messages)
 
-                <strong>Guest</strong>
+              return (
 
-                <p className="conversation-preview">
-                  {c.preview}
-                </p>
+                <div
+                  key={c.id}
+                  className="conversation-item"
+                  style={{ opacity: limitReached ? 0.5 : 1 }}  // 👈 AQUÍ VA
+                  onClick={() => !limitReached && setSelected(c)}
+                >
 
-              </div>
+                  <strong>Guest</strong>
 
-            ))}
+                  <p className="conversation-preview">
+                    {c.preview}
+                  </p>
+
+                  <div className="conversation-meta">
+                    <span>Intent: {analysis.intent}</span>
+                    <span>{analysis.messagesCount} msgs</span>
+
+                    {analysis.fallback && (
+                      <span style={{ color: "orange" }}>⚠ fallback</span>
+                    )}
+                  </div>
+
+                </div>
+
+              )
+            })
+            }
 
           </div>
 
