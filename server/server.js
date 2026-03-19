@@ -1457,6 +1457,8 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 /* --- CONVERSATION SCORING --- */
 app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, res) => {
 
+  const propertyId = req.params.propertyId
+
   const cacheKey = `stayassistant:conversation_score:${propertyId}`
 
   const cached = await redis.get(cacheKey)
