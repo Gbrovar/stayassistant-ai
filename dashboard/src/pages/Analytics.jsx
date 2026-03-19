@@ -126,6 +126,32 @@ export default function Analytics() {
         </div>
       )}
 
+      <button
+        style={{ marginTop: 10 }}
+        onClick={async () => {
+
+          const propertyId = localStorage.getItem("propertyId")
+          const token = localStorage.getItem("token")
+
+          const res = await fetch(
+            `${API_URL}/analytics/${propertyId}/auto-optimize`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+
+          const data = await res.json()
+
+          alert("Optimizations applied 🚀")
+
+        }}
+      >
+        ⚡ Auto Optimize Property
+      </button>
+
       {/* TOTAL MESSAGES */}
 
       <div style={{ marginTop: 30 }}>

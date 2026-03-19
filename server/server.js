@@ -1862,6 +1862,75 @@ async function getFaqSuggestions(propertyId) {
 
 }
 
+/* --- AUTO OPTIMIZE PROPERTY --- */
+
+app.post("/analytics/:propertyId/auto-optimize", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 2, { REV: true })
+
+    const property = await getProperty(propertyId)
+
+    if (!property) {
+      return res.status(404).json({ error: "property not found" })
+    }
+
+    let changes = []
+
+    for (const i of intents) {
+
+      if (i.value === "restaurants" && i.score >= 5) {
+
+        property.knowledge.faq.push({
+          question: "Can you recommend restaurants nearby?",
+          answer: "Of course! I can suggest great restaurants based on your preferences."
+        })
+
+        changes.push("restaurant FAQ added")
+
+      }
+
+      if (i.value === "activities" && i.score >= 5) {
+
+        property.knowledge.faq.push({
+          question: "What activities can I do nearby?",
+          answer: "There are many activities including tours, outdoor experiences and cultural visits."
+        })
+
+        changes.push("activities FAQ added")
+
+      }
+
+    }
+
+    property.updatedAt = Date.now()
+
+    await createProperty(property)
+
+    res.json({
+      success: true,
+      changes
+    })
+
+  } catch (err) {
+
+    console.error("Auto optimize error", err)
+
+    res.status(500).json({ error: "auto optimize failed" })
+
+  }
+
+})
+
 /* --- FAQ SUGGESTIONS AI --- */
 app.get("/analytics/:propertyId/faq-suggestions-ai", authenticate, async (req, res) => {
 
