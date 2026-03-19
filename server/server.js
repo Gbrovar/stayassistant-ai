@@ -1457,6 +1457,14 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 /* --- CONVERSATION SCORING --- */
 app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, res) => {
 
+  const cacheKey = `stayassistant:conversation_score:${propertyId}`
+
+  const cached = await redis.get(cacheKey)
+
+  if (cached) {
+    return res.json(JSON.parse(cached))
+  }
+
   try {
 
     const propertyId = req.params.propertyId
@@ -1473,25 +1481,26 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
 
     for (const id of ids) {
 
-      const key = `stayassistant:chat:${propertyId}:${id}`
+      const promises = ids.map(async (id) => {
 
-      const history = await redis.get(key)
+        const key = `stayassistant:chat:${propertyId}:${id}`
 
-      if (!history) continue
+        const history = await redis.get(key)
+        if (!history) return null
 
-      let parsed
+        let parsed
 
-      try {
-        parsed = JSON.parse(history)
-      } catch {
-        continue
-      }
+        try {
+          parsed = JSON.parse(history)
+        } catch {
+          return null
+        }
 
-      const messages = parsed
-        .map(m => `${m.role}: ${m.content}`)
-        .join("\n")
+        const messages = parsed
+          .map(m => `${m.role}: ${m.content}`)
+          .join("\n")
 
-      const prompt = `
+        const prompt = `
           Analyze this conversation:
 
           ${messages}
@@ -1507,30 +1516,29 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
             satisfaction: number,
             friction: number
           }
-          `
+        `
 
-      const completion = await openai.chat.completions.create({
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          temperature: 0.2,
+          max_tokens: 100,
+          messages: [
+            { role: "system", content: "You analyze chat quality." },
+            { role: "user", content: prompt }
+          ]
+        })
 
-        model: "gpt-4o-mini",
-        temperature: 0.2,
-        max_tokens: 100,
-
-        messages: [
-          { role: "system", content: "You analyze chat quality." },
-          { role: "user", content: prompt }
-        ]
+        try {
+          return JSON.parse(completion.choices[0].message.content)
+        } catch {
+          return null
+        }
 
       })
 
-      let json
+      const results = await Promise.all(promises)
 
-      try {
-        json = JSON.parse(completion.choices[0].message.content)
-      } catch {
-        continue
-      }
-
-      scores.push(json)
+      const scores = results.filter(Boolean)
 
     }
 
@@ -1541,11 +1549,17 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
     const avg = (key) =>
       scores.reduce((sum, s) => sum + (s[key] || 0), 0) / scores.length
 
-    res.json({
+    const result = {
       clarity: avg("clarity"),
       satisfaction: avg("satisfaction"),
       friction: avg("friction")
+    }
+
+    await redis.set(cacheKey, JSON.stringify(result), {
+      EX: 60 * 5
     })
+
+    res.json(result)
 
   } catch (err) {
 
@@ -1559,6 +1573,14 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
 
 /* --- SEMANTIC INSIGHTS (CONVERSATION LEVEL) --- */
 app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, res) => {
+
+  const cacheKey = `stayassistant:semantic:${propertyId}`
+
+  const cached = await redis.get(cacheKey)
+
+  if (cached) {
+    return res.json(JSON.parse(cached))
+  }
 
   try {
 
@@ -1636,7 +1658,13 @@ app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, re
       .split("\n")
       .filter(line => line.trim().length > 10)
 
-    res.json({ insights })
+    const result = { insights }
+
+    await redis.set(cacheKey, JSON.stringify(result), {
+      EX: 60 * 10 // 10 min (más pesado)
+    })
+
+    res.json(result)
 
   } catch (err) {
 
@@ -1913,6 +1941,14 @@ app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 /* --- AI INSIGHTS (GPT POWERED) --- */
 app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => {
 
+  const cacheKey = `stayassistant:ai_insights:${propertyId}`
+
+  const cached = await redis.get(cacheKey)
+
+  if (cached) {
+    return res.json(JSON.parse(cached))
+  }
+
   try {
 
     const propertyId = req.params.propertyId
@@ -1971,7 +2007,13 @@ app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => 
       .split("\n")
       .filter(line => line.trim().length > 10)
 
-    res.json({ insights })
+    const result = { insights }
+
+    await redis.set(cacheKey, JSON.stringify(result), {
+      EX: 60 * 5 // 5 min
+    })
+
+    res.json(result)
 
   } catch (err) {
 
@@ -2179,6 +2221,13 @@ app.get("/analytics/:propertyId/faq-suggestions-ai", authenticate, async (req, r
 
   const { propertyId } = req.params
 
+  const cacheKey = `stayassistant:faq_ai:${propertyId}`
+
+  const cached = await redis.get(cacheKey)
+  if (cached) {
+    return res.json(JSON.parse(cached))
+  }
+
   try {
 
     const suggestions = await getFaqSuggestions(propertyId)
@@ -2187,33 +2236,37 @@ app.get("/analytics/:propertyId/faq-suggestions-ai", authenticate, async (req, r
 
     for (const s of suggestions) {
 
-      const completion = await openai.chat.completions.create({
+      const promises = suggestions.map(async (s) => {
 
-        model: "gpt-4o-mini",
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: "You are a hotel concierge assistant."
+            },
+            {
+              role: "user",
+              content: `Guests often ask: "${s.question}". Write a helpful concierge style answer.`
+            }
+          ]
+        })
 
-        messages: [
-          {
-            role: "system",
-            content: "You are a hotel concierge assistant."
-          },
-          {
-            role: "user",
-            content: `Guests often ask: "${s.question}". 
-            Write a helpful concierge style answer.`
-          }
-        ]
-
-      })
-
-      enhanced.push({
-
-        question: s.question,
-        count: s.count,
-        suggested_answer: completion.choices[0].message.content
+        return {
+          question: s.question,
+          count: s.count,
+          suggested_answer: completion.choices[0].message.content
+        }
 
       })
+
+      const enhanced = await Promise.all(promises)
 
     }
+
+    await redis.set(cacheKey, JSON.stringify({ suggestions: enhanced }), {
+      EX: 60 * 10
+    })
 
     res.json({ suggestions: enhanced })
 
