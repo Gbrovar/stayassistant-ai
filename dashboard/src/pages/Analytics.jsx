@@ -20,7 +20,8 @@ export default function Analytics() {
     peakHours,
     hasData,
     insights,
-    aiInsights
+    aiInsights,
+    semanticInsights
   } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
