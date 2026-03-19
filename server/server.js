@@ -1760,6 +1760,61 @@ app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => 
 
 })
 
+/* --- APPLY AI ACTION --- */
+
+app.post("/analytics/:propertyId/apply-action", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+    const { action } = req.body
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const property = await getProperty(propertyId)
+
+    if (!property) {
+      return res.status(404).json({ error: "property not found" })
+    }
+
+    /* --- ACTIONS --- */
+
+    if (action === "add_restaurant_faq") {
+
+      property.knowledge.faq.push({
+        question: "Can you recommend good restaurants nearby?",
+        answer: "Of course! I can suggest great restaurants based on your preferences. Let me know what type of cuisine you like."
+      })
+
+    }
+
+    if (action === "add_activities_faq") {
+
+      property.knowledge.faq.push({
+        question: "What activities can I do nearby?",
+        answer: "There are many great activities nearby including local attractions, tours and outdoor experiences."
+      })
+
+    }
+
+    property.updatedAt = Date.now()
+
+    await createProperty(property)
+
+    res.json({ success: true })
+
+  } catch (err) {
+
+    console.error("Apply action error", err)
+
+    res.status(500).json({ error: "action failed" })
+
+  }
+
+})
+
 /* --- FAQ SUGGESTIONS --- */
 
 app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res) => {

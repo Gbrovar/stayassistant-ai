@@ -87,9 +87,40 @@ export default function Analytics() {
           <h3>🤖 AI Insights</h3>
 
           {aiInsights.map((text, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {text.replace(/\*\*/g, "")}
-            </p>
+
+            <div key={idx} style={{ marginTop: 15 }}>
+
+              <p>{text.replace(/\*\*/g, "")}</p>
+
+              {text.toLowerCase().includes("restaurant") && (
+                <button
+                  style={{ marginTop: 5 }}
+                  onClick={async () => {
+
+                    const propertyId = localStorage.getItem("propertyId")
+                    const token = localStorage.getItem("token")
+
+                    await fetch(`${API_URL}/analytics/${propertyId}/apply-action`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                      },
+                      body: JSON.stringify({
+                        action: "add_restaurant_faq"
+                      })
+                    })
+
+                    alert("FAQ added 🚀")
+
+                  }}
+                >
+                  Add restaurant FAQ
+                </button>
+              )}
+
+            </div>
+
           ))}
 
         </div>
