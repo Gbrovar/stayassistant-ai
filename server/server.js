@@ -1462,14 +1462,11 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
   const cacheKey = `stayassistant:conversation_score:${propertyId}`
 
   const cached = await redis.get(cacheKey)
-
   if (cached) {
     return res.json(JSON.parse(cached))
   }
 
   try {
-
-    const propertyId = req.params.propertyId
 
     if (req.propertyId !== propertyId) {
       return res.status(403).json({ error: "forbidden" })
@@ -1479,70 +1476,70 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
 
     const ids = await redis.zRange(listKey, 0, 10, { REV: true }) || []
 
-    let scores = []
+    if (ids.length === 0) {
+      return res.json({ score: null })
+    }
 
-    for (const id of ids) {
+    /* ✅ AQUÍ ESTÁ EL CAMBIO IMPORTANTE */
+    const promises = ids.map(async (id) => {
 
-      const promises = ids.map(async (id) => {
+      const key = `stayassistant:chat:${propertyId}:${id}`
 
-        const key = `stayassistant:chat:${propertyId}:${id}`
+      const history = await redis.get(key)
+      if (!history) return null
 
-        const history = await redis.get(key)
-        if (!history) return null
+      let parsed
 
-        let parsed
+      try {
+        parsed = JSON.parse(history)
+      } catch {
+        return null
+      }
 
-        try {
-          parsed = JSON.parse(history)
-        } catch {
-          return null
+      const messages = parsed
+        .map(m => `${m.role}: ${m.content}`)
+        .join("\n")
+
+      const prompt = `
+        Analyze this conversation:
+
+        ${messages}
+
+        Score from 0 to 10:
+        - clarity
+        - user satisfaction
+        - friction
+
+        Return JSON:
+        {
+          "clarity": number,
+          "satisfaction": number,
+          "friction": number
         }
-
-        const messages = parsed
-          .map(m => `${m.role}: ${m.content}`)
-          .join("\n")
-
-        const prompt = `
-          Analyze this conversation:
-
-          ${messages}
-
-          Score from 0 to 10:
-          - clarity
-          - user satisfaction
-          - friction
-
-          Return JSON:
-          {
-            clarity: number,
-            satisfaction: number,
-            friction: number
-          }
         `
 
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          temperature: 0.2,
-          max_tokens: 100,
-          messages: [
-            { role: "system", content: "You analyze chat quality." },
-            { role: "user", content: prompt }
-          ]
-        })
-
-        try {
-          return JSON.parse(completion.choices[0].message.content)
-        } catch {
-          return null
-        }
-
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        temperature: 0.2,
+        max_tokens: 100,
+        messages: [
+          { role: "system", content: "You analyze chat quality." },
+          { role: "user", content: prompt }
+        ]
       })
 
-      const results = await Promise.all(promises)
+      try {
+        return JSON.parse(completion.choices[0].message.content)
+      } catch {
+        return null
+      }
 
-      const scores = results.filter(Boolean)
+    })
 
-    }
+    /* ✅ SOLO UNA VEZ */
+    const results = await Promise.all(promises)
+
+    const scores = results.filter(Boolean)
 
     if (scores.length === 0) {
       return res.json({ score: null })
