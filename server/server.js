@@ -1048,12 +1048,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const listKey = `stayassistant:conversations:${propertyId}`
 
-      await redis.zAdd(listKey, {
-        score: Date.now(),
-        value: conversationId
-      })
+      const maxConversations = 200
 
-      await redis.zRemRangeByRank(listKey, 0, -201)
+      const total = await redis.zCard(listKey)
+
+      if (total > maxConversations) {
+        await redis.zRemRangeByRank(listKey, 0, total - maxConversations - 1)
+      }
 
     } catch (err) {
 
@@ -1065,27 +1066,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     history = history ? JSON.parse(history) : [];
 
-    history.push({
-      role: "user",
-      content: userMessage
-    });
-
     const lastUserMessage = history
       .filter(m => m.role === "user")
       .slice(-1)[0]?.content
 
-    // SOLO bloquea si el mensaje anterior es EXACTAMENTE igual
     if (lastUserMessage && lastUserMessage === userMessage) {
 
       console.log("⚠️ DUPLICATE MESSAGE BLOCKED")
 
       return res.json({
-        reply: "Let me add more details to help you 👇",
+        reply: "I'll give you more helpful details about that 👇",
         language: userLanguage
       })
     }
 
-    // 👉 AHORA sí añadimos el mensaje
+    // 👉 SOLO AQUÍ añadimos el mensaje
     history.push({
       role: "user",
       content: userMessage
