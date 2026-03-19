@@ -18,7 +18,8 @@ export default function Analytics() {
     totalMessages,
     topIntents,
     peakHours,
-    hasData
+    hasData,
+    insights
   } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
@@ -50,10 +51,22 @@ export default function Analytics() {
       <div>
         <h2>Analytics</h2>
 
+        {insights.length > 0 && (
+          <div className="analytics-card" style={{ marginTop: 20 }}>
+
+            <h3>📊 Business Insights</h3>
+
+            {insights.map((i, idx) => (
+              <p key={idx} style={{ marginTop: 10 }}>
+                {i.text}
+              </p>
+            ))}
+
+          </div>
+        )}
+
         <div className="analytics-card">
-
           Analytics will appear once guests start using the assistant.
-
         </div>
 
       </div>

@@ -1612,6 +1612,80 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
 });
 
+/* --- BUSINESS INSIGHTS (SAAS LEVEL) --- */
+
+app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+    const hourKey = `stayassistant:analytics:${propertyId}:hours`
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 9, { REV: true })
+    const hours = await redis.hGetAll(hourKey)
+
+    const insights = []
+
+    /* --- TOP INTENT INSIGHT --- */
+
+    if (intents.length > 0) {
+
+      const top = intents[0]
+
+      if (top.value === "restaurants") {
+
+        insights.push({
+          type: "revenue",
+          text: "Guests frequently ask about restaurants. Adding curated recommendations can improve guest satisfaction."
+        })
+
+      }
+
+      if (top.value === "activities") {
+
+        insights.push({
+          type: "experience",
+          text: "Guests are looking for activities. Suggesting local experiences can increase engagement."
+        })
+
+      }
+
+    }
+
+    /* --- PEAK HOUR INSIGHT --- */
+
+    if (Object.keys(hours).length > 0) {
+
+      const peak = Object.entries(hours)
+        .sort((a, b) => b[1] - a[1])[0]
+
+      const hour = peak[0]
+
+      insights.push({
+        type: "timing",
+        text: `Most guest activity happens around ${hour}:00. Optimize your concierge availability during this time.`
+      })
+
+    }
+
+    res.json({ insights })
+
+  } catch (err) {
+
+    console.error("Business insights error", err)
+
+    res.json({ insights: [] })
+
+  }
+
+})
+
 /* --- FAQ SUGGESTIONS --- */
 
 app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res) => {

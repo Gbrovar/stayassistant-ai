@@ -5,13 +5,12 @@ export default function useAnalytics() {
 
     const propertyId = localStorage.getItem("propertyId")
     const token = localStorage.getItem("token")
-
     const [loading, setLoading] = useState(true)
-
     const [totalMessages, setTotalMessages] = useState(0)
     const [topIntents, setTopIntents] = useState([])
     const [peakHours, setPeakHours] = useState({})
     const [hasData, setHasData] = useState(false)
+    const [insights, setInsights] = useState([])
 
     useEffect(() => {
 
@@ -35,6 +34,19 @@ export default function useAnalytics() {
                 setPeakHours(data.peak_hours || {})
                 setHasData(data.has_data || false)
 
+                const resInsights = await fetch(
+                    `${API_URL}/analytics/${propertyId}/business`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+
+                const dataInsights = await resInsights.json()
+
+                setInsights(dataInsights.insights || [])
+
             } catch (err) {
 
                 console.error("Analytics load error:", err)
@@ -54,7 +66,8 @@ export default function useAnalytics() {
         totalMessages,
         topIntents,
         peakHours,
-        hasData
+        hasData,
+        insights
     }
 
 }
