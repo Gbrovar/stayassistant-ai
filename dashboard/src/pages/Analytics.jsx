@@ -146,6 +146,7 @@ export default function Analytics() {
           const data = await res.json()
 
           alert("Optimizations applied 🚀")
+          window.location.reload()
 
         }}
       >
