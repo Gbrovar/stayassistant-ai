@@ -123,6 +123,7 @@ export default function Conversations() {
 
                   <div className="conversation-meta">
                     <span>Intent: {analysis.intent}</span>
+                    <span>•</span>
                     <span>{analysis.messagesCount} msgs</span>
 
                     {analysis.fallback && (
