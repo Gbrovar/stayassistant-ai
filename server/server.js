@@ -199,6 +199,11 @@ async function precomputeInsights(propertyId) {
   }
 }
 
+async function triggerPrecompute(propertyId) {
+  precomputeInsights(propertyId)
+}
+
+
 const propertyCache = new Map()
 
 async function loadProperty(propertyId) {
@@ -318,6 +323,13 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
   return R * c
 
+}
+
+/* --- Plan price --- */
+function getPlanPrice(plan) {
+  if (plan === "pro") return 29
+  if (plan === "business") return 99
+  return 0
 }
 
 /* --- middleware --- */
@@ -744,6 +756,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   await invalidateAnalyticsCache(propertyId)
 
+  triggerPrecompute(propertyId)
+
   /* --- ONBOARDING STEP COMPLETE --- */
 
   const onboardingKey = `stayassistant:onboarding:${propertyId}`
@@ -821,6 +835,8 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
 
   await invalidateAnalyticsCache(propertyId)
 
+  triggerPrecompute(propertyId)
+
   res.json({
     success: true
   })
@@ -870,6 +886,8 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
   propertyCache.delete(propertyId)
 
   await invalidateAnalyticsCache(propertyId)
+
+  triggerPrecompute(propertyId)
 
   res.json({ success: true })
 
@@ -944,6 +962,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   propertyCache.delete(propertyId)
 
   await invalidateAnalyticsCache(propertyId)
+
+  triggerPrecompute(propertyId)
 
   /* --- ONBOARDING STEP COMPLETE --- */
 
@@ -2302,6 +2322,8 @@ app.post("/analytics/:propertyId/apply-action", authenticate, async (req, res) =
 
     await invalidateAnalyticsCache(propertyId)
 
+    triggerPrecompute(propertyId)
+
     res.json({ success: true })
 
   } catch (err) {
@@ -2416,6 +2438,8 @@ app.post("/analytics/:propertyId/auto-optimize", authenticate, async (req, res) 
     propertyCache.delete(propertyId)
 
     await invalidateAnalyticsCache(propertyId)
+
+    triggerPrecompute(propertyId)
 
     res.json({
       success: true,
@@ -2610,6 +2634,8 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 
     await invalidateAnalyticsCache(propertyId)
 
+    triggerPrecompute(propertyId)
+
     res.json({ success: true })
 
   } catch (err) {
@@ -2707,6 +2733,8 @@ app.post("/property/setup", authenticate, async (req, res) => {
 
     await invalidateAnalyticsCache(propertyId)
 
+    triggerPrecompute(propertyId)
+
     res.json({
       success: true,
       coordinates: property.coordinates
@@ -2717,6 +2745,67 @@ app.post("/property/setup", authenticate, async (req, res) => {
     console.error("Property setup error", err)
 
     res.status(500).json({ error: "setup failed" })
+
+  }
+
+})
+
+/* --- COST TRACKING --- */
+app.get("/analytics/:propertyId/costs", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const month = new Date().toISOString().slice(0, 7)
+
+    const costKey = `stayassistant:cost:${propertyId}:${month}`
+
+    const data = await redis.hGetAll(costKey)
+
+    const cost = Number(data.cost || 0)
+    const inputTokens = Number(data.input_tokens || 0)
+    const outputTokens = Number(data.output_tokens || 0)
+
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`
+    const messages = Number(await redis.get(usageKey) || 0)
+
+    const costPerMessage = messages > 0 ? cost / messages : 0
+
+    const subKey = `stayassistant:subscription:${propertyId}`
+
+    const subRaw = await redis.get(subKey)
+
+    let plan = "free"
+
+    if (subRaw) {
+      const sub = JSON.parse(subRaw)
+      plan = sub.plan || "free"
+    }
+
+    const revenue = getPlanPrice(plan)
+
+    const profit = revenue - cost
+
+    res.json({
+      plan,
+      revenue,
+      cost,
+      profit,
+      margin: revenue > 0 ? (profit / revenue) * 100 : 0,
+      messages,
+      cost_per_message: costPerMessage
+    })
+
+  } catch (err) {
+
+    console.error("Cost analytics error", err)
+
+    res.status(500).json({ error: "cost analytics failed" })
 
   }
 
