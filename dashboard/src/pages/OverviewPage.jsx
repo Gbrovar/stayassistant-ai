@@ -25,6 +25,12 @@ export default function OverviewPage() {
 
   const percentage = Math.min((usage / limit) * 100, 100)
 
+  const peak =
+    Object.entries(peakHours).length > 0
+      ? Object.entries(peakHours)
+        .sort((a, b) => b[1] - a[1])[0][0] + ":00"
+      : "-"
+
   return (
 
     <div>
@@ -47,10 +53,7 @@ export default function OverviewPage() {
 
         <div className="card">
           <h3>Peak Hour</h3>
-          <p>
-            {Object.entries(peakHours)
-              .sort((a, b) => b[1] - a[1])[0]?.[0] + ":00" || "-"}
-          </p>
+          <p>{peak}</p>
         </div>
 
         <div className="card">
