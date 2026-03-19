@@ -1523,10 +1523,40 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const outputTokens = usageData.completion_tokens || 0
 
         const cost =
-          (inputTokens * 0.00000015) +
-          (outputTokens * 0.0000006)
+          (inputTokens / 1000) * 0.00015 +
+          (outputTokens / 1000) * 0.0006
 
         const costKey = `stayassistant:cost:${propertyId}:${month}`
+
+        // 💾 BILLING SNAPSHOT (MONTHLY)
+
+        const snapshotKey = `stayassistant:billing_snapshot:${propertyId}:${month}`
+
+        const snapshotExists = await redis.get(snapshotKey)
+
+        if (!snapshotExists) {
+
+          const subKey = `stayassistant:subscription:${propertyId}`
+
+          const subRaw = await redis.get(subKey)
+
+          let plan = "free"
+
+          if (subRaw) {
+            const sub = JSON.parse(subRaw)
+            plan = sub.plan || "free"
+          }
+
+          const revenue = getPlanPrice(plan)
+
+          await redis.set(snapshotKey, JSON.stringify({
+            plan,
+            revenue,
+            createdAt: Date.now()
+          }))
+
+          console.log("📸 SNAPSHOT CREATED:", propertyId, month)
+        }
 
         await redis.hIncrByFloat(costKey, "cost", cost)
         await redis.hIncrBy(costKey, "input_tokens", inputTokens)
@@ -1554,9 +1584,17 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           const totalCost = await redis.hGet(costKey, "cost")
 
-          if (Number(totalCost || 0) > revenue) {
+          const alertKey = `stayassistant:alerted:${propertyId}:${month}`
+
+          const alreadyAlerted = await redis.get(alertKey)
+
+          if (Number(totalCost || 0) > revenue && !alreadyAlerted) {
+
             console.log("🚨 UNPROFITABLE PROPERTY:", propertyId)
+
+            await redis.set(alertKey, "1", { EX: 60 * 60 * 6 }) // 6h cooldown
           }
+
 
         } catch (err) {
           console.log("Profit check error:", err)
@@ -2806,18 +2844,37 @@ app.get("/analytics/:propertyId/costs", authenticate, async (req, res) => {
 
     const costPerMessage = messages > 0 ? cost / messages : 0
 
-    const subKey = `stayassistant:subscription:${propertyId}`
+    // 💾 LOAD SNAPSHOT (MONTHLY)
 
-    const subRaw = await redis.get(subKey)
+    const snapshotKey = `stayassistant:billing_snapshot:${propertyId}:${month}`
+
+    const snapshotRaw = await redis.get(snapshotKey)
 
     let plan = "free"
+    let revenue = 0
 
-    if (subRaw) {
-      const sub = JSON.parse(subRaw)
-      plan = sub.plan || "free"
+    if (snapshotRaw) {
+
+      const snapshot = JSON.parse(snapshotRaw)
+
+      plan = snapshot.plan
+      revenue = snapshot.revenue
+
+    } else {
+
+      // fallback (por si no existe snapshot)
+      const subKey = `stayassistant:subscription:${propertyId}`
+
+      const subRaw = await redis.get(subKey)
+
+      if (subRaw) {
+        const sub = JSON.parse(subRaw)
+        plan = sub.plan || "free"
+      }
+
+      revenue = getPlanPrice(plan)
+
     }
-
-    const revenue = getPlanPrice(plan)
 
     const profit = revenue - cost
 
