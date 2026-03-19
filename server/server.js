@@ -17,7 +17,26 @@ import { createProperty, getProperty } from "./db/properties.js";
 import redis, { connectRedis } from "./db/redis.js";
 import { selectKnowledge } from "./utils/knowledgeSelector.js";
 import { detectIntent } from "./utils/intentEngine.js"
-import crypto from "crypto"
+import crypto from "crypto";
+
+async function invalidateAnalyticsCache(propertyId) {
+
+  const keys = [
+    `stayassistant:ai_insights:${propertyId}`,
+    `stayassistant:semantic:${propertyId}`,
+    `stayassistant:conversation_score:${propertyId}`,
+    `stayassistant:faq_ai:${propertyId}`
+  ]
+
+  try {
+    if (keys.length) {
+      await redis.del(keys)
+      console.log("🧹 Cache invalidated:", propertyId)
+    }
+  } catch (err) {
+    console.log("Cache invalidation error:", err)
+  }
+}
 
 const propertyCache = new Map()
 
@@ -499,6 +518,8 @@ app.post("/auth/register", async (req, res) => {
 
   propertyCache.delete(propertyId)
 
+  await invalidateAnalyticsCache(propertyId)
+
   /* --- CREATE TOKEN --- */
 
   const token = jwt.sign(
@@ -559,6 +580,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
   await createProperty(property)
 
   propertyCache.delete(propertyId)
+
+  await invalidateAnalyticsCache(propertyId)
 
   /* --- ONBOARDING STEP COMPLETE --- */
 
@@ -635,6 +658,8 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
 
   propertyCache.delete(propertyId)
 
+  await invalidateAnalyticsCache(propertyId)
+
   res.json({
     success: true
   })
@@ -682,6 +707,8 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
 
   // limpiar cache
   propertyCache.delete(propertyId)
+
+  await invalidateAnalyticsCache(propertyId)
 
   res.json({ success: true })
 
@@ -754,6 +781,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   await createProperty(property)
 
   propertyCache.delete(propertyId)
+
+  await invalidateAnalyticsCache(propertyId)
 
   /* --- ONBOARDING STEP COMPLETE --- */
 
@@ -1332,6 +1361,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
       await redis.incr(usageKey)
+
+      // 🔥 INVALIDATE ANALYTICS CACHE (NEW DATA)
+      await invalidateAnalyticsCache(propertyId)
 
       const ttl = await redis.ttl(usageKey)
 
@@ -2100,6 +2132,8 @@ app.post("/analytics/:propertyId/apply-action", authenticate, async (req, res) =
     // 🔥 FIX CRÍTICO
     propertyCache.delete(propertyId)
 
+    await invalidateAnalyticsCache(propertyId)
+
     res.json({ success: true })
 
   } catch (err) {
@@ -2210,6 +2244,10 @@ app.post("/analytics/:propertyId/auto-optimize", authenticate, async (req, res) 
     property.updatedAt = Date.now()
 
     await createProperty(property)
+
+    propertyCache.delete(propertyId)
+
+    await invalidateAnalyticsCache(propertyId)
 
     res.json({
       success: true,
@@ -2401,6 +2439,8 @@ app.post("/ai/setup", authenticate, async (req, res) => {
     await createProperty(property)
 
     propertyCache.delete(propertyId)
+
+    await invalidateAnalyticsCache(propertyId)
 
     res.json({ success: true })
 
