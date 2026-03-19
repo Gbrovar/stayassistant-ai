@@ -1522,9 +1522,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const inputTokens = usageData.prompt_tokens || 0
         const outputTokens = usageData.completion_tokens || 0
 
-        const cost =
-          (inputTokens / 1000) * 0.00015 +
-          (outputTokens / 1000) * 0.0006
+        const cost = Number(
+          (
+            (inputTokens / 1000) * 0.00015 +
+            (outputTokens / 1000) * 0.0006
+          ).toFixed(6)
+        )
 
         const costKey = `stayassistant:cost:${propertyId}:${month}`
 
