@@ -1492,6 +1492,98 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
 })
 
+/* --- SEMANTIC INSIGHTS (CONVERSATION LEVEL) --- */
+
+app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const listKey = `stayassistant:conversations:${propertyId}`
+
+    const ids = await redis.zRange(listKey, 0, 10, { REV: true }) || []
+
+    let allMessages = []
+
+    for (const id of ids) {
+
+      const key = `stayassistant:chat:${propertyId}:${id}`
+
+      const history = await redis.get(key)
+
+      if (!history) continue
+
+      try {
+        const parsed = JSON.parse(history)
+
+        parsed.forEach(m => {
+          if (m.role === "user") {
+            allMessages.push(m.content)
+          }
+        })
+
+      } catch { }
+
+    }
+
+    const sample = allMessages.slice(0, 20).join("\n")
+
+    if (!sample) {
+      return res.json({ insights: [] })
+    }
+
+    const prompt = `
+        Analyze these guest messages.
+
+        Detect:
+        - confusion
+        - repeated questions
+        - missing information
+        - opportunities to improve FAQ
+
+        Messages:
+        ${sample}
+
+        Return 3 short insights.
+        `
+
+    const completion = await openai.chat.completions.create({
+
+      model: "gpt-4o-mini",
+
+      max_tokens: 120,
+      temperature: 0.3,
+
+      messages: [
+        { role: "system", content: "You analyze customer conversations." },
+        { role: "user", content: prompt }
+      ]
+
+    })
+
+    const text = completion.choices[0].message.content
+
+    const insights = text
+      .split("\n")
+      .filter(line => line.trim().length > 10)
+
+    res.json({ insights })
+
+  } catch (err) {
+
+    console.error("Semantic insights error", err)
+
+    res.json({ insights: [] })
+
+  }
+
+})
+
 /* -- CONTEXT DETECTION --- */
 function detectContext(hour) {
 

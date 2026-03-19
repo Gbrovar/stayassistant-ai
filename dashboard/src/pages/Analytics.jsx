@@ -126,6 +126,20 @@ export default function Analytics() {
         </div>
       )}
 
+      {semanticInsights.length > 0 && (
+        <div className="analytics-card" style={{ marginTop: 20 }}>
+
+          <h3>🧠 Conversation Insights</h3>
+
+          {semanticInsights.map((text, idx) => (
+            <p key={idx} style={{ marginTop: 10 }}>
+              {text}
+            </p>
+          ))}
+
+        </div>
+      )}
+
       <button
         style={{ marginTop: 10 }}
         onClick={async () => {

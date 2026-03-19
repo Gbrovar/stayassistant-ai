@@ -12,6 +12,7 @@ export default function useAnalytics() {
     const [hasData, setHasData] = useState(false)
     const [insights, setInsights] = useState([])
     const [aiInsights, setAiInsights] = useState([])
+    const [semanticInsights, setSemanticInsights] = useState([])
 
     useEffect(() => {
 
@@ -61,6 +62,19 @@ export default function useAnalytics() {
 
                 setAiInsights(dataAI.insights || [])
 
+                const resSemantic = await fetch(
+                    `${API_URL}/analytics/${propertyId}/semantic-insights`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+
+                const dataSemantic = await resSemantic.json()
+
+                setSemanticInsights(dataSemantic.insights || [])
+
             } catch (err) {
 
                 console.error("Analytics load error:", err)
@@ -82,7 +96,8 @@ export default function useAnalytics() {
         peakHours,
         hasData,
         insights,
-        aiInsights
+        aiInsights,
+        semanticInsights
     }
 
 }
