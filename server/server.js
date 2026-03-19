@@ -196,8 +196,8 @@ app.get("/property/:id/suggestions", async (req, res) => {
     return res.json({ suggestions: [] })
   }
 
-  const faq = property.knowledge.faq.slice(0, 2)
-  const services = property.knowledge.services.slice(0, 2)
+  const faq = (property.knowledge?.faq || []).slice(0, 2)
+  const services = (property.knowledge?.services || []).slice(0, 2)
 
   const suggestions = []
 
@@ -1581,6 +1581,8 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
 
 /* --- SEMANTIC INSIGHTS (CONVERSATION LEVEL) --- */
 app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, res) => {
+
+  const propertyId = req.params.propertyId
 
   const cacheKey = `stayassistant:semantic:${propertyId}`
 
