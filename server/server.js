@@ -67,7 +67,6 @@ async function loadProperty(propertyId) {
 
 
 /* --- GET PROPERTY USAGE LIMIT --- */
-
 async function getUsageLimit(propertyId) {
 
   const key = `stayassistant:subscription:${propertyId}`
@@ -110,15 +109,6 @@ async function seedDatabase() {
 
 await seedDatabase()
 
-/*
-if (!(await getProperty("demo_property"))) {
-
-  console.log("Seeding demo_property into Redis")
-
-  await createProperty(properties["demo_property"])
-
-}
-*/
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET environment variable not set")
@@ -186,7 +176,6 @@ console.log("Serving static files from:", publicPath);
 app.use(express.static(publicPath));
 
 /* --- DASHBOARD STATIC (React build) --- */
-
 app.use("/dashboard", express.static(path.join(publicPath, "dashboard")));
 
 /* --- health check --- */
@@ -395,20 +384,17 @@ app.get("/", (req, res) => {
 });
 
 /* --- DASHBOARD SPA ROUTING --- */
-
 app.get(/^\/dashboard(\/.*)?$/, (req, res) => {
   res.sendFile(path.join(publicPath, "dashboard/index.html"));
 });
 
 /* --- OpenAI client --- */
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
 
 /* --- property config endpoint --- */
-
 app.get("/property/:id", async (req, res) => {
 
   const propertyId = req.params.id
@@ -428,7 +414,6 @@ app.get("/property/:id", async (req, res) => {
 })
 
 /* --- LOGIN --- */
-
 app.post("/auth/login", async (req, res) => {
 
   const { email, password } = req.body
@@ -459,8 +444,6 @@ app.post("/auth/login", async (req, res) => {
 });
 
 /* --- REGISTER PROPERTY --- */
-
-
 app.post("/auth/register", async (req, res) => {
 
   const { property_name, email, password } = req.body
@@ -532,7 +515,6 @@ app.post("/auth/register", async (req, res) => {
 });
 
 /* --- GET FAQ --- */
-
 app.get("/property/:id/faq", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -554,7 +536,6 @@ app.get("/property/:id/faq", authenticate, async (req, res) => {
 });
 
 /* --- UPDATE FAQ --- */
-
 app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -602,7 +583,6 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 });
 
 /* --- GET BRANDING --- */
-
 app.get("/property/:id/branding", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -626,7 +606,6 @@ app.get("/property/:id/branding", authenticate, async (req, res) => {
 });
 
 /* --- UPDATE BRANDING --- */
-
 app.post("/property/:id/branding", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -663,7 +642,6 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
 });
 
 /* --- UPDATE PROPERTY INFO --- */
-
 app.post("/property/:id/property-info", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -731,7 +709,6 @@ app.get("/property/:id/property-info", authenticate, async (req, res) => {
 
 
 /* --- GET RECOMMENDATIONS --- */
-
 app.get("/property/:id/recommendations", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -754,7 +731,6 @@ app.get("/property/:id/recommendations", authenticate, async (req, res) => {
 
 
 /* --- UPDATE RECOMMENDATIONS --- */
-
 app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -803,7 +779,6 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
 
 /* --- chat endpoint --- */
-
 app.post("/chat", chatLimiter, async (req, res) => {
 
   try {
@@ -842,12 +817,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
     console.log("Property:", propertyId);
 
     /* --- LOAD PROPERTY --- */
-
     let property = await loadProperty(propertyId)
 
 
     /* --- DEMO VISITOR LIMIT --- */
-
     if (propertyId === "demo_property") {
 
       const visitorId = req.body.visitorId || "anonymous"
@@ -877,7 +850,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     /* --- MONTHLY USAGE BUCKET --- */
-
     const month = new Date().toISOString().slice(0, 7)
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
@@ -902,7 +874,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     /* --- INTENT DETECTION --- */
-
     const intent = detectIntent(userMessage)
 
     console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
@@ -1022,7 +993,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     /* --- ANALYTICS TRACKING --- */
-
     try {
 
       // 1️⃣ intent analytics (ya existente)
@@ -1050,11 +1020,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     /* --- CHAT HISTORY --- */
-
     const historyKey = `stayassistant:chat:${propertyId}:${conversationId}`;
 
     /* --- REGISTER CONVERSATION --- */
-
     try {
 
       const listKey = `stayassistant:conversations:${propertyId}`
@@ -1120,7 +1088,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}`
 
     /* --- FAQ AUTO ANSWER --- */
-
     function similarity(a, b) {
       const aWords = a.split(" ")
       const bWords = b.split(" ")
@@ -1187,7 +1154,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     /* --- AI GUARD (SMART FALLBACK) --- */
-
     if (
       intent !== "other" &&
       intent !== "restaurants" &&
@@ -1205,7 +1171,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
-
     if (!knowledge || knowledge.length < 30) {
 
       console.log("🚫 AI BLOCKED (low knowledge)")
@@ -1217,7 +1182,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     /* --- LOAD NEARBY CONTEXT (SMART) --- */
-
     let nearbyContext = ""
 
     if (intent === "restaurants" || intent === "activities") {
@@ -1267,7 +1231,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     /* --- AI COMPLETION --- */
-
     const context = detectContext(hour);
 
     const trimmedHistory = history.map(m => ({
@@ -1436,7 +1399,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 });
 
 /* --- LIST CONVERSATIONS --- */
-
 app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 
   try {
@@ -1493,7 +1455,6 @@ app.get("/conversations/:propertyId", authenticate, async (req, res) => {
 })
 
 /* --- CONVERSATION SCORING --- */
-
 app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, res) => {
 
   try {
@@ -1597,7 +1558,6 @@ app.get("/analytics/:propertyId/conversation-score", authenticate, async (req, r
 })
 
 /* --- SEMANTIC INSIGHTS (CONVERSATION LEVEL) --- */
-
 app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, res) => {
 
   try {
@@ -1706,9 +1666,78 @@ function detectContext(hour) {
 
 }
 
+/* --- ALERT SYSTEM --- */
+
+app.get("/analytics/:propertyId/alerts", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 4, { REV: true })
+
+    const alerts = []
+
+    /* --- HIGH DEMAND ALERT --- */
+
+    const top = intents[0]
+
+    if (top && top.score >= 10) {
+
+      alerts.push({
+        type: "demand",
+        level: "warning",
+        text: `High demand for "${top.value}" (${top.score} requests)`
+      })
+
+    }
+
+    /* --- MISSING FAQ ALERT --- */
+
+    const property = await getProperty(propertyId)
+
+    if (property && property.knowledge?.faq) {
+
+      const faqText = property.knowledge.faq.map(f => f.question.toLowerCase()).join(" ")
+
+      intents.forEach(i => {
+
+        if (
+          i.score >= 5 &&
+          !faqText.includes(i.value)
+        ) {
+
+          alerts.push({
+            type: "faq_gap",
+            level: "critical",
+            text: `Missing FAQ for "${i.value}" (high demand)`
+          })
+
+        }
+
+      })
+
+    }
+
+    res.json({ alerts })
+
+  } catch (err) {
+
+    console.error("Alerts error", err)
+
+    res.json({ alerts: [] })
+
+  }
+
+})
 
 /* --- ANALYTICS API --- */
-
 app.get("/analytics/:propertyId", authenticate, async (req, res) => {
 
   try {
@@ -1809,7 +1838,6 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 });
 
 /* --- BUSINESS INSIGHTS (SAAS LEVEL) --- */
-
 app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 
   try {
@@ -1883,7 +1911,6 @@ app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 })
 
 /* --- AI INSIGHTS (GPT POWERED) --- */
-
 app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => {
 
   try {
@@ -1957,7 +1984,6 @@ app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => 
 })
 
 /* --- APPLY AI ACTION --- */
-
 app.post("/analytics/:propertyId/apply-action", authenticate, async (req, res) => {
 
   try {
@@ -2012,7 +2038,6 @@ app.post("/analytics/:propertyId/apply-action", authenticate, async (req, res) =
 })
 
 /* --- FAQ SUGGESTIONS --- */
-
 app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res) => {
 
   const propertyId = req.params.propertyId
@@ -2059,7 +2084,6 @@ async function getFaqSuggestions(propertyId) {
 }
 
 /* --- AUTO OPTIMIZE PROPERTY --- */
-
 app.post("/analytics/:propertyId/auto-optimize", authenticate, async (req, res) => {
 
   try {
@@ -2233,7 +2257,6 @@ app.post("/onboarding/complete", authenticate, async (req, res) => {
 })
 
 /* --- AI SETUP WIZARD --- */
-
 app.post("/ai/setup", authenticate, async (req, res) => {
 
   try {
@@ -2316,7 +2339,6 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 })
 
 /* --- PROPERTY SETUP (ADDRESS + COORDINATES) --- */
-
 app.post("/property/setup", authenticate, async (req, res) => {
 
   try {
@@ -2415,7 +2437,6 @@ app.post("/property/setup", authenticate, async (req, res) => {
 })
 
 /* --- CREATE STRIPE CHECKOUT --- */
-
 app.post("/billing/create-checkout", authenticate, async (req, res) => {
 
   try {
@@ -2474,7 +2495,6 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
 })
 
 /* --- SAVE SUBSCRIPTION HELPER --- */
-
 async function saveSubscription(propertyId, data) {
 
   const key = `stayassistant:subscription:${propertyId}`
@@ -2494,7 +2514,6 @@ async function saveSubscription(propertyId, data) {
 }
 
 /* --- STRIPE WEBHOOK --- */
-
 app.post("/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
 
   const sig = req.headers["stripe-signature"]
@@ -2633,7 +2652,6 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 })
 
 /* --- GET SUBSCRIPTION --- */
-
 app.get("/billing/subscription", authenticate, async (req, res) => {
 
   try {
@@ -2664,7 +2682,6 @@ app.get("/billing/subscription", authenticate, async (req, res) => {
 })
 
 /* --- STRIPE BILLING PORTAL --- */
-
 app.post("/billing/portal", authenticate, async (req, res) => {
 
   const propertyId = req.propertyId

@@ -14,6 +14,7 @@ export default function useAnalytics() {
     const [aiInsights, setAiInsights] = useState([])
     const [semanticInsights, setSemanticInsights] = useState([])
     const [conversationScore, setConversationScore] = useState(null)
+    const [alerts, setAlerts] = useState([])
 
     useEffect(() => {
 
@@ -89,6 +90,19 @@ export default function useAnalytics() {
 
                 setConversationScore(dataScore)
 
+                const resAlerts = await fetch(
+                    `${API_URL}/analytics/${propertyId}/alerts`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+
+                const dataAlerts = await resAlerts.json()
+
+                setAlerts(dataAlerts.alerts || [])
+
             } catch (err) {
 
                 console.error("Analytics load error:", err)
@@ -112,7 +126,8 @@ export default function useAnalytics() {
         insights,
         aiInsights,
         semanticInsights,
-        conversationScore
+        conversationScore,
+        alerts
     }
 
 }

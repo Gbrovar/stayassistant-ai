@@ -22,7 +22,8 @@ export default function Analytics() {
     insights,
     aiInsights,
     semanticInsights,
-    conversationScore
+    conversationScore,
+    alerts
   } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
@@ -68,6 +69,28 @@ export default function Analytics() {
     <div>
 
       <h2>Analytics</h2>
+
+      {alerts.length > 0 && (
+        <div style={{ marginTop: 20 }}>
+
+          {alerts.map((a, idx) => (
+
+            <div
+              key={idx}
+              style={{
+                background: a.level === "critical" ? "#7f1d1d" : "#78350f",
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 10
+              }}
+            >
+              ⚠️ {a.text}
+            </div>
+
+          ))}
+
+        </div>
+      )}
 
       {insights.length > 0 && (
         <div className="analytics-card" style={{ marginTop: 20 }}>
