@@ -11,6 +11,7 @@ export default function useAnalytics() {
     const [peakHours, setPeakHours] = useState({})
     const [hasData, setHasData] = useState(false)
     const [insights, setInsights] = useState([])
+    const [aiInsights, setAiInsights] = useState([])
 
     useEffect(() => {
 
@@ -47,6 +48,19 @@ export default function useAnalytics() {
 
                 setInsights(dataInsights.insights || [])
 
+                const resAI = await fetch(
+                    `${API_URL}/analytics/${propertyId}/ai-insights`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+
+                const dataAI = await resAI.json()
+
+                setAiInsights(dataAI.insights || [])
+
             } catch (err) {
 
                 console.error("Analytics load error:", err)
@@ -67,7 +81,8 @@ export default function useAnalytics() {
         topIntents,
         peakHours,
         hasData,
-        insights
+        insights,
+        aiInsights
     }
 
 }

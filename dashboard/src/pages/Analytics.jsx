@@ -19,7 +19,8 @@ export default function Analytics() {
     topIntents,
     peakHours,
     hasData,
-    insights
+    insights,
+    aiInsights
   } = useAnalytics()
 
   /* --- PREPARE CHART DATA --- */
@@ -74,6 +75,20 @@ export default function Analytics() {
           {insights.map((i, idx) => (
             <p key={idx} style={{ marginTop: 10 }}>
               {i.text}
+            </p>
+          ))}
+
+        </div>
+      )}
+
+      {aiInsights.length > 0 && (
+        <div className="analytics-card" style={{ marginTop: 20 }}>
+
+          <h3>🤖 AI Insights</h3>
+
+          {aiInsights.map((text, idx) => (
+            <p key={idx} style={{ marginTop: 10 }}>
+              {text}
             </p>
           ))}
 

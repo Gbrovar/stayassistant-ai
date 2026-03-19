@@ -1686,6 +1686,80 @@ app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 
 })
 
+/* --- AI INSIGHTS (GPT POWERED) --- */
+
+app.get("/analytics/:propertyId/ai-insights", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+    const hourKey = `stayassistant:analytics:${propertyId}:hours`
+
+    const intents = await redis.zRangeWithScores(intentKey, 0, 4, { REV: true })
+    const hours = await redis.hGetAll(hourKey)
+
+    const topIntents = intents.map(i => `${i.value} (${i.score})`).join(", ")
+
+    const hourSummary = Object.entries(hours)
+      .map(([h, v]) => `${h}:00 (${v})`)
+      .join(", ")
+
+    const prompt = `
+        You are a SaaS analytics assistant.
+
+        Analyze this property data and give 2-3 short business insights.
+
+        Top guest intents:
+        ${topIntents}
+
+        Peak hours:
+        ${hourSummary}
+
+        Rules:
+        - Be concise
+        - Be actionable
+        - Do NOT be generic
+        - Focus on improving guest experience or revenue
+        `
+
+    const completion = await openai.chat.completions.create({
+
+      model: "gpt-4o-mini",
+
+      max_tokens: 120,
+      temperature: 0.4,
+
+      messages: [
+        { role: "system", content: "You analyze SaaS product analytics." },
+        { role: "user", content: prompt }
+      ]
+
+    })
+
+    const text = completion.choices[0].message.content
+
+    const insights = text
+      .split("\n")
+      .filter(line => line.trim().length > 10)
+
+    res.json({ insights })
+
+  } catch (err) {
+
+    console.error("AI insights error", err)
+
+    res.json({ insights: [] })
+
+  }
+
+})
+
 /* --- FAQ SUGGESTIONS --- */
 
 app.get("/analytics/:propertyId/faq-suggestions", authenticate, async (req, res) => {
