@@ -573,6 +573,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   property.knowledge.faq = faq
 
+  property.updatedAt = Date.now()
+
   await createProperty(property)
 
   propertyCache.delete(propertyId)
@@ -648,6 +650,8 @@ app.post("/property/:id/branding", authenticate, async (req, res) => {
     primary_color
   }
 
+  property.updatedAt = Date.now()
+
   await createProperty(property)
 
   propertyCache.delete(propertyId)
@@ -693,6 +697,8 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
     wifi_name,
     wifi_password
   }
+
+  property.updatedAt = Date.now()
 
   await createProperty(property)
 
@@ -766,6 +772,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   }
 
   property.knowledge.local_recommendations = recommendations
+
+  property.updatedAt = Date.now()
 
   await createProperty(property)
 
@@ -1109,7 +1117,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const normalizedQuestion = normalizeMessage(userMessage)
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
-    const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}`;
+    const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}`
 
     /* --- FAQ AUTO ANSWER --- */
 
@@ -1820,6 +1828,8 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 
     property.knowledge.property_info.checkin = checkin
     property.knowledge.property_info.checkout = checkout
+
+    property.updatedAt = Date.now()
 
     await createProperty(property)
 
