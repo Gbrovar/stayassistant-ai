@@ -111,7 +111,7 @@ export default function Analytics() {
                       })
                     })
 
-                    alert("FAQ added 🚀")
+                    window.location.reload()
 
                   }}
                 >
