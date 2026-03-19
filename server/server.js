@@ -1594,8 +1594,6 @@ app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, re
 
   try {
 
-    const propertyId = req.params.propertyId
-
     if (req.propertyId !== propertyId) {
       return res.status(403).json({ error: "forbidden" })
     }
