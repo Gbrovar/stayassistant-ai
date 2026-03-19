@@ -133,9 +133,9 @@ export default function Analytics() {
           <h3>🧠 Conversation Insights</h3>
 
           {semanticInsights.map((text, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {text}
-            </p>
+            <div key={idx} style={{ marginTop: 15 }}>
+              <p>{text.replace(/\*\*/g, "")}</p>
+            </div>
           ))}
 
         </div>
