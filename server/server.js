@@ -1532,6 +1532,36 @@ app.post("/chat", chatLimiter, async (req, res) => {
         await redis.hIncrBy(costKey, "input_tokens", inputTokens)
         await redis.hIncrBy(costKey, "output_tokens", outputTokens)
 
+        // 🚨 PROFIT CHECK (REAL-TIME)
+
+        try {
+
+          const subKey = `stayassistant:subscription:${propertyId}`
+
+          const subRaw = await redis.get(subKey)
+
+          let plan = "free"
+
+          if (subRaw) {
+            const sub = JSON.parse(subRaw)
+            plan = sub.plan || "free"
+          }
+
+          const revenue =
+            plan === "pro" ? 29 :
+              plan === "business" ? 99 :
+                0
+
+          const totalCost = await redis.hGet(costKey, "cost")
+
+          if (Number(totalCost || 0) > revenue) {
+            console.log("🚨 UNPROFITABLE PROPERTY:", propertyId)
+          }
+
+        } catch (err) {
+          console.log("Profit check error:", err)
+        }
+
         console.log("💰 COST SAVED:", costKey)
 
       }
@@ -2790,6 +2820,8 @@ app.get("/analytics/:propertyId/costs", authenticate, async (req, res) => {
     const revenue = getPlanPrice(plan)
 
     const profit = revenue - cost
+
+
 
     res.json({
       plan,
