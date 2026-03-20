@@ -13,9 +13,9 @@ import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Billing from "./pages/Billing"
-import Onboarding from "./pages/Onboarding"
+import Onboarding from "./pages/_legacy/Onboarding"
 
-import Property from "./pages/Property"
+import Property from "./pages/_legacy/Property"
 import ConversationsPage from "./pages/ConversationsPage"
 import AnalyticsPage from "./pages/AnalyticsPage"
 import InsightsPage from "./pages/InsightsPage"
@@ -85,15 +85,7 @@ export default function App() {
 
         <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
 
-
-        {/* LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
         <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
-        <Route path="/preview" element={<ProtectedLayout><Preview /></ProtectedLayout>} />
-        <Route path="/onboarding" element={<ProtectedLayout><Onboarding /></ProtectedLayout>} />
-        <Route path="/propertyOld" element={<ProtectedLayout><Property /></ProtectedLayout>} />
-        {/* END * LEGACY ROUTES — TO DELETE AFTER MIGRATION */}
-
-
         <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
         <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
         <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />

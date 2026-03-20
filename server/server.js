@@ -384,14 +384,51 @@ async function checkUsageAndCost(propertyId) {
   return { allowed: true, mode: "normal" }
 }
 
-function detectUpgradeSignal({ usage, cost, plan }) {
+async function detectUpgradeSignal(propertyId) {
 
-  if (plan === "free" && usage > 80) {
-    return "upgrade_soft"
+  const month = new Date().toISOString().slice(0, 7)
+
+  const usageKey = `stayassistant:usage:${propertyId}:${month}`
+  const costKey = `stayassistant:cost:${propertyId}:${month}`
+  const subKey = `stayassistant:subscription:${propertyId}`
+  const engagementKey = `stayassistant:engagement:${propertyId}`
+
+  const usage = Number(await redis.get(usageKey) || 0)
+  const costData = await redis.hGetAll(costKey)
+  const cost = Number(costData.cost || 0)
+
+  const subRaw = await redis.get(subKey)
+  let plan = "free"
+
+  if (subRaw) {
+    plan = JSON.parse(subRaw).plan || "free"
   }
 
-  if (plan === "pro" && cost > 8) {
-    return "upgrade_strong"
+  const engagement = await redis.hGetAll(engagementKey)
+
+  const messages = Number(engagement.messages || 0)
+  const conversations = Number(engagement.conversations || 0)
+
+  // 🚀 LOGIC
+
+  if (plan === "free") {
+
+    if (usage > 80) return "upgrade_soft"
+
+    // 🔥 NUEVO: ALTO ENGAGEMENT
+    if (messages > 50 || conversations > 10) {
+      return "upgrade_soft"
+    }
+  }
+
+  if (plan === "pro") {
+
+    if (cost > 8) return "upgrade_strong"
+
+    // 🔥 NUEVO: USO INTENSO
+    if (messages > 800) {
+      return "upgrade_strong"
+    }
   }
 
   return null
@@ -1807,6 +1844,19 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
+      // 🧠 BEHAVIOR TRACKING
+
+      const engagementKey = `stayassistant:engagement:${propertyId}`
+
+      // total mensajes
+      await redis.hIncrBy(engagementKey, "messages", 1)
+
+      // conversaciones únicas
+      await redis.hIncrBy(engagementKey, "conversations", 1)
+
+      // guardar última actividad
+      await redis.hSet(engagementKey, "last_activity", Date.now())
+
       // 🔥 INVALIDATE ANALYTICS CACHE (NEW DATA)
       await invalidateAnalyticsCache(propertyId)
 
@@ -1902,9 +1952,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
       EX: 60 * 60 * 24 * 7
     });
 
+    // 🎯 UPGRADE TRIGGER MOMENT (SMART)
+
+    let upgradeTrigger = false
+
+    if (
+      control.mode === "normal" &&
+      Math.random() < 0.2 // 20% de veces
+    ) {
+      upgradeTrigger = true
+    }
+
     res.json({
       reply: shortReply,
-      language: detectedLanguage
+      language: detectedLanguage,
+      upgradeTrigger
     });
 
   } catch (error) {

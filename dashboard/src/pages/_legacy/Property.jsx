@@ -1,4 +1,4 @@
-import SetupWizard from "./SetupWizard"
+import SetupWizard from "../SetupWizard"
 import Onboarding from "./Onboarding"
 
 export default function Property(){

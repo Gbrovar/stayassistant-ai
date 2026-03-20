@@ -1,6 +1,6 @@
-import Preview from "./Preview"
-import Branding from "./Branding"
-import Personalization from "./Personalization"
+import Preview from "../Preview"
+import Branding from "../Branding"
+import Personalization from "../Personalization"
 
 export default function Assistant(){
 

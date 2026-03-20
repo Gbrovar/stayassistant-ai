@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { API_URL } from "../api/config"
+import { API_URL } from "../../api/config"
 
 export default function Onboarding() {
 
