@@ -141,6 +141,12 @@ export default function useAnalytics() {
 
         loadAnalytics()
 
+        const interval = setInterval(() => {
+            loadAnalytics()
+        }, 15000) // cada 15s
+
+        return () => clearInterval(interval)
+
     }, [propertyId, token])
 
     return {

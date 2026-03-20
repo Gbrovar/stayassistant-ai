@@ -1857,15 +1857,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
       plan
     })
 
+    const key = `stayassistant:upgrade_signal:${propertyId}`
+
     if (upgradeSignal) {
 
-      const key = `stayassistant:upgrade_signal:${propertyId}`
-
       await redis.set(key, upgradeSignal, {
-        EX: 60 * 60 * 6 // 6h
+        EX: 60 * 60 * 6
       })
 
       console.log("📈 UPGRADE SIGNAL:", propertyId, upgradeSignal)
+
+    } else {
+
+      await redis.del(key) // 🔥 limpia estado viejo
+
     }
 
     /* --- SAVE AI RESPONSE CACHE --- */
