@@ -63,7 +63,7 @@ export default function AdminDashboard() {
               <td>{p.propertyId}</td>
               <td>{p.plan}</td>
               <td>{p.revenue}€</td>
-              <td>{p.cost.toFixed(3)}€</td>
+              <td>{p.cost < 0.001 ? "<0.001€" : p.cost.toFixed(3) + "€"}</td>
               <td>{p.profit.toFixed(2)}€</td>
 
               <td>

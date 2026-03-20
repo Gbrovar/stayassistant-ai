@@ -653,6 +653,20 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
 
     for (const propertyId of properties) {
 
+      // ❌ EXCLUDE ADMIN PROPERTY
+      const adminEmail = process.env.ADMIN_EMAIL
+
+      const userKey = `stayassistant:user:${propertyId}`
+      const userRaw = await redis.get(userKey)
+
+      if (userRaw) {
+        const user = JSON.parse(userRaw)
+
+        if (user.email === adminEmail) {
+          continue
+        }
+      }
+
       // --- COST ---
       const costKey = `stayassistant:cost:${propertyId}:${month}`
       const costData = await redis.hGetAll(costKey)
@@ -695,9 +709,9 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
       })
 
       console.log("ADMIN CHECK:", {
-  userEmail: req.userEmail,
-  adminEmail: process.env.ADMIN_EMAIL
-})
+        userEmail: req.userEmail,
+        adminEmail: process.env.ADMIN_EMAIL
+      })
     }
 
     // --- SORT (TOP / WORST) ---
