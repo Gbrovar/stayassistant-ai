@@ -1,8 +1,10 @@
 import { useApp } from "../context/AppContext"
+import useAnalytics from "../hooks/useAnalytics"
 
 export default function Topbar() {
 
   const { subscription, usage } = useApp()
+  const { upgradeSignal } = useAnalytics()
 
   if (!subscription) return null
 
@@ -21,9 +23,9 @@ export default function Topbar() {
 
     <div className="topbar">
 
-      <div className="topbar-left">
-        <strong>{plan.toUpperCase()} PLAN</strong>
-      </div>
+      <strong>
+        {plan.toUpperCase()} PLAN {upgradeSignal && "⚡"}
+      </strong>
 
       <div className="topbar-right">
 
@@ -31,10 +33,16 @@ export default function Topbar() {
           {usage} / {limit}
         </div>
 
-        <button onClick={() => window.location.href = "/billing"}>
-          Upgrade
+        <button
+          style={{
+            background: upgradeSignal ? "#f59e0b" : undefined,
+            fontWeight: upgradeSignal ? "bold" : "normal"
+          }}
+          onClick={() => window.location.href = "/billing"}
+        >
+          {upgradeSignal ? "Upgrade Recommended" : "Upgrade"}
         </button>
-
+        
         <button
           onClick={() => {
             localStorage.clear()

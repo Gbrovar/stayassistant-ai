@@ -102,6 +102,64 @@ export default function Analytics() {
         </div>
       )}
 
+      {/* 🔥 URGENCY BOOST */}
+
+      {upgradeSignal === "upgrade_strong" && (
+        <div style={{
+          marginTop: 10,
+          padding: 12,
+          borderRadius: 8,
+          background: "#dc2626",
+          color: "white",
+          fontWeight: "bold"
+        }}>
+          ⚠️ Risk of degraded responses — upgrade recommended
+        </div>
+      )}
+
+      {/* 💰 UPGRADE IMPACT CARD */}
+
+      {upgradeSignal && (
+        <div style={{
+          marginTop: 20,
+          padding: 20,
+          borderRadius: 12,
+          background: "#0f172a",
+          color: "white"
+        }}>
+
+          <h3 style={{ marginBottom: 10 }}>
+            🚀 Unlock more value from your concierge
+          </h3>
+
+          <p style={{ opacity: 0.8 }}>
+            You're approaching system limits. Upgrading ensures:
+          </p>
+
+          <ul style={{ marginTop: 10, paddingLeft: 20 }}>
+            <li>✔️ More guest conversations</li>
+            <li>✔️ Faster AI responses</li>
+            <li>✔️ Advanced insights & automation</li>
+          </ul>
+
+          <button
+            style={{
+              marginTop: 15,
+              background: "#22c55e",
+              color: "black",
+              padding: "10px 16px",
+              borderRadius: 8,
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+            onClick={() => window.location.href = "/billing"}
+          >
+            Upgrade Plan
+          </button>
+
+        </div>
+      )}
+
       {isPro ? (
 
         alerts.length > 0 && (
