@@ -693,6 +693,11 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
             margin < 30 ? "medium" :
               "low"
       })
+
+      console.log("ADMIN CHECK:", {
+  userEmail: req.userEmail,
+  adminEmail: process.env.ADMIN_EMAIL
+})
     }
 
     // --- SORT (TOP / WORST) ---
