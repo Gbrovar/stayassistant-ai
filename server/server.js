@@ -1261,6 +1261,16 @@ app.post("/chat", chatLimiter, async (req, res) => {
       })
     }
 
+    if (intent === "other" && userMessage.length < 50) {
+
+      console.log("⚡ SMART FALLBACK (no AI)")
+
+      return res.json({
+        reply: "I'm here to help with your stay. Could you provide a bit more detail?",
+        language: userLanguage
+      })
+    }
+
     /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
 
     const knowledge = selectKnowledge(property, intent)
@@ -1446,7 +1456,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return message
         .toLowerCase()
         .replace(/[^\w\s]/g, "")
-        .replace(/\b(what|is|the|please|can|you|tell|me)\b/g, "")
+        .replace(/\b(what|is|the|please|can|you|tell|me|how|where|when|i|we)\b/g, "")
         .replace(/\s+/g, " ")
         .trim()
 
@@ -1455,8 +1465,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const normalizedQuestion = normalizeMessage(userMessage)
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
-    const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}`
-
+    const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}:${control.mode}`
+    
     /* --- FAQ AUTO ANSWER --- */
     function similarity(a, b) {
       const aWords = a.split(" ")
@@ -1524,20 +1534,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     /* --- AI GUARD (SMART FALLBACK) --- */
-    if (
-      intent !== "other" &&
-      intent !== "restaurants" &&
-      intent !== "activities"
-    ) {
 
-      console.log("🚫 AI BLOCKED (intent rule):", intent)
+    const shouldUseAI =
+      intent === "other" ||
+      intent === "restaurants" ||
+      intent === "activities"
+
+    if (!shouldUseAI) {
+
+      console.log("🚫 AI STRICT BLOCK:", intent)
 
       return res.json({
-        reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
+        reply: "I can help with that. Could you rephrase your question?",
         language: userLanguage
       })
     }
-
 
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
@@ -1614,6 +1625,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("🤖 CALLING OPENAI:", intent)
       console.log("📊 KNOWLEDGE LENGTH:", knowledge?.length)
+      console.log("⚙️ MODE:", control.mode)
 
       const isDegraded = control.mode === "degraded"
 
@@ -1805,7 +1817,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
       .replace(/LANGUAGE:\s*(English|Español|Deutsch)/i, "")
       .trim();
 
-    const shortReply = cleanReply.slice(0, 500)
+    const shortReply = isDegraded
+      ? cleanReply.slice(0, 250)
+      : cleanReply.slice(0, 500)
 
     /* --- SAVE AI RESPONSE CACHE --- */
 
