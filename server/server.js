@@ -638,6 +638,77 @@ app.post("/auth/login", async (req, res) => {
 
 });
 
+app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) => {
+
+  try {
+
+    const properties = await redis.sMembers("stayassistant:properties")
+
+    let totalRevenue = 0
+    let totalCost = 0
+
+    const month = new Date().toISOString().slice(0, 7)
+
+    const propertyStats = []
+
+    for (const propertyId of properties) {
+
+      // --- COST ---
+      const costKey = `stayassistant:cost:${propertyId}:${month}`
+      const costData = await redis.hGetAll(costKey)
+
+      const cost = Number(costData.cost || 0)
+
+      // --- SNAPSHOT ---
+      const snapshotKey = `stayassistant:billing_snapshot:${propertyId}:${month}`
+      const snapshotRaw = await redis.get(snapshotKey)
+
+      let revenue = 0
+      let plan = "free"
+
+      if (snapshotRaw) {
+        const snap = JSON.parse(snapshotRaw)
+        revenue = snap.revenue
+        plan = snap.plan
+      }
+
+      const profit = revenue - cost
+
+      totalRevenue += revenue
+      totalCost += cost
+
+      propertyStats.push({
+        propertyId,
+        plan,
+        revenue,
+        cost,
+        profit,
+        profitable: profit >= 0
+      })
+
+    }
+
+    // --- SORT (TOP / WORST) ---
+    propertyStats.sort((a, b) => b.profit - a.profit)
+
+    res.json({
+      total_properties: properties.length,
+      total_revenue: totalRevenue,
+      total_cost: totalCost,
+      total_profit: totalRevenue - totalCost,
+      properties: propertyStats
+    })
+
+  } catch (err) {
+
+    console.error("Admin metrics error", err)
+
+    res.status(500).json({ error: "admin metrics failed" })
+
+  }
+
+})
+
 /* --- REGISTER PROPERTY --- */
 app.post("/auth/register", async (req, res) => {
 
