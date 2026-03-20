@@ -21,6 +21,7 @@ import AnalyticsPage from "./pages/AnalyticsPage"
 import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
+import AdminDashboard from "./pages/AdminDashboard"
 
 
 function ProtectedLayout({ children }) {
@@ -95,11 +96,12 @@ export default function App() {
 
         <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
         <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
-
         <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
         <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
         <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
         <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
+
+        <Route path="/admin" element={<AdminDashboard />} />
 
         {/* FALLBACK */}
 

@@ -38,6 +38,10 @@ export default function Sidebar() {
           Billing
         </NavLink>
 
+        <NavLink to="/admin" className={({ isActive }) => isActive ? "active" : ""}>
+          Admin
+        </NavLink>
+
       </nav>
 
     </aside>

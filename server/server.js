@@ -674,6 +674,8 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
 
       const profit = revenue - cost
 
+      const margin = revenue > 0 ? (profit / revenue) * 100 : 0
+
       totalRevenue += revenue
       totalCost += cost
 
@@ -691,8 +693,6 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
             margin < 30 ? "medium" :
               "low"
       })
-
-      const margin = revenue > 0 ? (profit / revenue) * 100 : 0
     }
 
     // --- SORT (TOP / WORST) ---
