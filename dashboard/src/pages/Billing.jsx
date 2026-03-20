@@ -5,6 +5,7 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
+    
     const { usage } = useApp()
     const { upgradeSignal } = useAnalytics()
 

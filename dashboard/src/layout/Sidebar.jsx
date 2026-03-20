@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
 
 export default function Sidebar() {
+  
 
   const { upgradeSignal } = useAnalytics()
 

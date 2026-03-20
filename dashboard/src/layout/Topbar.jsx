@@ -2,6 +2,7 @@ import { useApp } from "../context/AppContext"
 import useAnalytics from "../hooks/useAnalytics"
 
 export default function Topbar() {
+  
 
   const { subscription, usage } = useApp()
   const { upgradeSignal } = useAnalytics()
@@ -42,7 +43,7 @@ export default function Topbar() {
         >
           {upgradeSignal ? "Upgrade Recommended" : "Upgrade"}
         </button>
-        
+
         <button
           onClick={() => {
             localStorage.clear()
