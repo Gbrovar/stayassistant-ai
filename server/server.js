@@ -683,9 +683,16 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
         revenue,
         cost,
         profit,
-        profitable: profit >= 0
+        margin,
+        profitable: profit >= 0,
+        unprofitable: cost > revenue,
+        risk:
+          cost > revenue ? "high" :
+            margin < 30 ? "medium" :
+              "low"
       })
 
+      const margin = revenue > 0 ? (profit / revenue) * 100 : 0
     }
 
     // --- SORT (TOP / WORST) ---
