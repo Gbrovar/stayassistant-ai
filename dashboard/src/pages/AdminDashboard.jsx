@@ -8,6 +8,8 @@ export default function AdminDashboard() {
 
   if (!data) return <div>No data</div>
 
+  if (!data || !data.properties) return <div>No access</div>
+
   return (
 
     <div className="page">
