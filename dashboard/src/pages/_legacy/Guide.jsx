@@ -1,5 +1,5 @@
-import FAQEditor from "./FAQEditor"
-import Recommendations from "./Recommendations"
+import FAQEditor from "../FAQEditor"
+import Recommendations from "../Recommendations"
 
 export default function Guide(){
 

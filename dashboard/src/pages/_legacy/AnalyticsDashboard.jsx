@@ -1,6 +1,6 @@
-import Analytics from "./Analytics"
-import Conversations from "./Conversations"
-import Insights from "./Insights"
+import Analytics from "../Analytics"
+import Conversations from "../Conversations"
+import Insights from "../Insights"
 
 export default function AnalyticsDashboard(){
 
