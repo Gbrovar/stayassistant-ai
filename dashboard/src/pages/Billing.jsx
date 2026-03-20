@@ -5,7 +5,7 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
-    
+
     const { usage } = useApp()
     const { upgradeSignal } = useAnalytics()
 
@@ -135,6 +135,22 @@ export default function Billing() {
                 </div>
 
             </div>
+
+            {/* 💡 SOFT UPGRADE (SIEMPRE VISIBLE EN FREE) */}
+
+            {subscription.plan === "free" && !upgradeSignal && (
+                <div style={{
+                    background: "#0f172a",
+                    border: "1px solid #1f2937",
+                    color: "#cbd5f5",
+                    padding: 14,
+                    borderRadius: 10,
+                    marginBottom: 20
+                }}>
+                    💡 You're on the Free plan.
+                    Upgrade to unlock more messages and advanced features.
+                </div>
+            )}
 
             {/* UPGRADE */}
 

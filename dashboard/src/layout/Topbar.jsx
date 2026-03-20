@@ -2,7 +2,7 @@ import { useApp } from "../context/AppContext"
 import useAnalytics from "../hooks/useAnalytics"
 
 export default function Topbar() {
-  
+
 
   const { subscription, usage } = useApp()
   const { upgradeSignal } = useAnalytics()
@@ -25,7 +25,7 @@ export default function Topbar() {
     <div className="topbar">
 
       <strong>
-        {plan.toUpperCase()} PLAN {upgradeSignal && "⚡"}
+        {plan.toUpperCase()} PLAN {upgradeSignal ? "⚡" : plan === "free" ? "💡" : ""}
       </strong>
 
       <div className="topbar-right">
