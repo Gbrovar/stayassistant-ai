@@ -1,16 +1,16 @@
 import jwt from "jsonwebtoken"
 
-export function authenticate(req,res,next){
+export function authenticate(req, res, next) {
 
   const authHeader = req.headers.authorization
 
-  if(!authHeader){
-    return res.status(401).json({error:"missing token"})
+  if (!authHeader) {
+    return res.status(401).json({ error: "missing token" })
   }
 
   const token = authHeader.split(" ")[1]
 
-  try{
+  try {
 
     const decoded = jwt.verify(
       token,
@@ -18,13 +18,25 @@ export function authenticate(req,res,next){
     )
 
     req.propertyId = decoded.propertyId
+    req.userEmail = decoded.email
 
     next()
 
-  }catch(err){
+  } catch (err) {
 
-    return res.status(401).json({error:"invalid token"})
+    return res.status(401).json({ error: "invalid token" })
 
   }
 
+}
+
+export function requireAdmin(req, res, next) {
+
+  const adminEmail = process.env.ADMIN_EMAIL
+
+  if (!req.userEmail || req.userEmail !== adminEmail) {
+    return res.status(403).json({ error: "admin only" })
+  }
+
+  next()
 }

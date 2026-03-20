@@ -7,7 +7,7 @@ import path from "path";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import Stripe from "stripe";
-import { authenticate } from "./authMiddleware.js";
+import { authenticate, requireAdmin } from "./authMiddleware.js";
 import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
 import { properties } from "./properties.js";
@@ -623,7 +623,10 @@ app.post("/auth/login", async (req, res) => {
   }
 
   const token = jwt.sign(
-    { propertyId: user.propertyId },
+    {
+      propertyId: user.propertyId,
+      email: user.email
+    },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   )
@@ -696,7 +699,10 @@ app.post("/auth/register", async (req, res) => {
   /* --- CREATE TOKEN --- */
 
   const token = jwt.sign(
-    { propertyId },
+    {
+      propertyId,
+      email
+    },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   )
