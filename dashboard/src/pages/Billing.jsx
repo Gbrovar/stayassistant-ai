@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 import { useApp } from "../context/AppContext"
+import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
     const { usage } = useApp()
+    const { upgradeSignal } = useAnalytics()
 
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
@@ -88,6 +90,24 @@ export default function Billing() {
 
             <h1>Billing</h1>
 
+            {upgradeSignal && (
+                <div style={{
+                    background: upgradeSignal === "upgrade_strong" ? "#7f1d1d" : "#1e3a8a",
+                    color: "white",
+                    padding: 16,
+                    borderRadius: 10,
+                    marginBottom: 20
+                }}>
+                    {upgradeSignal === "upgrade_soft" && (
+                        <>⚡ Your property is growing. Upgrade to handle more guest interactions smoothly.</>
+                    )}
+
+                    {upgradeSignal === "upgrade_strong" && (
+                        <>🚨 High usage detected. Upgrade now to avoid service degradation.</>
+                    )}
+                </div>
+            )}
+
             {/* CURRENT PLAN */}
 
             <div className="card">
@@ -121,7 +141,9 @@ export default function Billing() {
 
             <div className="plans">
 
-                <div className="plan-card">
+                <div className="plan-card" style={{
+                    border: upgradeSignal === "upgrade_soft" ? "2px solid #22c55e" : undefined
+                }}>
 
                     <h4>PRO</h4>
 
@@ -135,7 +157,9 @@ export default function Billing() {
 
                 </div>
 
-                <div className="plan-card">
+                <div className="plan-card" style={{
+                    border: upgradeSignal === "upgrade_strong" ? "2px solid #ef4444" : undefined
+                }}>
 
                     <h4>BUSINESS</h4>
 
