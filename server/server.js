@@ -377,7 +377,24 @@ async function checkUsageAndCost(propertyId) {
     return { allowed: true, mode: "degraded", reason: "cost_limit" }
   }
 
+  if (cost >= costLimit * 1.2) {
+    return { allowed: false, mode: "blocked", reason: "over_cost" }
+  }
+
   return { allowed: true, mode: "normal" }
+}
+
+function detectUpgradeSignal({ usage, cost, plan }) {
+
+  if (plan === "free" && usage > 80) {
+    return "upgrade_soft"
+  }
+
+  if (plan === "pro" && cost > 8) {
+    return "upgrade_strong"
+  }
+
+  return null
 }
 
 /* --- middleware --- */
@@ -725,6 +742,10 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
       const snapshotKey = `stayassistant:billing_snapshot:${propertyId}:${month}`
       const snapshotRaw = await redis.get(snapshotKey)
 
+      // --- UPGRADE SIGNAL
+      const signalKey = `stayassistant:upgrade_signal:${propertyId}`
+      const upgradeSignal = await redis.get(signalKey)
+
       let revenue = 0
       let plan = "free"
 
@@ -750,6 +771,7 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
         margin,
         profitable: profit >= 0,
         unprofitable: cost > revenue,
+        upgradeSignal,
         risk:
           cost > revenue ? "high" :
             margin < 30 ? "medium" :
@@ -1223,6 +1245,17 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const month = new Date().toISOString().slice(0, 7)
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
+    // --- PLAN ---
+    const subKey = `stayassistant:subscription:${propertyId}`
+    const subRaw = await redis.get(subKey)
+
+    let plan = "free"
+
+    if (subRaw) {
+      const sub = JSON.parse(subRaw)
+      plan = sub.plan || "free"
+    }
+
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
 
@@ -1254,13 +1287,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🚫 AI BLOCKED FOR INTENT:", intent)
     }
 
-    if (intent === "other" && userMessage.length < 20) {
-      return res.json({
-        reply: "Could you please provide more details so I can assist you better?",
-        language: userLanguage
-      })
-    }
-
     if (intent === "other" && userMessage.length < 50) {
 
       console.log("⚡ SMART FALLBACK (no AI)")
@@ -1270,10 +1296,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
         language: userLanguage
       })
     }
-
-    /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
-
-    const knowledge = selectKnowledge(property, intent)
 
     /* --- INTENT DIRECT RESPONSE (COST SHIELD) --- */
 
@@ -1466,7 +1488,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
     const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}:${control.mode}`
-    
+
     /* --- FAQ AUTO ANSWER --- */
     function similarity(a, b) {
       const aWords = a.split(" ")
@@ -1549,6 +1571,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
         language: userLanguage
       })
     }
+
+    /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
+
+    const knowledge = selectKnowledge(property, intent)
 
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
@@ -1820,6 +1846,27 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const shortReply = isDegraded
       ? cleanReply.slice(0, 250)
       : cleanReply.slice(0, 500)
+
+    // --- UPGRADE SIGNAL ---
+    const usage = Number(await redis.get(usageKey) || 0)
+    const cost = Number(await redis.hGet(`stayassistant:cost:${propertyId}:${month}`, "cost") || 0)
+
+    const upgradeSignal = detectUpgradeSignal({
+      usage,
+      cost,
+      plan
+    })
+
+    if (upgradeSignal) {
+
+      const key = `stayassistant:upgrade_signal:${propertyId}`
+
+      await redis.set(key, upgradeSignal, {
+        EX: 60 * 60 * 6 // 6h
+      })
+
+      console.log("📈 UPGRADE SIGNAL:", propertyId, upgradeSignal)
+    }
 
     /* --- SAVE AI RESPONSE CACHE --- */
 
@@ -3067,6 +3114,35 @@ app.get("/analytics/:propertyId/costs", authenticate, async (req, res) => {
     console.error("Cost analytics error", err)
 
     res.status(500).json({ error: "cost analytics failed" })
+
+  }
+
+})
+
+/* --- UPGRADE SIGNAL --- */
+app.get("/analytics/:propertyId/upgrade-signal", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const key = `stayassistant:upgrade_signal:${propertyId}`
+
+    const signal = await redis.get(key)
+
+    res.json({
+      upgradeSignal: signal || null
+    })
+
+  } catch (err) {
+
+    console.error("Upgrade signal error", err)
+
+    res.json({ upgradeSignal: null })
 
   }
 

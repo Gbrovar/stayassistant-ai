@@ -24,7 +24,8 @@ export default function Analytics() {
     aiInsights,
     semanticInsights,
     conversationScore,
-    alerts
+    alerts,
+    upgradeSignal
   } = useAnalytics()
 
   const isPro = plan !== "free"
@@ -72,6 +73,34 @@ export default function Analytics() {
     <div>
 
       <h2>Analytics</h2>
+
+      {/* 🚀 UPGRADE SIGNAL */}
+
+      {upgradeSignal === "upgrade_soft" && (
+        <div style={{
+          background: "#1e3a8a",
+          color: "white",
+          padding: 14,
+          borderRadius: 8,
+          marginTop: 20
+        }}>
+          ⚡ Your property is getting good traction.
+          Consider upgrading to handle more guest requests smoothly.
+        </div>
+      )}
+
+      {upgradeSignal === "upgrade_strong" && (
+        <div style={{
+          background: "#7f1d1d",
+          color: "white",
+          padding: 14,
+          borderRadius: 8,
+          marginTop: 20
+        }}>
+          🚀 High usage detected.
+          Upgrade now to avoid service interruptions.
+        </div>
+      )}
 
       {isPro ? (
 
@@ -144,7 +173,7 @@ export default function Analytics() {
         </div>
 
       )}
-      
+
       {semanticInsights.length > 0 && (
         <div className="analytics-card" style={{ marginTop: 20 }}>
 

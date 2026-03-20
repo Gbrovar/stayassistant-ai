@@ -15,6 +15,7 @@ export default function useAnalytics() {
     const [semanticInsights, setSemanticInsights] = useState([])
     const [conversationScore, setConversationScore] = useState(null)
     const [alerts, setAlerts] = useState([])
+    const [upgradeSignal, setUpgradeSignal] = useState(null)
 
     const [plan, setPlan] = useState("free")
 
@@ -121,6 +122,19 @@ export default function useAnalytics() {
 
             }
 
+            const resUpgrade = await fetch(
+                `${API_URL}/analytics/${propertyId}/upgrade-signal`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+
+            const dataUpgrade = await resUpgrade.json()
+
+            setUpgradeSignal(dataUpgrade.upgradeSignal)
+
             setLoading(false)
 
         }
@@ -140,7 +154,8 @@ export default function useAnalytics() {
         aiInsights,
         semanticInsights,
         conversationScore,
-        alerts
+        alerts,
+        upgradeSignal
     }
 
 }
