@@ -272,6 +272,14 @@ async function getUsageLimit(propertyId) {
 
 }
 
+function getCostLimit(plan) {
+
+  if (plan === "pro") return 10
+  if (plan === "business") return 50
+
+  return 2
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 console.log("Stripe loaded:", !!process.env.STRIPE_SECRET_KEY)
 
@@ -330,6 +338,46 @@ function getPlanPrice(plan) {
   if (plan === "pro") return 29
   if (plan === "business") return 99
   return 0
+}
+
+async function checkUsageAndCost(propertyId) {
+
+  const month = new Date().toISOString().slice(0, 7)
+
+  // --- PLAN ---
+  const subKey = `stayassistant:subscription:${propertyId}`
+  const subRaw = await redis.get(subKey)
+
+  let plan = "free"
+
+  if (subRaw) {
+    const sub = JSON.parse(subRaw)
+    plan = sub.plan || "free"
+  }
+
+  // --- LIMITS ---
+  const usageLimit = await getUsageLimit(propertyId)
+  const costLimit = getCostLimit(plan)
+
+  // --- USAGE ---
+  const usageKey = `stayassistant:usage:${propertyId}:${month}`
+  const usage = Number(await redis.get(usageKey) || 0)
+
+  // --- COST ---
+  const costKey = `stayassistant:cost:${propertyId}:${month}`
+  const cost = Number(await redis.hGet(costKey, "cost") || 0)
+
+  // --- DECISION ---
+
+  if (usage >= usageLimit) {
+    return { allowed: false, mode: "blocked", reason: "usage_limit" }
+  }
+
+  if (cost >= costLimit) {
+    return { allowed: true, mode: "degraded", reason: "cost_limit" }
+  }
+
+  return { allowed: true, mode: "normal" }
 }
 
 /* --- middleware --- */
@@ -1175,15 +1223,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const month = new Date().toISOString().slice(0, 7)
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
-    const usage = await redis.get(usageKey)
-    const currentUsage = Number(usage || 0)
-    const limit = await getUsageLimit(propertyId)
+    // 🛡️ UNIFIED CONTROL ENGINE
+    const control = await checkUsageAndCost(propertyId)
 
-    if (currentUsage >= limit) {
-      console.log("⛔ HARD LIMIT BLOCK", propertyId)
+    if (!control.allowed) {
+
+      console.log("⛔ BLOCKED:", control.reason)
 
       return res.json({
-        reply: "I'm sorry, I cannot assist further at the moment. Please contact the property directly for additional help.",
+        reply: "I'm sorry, I cannot assist further at the moment. Please contact the property directly.",
         limit_reached: true
       })
     }
@@ -1567,20 +1615,24 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🤖 CALLING OPENAI:", intent)
       console.log("📊 KNOWLEDGE LENGTH:", knowledge?.length)
 
+      const isDegraded = control.mode === "degraded"
+
       completion = await Promise.race([
+
 
         openai.chat.completions.create({
 
           model: "gpt-4o-mini",
 
-          max_tokens: 120,
-          temperature: 0.4,
+          max_tokens: isDegraded ? 60 : 120,
+          temperature: isDegraded ? 0.2 : 0.4,
 
           messages: [
             {
               role: "system",
               content:
                 buildPrompt(property, userLanguage, context, knowledge) +
+                (isDegraded ? "\n\nBe concise and short." : "") +
                 "\n\n--- LIVE DATA (REAL-TIME, PRIORITY) ---\n" +
                 nearbyContext
             },
