@@ -5,30 +5,14 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
+    const { forecast } = useApp()
     const { upgradeSignal } = useAnalytics()
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
-    const [forecast, setForecast] = useState(null)
 
     useEffect(() => {
         loadSubscription()
-        loadForecast()
     }, [])
-
-    async function loadForecast() {
-
-        const propertyId = localStorage.getItem("propertyId")
-
-        const res = await fetch(`${API_URL}/billing/forecast/${propertyId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-        const data = await res.json()
-
-        setForecast(data)
-    }
 
     async function loadSubscription() {
 

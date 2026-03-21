@@ -11,12 +11,15 @@ export function AppProvider({ children }) {
         business: 5000
     }
 
-    const [forecast, setForecast] = useState(null)
-    const plan = subscription?.plan || "free"
-    const limit = forecast?.usage_limit || limits[plan]
     const [subscription, setSubscription] = useState(null)
+    const [forecast, setForecast] = useState(null)
     const [usage, setUsage] = useState(0)
-    const limitReached = usage >= limit
+
+    const plan = subscription?.plan || "free"
+
+    const limit = forecast?.usage_limit || limits[plan]
+    const limitReached = forecast ? usage >= limit : false
+
     const [loading, setLoading] = useState(true)
     const token = localStorage.getItem("token")
     const propertyId = localStorage.getItem("propertyId")
