@@ -411,48 +411,23 @@ async function checkUsageAndCost(propertyId) {
   return { allowed: true, mode: "normal" }
 }
 
-async function detectUpgradeSignal(propertyId) {
+function detectUpgradeSignal({ usage, cost, plan, messages, conversations }) {
 
-  const month = new Date().toISOString().slice(0, 7)
-
-  const usageKey = `stayassistant:usage:${propertyId}:${month}`
-  const costKey = `stayassistant:cost:${propertyId}:${month}`
-  const subKey = `stayassistant:subscription:${propertyId}`
-  const engagementKey = `stayassistant:engagement:${propertyId}`
-
-  const usage = Number(await redis.get(usageKey) || 0)
-  const costData = await redis.hGetAll(costKey)
-  const cost = Number(costData.cost || 0)
-
-  const subRaw = await redis.get(subKey)
-  let plan = "free"
-
-  if (subRaw) {
-    plan = JSON.parse(subRaw).plan || "free"
-  }
-
-  const engagement = await redis.hGetAll(engagementKey)
-
-  const messages = Number(engagement.messages || 0)
-  const conversations = Number(engagement.conversations || 0)
-
-  // 🚀 LOGIC
-
+  // FREE → PRO
   if (plan === "free") {
 
     if (usage > 80) return "upgrade_soft"
 
-    // 🔥 NUEVO: ALTO ENGAGEMENT
     if (messages > 50 || conversations > 10) {
       return "upgrade_soft"
     }
   }
 
+  // PRO → BUSINESS
   if (plan === "pro") {
 
     if (cost > 8) return "upgrade_strong"
 
-    // 🔥 NUEVO: USO INTENSO
     if (messages > 800) {
       return "upgrade_strong"
     }
@@ -1875,14 +1850,61 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       if (isOverage) {
 
+        const overageKey = `stayassistant:overage:${propertyId}:${month}`
+        const overageData = await redis.hGetAll(overageKey)
+        const overageCost = Number(overageData.cost || 0)
+
+        if (overageCost > 100) {
+          console.log("🚨 HARD CAP TRIGGERED")
+
+          return res.json({
+            reply: "Service temporarily limited. Please contact support.",
+            limit_reached: true
+          })
+        }
         const pricePerMsg = getOveragePrice(plan)
 
-        const overageKey = `stayassistant:overage:${propertyId}:${month}`
+
 
         await redis.hIncrBy(overageKey, "messages", 1)
         await redis.hIncrByFloat(overageKey, "cost", pricePerMsg)
 
         console.log("💰 OVERAGE:", propertyId, pricePerMsg)
+
+        // 🚀 STRIPE USAGE REPORTING
+        try {
+
+          const subKey = `stayassistant:subscription:${propertyId}`
+          const subRaw = await redis.get(subKey)
+
+          if (subRaw) {
+
+            const sub = JSON.parse(subRaw)
+
+            if (sub.stripeMeteredItemId) {
+
+              await stripe.subscriptionItems.createUsageRecord(
+                sub.stripeMeteredItemId,
+                {
+                  quantity: 1,
+                  timestamp: Math.floor(Date.now() / 1000),
+                  action: "increment"
+                },
+                {
+                  idempotencyKey: `${propertyId}-${Date.now()}`
+                }
+              )
+
+              console.log("📡 STRIPE USAGE SENT")
+
+            }
+          }
+
+        } catch (err) {
+
+          console.log("Stripe usage error:", err.message)
+
+        }
       }
 
       // 🧠 BEHAVIOR TRACKING
@@ -1893,7 +1915,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
       await redis.hIncrBy(engagementKey, "messages", 1)
 
       // conversaciones únicas
-      await redis.hIncrBy(engagementKey, "conversations", 1)
+      const isNewConversation = history.length === 1
+
+      if (isNewConversation) {
+        await redis.hIncrBy(engagementKey, "conversations", 1)
+      }
 
       // guardar última actividad
       await redis.hSet(engagementKey, "last_activity", Date.now())
@@ -1942,10 +1968,18 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const usage = Number(await redis.get(usageKey) || 0)
     const cost = Number(await redis.hGet(`stayassistant:cost:${propertyId}:${month}`, "cost") || 0)
 
+    const engagementKey = `stayassistant:engagement:${propertyId}`
+    const engagement = await redis.hGetAll(engagementKey)
+
+    const messages = Number(engagement.messages || 0)
+    const conversations = Number(engagement.conversations || 0)
+
     const upgradeSignal = detectUpgradeSignal({
       usage,
       cost,
-      plan
+      plan,
+      messages,
+      conversations
     })
 
     const key = `stayassistant:upgrade_signal:${propertyId}`
@@ -3145,6 +3179,47 @@ app.post("/property/setup", authenticate, async (req, res) => {
 
 })
 
+/* --- BILLING FORECAST --- */
+app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
+
+  const { propertyId } = req.params
+
+  if (req.propertyId !== propertyId) {
+    return res.status(403).json({ error: "forbidden" })
+  }
+
+  const month = new Date().toISOString().slice(0, 7)
+
+  const usage = Number(await redis.get(`stayassistant:usage:${propertyId}:${month}`) || 0)
+
+  const costData = await redis.hGetAll(`stayassistant:cost:${propertyId}:${month}`)
+  const cost = Number(costData.cost || 0)
+
+  const overageData = await redis.hGetAll(`stayassistant:overage:${propertyId}:${month}`)
+  const overageCost = Number(overageData.cost || 0)
+
+  const subRaw = await redis.get(`stayassistant:subscription:${propertyId}`)
+
+  let plan = "free"
+
+  if (subRaw) {
+    plan = JSON.parse(subRaw).plan || "free"
+  }
+
+  const basePrice = getPlanPrice(plan)
+
+  const total = basePrice + overageCost
+
+  res.json({
+    plan,
+    base_price: basePrice,
+    usage,
+    cost,
+    overage_cost: overageCost,
+    estimated_total: total
+  })
+})
+
 /* --- COST TRACKING --- */
 app.get("/analytics/:propertyId/costs", authenticate, async (req, res) => {
 
@@ -3320,6 +3395,9 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
         {
           price: priceId,
           quantity: 1
+        },
+        {
+          price: process.env.STRIPE_OVERAGE_PRICE_ID
         }
       ],
 
@@ -3399,11 +3477,20 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
       const propertyId = session.metadata.propertyId
       const plan = session.metadata.plan
 
+      const subscription = await stripe.subscriptions.retrieve(
+        session.subscription
+      )
+
+      const meteredItem = subscription.items.data.find(
+        item => item.price.recurring?.usage_type === "metered"
+      )
+
       await saveSubscription(propertyId, {
         plan,
         status: "active",
         stripeCustomer: session.customer,
-        stripeSubscription: session.subscription
+        stripeSubscription: session.subscription,
+        stripeMeteredItemId: meteredItem?.id || null
       })
 
       console.log("Subscription activated:", propertyId)
