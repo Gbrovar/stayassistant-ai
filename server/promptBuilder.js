@@ -1,4 +1,4 @@
-export function buildPrompt(property, userLanguage, context, knowledge, memory = {}, history = []) {
+export function buildPrompt(property, userLanguage, context, knowledge, memory = {}, history = [], profile = {}) {
 
   const lastMessages = history
     .slice(-6)
@@ -37,6 +37,12 @@ GUEST PROFILE
 - Budget: ${budget}
 - Preferences: ${guestPreferences}
 - Travel type: ${travelContext}
+
+LONG TERM PROFILE
+
+- Budget tendency: ${profile.budget || "unknown"}
+- Interests: ${profile.interests?.join(", ") || "none"}
+- Known preferences: ${profile.preferences?.join(", ") || "none"}
 
 CONVERSATION MEMORY
 ${lastMessages}

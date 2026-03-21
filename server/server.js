@@ -1216,6 +1216,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
     // 🧠 MICRO MEMORY KEY (AHORA SÍ)
     const memoryKey = `stayassistant:memory:${propertyId}:${conversationId}`
 
+    // 🧠 GLOBAL USER PROFILE (persistente)
+    const profileKey = `stayassistant:profile:${propertyId}:${conversationId}`
+
     const hour = req.body.hour || null;
 
     console.log("Property:", propertyId);
@@ -1484,6 +1487,18 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     // 🧠 LOAD MEMORY
     let memoryRaw = await redis.get(memoryKey)
+
+    // 🧠 LOAD USER PROFILE
+    let profileRaw = await redis.get(profileKey)
+
+    let userProfile = profileRaw ? JSON.parse(profileRaw) : {
+      preferences: [],
+      budget: null,
+      travelType: null,
+      interests: [],
+      interactionCount: 0,
+      lastSeen: Date.now()
+    }
 
     let memory = memoryRaw ? JSON.parse(memoryRaw) : {
       lastIntent: null,
@@ -1795,7 +1810,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
                   context,
                   knowledge,
                   memory,
-                  history
+                  history,
+                  userProfile
                 ) +
                 (isDegraded ? "\n\nBe concise and short." : "") +
                 (isWarning ? "\n\nKeep responses helpful but slightly concise." : "") +
@@ -2153,6 +2169,46 @@ app.post("/chat", chatLimiter, async (req, res) => {
       upgradeTrigger = true
     }
 
+    // 🧠 PROFILE ENRICHMENT (V3)
+
+    // incrementar interacción
+    userProfile.interactionCount += 1
+    userProfile.lastSeen = Date.now()
+
+    // sincronizar con memory
+    if (memory.budget) {
+      userProfile.budget = memory.budget
+    }
+
+    if (memory.preferences?.length) {
+      userProfile.preferences = [
+        ...new Set([...userProfile.preferences, ...memory.preferences])
+      ]
+    }
+
+    // detectar intereses
+    if (intent === "restaurants") {
+      userProfile.interests.push("food")
+    }
+
+    if (intent === "activities") {
+      userProfile.interests.push("activities")
+    }
+
+    // limpiar duplicados
+    userProfile.interests = [...new Set(userProfile.interests)]
+
+    // 💰 VALUE SIGNAL SIMPLE (pre-LTV)
+    let userValueScore = 0
+
+    if (userProfile.interactionCount > 5) userValueScore += 1
+    if (userProfile.preferences.length > 1) userValueScore += 1
+    if (userProfile.interests.includes("food")) userValueScore += 1
+
+    if (userValueScore >= 2) {
+      console.log("💰 HIGH VALUE USER")
+    }
+
     // 🧠 UPDATE MEMORY
     memory.lastIntent = intent
 
@@ -2176,6 +2232,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
     // guardar en redis
     await redis.set(memoryKey, JSON.stringify(memory), {
       EX: 60 * 60 * 24
+    })
+
+    // 🧠 SAVE USER PROFILE (V3)
+    await redis.set(profileKey, JSON.stringify(userProfile), {
+      EX: 60 * 60 * 24 * 30 // 30 días
     })
 
     res.json({
