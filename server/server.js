@@ -1488,8 +1488,40 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let memory = memoryRaw ? JSON.parse(memoryRaw) : {
       lastIntent: null,
       lastTopic: null,
-      preferences: []
+      preferences: [],
+      budget: null,
+      travelContext: null,
+      lastEntities: [],
+      conversationStyle: "neutral"
     }
+
+    // 🧠 ADVANCED MEMORY EXTRACTION
+
+    const msgLower = userMessage.toLowerCase()
+
+    // presupuesto
+    if (msgLower.includes("cheap") || msgLower.includes("budget")) {
+      memory.budget = "low"
+    }
+
+    if (msgLower.includes("luxury") || msgLower.includes("expensive")) {
+      memory.budget = "high"
+    }
+
+    // tipo comida
+    if (msgLower.includes("vegan")) memory.preferences.push("vegan")
+    if (msgLower.includes("seafood")) memory.preferences.push("seafood")
+
+    // contexto viaje
+    if (msgLower.includes("honeymoon")) memory.travelContext = "romantic"
+    if (msgLower.includes("family")) memory.travelContext = "family"
+
+    // estilo conversación
+    if (msgLower.includes("quick")) memory.conversationStyle = "short"
+    if (msgLower.includes("detailed")) memory.conversationStyle = "detailed"
+
+    // limpiar duplicados
+    memory.preferences = [...new Set(memory.preferences)]
 
     // 🧠 SIMPLE PREFERENCE DETECTION
     const msg = userMessage.toLowerCase()
@@ -1505,10 +1537,22 @@ app.post("/chat", chatLimiter, async (req, res) => {
       intent === "other" &&
       memory.lastIntent === "restaurants"
     ) {
-      console.log("🧠 FOLLOW-UP → RESTAURANTS")
+      console.log("🧠 FOLLOW-UP → RESTAURANTS CONTEXTUAL")
+
+      let reply = "Here are some great options"
+
+      if (memory.budget === "low") {
+        reply += " that are budget-friendly"
+      }
+
+      if (memory.preferences.length) {
+        reply += ` with ${memory.preferences.join(", ")} options`
+      }
+
+      reply += ":"
 
       return res.json({
-        reply: "Here are some great options based on your preferences:",
+        reply,
         language: userLanguage
       })
     }
@@ -1745,7 +1789,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
             {
               role: "system",
               content:
-                buildPrompt(property, userLanguage, context, knowledge) +
+                buildPrompt(
+                  property,
+                  userLanguage,
+                  context,
+                  knowledge,
+                  memory,
+                  history
+                ) +
                 (isDegraded ? "\n\nBe concise and short." : "") +
                 (isWarning ? "\n\nKeep responses helpful but slightly concise." : "") +
                 "\n\n--- LIVE DATA ---\n" +
@@ -1773,6 +1824,19 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     const reply = completion.choices[0].message.content;
+
+    // ✨ HUMANIZER LAYER
+
+    let finalReply = reply.trim()
+
+    if (!finalReply.endsWith(".")) {
+      finalReply += "."
+    }
+
+    // evitar tono robótico
+    finalReply = finalReply
+      .replace("Here are some options:", "Here are a few great options you might like:")
+      .replace("I recommend", "I'd suggest")
 
     // --- AI COST TRACKING ---
     let usageData = null
@@ -2064,7 +2128,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     history.push({
       role: "assistant",
-      content: cleanReply
+      content: finalReply
     });
 
     if (history.length > 6) {
@@ -2091,6 +2155,16 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     // 🧠 UPDATE MEMORY
     memory.lastIntent = intent
+
+    if (intent !== "other") {
+      memory.lastTopic = intent
+    }
+
+    // guardar entidades simples
+    memory.lastEntities = [
+      ...memory.lastEntities.slice(-3),
+      userMessage
+    ]
 
     if (intent === "restaurants" || intent === "activities") {
       memory.lastTopic = intent
