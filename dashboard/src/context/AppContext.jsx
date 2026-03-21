@@ -14,16 +14,85 @@ export function AppProvider({ children }) {
     const [subscription, setSubscription] = useState(null)
     const [forecast, setForecast] = useState(null)
     const [usage, setUsage] = useState(0)
-
     const plan = subscription?.plan || "free"
-
     const limit = forecast?.usage_limit || limits[plan]
     const limitReached = forecast ? usage >= limit : false
-
     const [loading, setLoading] = useState(true)
     const token = localStorage.getItem("token")
     const propertyId = localStorage.getItem("propertyId")
+    const [conversion, setConversion] = useState(null)
 
+
+    function computeConversionState({
+        usage,
+        subscription,
+        limitReached,
+        ltv
+    }) {
+
+        if (!subscription) return null
+
+        const plan = subscription.plan || "free"
+
+        const limits = {
+            free: 100,
+            pro: 1500,
+            business: 5000
+        }
+
+        const limit = limits[plan] || 100
+        const ratio = usage / limit
+
+        // 🔴 HARD LIMIT
+        if (limitReached || ratio >= 1) {
+            return {
+                show: true,
+                level: "critical",
+                type: "limit",
+                message: "You've reached your limit. Upgrade to continue.",
+                cta: "Upgrade now",
+                location: "topbar"
+            }
+        }
+
+        // 🟠 HIGH USAGE
+        if (ratio >= 0.8) {
+            return {
+                show: true,
+                level: "high",
+                type: "usage",
+                message: "You're close to your limit.",
+                cta: "Upgrade",
+                location: "topbar"
+            }
+        }
+
+        // ⚡ LTV
+        if (ltv?.strategy) {
+            return {
+                show: true,
+                level: "medium",
+                type: "ltv",
+                message: ltv.strategy.message,
+                cta: "Upgrade",
+                location: "overview"
+            }
+        }
+
+        // 💡 FREE ENGAGEMENT
+        if (plan === "free" && usage > 20) {
+            return {
+                show: true,
+                level: "low",
+                type: "engagement",
+                message: "You're getting value from StayAssistant.",
+                cta: "Upgrade",
+                location: "overview"
+            }
+        }
+
+        return null
+    }
 
     useEffect(() => {
         loadData()
@@ -49,6 +118,20 @@ export function AppProvider({ children }) {
             setUsage(forecastData.usage || 0)
             setForecast(forecastData)
 
+            const usageValue = forecastData.usage || 0
+            const limitValue = forecastData.usage_limit || limits[subData.plan || "free"]
+            const limitReachedValue = usageValue >= limitValue
+
+            const conversionState = computeConversionState({
+                usage: usageValue,
+                subscription: subData,
+                limitReached: limitReachedValue,
+                ltv: forecastData?.ltv || null
+            })
+
+            setConversion(conversionState)
+
+
         } catch (err) {
             console.error("AppContext error", err)
         }
@@ -63,7 +146,8 @@ export function AppProvider({ children }) {
             forecast, // 🔥 NEW
             loading,
             limit,
-            limitReached
+            limitReached,
+            conversion
         }}>
             {children}
         </AppContext.Provider>

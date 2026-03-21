@@ -1,35 +1,11 @@
 import { useApp } from "../context/AppContext"
-import useAnalytics from "../hooks/useAnalytics"
 import { useEffect, useState } from "react"
 
 export default function Topbar() {
 
 
-  const { subscription, usage } = useApp()
-  const [realtimeUpgrade, setRealtimeUpgrade] = useState(null)
-  const { upgradeSignal, ltv } = useAnalytics()
+  const { subscription, usage, conversion } = useApp()
 
-  useEffect(() => {
-
-    try {
-
-      const raw = localStorage.getItem("stayassistant_upgrade_signal")
-
-      if (!raw) return
-
-      const data = JSON.parse(raw)
-
-      const isRecent = Date.now() - data.timestamp < 1000 * 60 * 10 // 10 min
-
-      if (isRecent) {
-        setRealtimeUpgrade(data)
-      }
-
-    } catch (e) {
-      console.log("Upgrade signal read error")
-    }
-
-  }, [])
 
   if (!subscription) return null
 
@@ -48,19 +24,22 @@ export default function Topbar() {
 
     <div className="topbar">
 
-      {realtimeUpgrade && (
-
+      {conversion?.show && conversion.location === "topbar" && (
         <div style={{
-          background: "#7f1d1d",
+          background:
+            conversion.level === "critical"
+              ? "#7f1d1d"
+              : conversion.level === "high"
+                ? "#78350f"
+                : "#1e3a8a",
           color: "white",
           padding: "8px 16px",
           marginBottom: 10,
           borderRadius: 6,
           fontSize: 14
         }}>
-          🚨 High usage detected in real time. Upgrade recommended.
+          {conversion.message}
         </div>
-
       )}
 
       {percentage > 100 && (
@@ -73,7 +52,7 @@ export default function Topbar() {
       )}
 
       <strong>
-        {plan.toUpperCase()} PLAN {ltv?.strategy ? "⚡" : plan === "free" ? "💡" : ""}
+        {plan.toUpperCase()} PLAN
       </strong>
 
       <div className="topbar-right">
@@ -85,23 +64,21 @@ export default function Topbar() {
         <button
           style={{
             background:
-              realtimeUpgrade?.urgency === "high"
+              conversion?.level === "critical"
                 ? "#dc2626"
-                : ltv?.strategy?.urgency === "high"
-                  ? "#dc2626"
+                : conversion?.level === "high"
+                  ? "#f59e0b"
                   : "#22c55e",
             color: "white",
             fontWeight: "bold"
           }}
-          onClick={() => window.location.href = "/dashboard/billing"}
+          onClick={() => window.location.href = "/billing"}
         >
-          {realtimeUpgrade?.urgency === "high"
-            ? "🚨 Upgrade Now"
-            : realtimeUpgrade
-              ? "⚡ Upgrade (Live)"
-              : ltv?.strategy
-                ? "⚡ Upgrade"
-                : "Upgrade"}
+          {conversion?.level === "critical"
+            ? "🚨 Upgrade now"
+            : conversion?.level === "high"
+              ? "⚡ Upgrade"
+              : "Upgrade"}
         </button>
 
         <button

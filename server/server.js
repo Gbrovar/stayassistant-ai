@@ -2159,14 +2159,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let upgradeTrigger = false
 
-    if (
-      strategy &&
-      (
-        strategy.urgency === "high" ||
-        (strategy.type === "soft" && Math.random() < 0.3)
-      )
-    ) {
-      upgradeTrigger = true
+    if (strategy) {
+
+      if (strategy.urgency === "high") {
+        upgradeTrigger = true
+      }
+
+      if (
+        strategy.type === "soft" &&
+        messages > 5 &&           // engaged user
+        conversations > 1         // not first visit
+      ) {
+        upgradeTrigger = true
+      }
+
     }
 
     // 🧠 PROFILE ENRICHMENT (V3)
@@ -2242,7 +2248,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     res.json({
       reply: shortReply,
       language: detectedLanguage,
-      uupgrade: upgradeTrigger ? {
+      upgrade: upgradeTrigger ? {
         type: strategy?.type,
         urgency: strategy?.urgency,
         message: strategy?.message
