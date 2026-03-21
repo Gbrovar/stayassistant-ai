@@ -61,25 +61,27 @@ export default function Topbar() {
           {usage} / {limit}
         </div>
 
-        <button
-          style={{
-            background:
-              conversion?.level === "critical"
-                ? "#dc2626"
-                : conversion?.level === "high"
-                  ? "#f59e0b"
-                  : "#22c55e",
-            color: "white",
-            fontWeight: "bold"
-          }}
-          onClick={() => window.location.href = "/billing"}
-        >
-          {conversion?.level === "critical"
-            ? "🚨 Upgrade now"
-            : conversion?.level === "high"
-              ? "⚡ Upgrade"
-              : "Upgrade"}
-        </button>
+        {conversion?.show && conversion.location === "topbar" && (
+          <button
+            style={{
+              background:
+                conversion.level === "critical"
+                  ? "#dc2626"
+                  : conversion.level === "high"
+                    ? "#f59e0b"
+                    : "#22c55e",
+              color: "white",
+              fontWeight: "bold"
+            }}
+            onClick={() => window.location.href = "/billing"}
+          >
+            {conversion.level === "critical"
+              ? "🚨 Upgrade now"
+              : conversion.level === "high"
+                ? "⚡ Upgrade"
+                : "Upgrade"}
+          </button>
+        )}
 
         <button
           onClick={() => {
@@ -92,19 +94,6 @@ export default function Topbar() {
 
       </div>
 
-      {/* WARNING BAR */}
-
-      {percentage > 80 && percentage <= 100 && (
-        <div className="topbar-warning">
-          ⚠️ High usage — nearing limit
-        </div>
-      )}
-
-      {percentage > 100 && (
-        <div className="topbar-danger">
-          🚨 Over limit — extra costs active
-        </div>
-      )}
 
     </div>
 
