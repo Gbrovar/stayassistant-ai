@@ -1298,20 +1298,33 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
 
-    const allowedAIIntents = ["other", "restaurants", "activities"]
+    // 🔥 FIX 5 — PRIORIDAD RESTAURANTS (SIN AI)
+    if (intent === "restaurants") {
+
+      console.log("🍽️ DIRECT RESTAURANTS FLOW")
+
+      return res.json({
+        reply: "Here are some great options nearby:",
+        language: userLanguage
+      })
+
+    }
+
+    const allowedAIIntents = ["other", "activities"]
 
     if (!allowedAIIntents.includes(intent)) {
       console.log("🚫 AI BLOCKED FOR INTENT:", intent)
     }
 
-    if (intent === "other" && userMessage.length < 50) {
-
-      console.log("⚡ SMART FALLBACK (no AI)")
-
-      return res.json({
+    if (
+      intent === "other" &&
+      userMessage.length < 20 &&
+      !userMessage.includes("?")
+    ) {
+      return {
         reply: "I'm here to help with your stay. Could you provide a bit more detail?",
         language: userLanguage
-      })
+      }
     }
 
     /* --- INTENT DIRECT RESPONSE (COST SHIELD) --- */
@@ -1576,7 +1589,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const shouldUseAI =
       intent === "other" ||
-      intent === "restaurants" ||
       intent === "activities"
 
     if (!shouldUseAI) {
@@ -1664,15 +1676,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let completion;
 
+    const isDegraded = control.mode === "degraded"
+    const isWarning = control.mode === "warning"
+
     try {
 
       console.log("🤖 CALLING OPENAI:", intent)
       console.log("📊 KNOWLEDGE LENGTH:", knowledge?.length)
       console.log("⚙️ MODE:", control.mode)
-
-      const isDegraded = control.mode === "degraded"
-
-      const isWarning = control.mode === "warning"
 
       completion = await Promise.race([
 

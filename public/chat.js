@@ -726,37 +726,35 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     /* PRE RESPONSE (LATENCY OPTIMIZATION) */
 
-    messages.innerHTML += `
+    let shouldShowPreResponse = userText.length > 25;
+
+    if (shouldShowPreResponse) {
+        messages.innerHTML += `
         <div class="bot-wrapper pre-response">
-
-        <div class="bot-avatar">🤖</div>
-
-        <div class="bot-message">
-        ${getPreResponse()}
+            <div class="bot-avatar">🤖</div>
+            <div class="bot-message">
+            ${getPreResponse()}
+            </div>
         </div>
-
-        </div>
-        `;
+    `;
+    }
 
     input.value = "";
 
-    messages.innerHTML += `
-        <div class="bot-wrapper" id="typing">
-
-        <div class="bot-avatar">🤖</div>
-
-        <div class="bot-message">
-
-        <div class="typing-dots">
-        <span></span>
-        <span></span>
-        <span></span>
-        </div>
-
-        </div>
-
-        </div>
+    if (shouldShowPreResponse) {
+        messages.innerHTML += `
+            <div class="bot-wrapper" id="typing">
+            <div class="bot-avatar">🤖</div>
+            <div class="bot-message">
+            <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+            </div>
+            </div>
+            </div>
         `;
+    }
 
     messages.scrollTop = messages.scrollHeight;
 
@@ -840,7 +838,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         /* primero recomendaciones */
 
-        await showRecommendations(userText);
+        if (data.reply && !data.reply.includes("something went wrong")) {
+            await showRecommendations(userText)
+        }
 
         /* luego quick actions */
 
