@@ -3,7 +3,7 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function OverviewPage() {
 
-  const { subscription, usage, loading } = useApp()
+  const { subscription, usage, loading, conversion } = useApp()
 
   const {
     totalMessages,
@@ -37,28 +37,38 @@ export default function OverviewPage() {
 
       <h1>Dashboard</h1>
 
-      {ltv?.strategy && (
+      {conversion?.show && conversion.location === "overview" && (
 
         <div className="card" style={{
           marginTop: 20,
           border:
-            ltv.strategy.urgency === "high"
+            conversion.level === "critical"
               ? "2px solid #dc2626"
-              : "2px solid #3b82f6"
+              : conversion.level === "high"
+                ? "2px solid #f59e0b"
+                : "2px solid #3b82f6"
         }}>
 
           <h3>
-            {ltv.strategy.urgency === "high"
+            {conversion.level === "critical"
               ? "🚨 Action required"
-              : "⚡ Opportunity detected"}
+              : conversion.level === "high"
+                ? "⚠️ Attention needed"
+                : "💡 Opportunity"}
           </h3>
 
-          <p>{ltv.strategy.message}</p>
+          <p>{conversion.message}</p>
 
           <button
-            onClick={() => window.location.href = "/dashboard/billing"}
+            onClick={() => window.location.href = "/billing"}
+            style={{
+              marginTop: 10,
+              background: "#22c55e",
+              color: "black",
+              fontWeight: "bold"
+            }}
           >
-            Upgrade Plan
+            {conversion.cta}
           </button>
 
         </div>
@@ -108,12 +118,6 @@ export default function OverviewPage() {
           />
         </div>
 
-        {percentage > 80 && (
-          <p style={{ color: "#ffb020", marginTop: 10 }}>
-            You are close to your limit. Consider upgrading.
-          </p>
-        )}
-
       </div>
 
       {/* QUICK INSIGHTS */}
@@ -130,25 +134,6 @@ export default function OverviewPage() {
 
       </div>
 
-      {/* UPGRADE CTA */}
-
-      {plan === "free" && (
-
-        <div style={{ marginTop: 30 }} className="card">
-
-          <h3>Upgrade your plan</h3>
-
-          <p>Unlock more messages and advanced features.</p>
-
-          <button
-            onClick={() => window.location.href = "/dashboard/billing"}
-          >
-            View plans
-          </button>
-
-        </div>
-
-      )}
 
     </div>
 
