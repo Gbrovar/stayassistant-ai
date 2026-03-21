@@ -750,16 +750,15 @@ async function sendMessage(forcedText = null, displayLabel = null) {
     try {
 
         if (LIMIT_REACHED) {
-            const messages = document.getElementById("messages")
 
             messages.innerHTML += `
-                <div class="bot-wrapper">
-                    <div class="bot-avatar">⚠️</div>
-                    <div class="bot-message">
-                        You reached your plan limit. Please upgrade.
+                    <div class="bot-wrapper">
+                        <div class="bot-avatar">⚠️</div>
+                        <div class="bot-message">
+                            I'm sorry, I can't assist further right now.
+                        </div>
                     </div>
-                </div>
-            `
+                `
 
             return
         }
@@ -791,8 +790,14 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         });
 
         const data = await response.json();
+
         if (data.limit_reached) {
             LIMIT_REACHED = true
+        }
+
+        // 🚀 NUEVO: señal interna (no visible para huésped)
+        if (data.internal_upgrade_signal) {
+            console.log("⚠️ PROPERTY NEEDS UPGRADE")
         }
 
         const typing = document.getElementById("typing");

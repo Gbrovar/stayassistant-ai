@@ -356,59 +356,36 @@ async function checkUsageAndCost(propertyId) {
 
   const month = new Date().toISOString().slice(0, 7)
 
-  // --- PLAN ---
-  const subKey = `stayassistant:subscription:${propertyId}`
-  const subRaw = await redis.get(subKey)
-
-  let plan = "free"
-
-  if (subRaw) {
-    const sub = JSON.parse(subRaw)
-    plan = sub.plan || "free"
-  }
-
-  // --- LIMITS ---
-  const usageLimit = await getUsageLimit(propertyId)
-  const costLimit = getCostLimit(plan)
-
-  // --- USAGE ---
   const usageKey = `stayassistant:usage:${propertyId}:${month}`
-  const usage = Number(await redis.get(usageKey) || 0)
-
-  // --- COST ---
   const costKey = `stayassistant:cost:${propertyId}:${month}`
+
+  const usage = Number(await redis.get(usageKey) || 0)
   const cost = Number(await redis.hGet(costKey, "cost") || 0)
 
-  const usageMode = await getUsageMode(propertyId)
+  const limit = await getUsageLimit(propertyId)
 
-  // --- DECISION ---
+  const usageRatio = usage / limit
 
-  if (usage >= usageLimit) {
+  // 🔥 PAYWALL LOGIC
 
-    if (usageMode === "smart_flex") {
-      return {
-        allowed: true,
-        mode: "overage",
-        overLimit: true
-      }
-    }
-
-    return {
-      allowed: false,
-      mode: "blocked",
-      reason: "usage_limit"
-    }
+  if (usageRatio < 0.8) {
+    return { allowed: true, mode: "normal" }
   }
 
-  if (cost >= costLimit) {
-    return { allowed: true, mode: "degraded", reason: "cost_limit" }
+  if (usageRatio < 1) {
+    return { allowed: true, mode: "warning" }
   }
 
-  if (cost >= costLimit * 1.2) {
-    return { allowed: false, mode: "blocked", reason: "over_cost" }
+  if (usageRatio < 1.2) {
+    return { allowed: true, mode: "degraded" }
   }
 
-  return { allowed: true, mode: "normal" }
+  // 🚨 HARD BLOCK
+  return {
+    allowed: false,
+    mode: "blocked",
+    reason: "limit_exceeded"
+  }
 }
 
 function detectUpgradeSignal({ usage, cost, plan, messages, conversations }) {
@@ -1302,14 +1279,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     if (!control.allowed) {
 
-      console.log("⛔ BLOCKED:", control.reason)
-
       return res.json({
-        reply: "I'm sorry, I cannot assist further at the moment. Please contact the property directly.",
-        limit_reached: true
+        reply: "I'm sorry, I'm unable to assist further at the moment. Please contact the property directly.",
+        limit_reached: true,
+        internal_upgrade_signal: true
       })
     }
-
 
     if (!property) {
       return res.json({
@@ -1696,6 +1671,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const isDegraded = control.mode === "degraded"
 
+      const isWarning = control.mode === "warning"
+
       completion = await Promise.race([
 
 
@@ -1712,7 +1689,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
               content:
                 buildPrompt(property, userLanguage, context, knowledge) +
                 (isDegraded ? "\n\nBe concise and short." : "") +
-                "\n\n--- LIVE DATA (REAL-TIME, PRIORITY) ---\n" +
+                (isWarning ? "\n\nKeep responses helpful but slightly concise." : "") +
+                "\n\n--- LIVE DATA ---\n" +
                 nearbyContext
             },
             ...trimmedHistory
@@ -3188,7 +3166,7 @@ app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
-  const usageLimit = await getUsageLimit(propertyId) 
+  const usageLimit = await getUsageLimit(propertyId)
 
   const month = new Date().toISOString().slice(0, 7)
 
