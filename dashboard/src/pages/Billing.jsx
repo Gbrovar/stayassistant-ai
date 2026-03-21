@@ -5,8 +5,7 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
-    const { forecast } = useApp()
-    const { upgradeSignal, ltv } = useAnalytics()
+    const { forecast, conversion } = useApp()
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
 
@@ -82,47 +81,31 @@ export default function Billing() {
 
             <h1>Billing</h1>
 
-            {usageRatio > 0.8 && usageRatio <= 1 && (
+            {conversion?.show && (
+
                 <div style={{
-                    background: "#7c2d12",
+                    background:
+                        conversion.level === "critical"
+                            ? "#7f1d1d"
+                            : conversion.level === "high"
+                                ? "#78350f"
+                                : "#1e3a8a",
                     color: "white",
-                    padding: 12,
-                    borderRadius: 8,
-                    marginBottom: 20
-                }}>
-                    ⚠️ You're close to your monthly limit.
-                    <br />
-                    Consider upgrading to avoid interruptions.
-                </div>
-            )}
-
-            {usageRatio > 1 && (
-                <div style={{
-                    background: "#7f1d1d",
-                    color: "white",
-                    padding: 12,
-                    borderRadius: 8,
-                    marginBottom: 20
-                }}>
-                    🚀 You're exceeding your plan.
-                    <br />
-                    Extra usage is being billed.
-                </div>
-            )}
-
-            {ltv?.strategy && (
-
-                <div style={{
-                    marginBottom: 20,
                     padding: 16,
                     borderRadius: 10,
-                    background:
-                        ltv.strategy.urgency === "high"
-                            ? "#7f1d1d"
-                            : "#1e3a8a",
-                    color: "white"
+                    marginBottom: 20
                 }}>
-                    {ltv.strategy.urgency === "high" ? "🚨" : "⚡"} {ltv.strategy.message}
+                    <strong>
+                        {conversion.level === "critical"
+                            ? "🚨 Immediate action required"
+                            : conversion.level === "high"
+                                ? "⚠️ Attention needed"
+                                : "💡 Opportunity"}
+                    </strong>
+
+                    <p style={{ marginTop: 6 }}>
+                        {conversion.message}
+                    </p>
                 </div>
 
             )}
@@ -172,22 +155,6 @@ export default function Billing() {
 
             </div>
 
-            {/* 💡 SOFT UPGRADE (SIEMPRE VISIBLE EN FREE) */}
-
-            {subscription.plan === "free" && !upgradeSignal && (
-                <div style={{
-                    background: "#0f172a",
-                    border: "1px solid #1f2937",
-                    color: "#cbd5f5",
-                    padding: 14,
-                    borderRadius: 10,
-                    marginBottom: 20
-                }}>
-                    💡 You're on the Free plan.
-                    Upgrade to unlock more messages and advanced features.
-                </div>
-            )}
-
             {/* UPGRADE */}
 
             <h3 style={{ marginTop: 30 }}>Upgrade your plan</h3>
@@ -195,7 +162,12 @@ export default function Billing() {
             <div className="plans">
 
                 <div className="plan-card" style={{
-                    border: upgradeSignal === "upgrade_soft" ? "2px solid #22c55e" : undefined
+                    border:
+                        conversion?.level === "high"
+                            ? "2px solid #f59e0b"
+                            : conversion?.level === "critical"
+                                ? "2px solid #ef4444"
+                                : undefined
                 }}>
 
                     <h4>PRO</h4>
@@ -218,7 +190,12 @@ export default function Billing() {
                 </div>
 
                 <div className="plan-card" style={{
-                    border: upgradeSignal === "upgrade_strong" ? "2px solid #ef4444" : undefined
+                    border:
+                        conversion?.level === "high"
+                            ? "2px solid #f59e0b"
+                            : conversion?.level === "critical"
+                                ? "2px solid #ef4444"
+                                : undefined
                 }}>
 
                     <h4>BUSINESS</h4>
