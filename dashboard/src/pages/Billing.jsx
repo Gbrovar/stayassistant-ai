@@ -5,18 +5,30 @@ import useAnalytics from "../hooks/useAnalytics"
 
 export default function Billing() {
 
-
-    const { usage } = useApp()
     const { upgradeSignal } = useAnalytics()
-
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
+    const [forecast, setForecast] = useState(null)
 
     useEffect(() => {
-
         loadSubscription()
-
+        loadForecast()
     }, [])
+
+    async function loadForecast() {
+
+        const propertyId = localStorage.getItem("propertyId")
+
+        const res = await fetch(`${API_URL}/billing/forecast/${propertyId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        const data = await res.json()
+
+        setForecast(data)
+    }
 
     async function loadSubscription() {
 
@@ -72,18 +84,13 @@ export default function Billing() {
 
     }
 
-    if (!subscription) return <div>Loading...</div>
+    if (!subscription || !forecast) return <div>Loading billing...</div>
 
-    const limits = {
-        free: 100,
-        pro: 1500,
-        business: 5000
-    }
-
-    const limit = limits[subscription.plan] || 100
-    // usage viene del contexto
+    const usage = forecast.usage
+    const limit = forecast.usage_limit
 
     const percentage = Math.min((usage / limit) * 100, 100)
+    const usageRatio = usage / limit
 
     return (
 
@@ -91,34 +98,42 @@ export default function Billing() {
 
             <h1>Billing</h1>
 
-            {upgradeSignal && (
+            {usageRatio > 0.8 && (
+                <div style={{
+                    background: "#7c2d12",
+                    color: "white",
+                    padding: 12,
+                    borderRadius: 8,
+                    marginBottom: 20
+                }}>
+                    ⚠️ You're close to your limit
+                </div>
+            )}
 
+            {upgradeSignal === "upgrade_strong" && (
                 <div style={{
                     marginBottom: 20,
                     padding: 16,
                     borderRadius: 10,
-                    background:
-                        upgradeSignal === "upgrade_strong"
-                            ? "#7f1d1d"
-                            : "#1e3a8a",
+                    background: "#7f1d1d",
                     color: "white"
                 }}>
-
-                    <h3>
-                        {upgradeSignal === "upgrade_strong"
-                            ? "🚨 Immediate upgrade recommended"
-                            : "⚡ You're growing fast"}
-                    </h3>
-
-                    <p>
-                        {upgradeSignal === "upgrade_strong"
-                            ? "You're reaching system limits. Upgrade now to avoid service disruption."
-                            : "Upgrade now to unlock more capacity and features."}
-                    </p>
-
+                    🚨 You're incurring extra costs. Upgrade recommended.
                 </div>
-
             )}
+
+            {upgradeSignal === "upgrade_soft" && (
+                <div style={{
+                    marginBottom: 20,
+                    padding: 16,
+                    borderRadius: 10,
+                    background: "#1e3a8a",
+                    color: "white"
+                }}>
+                    ⚡ You're growing fast. Consider upgrading.
+                </div>
+            )}
+
             {/* CURRENT PLAN */}
 
             <div className="card">
@@ -137,12 +152,24 @@ export default function Billing() {
                     {usage} / {limit} messages this month
                 </p>
 
+                <div style={{ marginTop: 10 }}>
+                    <strong>Estimated bill:</strong> €{forecast.estimated_total.toFixed(2)}
+                </div>
+
+                {forecast.overage_cost > 0 && (
+                    <div style={{ color: "#f59e0b", marginTop: 5 }}>
+                        +€{forecast.overage_cost.toFixed(2)} extra usage
+                    </div>
+                )}
+
                 <div className="usage-bar">
                     <div
                         className="usage-fill"
                         style={{ width: `${percentage}%` }}
                     />
                 </div>
+
+
 
             </div>
 

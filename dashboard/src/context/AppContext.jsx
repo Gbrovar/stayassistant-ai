@@ -11,20 +11,28 @@ export function AppProvider({ children }) {
         business: 5000
     }
 
+    const [forecast, setForecast] = useState(null)
+    const plan = subscription?.plan || "free"
+    const limit = forecast?.usage_limit || limits[plan]
     const [subscription, setSubscription] = useState(null)
     const [usage, setUsage] = useState(0)
-    const plan = subscription?.plan || "free"
-    const limit = limits[plan]
     const limitReached = usage >= limit
     const [loading, setLoading] = useState(true)
     const token = localStorage.getItem("token")
     const propertyId = localStorage.getItem("propertyId")
+
 
     useEffect(() => {
         loadData()
     }, [])
 
     async function loadData() {
+
+        const forecastRes = await fetch(`${API_URL}/billing/forecast/${propertyId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        const forecastData = await forecastRes.json()
 
         try {
 
@@ -34,14 +42,9 @@ export function AppProvider({ children }) {
 
             const subData = await subRes.json()
 
-            const analyticsRes = await fetch(`${API_URL}/analytics/${propertyId}/advanced`, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-
-            const analyticsData = await analyticsRes.json()
-
             setSubscription(subData)
-            setUsage(analyticsData.total_messages || 0)
+            setUsage(forecastData.usage || 0)
+            setForecast(forecastData)
 
         } catch (err) {
             console.error("AppContext error", err)
@@ -54,6 +57,7 @@ export function AppProvider({ children }) {
         <AppContext.Provider value={{
             subscription,
             usage,
+            forecast, // 🔥 NEW
             loading,
             limit,
             limitReached

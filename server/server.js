@@ -3188,6 +3188,8 @@ app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
+  const usageLimit = await getUsageLimit(propertyId) 
+
   const month = new Date().toISOString().slice(0, 7)
 
   const usage = Number(await redis.get(`stayassistant:usage:${propertyId}:${month}`) || 0)
@@ -3214,6 +3216,7 @@ app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
     plan,
     base_price: basePrice,
     usage,
+    usage_limit: usageLimit, // 🔥 rename consistente
     cost,
     overage_cost: overageCost,
     estimated_total: total
