@@ -293,5 +293,290 @@ upgrade triggers
 
 revenue optimization
 
+------------------------------------
 
+🧠 SIGUIENTE NIVEL (CUANDO ESCALES)
+
+Esto ya te deja listo para:
+
+BullMQ (plug & play)
+
+workers
+
+batching
+
+multi-tenant heavy load
+
+---------------------------------
+
+🚀 SIGUIENTE NIVEL (cuando escales)
+
+Luego lo convertiremos en:
+
+alertas en dashboard
+
+notificaciones admin
+
+auto-limit (ej: bajar calidad AI)
+
+-------------------------------
+
+🚀 SIGUIENTE NIVEL (CUANDO QUIERAS)
+
+Te llevo a:
+
+🔥 FASE 3 — REVENUE ENGINE
+
+dynamic pricing (usage-based)
+
+auto-upgrade suggestions
+
+churn prevention AI
+
+LTV optimization
+
+---------------------------------------------
+
+Perfecto. Ahora entramos en V4 = dinero real + inteligencia de producto.
+Voy a ser quirúrgico: qué tocar, dónde y por qué.
+
+🧠 V4 — OBJECTIVO REAL
+
+No es “responder mejor”.
+
+👉 Es esto:
+
+💰 1. Ranking inteligente (personalización real)
+💰 2. Recomendaciones con intención comercial
+💰 3. Motor de monetización dentro del chat
+💰 4. Triggering inteligente (cuándo vender)
+⚠️ PROBLEMA ACTUAL (CRÍTICO)
+
+Ahora mismo tu sistema:
+
+responde bien ✔️
+guarda perfil ✔️
+mide LTV ✔️
+
+❌ PERO:
+👉 no usa el perfil para decidir qué mostrar
+👉 no monetiza recomendaciones
+👉 no prioriza resultados
+
+🚀 V4 — ARQUITECTURA
+
+Vamos a añadir 3 capas:
+
+🧩 1. RANKING ENGINE (core de V4)
+
+👉 archivo nuevo:
+
+/utils/recommendationRanker.js
+🔧 IMPLEMENTACIÓN
+export function rankPlaces(places, userProfile, memory) {
+
+  return places
+    .map(place => {
+
+      let score = 0
+
+      // ⭐ rating base
+      score += (place.rating || 4) * 2
+
+      // 📍 distancia (más cerca = mejor)
+      if (place.distance) {
+        score += Math.max(0, 2000 - place.distance) / 500
+      }
+
+      // 🧠 preferencias
+      if (userProfile.preferences.includes("vegan") &&
+          place.name.toLowerCase().includes("vegan")) {
+        score += 3
+      }
+
+      if (memory.budget === "low") {
+        score += 1 // simple heuristic
+      }
+
+      // 🔥 intereses
+      if (userProfile.interests.includes("food")) {
+        score += 2
+      }
+
+      return {
+        ...place,
+        score
+      }
+
+    })
+    .sort((a, b) => b.score - a.score)
+}
+🔥 INTEGRACIÓN (CRÍTICA)
+
+📍 server.js
+
+Busca:
+
+const items = data.results.slice(0, 4).map(place => {
+🔁 REEMPLAZAR POR:
+let items = data.results.slice(0, 6).map(place => {
+➕ JUSTO DESPUÉS:
+import { rankPlaces } from "./utils/recommendationRanker.js"
+➕ Y después de construir items:
+items = rankPlaces(items, userProfile, memory).slice(0, 4)
+
+👉 Resultado:
+
+ANTES:
+
+random Google order
+
+AHORA:
+
+personalizado por usuario
+💰 2. MONETIZATION LAYER (CRÍTICO)
+
+Ahora mismo no ganas dinero con recomendaciones.
+
+Vamos a preparar esto:
+
+🧠 IDEA
+
+Añadir campo opcional:
+
+place.partner = true
+place.commission = 0.1
+🔧 PATCH EN server.js
+
+Después de crear cada place:
+
+// fake partner logic (V4)
+if (place.rating >= 4.5) {
+  place.partner = true
+}
+💰 3. SMART UPSELL (MUY IMPORTANTE)
+
+Ahora tienes LTV:
+
+const strategy = getUpgradeStrategy(score, plan)
+
+Pero no se usa en conversación.
+
+🔥 AÑADE ESTO (JUSTO ANTES DEL res.json FINAL)
+// 💰 SMART CONTEXTUAL UPSELL
+
+let monetizationHint = null
+
+if (
+  intent === "restaurants" &&
+  userProfile.interactionCount > 2
+) {
+  monetizationHint = "premium_recommendations"
+}
+🔁 Y modifica respuesta final:
+res.json({
+  reply: shortReply,
+  language: detectedLanguage,
+  monetization: monetizationHint,
+  upgrade: upgradeTrigger ? {
+    type: strategy?.type,
+    urgency: strategy?.urgency,
+    message: strategy?.message
+  } : null
+});
+⚠️ BUG IMPORTANTE DETECTADO
+
+En tu código:
+
+uupgrade: upgradeTrigger ? { ... }
+
+❌ MAL escrito
+
+🔁 FIX:
+upgrade: upgradeTrigger ? { ... }
+💻 FRONTEND (chat.js)
+
+Ahora mismo:
+
+if (data.upgrade) {
+
+👉 perfecto, pero no usas monetization.
+
+➕ AÑADE:
+if (data.monetization === "premium_recommendations") {
+  console.log("💰 PREMIUM INTENT DETECTED")
+}
+🧠 4. PERSONALIZACIÓN REAL EN PROMPT
+
+Tu prompt YA está preparado 👇
+
+
+Pero falta usarlo mejor.
+
+🔥 PATCH
+
+En promptBuilder añade:
+
+PERSONALIZATION RULES
+
+- If user has food interest → prioritize food suggestions
+- If budget is low → suggest affordable options
+- If preferences exist → adapt recommendations
+🚀 RESULTADO V4
+ANTES
+
+User:
+
+where to eat?
+
+👉 respuesta genérica
+
+AHORA
+
+User profile:
+
+vegan
+budget low
+
+👉 sistema:
+
+rankea restaurantes
+prioriza veganos
+ajusta respuesta
+prepara monetización
+📊 IMPACTO REAL
+Producto
+↑ relevancia brutal
+↑ sensación de "wow"
+Negocio
+base para:
+afiliados
+reservas
+partnerships locales
+🔥 LO MÁS IMPORTANTE (MENTALIDAD CTO)
+
+Esto ya NO es un chatbot.
+
+👉 Es:
+
+un motor de decisión + monetización
+
+🚀 SIGUIENTE NIVEL (V5)
+
+Si quieres escalar de verdad:
+
+👉 V5 = “Revenue Engine”
+
+reservas dentro del chat
+integración con APIs (TheFork, Uber, GetYourGuide)
+comisión automática
+smart nudges (timing perfecto)
+👉 Dime:
+
+“vamos a V5”
+
+y entramos en:
+👉 cómo convertir esto en un SaaS que facture de verdad 💰
+
+---------------------------------------
 
