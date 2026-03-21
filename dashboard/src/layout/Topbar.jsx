@@ -54,10 +54,10 @@ export default function Topbar() {
           }}
           onClick={() => window.location.href = "/dashboard/billing"}
         >
-          {upgradeSignal === "upgrade_strong"
+          {ltv?.strategy?.urgency === "high"
             ? "🚨 Upgrade Now"
-            : percentage > 80
-              ? "⚡ Upgrade Soon"
+            : ltv?.strategy
+              ? "⚡ Upgrade"
               : "Upgrade"}
         </button>
 

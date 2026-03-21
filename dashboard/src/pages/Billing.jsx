@@ -110,28 +110,21 @@ export default function Billing() {
                 </div>
             )}
 
-            {upgradeSignal === "upgrade_strong" && (
-                <div style={{
-                    marginBottom: 20,
-                    padding: 16,
-                    borderRadius: 10,
-                    background: "#7f1d1d",
-                    color: "white"
-                }}>
-                    🚨 You're incurring extra costs. Upgrade recommended.
-                </div>
-            )}
+            {ltv?.strategy && (
 
-            {upgradeSignal === "upgrade_soft" && (
                 <div style={{
                     marginBottom: 20,
                     padding: 16,
                     borderRadius: 10,
-                    background: "#1e3a8a",
+                    background:
+                        ltv.strategy.urgency === "high"
+                            ? "#7f1d1d"
+                            : "#1e3a8a",
                     color: "white"
                 }}>
-                    ⚡ You're growing fast. Consider upgrading.
+                    {ltv.strategy.urgency === "high" ? "🚨" : "⚡"} {ltv.strategy.message}
                 </div>
+
             )}
 
             {/* CURRENT PLAN */}

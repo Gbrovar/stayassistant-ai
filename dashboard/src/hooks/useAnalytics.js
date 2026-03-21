@@ -18,6 +18,7 @@ export default function useAnalytics() {
     const [upgradeSignal, setUpgradeSignal] = useState(null)
 
     const [plan, setPlan] = useState("free")
+    const [ltv, setLtv] = useState(null)
 
     useEffect(() => {
 
@@ -116,6 +117,19 @@ export default function useAnalytics() {
 
                 setAlerts(dataAlerts.alerts || [])
 
+                const resLtv = await fetch(
+                    `${API_URL}/analytics/${propertyId}/ltv`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+
+                const dataLtv = await resLtv.json()
+
+                setLtv(dataLtv)
+
             } catch (err) {
 
                 console.error("Analytics load error:", err)
@@ -161,7 +175,8 @@ export default function useAnalytics() {
         semanticInsights,
         conversationScore,
         alerts,
-        upgradeSignal
+        upgradeSignal,
+        ltv
     }
 
 }

@@ -18,6 +18,7 @@ import redis, { connectRedis } from "./db/redis.js";
 import { selectKnowledge } from "./utils/knowledgeSelector.js";
 import { detectIntent } from "./utils/intentEngine.js"
 import crypto from "crypto";
+import { computeCustomerScore, getUpgradeStrategy } from "./services/ltv.service.js";
 
 async function invalidateAnalyticsCache(propertyId) {
 
@@ -1952,15 +1953,41 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const messages = Number(engagement.messages || 0)
     const conversations = Number(engagement.conversations || 0)
 
-    const upgradeSignal = detectUpgradeSignal({
+    const revenue =
+      plan === "pro" ? 39 :
+        plan === "business" ? 99 :
+          0
+
+    const score = computeCustomerScore({
       usage,
       cost,
-      plan,
+      revenue,
       messages,
-      conversations
+      conversations,
+      plan
     })
 
-    const key = `stayassistant:upgrade_signal:${propertyId}`
+    const strategy = getUpgradeStrategy(score, plan)
+
+    const key = `stayassistant:ltv:${propertyId}`
+
+    // 💾 guardar score completo
+    await redis.set(key, JSON.stringify({
+      score,
+      strategy,
+      updatedAt: Date.now()
+    }), {
+      EX: 60 * 60 * 6
+    })
+
+    // 🔥 legacy compatibility (NO ROMPER NADA)
+    if (strategy?.type) {
+      await redis.set(`stayassistant:upgrade_signal:${propertyId}`, strategy.type, {
+        EX: 60 * 60 * 6
+      })
+    } else {
+      await redis.del(`stayassistant:upgrade_signal:${propertyId}`)
+    }
 
     if (upgradeSignal) {
 
@@ -3307,6 +3334,36 @@ app.get("/analytics/:propertyId/upgrade-signal", authenticate, async (req, res) 
     console.error("Upgrade signal error", err)
 
     res.json({ upgradeSignal: null })
+
+  }
+
+})
+
+app.get("/analytics/:propertyId/ltv", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.params.propertyId
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const key = `stayassistant:ltv:${propertyId}`
+
+    const data = await redis.get(key)
+
+    if (!data) {
+      return res.json({ ltv: null })
+    }
+
+    res.json(JSON.parse(data))
+
+  } catch (err) {
+
+    console.error("LTV fetch error", err)
+
+    res.json({ ltv: null })
 
   }
 
