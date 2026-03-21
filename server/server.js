@@ -1207,6 +1207,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let conversationId = req.body.conversationId
 
+    // 🧠 MICRO MEMORY KEY
+    const memoryKey = `stayassistant:memory:${propertyId}:${conversationId}`
+
     if (!conversationId) {
       conversationId = crypto.randomUUID()
     }
@@ -1295,6 +1298,28 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- INTENT DETECTION --- */
     const intent = detectIntent(userMessage)
+
+    // 🧠 SIMPLE PREFERENCE DETECTION
+    const msg = userMessage.toLowerCase()
+
+    if (msg.includes("cheap")) memory.preferences.push("cheap")
+    if (msg.includes("expensive")) memory.preferences.push("expensive")
+    if (msg.includes("seafood")) memory.preferences.push("seafood")
+    if (msg.includes("vegan")) memory.preferences.push("vegan")
+    if (msg.includes("near")) memory.preferences.push("nearby")
+
+    // 🧠 FOLLOW-UP DETECTION
+    if (
+      intent === "other" &&
+      memory.lastIntent === "restaurants"
+    ) {
+      console.log("🧠 FOLLOW-UP → RESTAURANTS")
+
+      return res.json({
+        reply: "Here are some great options based on your preferences:",
+        language: userLanguage
+      })
+    }
 
     console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
 
@@ -1479,6 +1504,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     let history = await redis.get(historyKey);
+
+    // 🧠 LOAD MEMORY
+    let memoryRaw = await redis.get(memoryKey)
+
+    let memory = memoryRaw ? JSON.parse(memoryRaw) : {
+      lastIntent: null,
+      lastTopic: null,
+      preferences: []
+    }
 
     history = history ? JSON.parse(history) : [];
 
@@ -2052,6 +2086,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
     ) {
       upgradeTrigger = true
     }
+
+    // 🧠 UPDATE MEMORY
+    memory.lastIntent = intent
+
+    if (intent === "restaurants" || intent === "activities") {
+      memory.lastTopic = intent
+    }
+
+    // evitar duplicados simples
+    memory.preferences = [...new Set(memory.preferences)]
+
+    // guardar en redis
+    await redis.set(memoryKey, JSON.stringify(memory), {
+      EX: 60 * 60 * 24
+    })
 
     res.json({
       reply: shortReply,
