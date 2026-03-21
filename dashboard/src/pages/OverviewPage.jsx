@@ -8,7 +8,8 @@ export default function OverviewPage() {
   const {
     totalMessages,
     topIntents,
-    peakHours
+    peakHours,
+    ltv
   } = useAnalytics()
 
   if (loading) return <div>Loading dashboard...</div>

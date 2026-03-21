@@ -6,7 +6,7 @@ import useAnalytics from "../hooks/useAnalytics"
 export default function Billing() {
 
     const { forecast } = useApp()
-    const { upgradeSignal } = useAnalytics()
+    const { upgradeSignal, ltv } = useAnalytics()
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
 
