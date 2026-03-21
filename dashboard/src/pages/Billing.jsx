@@ -82,7 +82,7 @@ export default function Billing() {
 
             <h1>Billing</h1>
 
-            {usageRatio > 0.8 && (
+            {usageRatio > 0.8 && usageRatio <= 1 && (
                 <div style={{
                     background: "#7c2d12",
                     color: "white",
@@ -90,7 +90,23 @@ export default function Billing() {
                     borderRadius: 8,
                     marginBottom: 20
                 }}>
-                    ⚠️ You're close to your limit
+                    ⚠️ You're close to your monthly limit.
+                    <br />
+                    Consider upgrading to avoid interruptions.
+                </div>
+            )}
+
+            {usageRatio > 1 && (
+                <div style={{
+                    background: "#7f1d1d",
+                    color: "white",
+                    padding: 12,
+                    borderRadius: 8,
+                    marginBottom: 20
+                }}>
+                    🚀 You're exceeding your plan.
+                    <br />
+                    Extra usage is being billed.
                 </div>
             )}
 
@@ -135,6 +151,12 @@ export default function Billing() {
                 <p>
                     {usage} / {limit} messages this month
                 </p>
+
+                <div style={{ marginTop: 8, fontSize: 13, opacity: 0.8 }}>
+                    {usageRatio < 1
+                        ? `${Math.round((1 - usageRatio) * 100)}% remaining`
+                        : `Exceeded by ${Math.round((usageRatio - 1) * 100)}%`}
+                </div>
 
                 <div style={{ marginTop: 10 }}>
                     <strong>Estimated bill:</strong> €{forecast.estimated_total.toFixed(2)}
@@ -189,8 +211,15 @@ export default function Billing() {
 
                     <p className="price">€39 / month</p>
 
-                    <button onClick={() => upgrade("pro")}>
-                        Upgrade
+                    <button
+                        onClick={() => upgrade("pro")}
+                        style={{
+                            background: "#22c55e",
+                            color: "black",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        🚀 Upgrade to PRO
                     </button>
 
                 </div>
@@ -205,8 +234,15 @@ export default function Billing() {
 
                     <p className="price">€99 / month</p>
 
-                    <button onClick={() => upgrade("business")}>
-                        Upgrade
+                    <button
+                        onClick={() => upgrade("business")}
+                        style={{
+                            background: "#22c55e",
+                            color: "black",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        🚀 Upgrade to BUSINESS
                     </button>
 
                 </div>

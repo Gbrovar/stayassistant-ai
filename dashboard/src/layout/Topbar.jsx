@@ -24,6 +24,15 @@ export default function Topbar() {
 
     <div className="topbar">
 
+      {percentage > 100 && (
+        <span style={{
+          color: "#ef4444",
+          marginRight: 8
+        }}>
+          ●
+        </span>
+      )}
+
       <strong>
         {plan.toUpperCase()} PLAN {upgradeSignal ? "⚡" : plan === "free" ? "💡" : ""}
       </strong>
@@ -46,8 +55,10 @@ export default function Topbar() {
           onClick={() => window.location.href = "/dashboard/billing"}
         >
           {upgradeSignal === "upgrade_strong"
-            ? "Upgrade Now"
-            : "Upgrade"}
+            ? "🚨 Upgrade Now"
+            : percentage > 80
+              ? "⚡ Upgrade Soon"
+              : "Upgrade"}
         </button>
 
         <button
@@ -63,15 +74,15 @@ export default function Topbar() {
 
       {/* WARNING BAR */}
 
-      {percentage > 90 && (
+      {percentage > 80 && percentage <= 100 && (
         <div className="topbar-warning">
-          You are about to reach your limit
+          ⚠️ High usage — nearing limit
         </div>
       )}
 
-      {percentage >= 100 && (
+      {percentage > 100 && (
         <div className="topbar-danger">
-          Limit reached — upgrade required
+          🚨 Over limit — extra costs active
         </div>
       )}
 
