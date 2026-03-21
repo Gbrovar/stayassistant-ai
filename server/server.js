@@ -1205,16 +1205,17 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
 
-    let conversationId = req.body.conversationId
+    const propertyId = req.body.propertyId || "demo_property";
 
-    // 🧠 MICRO MEMORY KEY
-    const memoryKey = `stayassistant:memory:${propertyId}:${conversationId}`
+    let conversationId = req.body.conversationId
 
     if (!conversationId) {
       conversationId = crypto.randomUUID()
     }
 
-    const propertyId = req.body.propertyId || "demo_property";
+    // 🧠 MICRO MEMORY KEY (AHORA SÍ)
+    const memoryKey = `stayassistant:memory:${propertyId}:${conversationId}`
+
     const hour = req.body.hour || null;
 
     console.log("Property:", propertyId);
@@ -1299,30 +1300,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- INTENT DETECTION --- */
     const intent = detectIntent(userMessage)
 
-    // 🧠 SIMPLE PREFERENCE DETECTION
-    const msg = userMessage.toLowerCase()
-
-    if (msg.includes("cheap")) memory.preferences.push("cheap")
-    if (msg.includes("expensive")) memory.preferences.push("expensive")
-    if (msg.includes("seafood")) memory.preferences.push("seafood")
-    if (msg.includes("vegan")) memory.preferences.push("vegan")
-    if (msg.includes("near")) memory.preferences.push("nearby")
-
-    // 🧠 FOLLOW-UP DETECTION
-    if (
-      intent === "other" &&
-      memory.lastIntent === "restaurants"
-    ) {
-      console.log("🧠 FOLLOW-UP → RESTAURANTS")
-
-      return res.json({
-        reply: "Here are some great options based on your preferences:",
-        language: userLanguage
-      })
-    }
-
-    console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
-
     // 🔥 FIX 5 — PRIORIDAD RESTAURANTS (SIN AI)
     if (intent === "restaurants") {
 
@@ -1346,10 +1323,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
       userMessage.length < 20 &&
       !userMessage.includes("?")
     ) {
-      return {
+      return res.json({
         reply: "I'm here to help with your stay. Could you provide a bit more detail?",
         language: userLanguage
-      }
+      })
     }
 
     /* --- INTENT DIRECT RESPONSE (COST SHIELD) --- */
@@ -1513,6 +1490,30 @@ app.post("/chat", chatLimiter, async (req, res) => {
       lastTopic: null,
       preferences: []
     }
+
+    // 🧠 SIMPLE PREFERENCE DETECTION
+    const msg = userMessage.toLowerCase()
+
+    if (msg.includes("cheap")) memory.preferences.push("cheap")
+    if (msg.includes("expensive")) memory.preferences.push("expensive")
+    if (msg.includes("seafood")) memory.preferences.push("seafood")
+    if (msg.includes("vegan")) memory.preferences.push("vegan")
+    if (msg.includes("near")) memory.preferences.push("nearby")
+
+    // 🧠 FOLLOW-UP DETECTION
+    if (
+      intent === "other" &&
+      memory.lastIntent === "restaurants"
+    ) {
+      console.log("🧠 FOLLOW-UP → RESTAURANTS")
+
+      return res.json({
+        reply: "Here are some great options based on your preferences:",
+        language: userLanguage
+      })
+    }
+
+    console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
 
     history = history ? JSON.parse(history) : [];
 
