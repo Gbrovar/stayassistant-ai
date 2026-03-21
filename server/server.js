@@ -1532,8 +1532,18 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     const faqMatch = property.knowledge.faq.find(f => {
+
       const normalizedFaq = normalizeMessage(f.question)
-      return similarity(normalizedQuestion, normalizedFaq) > 0.5
+
+      const similarityScore = similarity(normalizedQuestion, normalizedFaq)
+
+      const faqIntent = detectIntent(f.question)
+
+      return (
+        similarityScore > 0.7 &&
+        faqIntent === intent
+      )
+
     })
 
     if (faqMatch) {
