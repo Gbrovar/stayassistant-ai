@@ -689,6 +689,19 @@ function getPreResponse() {
 
 }
 
+function sendUpgradeSignalToParent(upgrade) {
+
+    if (window.parent !== window) {
+
+        window.parent.postMessage({
+            type: "stayassistant_upgrade",
+            payload: upgrade
+        }, "*")
+
+    }
+
+}
+
 /* SEND MESSAGE */
 
 async function sendMessage(forcedText = null, displayLabel = null) {
@@ -791,13 +804,27 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         const data = await response.json();
 
-        if (data.limit_reached) {
-            LIMIT_REACHED = true
+        // 💰 UPGRADE SIGNAL (invisible para huésped)
+        if (data.upgrade) {
+
+            console.log("💰 UPGRADE TRIGGER:", data.upgrade)
+
+            // guardar para dashboard
+            localStorage.setItem(
+                "stayassistant_upgrade_signal",
+                JSON.stringify({
+                    ...data.upgrade,
+                    timestamp: Date.now()
+                })
+            )
+
+            // enviar al widget (cross iframe)
+            sendUpgradeSignalToParent(data.upgrade)
+
         }
 
-        // 🚀 NUEVO: señal interna (no visible para huésped)
-        if (data.internal_upgrade_signal) {
-            console.log("⚠️ PROPERTY NEEDS UPGRADE")
+        if (data.limit_reached) {
+            LIMIT_REACHED = true
         }
 
         const typing = document.getElementById("typing");

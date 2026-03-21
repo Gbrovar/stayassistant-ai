@@ -2023,8 +2023,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let upgradeTrigger = false
 
     if (
-      control.mode === "normal" &&
-      Math.random() < 0.2 // 20% de veces
+      strategy &&
+      (
+        strategy.urgency === "high" ||
+        (strategy.type === "soft" && Math.random() < 0.3)
+      )
     ) {
       upgradeTrigger = true
     }
@@ -2032,7 +2035,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
     res.json({
       reply: shortReply,
       language: detectedLanguage,
-      upgradeTrigger
+      uupgrade: upgradeTrigger ? {
+        type: strategy?.type,
+        urgency: strategy?.urgency,
+        message: strategy?.message
+      } : null
     });
 
   } catch (error) {
