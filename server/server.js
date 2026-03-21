@@ -1604,28 +1604,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-    if (faqMatch) {
-
-      console.log("FAQ auto-answer triggered");
-
-      let answer = faqMatch.answer;
-
-      history.push({
-        role: "assistant",
-        content: answer
-      });
-
-      await redis.set(historyKey, JSON.stringify(history), {
-        EX: 60 * 60 * 24 * 7
-      });
-
-      return res.json({
-        reply: answer,
-        language: userLanguage
-      });
-
-    }
-
     /* --- AI RESPONSE CACHE --- */
 
     const cachedReply = await redis.get(cacheKey);

@@ -726,7 +726,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     /* PRE RESPONSE (LATENCY OPTIMIZATION) */
 
-    let shouldShowPreResponse = userText.length > 25;
+    let shouldShowPreResponse = true;
 
     if (shouldShowPreResponse) {
         messages.innerHTML += `

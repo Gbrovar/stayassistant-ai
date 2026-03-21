@@ -53,17 +53,9 @@ ${k.property_info.checkout}
 `
 
         case "restaurants":
-
-            const rankedRestaurants = rankRecommendations(
-                k.local_recommendations,
-                intent
-            )
-
             return `
 RESTAURANTS
-${rankedRestaurants
-                    .map(r => `${r.name} — ${r.description}`)
-                    .join("\n")}
+Use real-time nearby recommendations based on location.
 `
 
         case "transport":
@@ -84,10 +76,10 @@ PROPERTY
 ${k.property_info.description || ""}
 
 SERVICES
-${k.services.slice(0,5).join("\n")}
+${k.services.slice(0, 5).join("\n")}
 
 AMENITIES
-${k.amenities.slice(0,5).join("\n")}
+${k.amenities.slice(0, 5).join("\n")}
 `
     }
 
