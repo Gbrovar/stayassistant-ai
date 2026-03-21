@@ -1566,20 +1566,43 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return matchCount / Math.max(aWords.length, bWords.length)
     }
 
-    const faqMatch = property.knowledge.faq.find(f => {
+    let bestMatch = null
+    let bestScore = 0
+
+    for (const f of property.knowledge.faq) {
 
       const normalizedFaq = normalizeMessage(f.question)
-
       const similarityScore = similarity(normalizedQuestion, normalizedFaq)
-
       const faqIntent = detectIntent(f.question)
 
-      return (
-        similarityScore > 0.7 &&
-        faqIntent === intent
-      )
+      // 🎯 prioridad fuerte: match de intent + alta similitud
+      if (faqIntent === intent && similarityScore > bestScore) {
+        bestMatch = f
+        bestScore = similarityScore
+      }
 
-    })
+    }
+
+    // 🔥 threshold dinámico
+    if (bestMatch && bestScore > 0.7) {
+
+      console.log("✅ FAQ MATCH STRONG:", bestScore)
+
+      history.push({
+        role: "assistant",
+        content: bestMatch.answer
+      })
+
+      await redis.set(historyKey, JSON.stringify(history), {
+        EX: 60 * 60 * 24 * 7
+      })
+
+      return res.json({
+        reply: bestMatch.answer,
+        language: userLanguage
+      })
+
+    }
 
     if (faqMatch) {
 
