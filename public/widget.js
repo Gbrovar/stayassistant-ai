@@ -262,6 +262,27 @@
 
     window.addEventListener("message", function (event) {
 
+        // 💰 UPGRADE SIGNAL FROM CHAT (invisible)
+        if (event.data?.type === "stayassistant_upgrade") {
+
+            console.log("💰 UPGRADE SIGNAL RECEIVED (widget)", event.data.payload)
+
+            try {
+
+                localStorage.setItem(
+                    "stayassistant_upgrade_signal",
+                    JSON.stringify({
+                        ...event.data.payload,
+                        timestamp: Date.now()
+                    })
+                )
+
+            } catch (e) {
+                console.warn("Upgrade signal storage failed")
+            }
+
+        }
+
         if (event.data === "stayassistant-close") {
 
             if (iframe) {
