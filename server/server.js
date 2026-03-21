@@ -272,6 +272,18 @@ async function getUsageLimit(propertyId) {
 
 }
 
+function getOveragePrice(plan) {
+  if (plan === "pro") return 0.04
+  if (plan === "business") return 0.03
+  return 0.05
+}
+
+async function getUsageMode(propertyId) {
+  const key = `stayassistant:usage_mode:${propertyId}`
+  const mode = await redis.get(key)
+  return mode || "hard_limit"
+}
+
 function getCostLimit(plan) {
 
   if (plan === "pro") return 10
@@ -367,10 +379,25 @@ async function checkUsageAndCost(propertyId) {
   const costKey = `stayassistant:cost:${propertyId}:${month}`
   const cost = Number(await redis.hGet(costKey, "cost") || 0)
 
+  const usageMode = await getUsageMode(propertyId)
+
   // --- DECISION ---
 
   if (usage >= usageLimit) {
-    return { allowed: false, mode: "blocked", reason: "usage_limit" }
+
+    if (usageMode === "smart_flex") {
+      return {
+        allowed: true,
+        mode: "overage",
+        overLimit: true
+      }
+    }
+
+    return {
+      allowed: false,
+      mode: "blocked",
+      reason: "usage_limit"
+    }
   }
 
   if (cost >= costLimit) {
@@ -1296,6 +1323,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
 
+    const isOverage = control.mode === "overage"
+
     if (!control.allowed) {
 
       console.log("⛔ BLOCKED:", control.reason)
@@ -1843,6 +1872,18 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     try {
       await redis.incr(usageKey)
+
+      if (isOverage) {
+
+        const pricePerMsg = getOveragePrice(plan)
+
+        const overageKey = `stayassistant:overage:${propertyId}:${month}`
+
+        await redis.hIncrBy(overageKey, "messages", 1)
+        await redis.hIncrByFloat(overageKey, "cost", pricePerMsg)
+
+        console.log("💰 OVERAGE:", propertyId, pricePerMsg)
+      }
 
       // 🧠 BEHAVIOR TRACKING
 
@@ -3210,6 +3251,38 @@ app.get("/analytics/:propertyId/upgrade-signal", authenticate, async (req, res) 
     console.error("Upgrade signal error", err)
 
     res.json({ upgradeSignal: null })
+
+  }
+
+})
+
+/* --- BILLING OVERAGE --- */
+app.get("/billing/overage/:propertyId", authenticate, async (req, res) => {
+
+  try {
+
+    const { propertyId } = req.params
+
+    if (req.propertyId !== propertyId) {
+      return res.status(403).json({ error: "forbidden" })
+    }
+
+    const month = new Date().toISOString().slice(0, 7)
+
+    const key = `stayassistant:overage:${propertyId}:${month}`
+
+    const data = await redis.hGetAll(key)
+
+    res.json({
+      messages: Number(data.messages || 0),
+      cost: Number(data.cost || 0)
+    })
+
+  } catch (err) {
+
+    console.error("Overage fetch error", err)
+
+    res.status(500).json({ error: "failed" })
 
   }
 
