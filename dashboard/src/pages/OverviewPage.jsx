@@ -9,7 +9,8 @@ export default function OverviewPage() {
     totalMessages,
     topIntents,
     peakHours,
-    hasData
+    hasData,
+    upgradeSignal
   } = useAnalytics()
 
   if (loading) return <div>Loading dashboard...</div>
@@ -36,6 +37,37 @@ export default function OverviewPage() {
     <div>
 
       <h1>Dashboard</h1>
+
+      {upgradeSignal && (
+
+        <div className="card" style={{
+          marginTop: 20,
+          border: upgradeSignal === "upgrade_strong"
+            ? "2px solid #dc2626"
+            : "2px solid #3b82f6"
+        }}>
+
+          <h3>
+            {upgradeSignal === "upgrade_strong"
+              ? "🚨 High usage detected"
+              : "⚡ Growing usage"}
+          </h3>
+
+          <p>
+            {upgradeSignal === "upgrade_strong"
+              ? "You're close to your system limits. Upgrade to avoid degraded responses."
+              : "Your assistant is getting traction. Upgrade to scale smoothly."}
+          </p>
+
+          <button
+            onClick={() => window.location.href = "/dashboard/billing"}
+          >
+            Upgrade Plan
+          </button>
+
+        </div>
+
+      )}
 
       <p>Overview of your AI concierge performance.</p>
 

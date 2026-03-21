@@ -36,12 +36,18 @@ export default function Topbar() {
 
         <button
           style={{
-            background: upgradeSignal ? "#f59e0b" : undefined,
-            fontWeight: upgradeSignal ? "bold" : "normal"
+            background:
+              upgradeSignal === "upgrade_strong"
+                ? "#dc2626"
+                : "#22c55e",
+            color: "white",
+            fontWeight: "bold"
           }}
-          onClick={() => window.location.href = "/billing"}
+          onClick={() => window.location.href = "/dashboard/billing"}
         >
-          {upgradeSignal ? "Upgrade Recommended" : "Upgrade"}
+          {upgradeSignal === "upgrade_strong"
+            ? "Upgrade Now"
+            : "Upgrade"}
         </button>
 
         <button

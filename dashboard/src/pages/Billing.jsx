@@ -92,23 +92,33 @@ export default function Billing() {
             <h1>Billing</h1>
 
             {upgradeSignal && (
+
                 <div style={{
-                    background: upgradeSignal === "upgrade_strong" ? "#7f1d1d" : "#1e3a8a",
-                    color: "white",
+                    marginBottom: 20,
                     padding: 16,
                     borderRadius: 10,
-                    marginBottom: 20
+                    background:
+                        upgradeSignal === "upgrade_strong"
+                            ? "#7f1d1d"
+                            : "#1e3a8a",
+                    color: "white"
                 }}>
-                    {upgradeSignal === "upgrade_soft" && (
-                        <>⚡ Your property is growing. Upgrade to handle more guest interactions smoothly.</>
-                    )}
 
-                    {upgradeSignal === "upgrade_strong" && (
-                        <>🚨 High usage detected. Upgrade now to avoid service degradation.</>
-                    )}
+                    <h3>
+                        {upgradeSignal === "upgrade_strong"
+                            ? "🚨 Immediate upgrade recommended"
+                            : "⚡ You're growing fast"}
+                    </h3>
+
+                    <p>
+                        {upgradeSignal === "upgrade_strong"
+                            ? "You're reaching system limits. Upgrade now to avoid service disruption."
+                            : "Upgrade now to unlock more capacity and features."}
+                    </p>
+
                 </div>
-            )}
 
+            )}
             {/* CURRENT PLAN */}
 
             <div className="card">

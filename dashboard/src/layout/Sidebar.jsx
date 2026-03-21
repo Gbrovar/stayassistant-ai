@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
 
 export default function Sidebar() {
-  
+
 
   const { upgradeSignal } = useAnalytics()
 
@@ -39,7 +39,17 @@ export default function Sidebar() {
         </NavLink>
 
         <NavLink to="/billing" className={({ isActive }) => isActive ? "active" : ""}>
-          Billing {upgradeSignal ? "⚠️" : ""}
+          Billing
+          {upgradeSignal && (
+            <span style={{
+              marginLeft: 8,
+              color: upgradeSignal === "upgrade_strong"
+                ? "#dc2626"
+                : "#facc15"
+            }}>
+              ●
+            </span>
+          )}
         </NavLink>
 
         <NavLink to="/admin" className={({ isActive }) => isActive ? "active" : ""}>
