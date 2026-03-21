@@ -4,7 +4,7 @@ import useAnalytics from "../hooks/useAnalytics"
 export default function Sidebar() {
 
 
-  const { upgradeSignal } = useAnalytics()
+  const { ltv } = useAnalytics()
 
   return (
 
@@ -40,10 +40,10 @@ export default function Sidebar() {
 
         <NavLink to="/billing" className={({ isActive }) => isActive ? "active" : ""}>
           Billing
-          {upgradeSignal && (
+          {ltv?.strategy && (
             <span style={{
               marginLeft: 8,
-              color: upgradeSignal === "upgrade_strong"
+              color: ltv?.strategy?.urgency === "high"
                 ? "#dc2626"
                 : "#facc15"
             }}>
