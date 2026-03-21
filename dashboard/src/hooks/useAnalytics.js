@@ -128,7 +128,7 @@ export default function useAnalytics() {
 
                 const dataLtv = await resLtv.json()
 
-                setLtv(dataLtv || null)
+                setLtv(dataLtv?.ltv === null ? null : dataLtv)
 
             } catch (err) {
 

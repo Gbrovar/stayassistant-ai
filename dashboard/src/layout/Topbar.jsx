@@ -5,7 +5,7 @@ export default function Topbar() {
 
 
   const { subscription, usage } = useApp()
-  const { upgradeSignal } = useAnalytics()
+  const { upgradeSignal, ltv } = useAnalytics()
 
   if (!subscription) return null
 
@@ -34,7 +34,7 @@ export default function Topbar() {
       )}
 
       <strong>
-        {plan.toUpperCase()} PLAN {upgradeSignal ? "⚡" : plan === "free" ? "💡" : ""}
+        {plan.toUpperCase()} PLAN {ltv?.strategy ? "⚡" : plan === "free" ? "💡" : ""}
       </strong>
 
       <div className="topbar-right">
