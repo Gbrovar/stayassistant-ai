@@ -42,6 +42,21 @@ export function AppProvider({ children }) {
 
         const limit = limits[plan] || 100
         const ratio = usage / limit
+
+        const visits = parseInt(localStorage.getItem("sa_visits") || "0")
+        const lastSeen = parseInt(localStorage.getItem("sa_last_seen") || "0")
+
+        const now = Date.now()
+        const minutesSinceLastVisit = (now - lastSeen) / 1000 / 60
+
+        let behaviorHint = ""
+
+        if (visits >= 5 && minutesSinceLastVisit < 10) {
+            behaviorHint = " You're actively managing your AI assistant."
+        } else if (visits >= 3) {
+            behaviorHint = " You've checked your dashboard multiple times."
+        }
+
         const remaining = limit - usage
         let urgencyHint = ""
 
@@ -72,7 +87,7 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "critical",
                 type: "limit",
-                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.${pressureHint}`,
+                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.${pressureHint}${behaviorHint}`,
                 cta: "Upgrade to keep it running",
                 location: "topbar"
             }
@@ -85,8 +100,8 @@ export function AppProvider({ children }) {
                 level: "high",
                 type: "usage",
                 message: remaining < 200
-                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.${pressureHint}`
-                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.${pressureHint}`,
+                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`
+                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`,
                 cta: "Upgrade before interruptions",
                 location: "topbar"
             }
@@ -98,7 +113,7 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "medium",
                 type: "ltv",
-                message: `${ltv.strategy.message} Upgrading now helps you capture more guest interactions.`,
+                message: `${ltv.strategy.message} Upgrading now helps you capture more guest interactions.${behaviorHint}`,
                 cta: "Unlock more capacity",
                 location: "overview"
             }

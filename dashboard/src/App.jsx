@@ -25,6 +25,7 @@ import AdminDashboard from "./pages/AdminDashboard"
 
 
 function ProtectedLayout({ children }) {
+  const location = useLocation()
   const { limitReached } = useApp()
 
   const token = localStorage.getItem("token")
@@ -32,6 +33,15 @@ function ProtectedLayout({ children }) {
   if (!token) {
     return <Navigate to="/login" />
   }
+
+  useEffect(() => {
+
+    const visits = parseInt(localStorage.getItem("sa_visits") || "0")
+    localStorage.setItem("sa_visits", visits + 1)
+
+    localStorage.setItem("sa_last_seen", Date.now())
+
+  }, [location.pathname])
 
   return (
 
