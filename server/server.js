@@ -3713,13 +3713,24 @@ app.post("/billing/webhook", async (req, res) => {
       const propertyId = session.metadata.propertyId
       const plan = session.metadata.plan
 
-      const subscription = await stripe.subscriptions.retrieve(
-        session.subscription
+      let subscription = await stripe.subscriptions.retrieve(
+        session.subscription,
+        { expand: ["items.data.price"] }
       )
 
-      const meteredItem = subscription.items?.data?.find(
-        item => item.price?.recurring?.usage_type === "metered"
-      )
+      console.log("🧾 SUB FULL:", JSON.stringify(subscription, null, 2))
+
+      const items = subscription.items?.data || []
+
+      const meteredItem = items.find(item => {
+        const usageType = item.price?.recurring?.usage_type
+        console.log("🔍 ITEM:", item.id, usageType)
+        return usageType === "metered"
+      })
+
+      if (!meteredItem) {
+        console.error("❌ NO METERED ITEM FOUND")
+      }
 
       await saveSubscription(propertyId, {
         plan,
@@ -3730,99 +3741,6 @@ app.post("/billing/webhook", async (req, res) => {
       })
 
       console.log("✅ Subscription activated:", propertyId)
-    }
-
-    if (event.type === "customer.subscription.created") {
-      const subscription = await stripe.subscriptions.retrieve(
-        event.data.object.id,
-        { expand: ["items.data.price"] }
-      )
-
-      const propertyId = subscription.metadata?.propertyId
-
-      if (!propertyId) return
-
-      const meteredItem = subscription.items.data.find(
-        item => item.price?.recurring?.usage_type === "metered"
-      )
-
-      const plan =
-        subscription.items.data[0].price.nickname?.toLowerCase() || "pro"
-
-      await saveSubscription(propertyId, {
-        plan,
-        status: subscription.status,
-        stripeCustomer: subscription.customer,
-        stripeSubscription: subscription.id,
-        stripeMeteredItemId: meteredItem?.id || null
-      })
-
-      console.log("✅ Metered item saved:", meteredItem?.id)
-    }
-
-    // 🔥 SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE / STATUS)
-    if (event.type === "customer.subscription.updated") {
-
-      const subscription = await stripe.subscriptions.retrieve(
-        event.data.object.id,
-        { expand: ["items.data.price"] }
-      )
-
-      const indexKey = `stayassistant:subscription_index:${subscription.id}`
-      const propertyId = await redis.get(indexKey)
-
-      if (!propertyId) return
-
-      const status = subscription.status
-
-      let plan = "free"
-
-      const priceId = subscription.items.data[0]?.price?.id
-
-      if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
-        plan = "pro"
-      }
-
-      if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
-        plan = "business"
-      }
-
-      const meteredItem = subscription.items?.data?.find(
-        item => item.price?.recurring?.usage_type === "metered"
-      )
-
-      await saveSubscription(propertyId, {
-        plan,
-        status,
-        stripeCustomer: subscription.customer,
-        stripeSubscription: subscription.id,
-        stripeMeteredItemId: meteredItem?.id || null
-      })
-
-      console.log("🔄 Subscription updated:", propertyId, plan, status)
-    }
-
-    // ❌ SUBSCRIPTION DELETED (CANCEL)
-    if (event.type === "customer.subscription.deleted") {
-
-      const subscription = await stripe.subscriptions.retrieve(
-        event.data.object.id,
-        { expand: ["items.data.price"] }
-      )
-
-      const indexKey = `stayassistant:subscription_index:${subscription.id}`
-      const propertyId = await redis.get(indexKey)
-
-      if (!propertyId) return
-
-      await saveSubscription(propertyId, {
-        plan: "free",
-        status: "canceled",
-        stripeCustomer: subscription.customer,
-        stripeSubscription: subscription.id
-      })
-
-      console.log("❌ Subscription canceled:", propertyId)
     }
 
   } catch (err) {
