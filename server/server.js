@@ -417,7 +417,8 @@ function detectUpgradeSignal({ usage, cost, plan, messages, conversations }) {
 /* --- middleware --- */
 
 app.use(cors());
-app.use(express.json());
+app.use("/billing/webhook", express.raw({ type: "application/json" }))
+app.use(express.json())
 
 /* --- chat limiter ---*/
 
@@ -3693,7 +3694,12 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
 
   const sig = req.headers["stripe-signature"]
 
-  let event
+  const event = stripe.webhooks.constructEvent(
+    req.body, // ⚠️ RAW body, no JSON
+    sig,
+    process.env.STRIPE_WEBHOOK_SECRET
+  )
+
 
   try {
 
