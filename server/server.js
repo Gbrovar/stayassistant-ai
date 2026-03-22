@@ -3726,8 +3726,8 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
         session.subscription
       )
 
-      const meteredItem = subscription.items.data.find(
-        item => item.price.recurring?.usage_type === "metered"
+      const meteredItem = subscription.items?.data?.find(
+        item => item.price?.recurring?.usage_type === "metered"
       )
 
       await saveSubscription(propertyId, {
