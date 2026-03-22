@@ -3733,7 +3733,10 @@ app.post("/billing/webhook", async (req, res) => {
     }
 
     if (event.type === "customer.subscription.created") {
-      const subscription = event.data.object
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.id,
+        { expand: ["items.data.price"] }
+      )
 
       const propertyId = subscription.metadata?.propertyId
 
@@ -3760,7 +3763,10 @@ app.post("/billing/webhook", async (req, res) => {
     // 🔥 SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE / STATUS)
     if (event.type === "customer.subscription.updated") {
 
-      const subscription = event.data.object
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.id,
+        { expand: ["items.data.price"] }
+      )
 
       const indexKey = `stayassistant:subscription_index:${subscription.id}`
       const propertyId = await redis.get(indexKey)
@@ -3799,7 +3805,10 @@ app.post("/billing/webhook", async (req, res) => {
     // ❌ SUBSCRIPTION DELETED (CANCEL)
     if (event.type === "customer.subscription.deleted") {
 
-      const subscription = event.data.object
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.id,
+        { expand: ["items.data.price"] }
+      )
 
       const indexKey = `stayassistant:subscription_index:${subscription.id}`
       const propertyId = await redis.get(indexKey)
