@@ -89,7 +89,7 @@ export default function Topbar() {
             }}
             onClick={() => {
               trackClick()
-              window.location.href = "/billing"
+              window.location.href = "/dashboard/billing"
             }}
           >
             {conversion.level === "critical"

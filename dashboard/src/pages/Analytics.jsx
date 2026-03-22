@@ -152,7 +152,7 @@ export default function Analytics() {
               fontWeight: "bold",
               cursor: "pointer"
             }}
-            onClick={() => window.location.href = "/billing"}
+            onClick={() => window.location.href = "/dashboard/billing"}
           >
             Upgrade Plan
           </button>
