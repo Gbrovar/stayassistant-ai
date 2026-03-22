@@ -3732,6 +3732,31 @@ app.post("/billing/webhook", async (req, res) => {
       console.log("✅ Subscription activated:", propertyId)
     }
 
+    if (event.type === "customer.subscription.created") {
+      const subscription = event.data.object
+
+      const propertyId = subscription.metadata?.propertyId
+
+      if (!propertyId) return
+
+      const meteredItem = subscription.items.data.find(
+        item => item.price?.recurring?.usage_type === "metered"
+      )
+
+      const plan =
+        subscription.items.data[0].price.nickname?.toLowerCase() || "pro"
+
+      await saveSubscription(propertyId, {
+        plan,
+        status: subscription.status,
+        stripeCustomer: subscription.customer,
+        stripeSubscription: subscription.id,
+        stripeMeteredItemId: meteredItem?.id || null
+      })
+
+      console.log("✅ Metered item saved:", meteredItem?.id)
+    }
+
     // 🔥 SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE / STATUS)
     if (event.type === "customer.subscription.updated") {
 
