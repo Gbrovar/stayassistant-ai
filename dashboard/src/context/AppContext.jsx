@@ -45,6 +45,18 @@ export function AppProvider({ children }) {
 
         let variant = localStorage.getItem("sa_ab_variant")
 
+        function trackEvent(type) {
+            const events = JSON.parse(localStorage.getItem("sa_events") || "[]")
+
+            events.push({
+                type,
+                variant,
+                timestamp: Date.now()
+            })
+
+            localStorage.setItem("sa_events", JSON.stringify(events))
+        }
+
         if (!variant) {
             variant = Math.random() > 0.5 ? "A" : "B"
             localStorage.setItem("sa_ab_variant", variant)
@@ -117,7 +129,7 @@ export function AppProvider({ children }) {
         if (limitReached || ratio >= 1) {
 
             if (!shouldShow("critical")) return null
-
+            trackEvent("conversion_shown")
             return {
                 show: true,
                 level: "critical",
@@ -134,7 +146,7 @@ export function AppProvider({ children }) {
         if (ratio >= 0.8) {
 
             if (!shouldShow("high")) return null
-
+            trackEvent("conversion_shown")
             return {
                 show: true,
                 level: "high",
@@ -157,7 +169,7 @@ export function AppProvider({ children }) {
         if (ltv?.strategy) {
 
             if (!shouldShow("medium")) return null
-
+            trackEvent("conversion_shown")
             return {
                 show: true,
                 level: "medium",
@@ -170,6 +182,7 @@ export function AppProvider({ children }) {
 
         // 💡 FREE ENGAGEMENT
         if (plan === "free" && usage > 20) {
+            trackEvent("conversion_shown")
             return {
                 show: true,
                 level: "low",

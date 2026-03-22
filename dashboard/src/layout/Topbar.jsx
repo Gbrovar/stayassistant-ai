@@ -20,6 +20,20 @@ export default function Topbar() {
 
   const percentage = (usage / limit) * 100
 
+  function trackClick() {
+    const variant = localStorage.getItem("sa_ab_variant")
+
+    const events = JSON.parse(localStorage.getItem("sa_events") || "[]")
+
+    events.push({
+      type: "conversion_clicked",
+      variant,
+      timestamp: Date.now()
+    })
+
+    localStorage.setItem("sa_events", JSON.stringify(events))
+  }
+
   return (
 
     <div className="topbar">
@@ -73,7 +87,10 @@ export default function Topbar() {
               color: "white",
               fontWeight: "bold"
             }}
-            onClick={() => window.location.href = "/billing"}
+            onClick={() => {
+              trackClick()
+              window.location.href = "/billing"
+            }}
           >
             {conversion.level === "critical"
               ? "🚨 Upgrade now"
