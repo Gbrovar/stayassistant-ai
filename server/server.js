@@ -3689,37 +3689,26 @@ async function saveSubscription(propertyId, data) {
 }
 
 
-/* --- STRIPE WEBHOOK --- */
-app.post("/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+app.post("/billing/webhook", async (req, res) => {
 
   const sig = req.headers["stripe-signature"]
 
-  const event = stripe.webhooks.constructEvent(
-    req.body, // ⚠️ RAW body, no JSON
-    sig,
-    process.env.STRIPE_WEBHOOK_SECRET
-  )
-
+  let event
 
   try {
-
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     )
-
   } catch (err) {
-
-    console.log("Webhook signature failed", err)
-
+    console.log("❌ Webhook signature failed", err.message)
     return res.status(400).send(`Webhook Error: ${err.message}`)
-
   }
 
   try {
 
-    /* --- CHECKOUT COMPLETED (NEW SUBSCRIPTION) --- */
+    console.log("🔥 Webhook received:", event.type)
 
     if (event.type === "checkout.session.completed") {
 
@@ -3744,116 +3733,14 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
         stripeMeteredItemId: meteredItem?.id || null
       })
 
-      console.log("Subscription activated:", propertyId)
-
-      // 🔥 EMIT REAL UPGRADE EVENT (CORRECTO)
-      const eventKey = `stayassistant:event:upgrade_completed:${propertyId}`
-
-      await redis.set(eventKey, JSON.stringify({
-        plan,
-        timestamp: Date.now()
-      }), {
-        EX: 60 * 10
-      })
-
-      // 🧹 CLEAN OLD SIGNAL
-      await redis.del(`stayassistant:upgrade_signal:${propertyId}`)
-
-      console.log("🔥 UPGRADE EVENT EMITTED:", propertyId)
-
-    }
-
-    /* --- SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE) --- */
-
-    if (event.type === "customer.subscription.updated") {
-
-      const subscription = event.data.object
-
-      const stripeSubId = subscription.id
-
-      const propertyId = await redis.get(
-        `stayassistant:subscription_index:${stripeSubId}`
-      )
-
-      if (propertyId) {
-
-        const key = `stayassistant:subscription:${propertyId}`
-
-        const sub = JSON.parse(await redis.get(key))
-
-        sub.status = subscription.status
-
-        await redis.set(key, JSON.stringify(sub))
-
-        console.log("Subscription updated:", propertyId)
-
-      }
-
-    }
-
-    /* --- SUBSCRIPTION CANCELLED --- */
-
-    if (event.type === "customer.subscription.deleted") {
-
-      const subscription = event.data.object
-
-      const stripeSubId = subscription.id
-
-      const propertyId = await redis.get(
-        `stayassistant:subscription_index:${stripeSubId}`
-      )
-
-      if (propertyId) {
-
-        const key = `stayassistant:subscription:${propertyId}`
-
-        await redis.set(key, JSON.stringify({
-          plan: "free",
-          status: "cancelled"
-        }))
-
-        console.log("Subscription cancelled:", propertyId)
-
-      }
-
-    }
-
-    /* --- PAYMENT FAILED --- */
-
-    if (event.type === "invoice.payment_failed") {
-
-      const invoice = event.data.object
-
-      const stripeSubId = invoice.subscription
-
-      const propertyId = await redis.get(
-        `stayassistant:subscription_index:${stripeSubId}`
-      )
-
-      if (propertyId) {
-
-        const key = `stayassistant:subscription:${propertyId}`
-
-        const sub = JSON.parse(await redis.get(key))
-
-        sub.status = "payment_failed"
-
-        await redis.set(key, JSON.stringify(sub))
-
-        console.log("Payment failed:", propertyId)
-
-      }
-
+      console.log("✅ Subscription activated:", propertyId)
     }
 
   } catch (err) {
-
     console.error("Webhook processing error", err)
-
   }
 
   res.json({ received: true })
-
 })
 
 /* --- GET SUBSCRIPTION --- */
