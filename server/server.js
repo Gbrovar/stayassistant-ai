@@ -3706,7 +3706,7 @@ app.post("/billing/webhook", async (req, res) => {
 
     console.log("🔥 Webhook received:", event.type)
 
-    if (event.type === "customer.subscription.created") {
+    if (event.type === "checkout.session.completed") {
 
       const session = event.data.object
 
@@ -3717,8 +3717,8 @@ app.post("/billing/webhook", async (req, res) => {
         session.subscription
       )
 
-      const meteredItem = subscription.items.data.find(
-        item => item.price.recurring?.usage_type === "metered"
+      const meteredItem = subscription.items?.data?.find(
+        item => item.price?.recurring?.usage_type === "metered"
       )
 
       await saveSubscription(propertyId, {
@@ -3789,7 +3789,7 @@ app.post("/billing/webhook", async (req, res) => {
 
       const meteredItem = subscription.items?.data?.find(
         item => item.price?.recurring?.usage_type === "metered"
-      ) 
+      )
 
       await saveSubscription(propertyId, {
         plan,
@@ -3800,8 +3800,6 @@ app.post("/billing/webhook", async (req, res) => {
       })
 
       console.log("🔄 Subscription updated:", propertyId, plan, status)
-
-      console.log("ITEMS FULL:", JSON.stringify(subscription.items.data, null, 2))
     }
 
     // ❌ SUBSCRIPTION DELETED (CANCEL)
