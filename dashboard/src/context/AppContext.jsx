@@ -49,8 +49,8 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "critical",
                 type: "limit",
-                message: "You've reached your limit. Upgrade to continue.",
-                cta: "Upgrade now",
+                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests.`,
+                cta: "Upgrade to keep it running",
                 location: "topbar"
             }
         }
@@ -61,8 +61,8 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "high",
                 type: "usage",
-                message: "You're close to your limit.",
-                cta: "Upgrade",
+                message: `You're using your AI actively. At this pace, you may hit your limit soon and miss guest requests.`,
+                cta: "Upgrade before interruptions",
                 location: "topbar"
             }
         }
@@ -73,8 +73,8 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "medium",
                 type: "ltv",
-                message: ltv.strategy.message,
-                cta: "Upgrade",
+                message: `${ltv.strategy.message} Upgrading now helps you capture more guest interactions.`,
+                cta: "Unlock more capacity",
                 location: "overview"
             }
         }
@@ -85,8 +85,8 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "low",
                 type: "engagement",
-                message: "You're getting value from StayAssistant.",
-                cta: "Upgrade",
+                message: "Your AI concierge is already helping guests. Upgrade to handle more requests and improve their experience.",
+                cta: "Upgrade for more capacity",
                 location: "overview"
             }
         }
