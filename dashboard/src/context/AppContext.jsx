@@ -42,6 +42,16 @@ export function AppProvider({ children }) {
 
         const limit = limits[plan] || 100
         const ratio = usage / limit
+        const remaining = limit - usage
+        let urgencyHint = ""
+
+        if (ratio >= 0.9) {
+            urgencyHint = "very soon"
+        } else if (ratio >= 0.8) {
+            urgencyHint = "soon"
+        } else if (ratio >= 0.7) {
+            urgencyHint = "in the next few days"
+        }
 
         // 🔴 HARD LIMIT
         if (limitReached || ratio >= 1) {
@@ -49,7 +59,7 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "critical",
                 type: "limit",
-                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests.`,
+                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.`,
                 cta: "Upgrade to keep it running",
                 location: "topbar"
             }
@@ -61,8 +71,9 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "high",
                 type: "usage",
-                message: `You're using your AI actively. At this pace, you may hit your limit soon and miss guest requests.`,
-                cta: "Upgrade before interruptions",
+                message: remaining < 200
+                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.`
+                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.`, cta: "Upgrade before interruptions",
                 location: "topbar"
             }
         }
