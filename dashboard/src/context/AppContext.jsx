@@ -57,6 +57,31 @@ export function AppProvider({ children }) {
             behaviorHint = " You've checked your dashboard multiple times."
         }
 
+        function shouldShow(level) {
+
+            const now = Date.now()
+            const lastShown = parseInt(localStorage.getItem("sa_last_conversion") || "0")
+            const lastLevel = localStorage.getItem("sa_last_level")
+
+            const cooldowns = {
+                critical: 2 * 60 * 1000,
+                high: 5 * 60 * 1000,
+                medium: 10 * 60 * 1000,
+                low: 20 * 60 * 1000
+            }
+
+            const cooldown = cooldowns[level] || 5 * 60 * 1000
+
+            if (lastLevel === level && (now - lastShown) < cooldown) {
+                return false
+            }
+
+            localStorage.setItem("sa_last_conversion", now)
+            localStorage.setItem("sa_last_level", level)
+
+            return true
+        }
+
         const remaining = limit - usage
         let urgencyHint = ""
 
@@ -83,6 +108,9 @@ export function AppProvider({ children }) {
 
         // 🔴 HARD LIMIT
         if (limitReached || ratio >= 1) {
+
+            if (!shouldShow("critical")) return null
+
             return {
                 show: true,
                 level: "critical",
@@ -95,6 +123,9 @@ export function AppProvider({ children }) {
 
         // 🟠 HIGH USAGE
         if (ratio >= 0.8) {
+
+            if (!shouldShow("high")) return null
+
             return {
                 show: true,
                 level: "high",
@@ -109,6 +140,9 @@ export function AppProvider({ children }) {
 
         // ⚡ LTV
         if (ltv?.strategy) {
+
+            if (!shouldShow("medium")) return null
+
             return {
                 show: true,
                 level: "medium",
