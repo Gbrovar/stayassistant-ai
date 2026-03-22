@@ -3687,21 +3687,6 @@ async function saveSubscription(propertyId, data) {
 
 }
 
-// 🔥 EMIT REAL UPGRADE EVENT
-const eventKey = `stayassistant:event:upgrade_completed:${propertyId}`
-
-await redis.set(eventKey, JSON.stringify({
-  plan,
-  timestamp: Date.now()
-}), {
-  EX: 60 * 10 // 10 min window
-})
-
-// 🧹 CLEAN OLD UPGRADE SIGNAL (CRÍTICO UX FIX)
-await redis.del(`stayassistant:upgrade_signal:${propertyId}`)
-
-console.log("🔥 UPGRADE EVENT EMITTED:", propertyId)
-
 
 /* --- STRIPE WEBHOOK --- */
 app.post("/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
@@ -3754,6 +3739,21 @@ app.post("/billing/webhook", express.raw({ type: "application/json" }), async (r
       })
 
       console.log("Subscription activated:", propertyId)
+
+      // 🔥 EMIT REAL UPGRADE EVENT (CORRECTO)
+      const eventKey = `stayassistant:event:upgrade_completed:${propertyId}`
+
+      await redis.set(eventKey, JSON.stringify({
+        plan,
+        timestamp: Date.now()
+      }), {
+        EX: 60 * 10
+      })
+
+      // 🧹 CLEAN OLD SIGNAL
+      await redis.del(`stayassistant:upgrade_signal:${propertyId}`)
+
+      console.log("🔥 UPGRADE EVENT EMITTED:", propertyId)
 
     }
 
