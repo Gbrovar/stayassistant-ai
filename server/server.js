@@ -273,6 +273,36 @@ async function getUsageLimit(propertyId) {
 
 }
 
+async function getRealSubscription(propertyId) {
+
+  const subRaw = await redis.get(`stayassistant:subscription:${propertyId}`)
+
+  if (!subRaw) return { plan: "free" }
+
+  const sub = JSON.parse(subRaw)
+
+  if (!sub.stripeSubscription) return sub
+
+  try {
+
+    const stripeSub = await stripe.subscriptions.retrieve(
+      sub.stripeSubscription
+    )
+
+    if (stripeSub.status !== "active") {
+      return { plan: "free", status: stripeSub.status }
+    }
+
+    return sub
+
+  } catch (err) {
+
+    console.log("Stripe sync fallback:", err.message)
+
+    return sub
+  }
+}
+
 function getOveragePrice(plan) {
   if (plan === "pro") return 0.04
   if (plan === "business") return 0.03
@@ -1271,15 +1301,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const usageKey = `stayassistant:usage:${propertyId}:${month}`
 
     // --- PLAN ---
-    const subKey = `stayassistant:subscription:${propertyId}`
-    const subRaw = await redis.get(subKey)
+    const sub = await getRealSubscription(propertyId)
 
-    let plan = "free"
-
-    if (subRaw) {
-      const sub = JSON.parse(subRaw)
-      plan = sub.plan || "free"
-    }
+    let plan = sub.plan || "free"
 
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
@@ -3377,13 +3401,9 @@ app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
   const overageData = await redis.hGetAll(`stayassistant:overage:${propertyId}:${month}`)
   const overageCost = Number(overageData.cost || 0)
 
-  const subRaw = await redis.get(`stayassistant:subscription:${propertyId}`)
+  const sub = await getRealSubscription(propertyId)
 
-  let plan = "free"
-
-  if (subRaw) {
-    plan = JSON.parse(subRaw).plan || "free"
-  }
+  let plan = sub.plan || "free"
 
   const basePrice = getPlanPrice(plan)
 
@@ -3736,11 +3756,16 @@ app.post("/billing/webhook", async (req, res) => {
         plan = "business"
       }
 
+      const meteredItem = subscription.items?.data?.find(
+        item => item.price?.recurring?.usage_type === "metered"
+      )
+
       await saveSubscription(propertyId, {
         plan,
         status,
         stripeCustomer: subscription.customer,
-        stripeSubscription: subscription.id
+        stripeSubscription: subscription.id,
+        stripeMeteredItemId: meteredItem?.id || null
       })
 
       console.log("🔄 Subscription updated:", propertyId, plan, status)
@@ -3780,20 +3805,9 @@ app.get("/billing/subscription", authenticate, async (req, res) => {
 
     const propertyId = req.propertyId
 
-    const key = `stayassistant:subscription:${propertyId}`
+    const sub = await getRealSubscription(propertyId)
 
-    const sub = await redis.get(key)
-
-    if (!sub) {
-
-      return res.json({
-        plan: "free",
-        status: "active"
-      })
-
-    }
-
-    res.json(JSON.parse(sub))
+    res.json(sub)
 
   } catch (err) {
 
