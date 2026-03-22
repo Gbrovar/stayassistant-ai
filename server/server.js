@@ -1997,14 +1997,15 @@ app.post("/chat", chatLimiter, async (req, res) => {
         if (subRaw) {
           const sub = JSON.parse(subRaw)
 
-          if (sub.stripeCustomer) {
-            await stripe.billing.meterEvents.create({
-              event_name: "api_requests",
-              payload: {
-                value: 1,
-                stripe_customer_id: sub.stripeCustomer
+          if (sub.stripeCustomer && sub.stripeMeteredItemId) {
+            await stripe.subscriptionItems.createUsageRecord(
+              sub.stripeMeteredItemId,
+              {
+                quantity: 1,
+                timestamp: Math.floor(Date.now() / 1000),
+                action: "increment"
               }
-            })
+            )
 
             console.log("📡 STRIPE USAGE SENT")
           }
@@ -3718,6 +3719,11 @@ app.post("/billing/webhook", async (req, res) => {
         { expand: ["items.data.price"] }
       )
 
+      if (!session.subscription) {
+        console.error("❌ NO SUBSCRIPTION IN SESSION")
+        return
+      }
+
       console.log("🧾 SUB FULL:", JSON.stringify(subscription, null, 2))
 
       const items = subscription.items?.data || []
@@ -3739,6 +3745,8 @@ app.post("/billing/webhook", async (req, res) => {
         stripeSubscription: session.subscription,
         stripeMeteredItemId: meteredItem?.id || null
       })
+
+      console.log("💡 METERED PRICE ID:", meteredItem?.price?.id)
 
       console.log("✅ Subscription activated:", propertyId)
     }
