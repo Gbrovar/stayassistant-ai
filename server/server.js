@@ -1965,63 +1965,28 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
-      if (isOverage) {
+      // 🚀 TRACK ALWAYS (CRÍTICO)
+      try {
+        const subKey = `stayassistant:subscription:${propertyId}`
+        const subRaw = await redis.get(subKey)
 
-        const overageKey = `stayassistant:overage:${propertyId}:${month}`
-        const overageData = await redis.hGetAll(overageKey)
-        const overageCost = Number(overageData.cost || 0)
+        if (subRaw) {
+          const sub = JSON.parse(subRaw)
 
-        if (overageCost > 100) {
-          console.log("🚨 HARD CAP TRIGGERED")
+          if (sub.stripeCustomer) {
+            await stripe.billing.meterEvents.create({
+              event_name: "api_requests",
+              payload: {
+                value: 1,
+                stripe_customer_id: sub.stripeCustomer
+              }
+            })
 
-          return res.json({
-            reply: "Service temporarily limited. Please contact support.",
-            limit_reached: true
-          })
-        }
-        const pricePerMsg = getOveragePrice(plan)
-
-
-
-        await redis.hIncrBy(overageKey, "messages", 1)
-        await redis.hIncrByFloat(overageKey, "cost", pricePerMsg)
-
-        console.log("💰 OVERAGE:", propertyId, pricePerMsg)
-
-        // 🚀 STRIPE USAGE REPORTING
-        try {
-
-          const subKey = `stayassistant:subscription:${propertyId}`
-          const subRaw = await redis.get(subKey)
-
-          if (subRaw) {
-
-            const sub = JSON.parse(subRaw)
-
-            if (sub.stripeMeteredItemId) {
-
-              await stripe.subscriptionItems.createUsageRecord(
-                sub.stripeMeteredItemId,
-                {
-                  quantity: 1,
-                  timestamp: Math.floor(Date.now() / 1000),
-                  action: "increment"
-                },
-                {
-                  idempotencyKey: `${propertyId}-${Date.now()}`
-                }
-              )
-
-              console.log("📡 STRIPE USAGE SENT")
-
-            }
+            console.log("📡 STRIPE USAGE SENT")
           }
-
-        } catch (err) {
-
-          console.log("Stripe usage error:", err.message)
-
         }
+      } catch (err) {
+        console.log("Stripe usage error:", err.message)
       }
 
       // 🧠 BEHAVIOR TRACKING
@@ -3630,7 +3595,18 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
       return res.status(400).json({ error: "invalid plan" })
     }
 
+    const existing = await redis.get(`stayassistant:subscription:${propertyId}`)
+
+    let customerId = null
+
+    if (existing) {
+      const sub = JSON.parse(existing)
+      customerId = sub.stripeCustomer
+    }
+
     const session = await stripe.checkout.sessions.create({
+
+      customer: customerId || undefined,
 
       mode: "subscription",
 
@@ -3734,6 +3710,60 @@ app.post("/billing/webhook", async (req, res) => {
       })
 
       console.log("✅ Subscription activated:", propertyId)
+    }
+
+    // 🔥 SUBSCRIPTION UPDATED (UPGRADE / DOWNGRADE / STATUS)
+    if (event.type === "customer.subscription.updated") {
+
+      const subscription = event.data.object
+
+      const indexKey = `stayassistant:subscription_index:${subscription.id}`
+      const propertyId = await redis.get(indexKey)
+
+      if (!propertyId) return
+
+      const status = subscription.status
+
+      let plan = "free"
+
+      const priceId = subscription.items.data[0]?.price?.id
+
+      if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
+        plan = "pro"
+      }
+
+      if (priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
+        plan = "business"
+      }
+
+      await saveSubscription(propertyId, {
+        plan,
+        status,
+        stripeCustomer: subscription.customer,
+        stripeSubscription: subscription.id
+      })
+
+      console.log("🔄 Subscription updated:", propertyId, plan, status)
+    }
+
+    // ❌ SUBSCRIPTION DELETED (CANCEL)
+    if (event.type === "customer.subscription.deleted") {
+
+      const subscription = event.data.object
+
+      const indexKey = `stayassistant:subscription_index:${subscription.id}`
+      const propertyId = await redis.get(indexKey)
+
+      if (!propertyId) return
+
+      await saveSubscription(propertyId, {
+        plan: "free",
+        status: "canceled",
+        stripeCustomer: subscription.customer,
+        stripeSubscription: subscription.id
+      })
+
+      console.log("❌ Subscription canceled:", propertyId)
     }
 
   } catch (err) {
