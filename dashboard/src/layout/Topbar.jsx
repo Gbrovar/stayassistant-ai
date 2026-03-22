@@ -32,6 +32,8 @@ export default function Topbar() {
     })
 
     localStorage.setItem("sa_events", JSON.stringify(events))
+
+    localStorage.setItem("sa_last_click", Date.now())
   }
 
   return (

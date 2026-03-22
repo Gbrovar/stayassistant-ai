@@ -91,10 +91,20 @@ export function AppProvider({ children }) {
 
             const cooldown = cooldowns[level] || 5 * 60 * 1000
 
+            const clickedRecently = localStorage.getItem("sa_last_click")
+            const clickedTime = parseInt(clickedRecently || "0")
+
+            // 🚫 si hizo click recientemente → NO bloquear mensaje
+            if (clickedTime && (now - clickedTime) < 5 * 60 * 1000) {
+                return true
+            }
+
+            // 🧠 cooldown normal
             if (lastLevel === level && (now - lastShown) < cooldown) {
                 return false
             }
 
+            // guardar solo si realmente mostramos
             localStorage.setItem("sa_last_conversion", now)
             localStorage.setItem("sa_last_level", level)
 
