@@ -43,6 +43,13 @@ export function AppProvider({ children }) {
         const limit = limits[plan] || 100
         const ratio = usage / limit
 
+        let variant = localStorage.getItem("sa_ab_variant")
+
+        if (!variant) {
+            variant = Math.random() > 0.5 ? "A" : "B"
+            localStorage.setItem("sa_ab_variant", variant)
+        }
+
         const visits = parseInt(localStorage.getItem("sa_visits") || "0")
         const lastSeen = parseInt(localStorage.getItem("sa_last_seen") || "0")
 
@@ -115,7 +122,9 @@ export function AppProvider({ children }) {
                 show: true,
                 level: "critical",
                 type: "limit",
-                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.${pressureHint}${behaviorHint}`,
+                message: variant === "A"
+                    ? `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.${pressureHint}${behaviorHint}`
+                    : `Your assistant has reached its limit and may stop responding. Upgrade now to restore full service.${pressureHint}${behaviorHint}`,
                 cta: "Upgrade to keep it running",
                 location: "topbar"
             }
@@ -131,9 +140,15 @@ export function AppProvider({ children }) {
                 level: "high",
                 type: "usage",
                 message: remaining < 200
-                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`
-                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`,
-                cta: "Upgrade before interruptions",
+                    ? variant === "A"
+                        ? `Only ${remaining} messages left — you may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`
+                        : `You're close to your limit. Only ${remaining} messages remaining before your assistant may stop.${pressureHint}${behaviorHint}`
+                    : variant === "A"
+                        ? `You're using your AI actively. You may hit your limit ${urgencyHint}.${pressureHint}${behaviorHint}`
+                        : `Your assistant is handling many requests. Upgrade now to avoid interruptions.${pressureHint}${behaviorHint}`,
+                cta: variant === "A"
+                    ? "Upgrade before interruptions"
+                    : "Upgrade now",
                 location: "topbar"
             }
         }
