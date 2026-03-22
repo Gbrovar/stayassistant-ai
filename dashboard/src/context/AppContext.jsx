@@ -53,13 +53,26 @@ export function AppProvider({ children }) {
             urgencyHint = "in the next few days"
         }
 
+
+        let pressureHint = ""
+
+        if (ratio >= 0.9) {
+            pressureHint = " Guests are actively using your concierge right now."
+        } else if (ratio >= 0.7) {
+            pressureHint = " Guests are actively interacting with your assistant."
+        } else if (ratio >= 0.5) {
+            pressureHint = " Your AI concierge is handling a good volume of guest requests."
+        } else if (ratio >= 0.3) {
+            pressureHint = " Your AI concierge is already helping guests."
+        }
+
         // 🔴 HARD LIMIT
         if (limitReached || ratio >= 1) {
             return {
                 show: true,
                 level: "critical",
                 type: "limit",
-                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.`,
+                message: `You've reached your monthly limit. Your AI concierge may stop responding to guests right now.${pressureHint}`,
                 cta: "Upgrade to keep it running",
                 location: "topbar"
             }
@@ -72,8 +85,9 @@ export function AppProvider({ children }) {
                 level: "high",
                 type: "usage",
                 message: remaining < 200
-                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.`
-                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.`, cta: "Upgrade before interruptions",
+                    ? `Only ${remaining} messages left — at this pace you may hit your limit ${urgencyHint}.${pressureHint}`
+                    : `You're using your AI actively. At this pace you may hit your limit ${urgencyHint}.${pressureHint}`,
+                cta: "Upgrade before interruptions",
                 location: "topbar"
             }
         }
