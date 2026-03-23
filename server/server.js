@@ -1995,64 +1995,82 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const subKey = `stayassistant:subscription:${propertyId}`
         const subRaw = await redis.get(subKey)
 
-        if (!subRaw) return
+        if (subRaw) {
 
-        const sub = JSON.parse(subRaw)
+          const sub = JSON.parse(subRaw)
 
-        if (!sub.stripeSubscription) return
+          if (sub.stripeSubscription) {
 
-        // 🔥 CACHE KEY
-        const itemCacheKey = `stayassistant:metered_item:${propertyId}`
+            const itemCacheKey = `stayassistant:metered_item:${propertyId}`
 
-        let meteredItemId = await redis.get(itemCacheKey)
+            let meteredItemId = await redis.get(itemCacheKey)
 
-        // 🔥 SI NO EXISTE → ir a Stripe SOLO UNA VEZ
-        if (!meteredItemId) {
+            if (!meteredItemId) {
 
-          const stripeSub = await stripe.subscriptions.retrieve(
-            sub.stripeSubscription,
-            { expand: ["items.data"] }
-          )
+              const stripeSub = await stripe.subscriptions.retrieve(
+                sub.stripeSubscription,
+                { expand: ["items.data"] }
+              )
 
-          // 🔥 VALIDACIÓN ESTADO
-          if (stripeSub.status !== "active") {
-            console.log("⚠️ Subscription not active:", stripeSub.status)
-            return
+              if (stripeSub.status === "active") {
+
+                let meteredItem = stripeSub.items.data.find(
+                  item => item.price?.recurring?.usage_type === "metered"
+                )
+
+                if (!meteredItem) {
+
+                  console.log("⚠️ Metered not found by usage_type")
+
+                  meteredItem = stripeSub.items.data.find(
+                    item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
+                  )
+                }
+
+                if (meteredItem) {
+
+                  meteredItemId = meteredItem.id
+
+                  await redis.set(itemCacheKey, meteredItemId, {
+                    EX: 60 * 60 * 24
+                  })
+
+                  console.log("💾 Metered item cached")
+                } else {
+                  console.log("❌ NO METERED ITEM FOUND (FINAL)")
+                }
+
+              } else {
+                console.log("⚠️ Subscription not active:", stripeSub.status)
+              }
+            }
+
+            if (meteredItemId) {
+
+              await stripe.billing.meterEvents.create({
+                event_name: "api_requests",
+                payload: {
+                  stripe_subscription_item_id: meteredItemId,
+                  value: 1
+                }
+              })
+
+              console.log("📡 STRIPE METER EVENT SENT (CACHED)")
+            }
+
+          } else {
+            console.log("⚠️ No stripeSubscription id")
           }
 
-          const meteredItem = stripeSub.items.data.find(
-            item => item.price.recurring?.usage_type === "metered"
-          )
-
-          if (!meteredItem) {
-            console.log("❌ NO METERED ITEM FOUND (RUNTIME)")
-            return
-          }
-
-          meteredItemId = meteredItem.id
-
-          // 🔥 GUARDAR CACHE (24h)
-          await redis.set(itemCacheKey, meteredItemId, {
-            EX: 60 * 60 * 24
-          })
-
-          console.log("💾 Metered item cached")
+        } else {
+          console.log("⚠️ No subscription found")
         }
-
-        // 🔥 ENVIAR EVENTO (SIN STRIPE CALL)
-        await stripe.billing.meterEvents.create({
-          event_name: "api_requests",
-          payload: {
-            stripe_subscription_item_id: meteredItemId,
-            value: 1 // 🔥 FIX TYPE
-          }
-        })
-
-        console.log("📡 STRIPE METER EVENT SENT (CACHED)")
 
       } catch (err) {
         console.log("Stripe meter error:", err.message)
       }
+
+
 
       // 🧠 BEHAVIOR TRACKING
 
@@ -3769,14 +3787,23 @@ app.post("/billing/webhook", async (req, res) => {
 
       const items = subscription.items?.data || []
 
-      const meteredItem = items.find(item => {
-        const usageType = item.price?.recurring?.usage_type
-        console.log("🔍 ITEM:", item.id, usageType)
-        return usageType === "metered"
-      })
+      let meteredItem = items.find(item =>
+        item.price?.recurring?.usage_type === "metered"
+      )
 
       if (!meteredItem) {
-        console.error("❌ NO METERED ITEM FOUND")
+
+        console.log("⚠️ Metered not found by usage_type (webhook)")
+
+        meteredItem = items.find(
+          item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
+        )
+      }
+
+      if (!meteredItem) {
+        console.error("❌ NO METERED ITEM FOUND (WEBHOOK FINAL)")
+      } else {
+        console.log("💡 METERED PRICE ID:", meteredItem.price.id)
       }
 
       await saveSubscription(propertyId, {
