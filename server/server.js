@@ -2015,7 +2015,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
               if (stripeSub.status === "active") {
 
                 let meteredItem = stripeSub.items.data.find(
-                  item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
+                  item =>
+                    item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
+                    item.price?.recurring?.usage_type === "metered"
                 )
 
                 if (meteredItem) {
@@ -3783,12 +3785,43 @@ app.post("/billing/webhook", async (req, res) => {
         item.price?.recurring?.usage_type === "metered"
       )
 
+      // 🔥 FIX REAL — CREATE METERED IF MISSING
+
+      if (!meteredItem) {
+
+        console.log("⚠️ Metered item missing → creating it")
+
+        const newItem = await stripe.subscriptionItems.create({
+          subscription: subscription.id,
+          price: process.env.STRIPE_OVERAGE_PRICE_ID
+        })
+
+        console.log("✅ Metered item created:", newItem.id)
+
+        // refrescar subscription
+        const updatedSub = await stripe.subscriptions.retrieve(
+          subscription.id,
+          { expand: ["items.data.price"] }
+        )
+
+        const updatedItems = updatedSub.items?.data || []
+
+        meteredItem = updatedItems.find(
+          item =>
+            item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
+            item.price?.recurring?.usage_type === "metered"
+        )
+
+      }
+
       if (!meteredItem) {
 
         console.log("⚠️ Metered not found by usage_type (webhook)")
 
         meteredItem = items.find(
-          item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
+          item =>
+            item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
+            item.price?.recurring?.usage_type === "metered"
         )
       }
 
