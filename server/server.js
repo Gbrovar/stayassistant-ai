@@ -2015,18 +2015,10 @@ app.post("/chat", chatLimiter, async (req, res) => {
               if (stripeSub.status === "active") {
 
                 let meteredItem = stripeSub.items.data.find(
-                  item => item.price?.recurring?.usage_type === "metered"
+                  item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
                 )
 
-                if (!meteredItem) {
-
-                  console.log("⚠️ Metered not found by usage_type")
-
-                  meteredItem = stripeSub.items.data.find(
-                    item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
-                  )
-                }
-
+              
                 if (meteredItem) {
 
                   meteredItemId = meteredItem.id
