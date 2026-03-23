@@ -1989,7 +1989,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
-      // 🚀 STRIPE METER EVENTS (OPTIMIZED)
+      // 💰 STRIPE METER EVENTS (NUEVO - CORRECTO)
       try {
 
         const subKey = `stayassistant:subscription:${propertyId}`
@@ -1999,72 +1999,29 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           const sub = JSON.parse(subRaw)
 
-          if (sub.stripeSubscription) {
+          if (sub.stripeCustomer) {
 
-            const itemCacheKey = `stayassistant:metered_item:${propertyId}`
-
-            let meteredItemId = await redis.get(itemCacheKey)
-
-            if (!meteredItemId) {
-
-              const stripeSub = await stripe.subscriptions.retrieve(
-                sub.stripeSubscription,
-                { expand: ["items.data"] }
-              )
-
-              if (stripeSub.status === "active") {
-
-                let meteredItem = stripeSub.items.data.find(
-                  item =>
-                    item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
-                    item.price?.recurring?.usage_type === "metered"
-                )
-
-                if (meteredItem) {
-
-                  meteredItemId = meteredItem.id
-
-                  await redis.set(itemCacheKey, meteredItemId, {
-                    EX: 60 * 60 * 24
-                  })
-
-                  console.log("💾 Metered item cached")
-                } else {
-                  console.log("❌ NO METERED ITEM FOUND (FINAL)")
-                }
-
-              } else {
-                console.log("⚠️ Subscription not active:", stripeSub.status)
+            await stripe.billing.meterEvents.create({
+              event_name: "messages",
+              payload: {
+                stripe_customer_id: sub.stripeCustomer,
+                value: "1"
               }
-            }
+            })
 
-            if (meteredItemId) {
-
-              await stripe.subscriptionItems.createUsageRecord(
-                meteredItemId,
-                {
-                  quantity: 1,
-                  timestamp: Math.floor(Date.now() / 1000),
-                  action: "increment"
-                }
-              )
-
-              console.log("💰 STRIPE USAGE RECORDED")
-            }
+            console.log("💰 STRIPE METER EVENT SENT")
 
           } else {
-            console.log("⚠️ No stripeSubscription id")
+            console.log("⚠️ No stripeCustomer")
           }
 
         } else {
-          console.log("⚠️ No subscription found")
+          console.log("⚠️ No subscription in Redis")
         }
 
       } catch (err) {
         console.log("Stripe meter error:", err.message)
       }
-
-
 
       // 🧠 BEHAVIOR TRACKING
 
@@ -3700,6 +3657,9 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
         {
           price: priceId,
           quantity: 1
+        },
+        {
+          price: process.env.STRIPE_OVERAGE_PRICE_ID
         }
       ],
 
