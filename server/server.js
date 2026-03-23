@@ -3668,6 +3668,11 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
       return res.status(400).json({ error: "invalid plan" })
     }
 
+    if (!process.env.STRIPE_OVERAGE_PRICE_ID) {
+      console.error("❌ STRIPE_OVERAGE_PRICE_ID missing")
+      return res.status(500).json({ error: "overage price not configured" })
+    }
+
     const existing = await redis.get(`stayassistant:subscription:${propertyId}`)
 
     let customerId = null
@@ -3676,6 +3681,12 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
       const sub = JSON.parse(existing)
       customerId = sub.stripeCustomer
     }
+
+    console.log("💰 STRIPE DEBUG:", {
+      plan,
+      basePriceId: priceId,
+      overagePriceId: process.env.STRIPE_OVERAGE_PRICE_ID
+    })
 
     const session = await stripe.checkout.sessions.create({
 
@@ -3688,10 +3699,6 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
       line_items: [
         {
           price: priceId,
-          quantity: 1
-        },
-        {
-          price: process.env.STRIPE_OVERAGE_PRICE_ID,
           quantity: 1
         }
       ],
@@ -3790,6 +3797,11 @@ app.post("/billing/webhook", async (req, res) => {
       if (!meteredItem) {
 
         console.log("⚠️ Metered item missing → creating it")
+
+        if (!process.env.STRIPE_OVERAGE_PRICE_ID) {
+          console.error("❌ Missing STRIPE_OVERAGE_PRICE_ID in webhook")
+          return
+        }
 
         const newItem = await stripe.subscriptionItems.create({
           subscription: subscription.id,
