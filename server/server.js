@@ -2018,7 +2018,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
                   item => item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID
                 )
 
-              
                 if (meteredItem) {
 
                   meteredItemId = meteredItem.id
@@ -2039,15 +2038,16 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
             if (meteredItemId) {
 
-              await stripe.billing.meterEvents.create({
-                event_name: "api_requests",
-                payload: {
-                  stripe_subscription_item_id: meteredItemId,
-                  value: 1
+              await stripe.subscriptionItems.createUsageRecord(
+                meteredItemId,
+                {
+                  quantity: 1,
+                  timestamp: Math.floor(Date.now() / 1000),
+                  action: "increment"
                 }
-              })
+              )
 
-              console.log("📡 STRIPE METER EVENT SENT (CACHED)")
+              console.log("💰 STRIPE USAGE RECORDED")
             }
 
           } else {
