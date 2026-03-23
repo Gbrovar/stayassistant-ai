@@ -1989,26 +1989,67 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
-      // 🚀 STRIPE METER EVENTS (NEW SYSTEM)
+      // 🚀 STRIPE METER EVENTS (OPTIMIZED)
       try {
+
         const subKey = `stayassistant:subscription:${propertyId}`
         const subRaw = await redis.get(subKey)
 
-        if (subRaw) {
-          const sub = JSON.parse(subRaw)
+        if (!subRaw) return
 
-          if (sub.stripeCustomer) {
-            await stripe.billing.meterEvents.create({
-              event_name: "api_requests", // ⚠️ EXACT MATCH con Stripe
-              payload: {
-                stripe_customer_id: sub.stripeCustomer,
-                value: "1"
-              }
-            })
+        const sub = JSON.parse(subRaw)
 
-            console.log("📡 STRIPE METER EVENT SENT")
+        if (!sub.stripeSubscription) return
+
+        // 🔥 CACHE KEY
+        const itemCacheKey = `stayassistant:metered_item:${propertyId}`
+
+        let meteredItemId = await redis.get(itemCacheKey)
+
+        // 🔥 SI NO EXISTE → ir a Stripe SOLO UNA VEZ
+        if (!meteredItemId) {
+
+          const stripeSub = await stripe.subscriptions.retrieve(
+            sub.stripeSubscription,
+            { expand: ["items.data"] }
+          )
+
+          // 🔥 VALIDACIÓN ESTADO
+          if (stripeSub.status !== "active") {
+            console.log("⚠️ Subscription not active:", stripeSub.status)
+            return
           }
+
+          const meteredItem = stripeSub.items.data.find(
+            item => item.price.recurring?.usage_type === "metered"
+          )
+
+          if (!meteredItem) {
+            console.log("❌ NO METERED ITEM FOUND (RUNTIME)")
+            return
+          }
+
+          meteredItemId = meteredItem.id
+
+          // 🔥 GUARDAR CACHE (24h)
+          await redis.set(itemCacheKey, meteredItemId, {
+            EX: 60 * 60 * 24
+          })
+
+          console.log("💾 Metered item cached")
         }
+
+        // 🔥 ENVIAR EVENTO (SIN STRIPE CALL)
+        await stripe.billing.meterEvents.create({
+          event_name: "api_requests",
+          payload: {
+            stripe_subscription_item_id: meteredItemId,
+            value: 1 // 🔥 FIX TYPE
+          }
+        })
+
+        console.log("📡 STRIPE METER EVENT SENT (CACHED)")
+
       } catch (err) {
         console.log("Stripe meter error:", err.message)
       }
@@ -3638,7 +3679,8 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
           quantity: 1
         },
         {
-          price: process.env.STRIPE_OVERAGE_PRICE_ID
+          price: process.env.STRIPE_OVERAGE_PRICE_ID,
+          quantity: 1
         }
       ],
 
@@ -3745,6 +3787,17 @@ app.post("/billing/webhook", async (req, res) => {
       })
 
       console.log("💡 METERED PRICE ID:", meteredItem?.price?.id)
+
+      if (meteredItem) {
+
+        const itemCacheKey = `stayassistant:metered_item:${propertyId}`
+
+        await redis.set(itemCacheKey, meteredItem.id, {
+          EX: 60 * 60 * 24
+        })
+
+        console.log("💾 Metered item cached from webhook")
+      }
 
       console.log("✅ Subscription activated:", propertyId)
     }
