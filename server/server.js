@@ -378,7 +378,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 /* --- Plan price --- */
 function getPlanPrice(plan) {
-  if (plan === "pro") return 29
+  if (plan === "pro") return 39
   if (plan === "business") return 99
   return 0
 }
@@ -1989,7 +1989,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
-      // 🚀 TRACK ALWAYS (CRÍTICO)
+      // 🚀 STRIPE METER EVENTS (NEW SYSTEM)
       try {
         const subKey = `stayassistant:subscription:${propertyId}`
         const subRaw = await redis.get(subKey)
@@ -1997,21 +1997,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
         if (subRaw) {
           const sub = JSON.parse(subRaw)
 
-          if (sub.stripeCustomer && sub.stripeMeteredItemId) {
-            await stripe.subscriptionItems.createUsageRecord(
-              sub.stripeMeteredItemId,
-              {
-                quantity: 1,
-                timestamp: Math.floor(Date.now() / 1000),
-                action: "increment"
+          if (sub.stripeCustomer) {
+            await stripe.billing.meterEvents.create({
+              event_name: "api_requests", // ⚠️ EXACT MATCH con Stripe
+              payload: {
+                stripe_customer_id: sub.stripeCustomer,
+                value: "1"
               }
-            )
+            })
 
-            console.log("📡 STRIPE USAGE SENT")
+            console.log("📡 STRIPE METER EVENT SENT")
           }
         }
       } catch (err) {
-        console.log("Stripe usage error:", err.message)
+        console.log("Stripe meter error:", err.message)
       }
 
       // 🧠 BEHAVIOR TRACKING
@@ -3743,7 +3742,6 @@ app.post("/billing/webhook", async (req, res) => {
         status: "active",
         stripeCustomer: session.customer,
         stripeSubscription: session.subscription,
-        stripeMeteredItemId: meteredItem?.id || null
       })
 
       console.log("💡 METERED PRICE ID:", meteredItem?.price?.id)
