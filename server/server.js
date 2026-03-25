@@ -2039,30 +2039,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
               }
 
               // 3️⃣ ENVIAR USAGE REAL (CLAVE)
-              if (subscriptionItemId) {
-
-                try {
-
-                  await stripe.subscriptionItems.createUsageRecord(
-                    subscriptionItemId,
-                    {
-                      quantity: 1,
-                      timestamp: Math.floor(Date.now() / 1000),
-                      action: "increment"
-                    }
-                  )
-
-                  console.log("💰 USAGE RECORDED (REAL BILLING)")
-
-                } catch (err) {
-                  console.log("❌ Usage record error:", err.message)
-                }
-
-              } else {
-                console.log("❌ No subscriptionItemId → no billing")
-              }
-
-              // 4️⃣ (OPCIONAL) mantener meterEvents como analytics
               try {
 
                 await stripe.billing.meterEvents.create({
