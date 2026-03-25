@@ -2005,7 +2005,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
               event_name: "messages",
               payload: {
                 stripe_customer_id: sub.stripeCustomer,
-                value: "1"
+                value: 1
               }
             })
 
