@@ -1989,6 +1989,28 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       await redis.incr(usageKey)
 
+      // 💰 OVERAGE TRACKING REAL
+
+      const limit = await getUsageLimit(propertyId)
+
+      const currentUsage = Number(await redis.get(usageKey) || 0)
+
+      if (currentUsage > limit) {
+
+        const overageKey = `stayassistant:overage:${propertyId}:${month}`
+
+        const price = getOveragePrice(plan)
+
+        await redis.hIncrBy(overageKey, "messages", 1)
+
+        await redis.hIncrByFloat(overageKey, "cost", price)
+
+        console.log("💰 Overage tracked:", {
+          propertyId,
+          price
+        })
+      }
+
       // 💰 STRIPE METER EVENTS (NUEVO - CORRECTO)
       try {
 
@@ -1999,18 +2021,39 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           const sub = JSON.parse(subRaw)
 
-          if (sub.stripeCustomer) {
+          // 💡 LOAD METERED ITEM CACHE (DEBUG PRO)
+          const itemCacheKey = `stayassistant:metered_item:${propertyId}`
 
-            await stripe.billing.meterEvents.create({
+          const meteredItemId = await redis.get(itemCacheKey)
+
+          if (!meteredItemId) {
+            console.log("⚠️ No cached metered item (not blocking)")
+          } else {
+            console.log("💡 Using metered item:", meteredItemId)
+          }
+
+          console.log("🧾 Stripe customer:", sub.stripeCustomer)
+          console.log("📊 Plan:", plan)
+
+          if (!sub.stripeCustomer || sub.stripeCustomer.startsWith("guest")) {
+
+            console.log("❌ Invalid stripe customer:", sub.stripeCustomer)
+
+          } else {
+
+            console.log("📡 Sending meter event:", sub.stripeCustomer)
+
+            const meter = await stripe.billing.meterEvents.create({
               event_name: "messages",
               payload: {
                 stripe_customer_id: sub.stripeCustomer,
                 value: 1
               }
+            }, {
+              idempotencyKey: `${propertyId}-${Date.now()}`
             })
 
-          } else {
-            console.log("⚠️ No stripeCustomer")
+            console.log("✅ Meter event:", meter.id)
           }
 
         } else {
@@ -3624,9 +3667,19 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
       return res.status(400).json({ error: "invalid plan" })
     }
 
-    if (!process.env.STRIPE_OVERAGE_PRICE_ID) {
-      console.error("❌ STRIPE_OVERAGE_PRICE_ID missing")
-      return res.status(500).json({ error: "overage price not configured" })
+    let overagePriceId
+
+    if (plan === "pro") {
+      overagePriceId = process.env.STRIPE_PRO_OVERAGE_PRICE_ID
+    }
+
+    if (plan === "business") {
+      overagePriceId = process.env.STRIPE_BUSINESS_OVERAGE_PRICE_ID
+    }
+
+    if (!overagePriceId) {
+      console.error("❌ Overage price missing for plan:", plan)
+      return res.status(500).json({ error: "overage not configured" })
     }
 
     const existing = await redis.get(`stayassistant:subscription:${propertyId}`)
@@ -3641,7 +3694,7 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
     console.log("💰 STRIPE DEBUG:", {
       plan,
       basePriceId: priceId,
-      overagePriceId: process.env.STRIPE_OVERAGE_PRICE_ID
+      overagePriceId
     })
 
     const session = await stripe.checkout.sessions.create({
@@ -3658,7 +3711,7 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
           quantity: 1
         },
         {
-          price: process.env.STRIPE_OVERAGE_PRICE_ID
+          price: overagePriceId
         }
       ],
 
@@ -3747,54 +3800,59 @@ app.post("/billing/webhook", async (req, res) => {
 
       const items = subscription.items?.data || []
 
+      let overagePriceId
+
+      if (plan === "pro") {
+        overagePriceId = process.env.STRIPE_PRO_OVERAGE_PRICE_ID
+      }
+
+      if (plan === "business") {
+        overagePriceId = process.env.STRIPE_BUSINESS_OVERAGE_PRICE_ID
+      }
+
       let meteredItem = items.find(item =>
-        item.price?.recurring?.usage_type === "metered"
+        item.price?.id === overagePriceId
       )
 
       // 🔥 FIX REAL — CREATE METERED IF MISSING
+      if (!meteredItem && overagePriceId) {
 
-      if (!meteredItem) {
+        console.log("⚠️ Metered item missing → attempting recovery")
 
-        console.log("⚠️ Metered item missing → creating it")
+        console.log("🔍 Existing items:",
+          items.map(i => i.price?.id)
+        )
 
-        if (!process.env.STRIPE_OVERAGE_PRICE_ID) {
-          console.error("❌ Missing STRIPE_OVERAGE_PRICE_ID in webhook")
-          return
+        // 🔒 protección anti-duplicados (muy importante)
+        const alreadyExists = items.some(
+          i => i.price?.id === overagePriceId
+        )
+
+        if (!alreadyExists) {
+
+          const newItem = await stripe.subscriptionItems.create({
+            subscription: subscription.id,
+            price: overagePriceId
+          })
+
+          console.log("✅ Metered item created:", newItem.id)
+
+          const updatedSub = await stripe.subscriptions.retrieve(
+            subscription.id,
+            { expand: ["items.data.price"] }
+          )
+
+          const updatedItems = updatedSub.items?.data || []
+
+          meteredItem = updatedItems.find(
+            item => item.price?.id === overagePriceId
+          )
+
+        } else {
+          console.log("⚠️ Metered item exists but not detected properly")
         }
-
-        const newItem = await stripe.subscriptionItems.create({
-          subscription: subscription.id,
-          price: process.env.STRIPE_OVERAGE_PRICE_ID
-        })
-
-        console.log("✅ Metered item created:", newItem.id)
-
-        // refrescar subscription
-        const updatedSub = await stripe.subscriptions.retrieve(
-          subscription.id,
-          { expand: ["items.data.price"] }
-        )
-
-        const updatedItems = updatedSub.items?.data || []
-
-        meteredItem = updatedItems.find(
-          item =>
-            item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
-            item.price?.recurring?.usage_type === "metered"
-        )
-
       }
 
-      if (!meteredItem) {
-
-        console.log("⚠️ Metered not found by usage_type (webhook)")
-
-        meteredItem = items.find(
-          item =>
-            item.price?.id === process.env.STRIPE_OVERAGE_PRICE_ID ||
-            item.price?.recurring?.usage_type === "metered"
-        )
-      }
 
       if (!meteredItem) {
         console.error("❌ NO METERED ITEM FOUND (WEBHOOK FINAL)")
