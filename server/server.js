@@ -2001,6 +2001,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           if (sub.stripeCustomer) {
 
+            /*
             await stripe.billing.meterEvents.create({
               event_name: "messages",
               payload: {
@@ -2008,6 +2009,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
                 value: 1
               }
             })
+            */
 
             console.log("💰 STRIPE METER EVENT SENT")
 
