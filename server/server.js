@@ -304,8 +304,8 @@ async function getRealSubscription(propertyId) {
 }
 
 function getOveragePrice(plan) {
-  if (plan === "pro") return 0.04
-  if (plan === "business") return 0.03
+  if (plan === "pro") return 0.02
+  if (plan === "business") return 0.02
   return 0.05
 }
 
@@ -1308,8 +1308,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
 
-    const isOverage = control.mode === "overage"
-
     if (!control.allowed) {
 
       return res.json({
@@ -1999,7 +1997,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         const overageKey = `stayassistant:overage:${propertyId}:${month}`
 
-        const price = getOveragePrice(plan)
+        const priceKey = `stayassistant:overage_price:${propertyId}`
+
+        let price = Number(await redis.get(priceKey))
+
+        if (!price) {
+          price = getOveragePrice(plan) // fallback safety
+        }
 
         await redis.hIncrBy(overageKey, "messages", 1)
 
@@ -2009,6 +2013,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
           propertyId,
           price
         })
+
+        console.log("📊 Usage:", currentUsage, "/", limit)
       }
 
       // 💰 STRIPE METER EVENTS (NUEVO - CORRECTO)
@@ -2046,14 +2052,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
             const meter = await stripe.billing.meterEvents.create({
               event_name: "messages",
               payload: {
-                stripe_customer_id: sub.stripeCustomer,
+                customer: sub.stripeCustomer,
                 value: 1
               }
             }, {
               idempotencyKey: `${propertyId}-${Date.now()}`
             })
 
-            console.log("✅ Meter event:", meter.id)
+            console.log("✅ Meter event sent")
           }
 
         } else {
@@ -3880,6 +3886,18 @@ app.post("/billing/webhook", async (req, res) => {
         console.log("🔥 SAVED SUB ITEM:", meteredItem.id)
 
         console.log("💾 Metered item cached from webhook")
+      }
+
+      // 💰 SAVE REAL OVERAGE PRICE (PRO LEVEL)
+      if (meteredItem?.price?.unit_amount) {
+
+        const overagePrice = meteredItem.price.unit_amount / 100
+
+        const priceKey = `stayassistant:overage_price:${propertyId}`
+
+        await redis.set(priceKey, overagePrice)
+
+        console.log("💰 Overage price cached:", overagePrice)
       }
 
       console.log("✅ Subscription activated:", propertyId)
