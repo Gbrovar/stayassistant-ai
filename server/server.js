@@ -2052,7 +2052,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
             const meter = await stripe.billing.meterEvents.create({
               event_name: "messages",
               payload: {
-                customer: sub.stripeCustomer,
+                stripe_customer_id: sub.stripeCustomer,
                 value: 1
               }
             }, {
