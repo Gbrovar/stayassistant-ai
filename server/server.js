@@ -2001,17 +2001,83 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
           if (sub.stripeCustomer) {
 
-            
-            await stripe.billing.meterEvents.create({
-              event_name: "messages",
-              payload: {
-                stripe_customer_id: sub.stripeCustomer,
-                value: 1
-              }
-            })
-            
 
-            console.log("💰 STRIPE METER EVENT SENT")
+            if (sub.stripeCustomer) {
+
+              // 1️⃣ Intentar obtener subscription_item_id
+              const itemKey = `stayassistant:metered_item:${propertyId}`
+              let subscriptionItemId = await redis.get(itemKey)
+
+              // 2️⃣ Fallback si no existe (muy importante)
+              if (!subscriptionItemId && sub.stripeSubscription) {
+
+                console.log("⚠️ No cached item → fetching from Stripe")
+
+                try {
+                  const stripeSub = await stripe.subscriptions.retrieve(
+                    sub.stripeSubscription,
+                    { expand: ["items.data.price"] }
+                  )
+
+                  const meteredItem = stripeSub.items.data.find(
+                    item => item.price?.recurring?.usage_type === "metered"
+                  )
+
+                  if (meteredItem) {
+                    subscriptionItemId = meteredItem.id
+
+                    await redis.set(itemKey, subscriptionItemId, {
+                      EX: 60 * 60 * 24
+                    })
+
+                    console.log("💾 Metered item cached (fallback)")
+                  }
+
+                } catch (err) {
+                  console.log("⚠️ Failed to fetch subscription item:", err.message)
+                }
+              }
+
+              // 3️⃣ ENVIAR USAGE REAL (CLAVE)
+              if (subscriptionItemId) {
+
+                try {
+
+                  await stripe.subscriptionItems.createUsageRecord(
+                    subscriptionItemId,
+                    {
+                      quantity: 1,
+                      timestamp: Math.floor(Date.now() / 1000),
+                      action: "increment"
+                    }
+                  )
+
+                  console.log("💰 USAGE RECORDED (REAL BILLING)")
+
+                } catch (err) {
+                  console.log("❌ Usage record error:", err.message)
+                }
+
+              } else {
+                console.log("❌ No subscriptionItemId → no billing")
+              }
+
+              // 4️⃣ (OPCIONAL) mantener meterEvents como analytics
+              try {
+
+                await stripe.billing.meterEvents.create({
+                  event_name: "messages",
+                  payload: {
+                    stripe_customer_id: sub.stripeCustomer,
+                    value: 1
+                  }
+                })
+
+              } catch (err) {
+                console.log("Meter event error:", err.message)
+              }
+
+            }
 
           } else {
             console.log("⚠️ No stripeCustomer")
@@ -2024,6 +2090,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       } catch (err) {
         console.log("Stripe meter error:", err.message)
       }
+
+
 
       // 🧠 BEHAVIOR TRACKING
 
@@ -3821,6 +3889,8 @@ app.post("/billing/webhook", async (req, res) => {
         await redis.set(itemCacheKey, meteredItem.id, {
           EX: 60 * 60 * 24
         })
+
+        console.log("🔥 SAVED SUB ITEM:", meteredItem.id)
 
         console.log("💾 Metered item cached from webhook")
       }
