@@ -1401,7 +1401,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
         return res.json({
           reply:
             "Thanks for trying StayAssistant. This demo allows a limited number of questions.",
-          demo_limit: true
+          demo_limit: true,
+          language: userLanguage,
+          intent
         })
 
       }
@@ -1429,7 +1431,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json({
         reply: "I'm sorry, I'm unable to assist further at the moment. Please contact the property directly.",
         limit_reached: true,
-        internal_upgrade_signal: true
+        internal_upgrade_signal: true,
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1449,7 +1453,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: "Here are some great options nearby:",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
 
     }
@@ -1467,7 +1472,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
     ) {
       return res.json({
         reply: "I'm here to help with your stay. Could you provide a bit more detail?",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1478,7 +1484,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json({
         reply:
           "You can easily order a taxi using Uber or a local taxi service. Let me know if you need help with directions.",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
 
     }
@@ -1530,7 +1537,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: answer.trim(),
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1545,7 +1553,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: answer,
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1554,7 +1563,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json({
         reply:
           "You can find nearby pharmacies using Google Maps. Let me know if you want recommendations.",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
 
     }
@@ -1564,7 +1574,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json({
         reply:
           "Public transport options such as bus or metro are available nearby. Let me know your destination and I can help.",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
 
     }
@@ -1708,7 +1719,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply,
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1798,7 +1810,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: bestMatch.answer,
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
 
     }
@@ -1823,7 +1836,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: cachedReply,
-        language: userLanguage
+        language: userLanguage,
+        intent
       });
 
     }
@@ -1842,7 +1856,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: "I can help with that. Could you rephrase your question?",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1858,7 +1873,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -1974,7 +1990,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("OpenAI timeout or error:", err.message)
 
       return res.json({
-        reply: "I'm sorry, I'm having trouble answering right now. Please try again in a moment."
+        reply: "I'm sorry, I'm having trouble answering right now. Please try again in a moment.",
+        language: userLanguage,
+        intent
       })
 
     }
