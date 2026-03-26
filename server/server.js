@@ -874,9 +874,25 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
 
 })
 
-app.post("/chat/token", async (req, res) => {
+const tokenLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: { error: "Too many token requests" }
+});
 
-  const { propertyId } = req.body;
+app.post("/chat/token", tokenLimiter, async (req, res) => {
+
+  const { propertyId, visitorId } = req.body;
+
+  if (!visitorId) {
+    return res.status(400).json({ error: "visitorId required" });
+  }
+
+  const origin = req.headers.origin || "";
+
+  if (!origin.includes("stayassistantai.com")) {
+    return res.status(403).json({ error: "Invalid origin" });
+  }
 
   if (!propertyId) {
     return res.status(400).json({ error: "propertyId required" });
@@ -892,6 +908,7 @@ app.post("/chat/token", async (req, res) => {
   const token = jwt.sign(
     {
       propertyId,
+      visitorId,
       type: "chat"
     },
     process.env.JWT_SECRET,
@@ -1290,6 +1307,31 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     const propertyId = decoded.propertyId
+    
+    const visitorId = req.body.visitorId;
+
+    if (!visitorId || decoded.visitorId !== visitorId) {
+      return res.status(403).json({
+        reply: "Invalid visitor"
+      });
+    }
+
+    // 🛡️ ANTI-SPAM POR VISITOR (AISLADO)
+    const visitorUsageKey = `stayassistant:visitor_usage:${propertyId}:${decoded.visitorId}`;
+
+    const visitorUsage = await redis.incr(visitorUsageKey);
+
+    if (visitorUsage === 1) {
+      await redis.expire(visitorUsageKey, 60 * 60); // 1h
+    }
+
+    if (visitorUsage > 50) {
+      return res.status(429).json({
+        reply: "Too many messages"
+      });
+    }
+
+
 
     let userLanguage = req.body.language || null
 

@@ -64,7 +64,8 @@ async function initChatToken() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                propertyId: propertyId
+                propertyId,
+                visitorId
             })
         });
 
