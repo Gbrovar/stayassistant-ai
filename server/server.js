@@ -874,6 +874,22 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
 
 })
 
+app.post("/chat/token", authenticate, async (req, res) => {
+
+  const propertyId = req.propertyId
+
+  const token = jwt.sign(
+    {
+      propertyId,
+      type: "chat"
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "24h" }
+  )
+
+  res.json({ token })
+})
+
 /* --- REGISTER PROPERTY --- */
 app.post("/auth/register", async (req, res) => {
 
@@ -1236,6 +1252,34 @@ app.post("/chat", chatLimiter, async (req, res) => {
   try {
 
     const userMessage = req.body.message || "";
+
+    // 🔐 CHAT TOKEN VALIDATION
+    const chatToken = req.headers["x-chat-token"]
+
+    if (!chatToken) {
+      return res.status(401).json({
+        reply: "Unauthorized"
+      })
+    }
+
+    let decoded
+
+    try {
+      decoded = jwt.verify(chatToken, process.env.JWT_SECRET)
+    } catch {
+      return res.status(401).json({
+        reply: "Invalid token"
+      })
+    }
+
+    if (decoded.type !== "chat") {
+      return res.status(403).json({
+        reply: "Invalid token type"
+      })
+    }
+
+    const propertyId = decoded.propertyId
+
     let userLanguage = req.body.language || null
 
     if (!userLanguage) {
@@ -1256,8 +1300,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     }
 
-
-    const propertyId = req.body.propertyId || "demo_property";
 
     let conversationId = req.body.conversationId
 
