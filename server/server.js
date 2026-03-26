@@ -874,9 +874,20 @@ app.get("/admin/global-metrics", authenticate, requireAdmin, async (req, res) =>
 
 })
 
-app.post("/chat/token", authenticate, async (req, res) => {
+app.post("/chat/token", async (req, res) => {
 
-  const propertyId = req.propertyId
+  const { propertyId } = req.body;
+
+  if (!propertyId) {
+    return res.status(400).json({ error: "propertyId required" });
+  }
+
+  // opcional pero recomendado
+  const property = await loadProperty(propertyId);
+
+  if (!property) {
+    return res.status(404).json({ error: "property not found" });
+  }
 
   const token = jwt.sign(
     {
@@ -885,10 +896,10 @@ app.post("/chat/token", authenticate, async (req, res) => {
     },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
-  )
+  );
 
-  res.json({ token })
-})
+  res.json({ token });
+});
 
 /* --- REGISTER PROPERTY --- */
 app.post("/auth/register", async (req, res) => {
