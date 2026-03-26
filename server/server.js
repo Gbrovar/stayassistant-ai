@@ -3933,7 +3933,7 @@ app.post("/billing/webhook", async (req, res) => {
     console.error("Webhook processing error", err)
   }
 
-  // CANCEL SUBSCRIPTION
+  // SUBSCRIPTION DELETED
   if (event.type === "customer.subscription.deleted") {
 
     const subscription = event.data.object
@@ -4029,6 +4029,43 @@ app.post("/billing/portal", authenticate, async (req, res) => {
   })
 
   res.json({ url: session.url })
+
+})
+
+/* CANCEL PLAN */
+app.post("/billing/cancel", authenticate, async (req, res) => {
+
+  const propertyId = req.propertyId
+
+  const key = `stayassistant:subscription:${propertyId}`
+
+  const subRaw = await redis.get(key)
+
+  if (!subRaw) {
+    return res.status(400).json({ error: "no subscription" })
+  }
+
+  const sub = JSON.parse(subRaw)
+
+  if (!sub.stripeSubscription) {
+    return res.status(400).json({ error: "no stripe subscription" })
+  }
+
+  try {
+
+    await stripe.subscriptions.update(sub.stripeSubscription, {
+      cancel_at_period_end: true
+    })
+
+    res.json({ success: true })
+
+  } catch (err) {
+
+    console.error("Cancel error:", err)
+
+    res.status(500).json({ error: "cancel failed" })
+
+  }
 
 })
 
