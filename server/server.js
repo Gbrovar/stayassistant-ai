@@ -3933,6 +3933,58 @@ app.post("/billing/webhook", async (req, res) => {
     console.error("Webhook processing error", err)
   }
 
+  // CANCEL SUBSCRIPTION
+  if (event.type === "customer.subscription.deleted") {
+
+    const subscription = event.data.object
+
+    const subId = subscription.id
+
+    console.log("🧨 Subscription deleted:", subId)
+
+    // 🔍 Buscar propertyId desde índice
+    const indexKey = `stayassistant:subscription_index:${subId}`
+
+    const propertyId = await redis.get(indexKey)
+
+    if (!propertyId) {
+      console.log("❌ No propertyId found for subscription")
+      return
+    }
+
+    // 💾 Reset a FREE
+    await saveSubscription(propertyId, {
+      plan: "free",
+      status: "canceled"
+    })
+
+    // 🧹 limpiar metered item cache
+    await redis.del(`stayassistant:metered_item:${propertyId}`)
+    await redis.del(`stayassistant:overage_price:${propertyId}`)
+
+    console.log("✅ Subscription downgraded to FREE:", propertyId)
+  }
+
+  if (event.type === "customer.subscription.updated") {
+
+    const subscription = event.data.object
+
+    if (subscription.cancel_at_period_end) {
+
+      console.log("⚠️ Subscription will cancel at period end:", subscription.id)
+
+      const indexKey = `stayassistant:subscription_index:${subscription.id}`
+      const propertyId = await redis.get(indexKey)
+
+      if (propertyId) {
+        await saveSubscription(propertyId, {
+          plan: "free",
+          status: "cancel_scheduled"
+        })
+      }
+    }
+  }
+
   res.json({ received: true })
 })
 
