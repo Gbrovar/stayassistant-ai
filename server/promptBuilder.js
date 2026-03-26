@@ -47,8 +47,13 @@ LONG TERM PROFILE
 CONVERSATION MEMORY
 ${lastMessages}
 
-KNOWLEDGE
+RELEVANT CONTEXT
 ${knowledge}
+
+INSTRUCTIONS:
+- Use this context ONLY if relevant
+- Prioritize helpful, actionable answers
+- Personalize when possible based on guest profile
 
 IMPORTANT RULES
 - Use the knowledge section when relevant
