@@ -73,8 +73,14 @@ ${buildUserContext()}
 
         case "transport":
             return `
-TRANSPORT OPTIONS:
-${k.property_info?.transport || "Ask user destination to help"}
+TRANSPORT CONTEXT:
+
+${k.property_info?.transport || "No transport information provided"}
+
+INSTRUCTIONS:
+- Do NOT assume available transport types
+- If transport info is missing → ask user destination
+- Suggest taxis or generic options ONLY if safe
 
 ${buildUserContext()}
 `
