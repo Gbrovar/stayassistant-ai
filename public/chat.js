@@ -48,6 +48,40 @@ function detectBrowserLanguage() {
 
 const savedLang = localStorage.getItem("stayassistant_lang");
 
+/* --- CHAT TOKEN INIT --- */
+
+async function initChatToken() {
+
+    let token = localStorage.getItem("stayassistant_chat_token");
+
+    if (token) return token;
+
+    try {
+
+        const res = await fetch(`${API_BASE}/chat/token`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                propertyId: propertyId
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.token) {
+            localStorage.setItem("stayassistant_chat_token", data.token);
+            return data.token;
+        }
+
+    } catch (e) {
+        console.error("Token init failed", e);
+    }
+
+    return null;
+}
+
 if (savedLang) {
     selectedLanguage = savedLang;
 } else {
@@ -58,6 +92,9 @@ if (savedLang) {
 /* INIT */
 
 window.onload = async function () {
+
+    // 🔐 INIT TOKEN 
+    await initChatToken();
 
     try {
 
@@ -774,12 +811,14 @@ async function sendMessage(forcedText = null, displayLabel = null) {
             return
         }
 
+        const chatToken = localStorage.getItem("stayassistant_chat_token");
         const response = await fetch(`${API_BASE}/chat`, {
 
             method: "POST",
 
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-chat-token": chatToken || ""
             },
 
             body: JSON.stringify({
