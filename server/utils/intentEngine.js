@@ -35,7 +35,10 @@ export function detectIntent(text) {
       "breakfast",
       "comer",
       "restaurante",
-      "cena"
+      "cena",
+      "sushi",
+      "pizza",
+      "burger"
     ],
 
     supermarket: [
@@ -87,18 +90,61 @@ export function detectIntent(text) {
       "metro",
       "train",
       "transport",
-      "transporte"
+      "transporte",
+      "airport"
     ],
 
     activities: [
       "activity",
       "things to do",
       "tour",
-      "excursion"
+      "excursion",
+      "visit",
+      "que hacer",
+      "was tun"
     ]
 
   }
 
+  const scores = {}
+
+  // init scores
+  Object.keys(intents).forEach(intent => {
+    scores[intent] = 0
+  })
+
+  // 🔥 SCORING POR KEYWORDS (tu sistema mejorado)
+  for (const intent in intents) {
+    for (const keyword of intents[intent]) {
+      if (text.includes(keyword)) {
+        scores[intent] += keyword.split(" ").length > 1 ? 2 : 1
+      }
+    }
+  }
+
+  // 🔥 CONTEXTO INTELIGENTE
+
+  if (text.includes("things to do") || text.includes("what can we do")) {
+    scores.activities += 3
+  }
+
+  if (text.includes("where can i eat") || text.includes("places to eat")) {
+    scores.restaurants += 3
+  }
+
+  if (text.includes("with kids") || text.includes("family")) {
+    scores.activities += 2
+  }
+
+  if (text.includes("cheap") || text.includes("budget")) {
+    scores.restaurants += 1
+  }
+
+  if (text.includes("how do i get") || text.includes("how to go")) {
+    scores.transport += 2
+  }
+
+  // 🔥 PRIORIDAD (como tu sistema original)
   const priorityOrder = [
     "checkin",
     "checkout",
@@ -111,13 +157,29 @@ export function detectIntent(text) {
     "activities"
   ]
 
+  let bestIntent = "other"
+  let bestScore = 0
+
   for (const intent of priorityOrder) {
-    for (const keyword of intents[intent] || []) {
-      if (text.includes(keyword)) {
-        return intent
-      }
+    if (scores[intent] > bestScore) {
+      bestScore = scores[intent]
+      bestIntent = intent
     }
   }
-  
-  return "other"
+
+  // 🔥 FALLBACK INTELIGENTE
+  if (bestScore === 0) {
+
+    if (text.length < 20) return "other"
+
+    if (text.includes("recommend") || text.includes("suggest")) {
+      return "restaurants"
+    }
+
+    if (text.includes("help")) {
+      return "other"
+    }
+  }
+
+  return bestIntent
 }
