@@ -310,7 +310,7 @@ async function getRealSubscription(propertyId) {
       sub.stripeSubscription
     )
 
-    if (stripeSub.status !== "active") {
+    if (stripeSub.status === "canceled") {
       return { plan: "free", status: stripeSub.status }
     }
 
@@ -2062,25 +2062,32 @@ app.post("/chat", chatLimiter, async (req, res) => {
           console.log("🧾 Stripe customer:", sub.stripeCustomer)
           console.log("📊 Plan:", plan)
 
-          if (!sub.stripeCustomer || sub.stripeCustomer.startsWith("guest")) {
-
-            console.log("❌ Invalid stripe customer:", sub.stripeCustomer)
-
-          } else {
+          if (
+            plan !== "free" &&
+            sub.status === "active" &&
+            sub.stripeCustomer &&
+            !sub.stripeCustomer.startsWith("guest")
+          ) {
 
             console.log("📡 Sending meter event:", sub.stripeCustomer)
 
-            const meter = await stripe.billing.meterEvents.create({
+            await stripe.billing.meterEvents.create({
               event_name: "messages",
               payload: {
                 stripe_customer_id: sub.stripeCustomer,
                 value: 1
               }
             }, {
-              idempotencyKey: `${propertyId}-${Date.now()}`
+              idempotencyKey: `${propertyId}-${conversationId}-${Date.now()}`
             })
 
             console.log("✅ Meter event sent")
+
+          } else {
+            console.log("⚠️ Meter skipped:", {
+              plan,
+              status: sub.status
+            })
           }
 
         } else {
@@ -3946,6 +3953,8 @@ app.post("/billing/webhook", async (req, res) => {
     const indexKey = `stayassistant:subscription_index:${subId}`
 
     const propertyId = await redis.get(indexKey)
+
+    await redis.del(indexKey)
 
     if (!propertyId) {
       console.log("❌ No propertyId found for subscription")
