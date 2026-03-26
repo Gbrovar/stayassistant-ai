@@ -204,6 +204,24 @@ async function triggerPrecompute(propertyId) {
   precomputeInsights(propertyId)
 }
 
+async function cancelActiveSubscriptions(customerId) {
+  try {
+    const subs = await stripe.subscriptions.list({
+      customer: customerId,
+      status: "active"
+    })
+
+    for (const sub of subs.data) {
+      console.log("🧨 Cancelling old subscription:", sub.id)
+
+      await stripe.subscriptions.cancel(sub.id)
+    }
+
+  } catch (err) {
+    console.log("Cancel subscriptions error:", err.message)
+  }
+}
+
 
 const propertyCache = new Map()
 
@@ -3695,6 +3713,11 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
     if (existing) {
       const sub = JSON.parse(existing)
       customerId = sub.stripeCustomer
+    }
+
+    // 🔥 FIX CRÍTICO: cancelar subscripciones activas
+    if (customerId) {
+      await cancelActiveSubscriptions(customerId)
     }
 
     console.log("💰 STRIPE DEBUG:", {
