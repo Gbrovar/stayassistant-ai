@@ -214,7 +214,10 @@ async function cancelActiveSubscriptions(customerId) {
     for (const sub of subs.data) {
       console.log("🧨 Cancelling old subscription:", sub.id)
 
-      await stripe.subscriptions.cancel(sub.id)
+      await stripe.subscriptions.cancel(sub.id, {
+        invoice_now: false,
+        prorate: false
+      })
     }
 
   } catch (err) {
