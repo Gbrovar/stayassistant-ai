@@ -879,7 +879,8 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         /* primero recomendaciones */
 
         if (data.reply && !data.reply.includes("something went wrong")) {
-            await showRecommendations(userText)
+            const detectedIntent = data.intent || null;
+            await showRecommendations(detectedIntent || userText)
         }
 
         /* luego quick actions */

@@ -1307,7 +1307,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     const propertyId = decoded.propertyId
-    
+
     const visitorId = req.body.visitorId;
 
     if (!visitorId || decoded.visitorId !== visitorId) {
@@ -1499,7 +1499,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply: answer,
-        language: userLanguage
+        language: userLanguage,
+        intent
       })
     }
 
@@ -2419,6 +2420,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     res.json({
       reply: shortReply,
       language: detectedLanguage,
+      intent: intent,
       upgrade: upgradeTrigger ? {
         type: strategy?.type,
         urgency: strategy?.urgency,

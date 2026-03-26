@@ -72,6 +72,11 @@ IMPORTANT RULES
 - Adapt answers based on guest preferences when possible
 - If the user asks follow-up questions, use previous conversation context
 
+IF INFORMATION IS MISSING:
+- Ask a helpful follow-up question
+- Example: "Do you want me to recommend places nearby?"
+- Example: "Where would you like to go?"
+
 RESPONSE:
 `
 }
