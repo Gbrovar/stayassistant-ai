@@ -1,85 +1,102 @@
-function rankRecommendations(recommendations, intent) {
+export function selectKnowledge(property, intent, memory = {}) {
 
-    if (!recommendations || !recommendations.length) return []
+    const k = property.knowledge || {}
 
-    const keywordMap = {
-        restaurants: ["restaurant", "food", "eat", "dinner", "lunch", "pizza", "cafe"]
+    const preferences = memory.preferences?.join(", ") || null
+    const budget = memory.budget || null
+    const travel = memory.travelContext || null
+
+    function buildUserContext() {
+        let ctx = ""
+
+        if (preferences) ctx += `Guest preferences: ${preferences}\n`
+        if (budget) ctx += `Budget level: ${budget}\n`
+        if (travel) ctx += `Travel type: ${travel}\n`
+
+        return ctx
     }
-
-    const keywords = keywordMap[intent] || []
-
-    return recommendations
-        .map(r => {
-
-            const text = `${r.name} ${r.description}`.toLowerCase()
-
-            let score = 0
-
-            keywords.forEach(k => {
-                if (text.includes(k)) score++
-            })
-
-            return { ...r, score }
-
-        })
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3)
-
-}
-
-export function selectKnowledge(property, intent) {
-
-    const k = property.knowledge
-
-    if (!k) return ""
 
     switch (intent) {
 
         case "wifi":
             return `
-WIFI
-Network: ${k.property_info.wifi_name}
-Password: ${k.property_info.wifi_password}
+WIFI INFORMATION:
+Network: ${k.property_info?.wifi_name || "Not provided"}
+Password: ${k.property_info?.wifi_password || "Not provided"}
+
+${buildUserContext()}
 `
 
         case "checkin":
         case "checkout":
             return `
-CHECK-IN
-${k.property_info.checkin}
+CHECK-IN / CHECK-OUT:
+Check-in: ${k.property_info?.checkin || "Not specified"}
+Check-out: ${k.property_info?.checkout || "Not specified"}
+Instructions: ${k.property_info?.checkin_instructions || "Not provided"}
 
-CHECK-OUT
-${k.property_info.checkout}
+${buildUserContext()}
 `
 
         case "restaurants":
+
+            const recs = (k.local_recommendations || []).slice(0, 5)
+
             return `
-RESTAURANTS
-Use real-time nearby recommendations based on location.
+LOCAL RESTAURANT CONTEXT:
+
+${recs.map(r => `- ${r}`).join("\n") || "No curated recommendations available"}
+
+INSTRUCTIONS:
+- Recommend places based on guest preferences
+- Be specific when possible
+- Keep it natural and concierge-style
+
+${buildUserContext()}
+`
+
+        case "activities":
+
+            const activities = (k.local_recommendations || []).slice(0, 5)
+
+            return `
+LOCAL ACTIVITIES:
+
+${activities.map(a => `- ${a}`).join("\n") || "No activities configured"}
+
+INSTRUCTIONS:
+- Suggest relevant activities based on guest type
+- Keep suggestions concise
+
+${buildUserContext()}
 `
 
         case "transport":
             return `
-TRANSPORT
-${k.property_info.transport}
-`
+TRANSPORT OPTIONS:
+${k.property_info?.transport || "Ask user destination to help"}
 
-        case "pharmacy":
-            return `
-EMERGENCY
-${k.emergency}
+${buildUserContext()}
 `
 
         default:
             return `
-PROPERTY
-${k.property_info.description || ""}
+PROPERTY CONTEXT:
 
-SERVICES
-${k.services.slice(0, 5).join("\n")}
+Description:
+${k.property_info?.description || "Not provided"}
 
-AMENITIES
-${k.amenities.slice(0, 5).join("\n")}
+Amenities:
+${(k.amenities || []).slice(0, 5).join(", ")}
+
+Services:
+${(k.services || []).slice(0, 5).join(", ")}
+
+INSTRUCTIONS:
+- Use this info ONLY if relevant
+- Do not hallucinate missing details
+
+${buildUserContext()}
 `
     }
 

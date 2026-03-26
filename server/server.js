@@ -1847,7 +1847,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
 
-    const knowledge = selectKnowledge(property, intent)
+    const knowledge = selectKnowledge(property, intent, memory)
 
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
