@@ -112,6 +112,19 @@ function renderPlacesFromBackend(places) {
     messages.scrollTop = messages.scrollHeight;
 }
 
+function getLimitMessage() {
+
+    if (selectedLanguage === "Español") {
+        return "Lo siento, ahora mismo no puedo ayudarte con eso 🙏. Por favor, contacta con recepción para asistencia inmediata.";
+    }
+
+    if (selectedLanguage === "Deutsch") {
+        return "Es tut mir leid, ich kann dir gerade nicht weiterhelfen 🙏. Bitte wende dich an die Rezeption für Unterstützung.";
+    }
+
+    return "I'm sorry, I can't assist with that right now 🙏. Please contact reception for immediate assistance.";
+}
+
 /* --- CHAT TOKEN INIT --- */
 
 async function initChatToken() {
@@ -866,9 +879,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
             messages.innerHTML += `
                     <div class="bot-wrapper">
-                        <div class="bot-avatar">⚠️</div>
+                        <div class="bot-avatar">🤖</div>
                         <div class="bot-message">
-                            I'm sorry, I can't assist further right now.
+                            ${getLimitMessage()}
                         </div>
                     </div>
                 `
