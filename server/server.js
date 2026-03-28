@@ -1504,6 +1504,47 @@ app.post("/chat", chatLimiter, async (req, res) => {
       }
     }
 
+    /* --- DIRECT PLACES FLOW (NEW) --- */
+
+    const placeIntentMap = {
+      supermarket: "supermarket",
+      pharmacy: "pharmacy",
+      cafes: "cafes",
+      bars: "bars",
+      parks: "parks",
+      activities: "activities",
+      public_transport: "public_transport"
+    }
+
+    if (placeIntentMap[intent]) {
+
+      console.log("📍 DIRECT PLACES FLOW:", intent)
+
+      try {
+
+        const url = `${req.protocol}://${req.get("host")}/property/${propertyId}/places/${placeIntentMap[intent]}`
+
+        const response = await fetch(url)
+        const data = await response.json()
+
+        return res.json({
+          reply: "Here are some useful places nearby 😊",
+          intent,
+          places: data.items || []
+        })
+
+      } catch (err) {
+
+        console.log("Places fetch error:", err)
+
+        return res.json({
+          reply: "I couldn't load nearby places right now, but I can help 😊",
+          intent
+        })
+
+      }
+    }
+
     const allowedAIIntents = ["other", "activities"]
 
     if (!allowedAIIntents.includes(intent)) {
@@ -1603,16 +1644,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       })
     }
 
-    if (intent === "pharmacy") {
-
-      return res.json({
-        reply:
-          "You can find nearby pharmacies using Google Maps. Let me know if you want recommendations.",
-        language: userLanguage,
-        intent
-      })
-
-    }
 
     if (intent === "transport") {
 
@@ -1937,7 +1968,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🚫 AI STRICT BLOCK:", intent)
 
       return res.json({
-        reply: "Could you clarify that a bit? 😊",
+        reply: "Let me help you with that 😊",
         language: userLanguage,
         intent
       })
