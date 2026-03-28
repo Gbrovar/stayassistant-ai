@@ -885,8 +885,6 @@ async function sendMessage(forcedText = null, displayLabel = null) {
                         </div>
                     </div>
                 `
-
-            return
         }
 
         const chatToken = localStorage.getItem("stayassistant_chat_token");
@@ -939,7 +937,16 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         }
 
         if (data.limit_reached) {
-            LIMIT_REACHED = true
+            LIMIT_REACHED = true;
+
+            messages.innerHTML += `
+                <div class="bot-wrapper">
+                    <div class="bot-avatar">🤖</div>
+                    <div class="bot-message">
+                        If you need more help, you can contact the property directly 😊
+                    </div>
+                </div>
+            `;
         }
 
         const typing = document.getElementById("typing");

@@ -1456,7 +1456,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         return res.json(
           buildResponse({
-            reply: "Thanks for trying StayAssistant. This demo allows a limited number of questions.",
+            reply: "Thanks for trying StayAssistant 😊 This demo has a limited number of questions, but I hope it helped you get a feel for it.",
             intent: null,
             limit_reached: true
           })
@@ -1488,7 +1488,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     if (!control.allowed) {
       return res.json(
         buildResponse({
-          reply: "I'm sorry, I'm unable to assist further at the moment. Please contact the property directly.",
+          reply: "I’ve shared as much as I can for now 😊 For more help, you can contact the property directly or try again later.",
           intent: null,
           limit_reached: true
         })
