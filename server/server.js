@@ -1377,9 +1377,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     if (visitorUsage > 50) {
-      return res.status(429).json({
-        reply: "Too many messages"
-      });
+      return res.status(429).json(
+        buildResponse({
+          reply: "Too many messages",
+          error: true
+        })
+      )
     }
 
 
@@ -1491,9 +1494,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     if (!property) {
-      return res.json({
-        reply: "Property configuration not found."
-      });
+      return res.json(
+        buildResponse({
+          reply: "Property configuration not found.",
+          error: true
+        })
+      )
     }
 
 
@@ -1537,10 +1543,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         console.log("Places fetch error:", err)
 
-        return res.json({
-          reply: "I can recommend great places nearby 😊 What type of food do you prefer?",
-          intent
-        })
+        return res.json(
+          buildResponse({
+            reply: "I can recommend great places nearby 😊 What type of food do you prefer?",
+            intent
+          })
+        )
 
       }
     }
@@ -1568,20 +1576,24 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const response = await fetch(url)
         const data = await response.json()
 
-        return res.json({
-          reply: "Here are some useful places nearby 😊",
-          intent,
-          places: data.items || []
-        })
+        return res.json(
+          buildResponse({
+            reply: "Here are some useful places nearby 😊",
+            intent,
+            places: data.items?.length ? data.items : null
+          })
+        )
 
       } catch (err) {
 
         console.log("Places fetch error:", err)
 
-        return res.json({
-          reply: "I couldn't load nearby places right now, but I can help 😊",
-          intent
-        })
+        return res.json(
+          buildResponse({
+            reply: "I couldn't load nearby places right now, but I can help 😊",
+            intent
+          })
+        )
 
       }
     }
@@ -1597,23 +1609,24 @@ app.post("/chat", chatLimiter, async (req, res) => {
       userMessage.length < 20 &&
       !userMessage.includes("?")
     ) {
-      return res.json({
-        reply: "I'm here to help with your stay. Could you provide a bit more detail?",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "I'm here to help with your stay. Could you provide a bit more detail?",
+          intent
+        })
+      )
     }
 
     /* --- INTENT DIRECT RESPONSE (COST SHIELD) --- */
 
     if (intent === "taxi") {
 
-      return res.json({
-        reply:
-          "I can help you arrange a taxi 😊 Where do you need to go?",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "I can help you arrange a taxi 😊 Where do you need to go?",
+          intent
+        })
+      )
 
     }
 
@@ -1694,37 +1707,40 @@ app.post("/chat", chatLimiter, async (req, res) => {
       // 🎯 AEROPUERTO + TRANSPORTE PÚBLICO
       if (isAirport && wantsPublicTransport) {
 
-        return res.json({
-          reply:
-            "You can usually get to the airport by bus 😊 Routes vary depending on your location, so I recommend checking Google Maps for the best option.",
-          language: userLanguage,
-          intent
-        })
-
+        return res.json(
+          buildResponse({
+            reply:
+              "You can usually get to the airport by bus 😊 Routes vary depending on your location, so I recommend checking Google Maps for the best option.",
+            language: userLanguage,
+            intent
+          })
+        )
       }
 
       // 🎯 AEROPUERTO NORMAL
       if (isAirport) {
 
-        return res.json({
-          reply:
-            "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service.",
-          language: userLanguage,
-          intent
-        })
-
+        return res.json(
+          buildResponse({
+            reply:
+              "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service.",
+            language: userLanguage,
+            intent
+          })
+        )
       }
 
       // 🎯 GENERAL + TRANSPORTE PÚBLICO
       if (wantsPublicTransport) {
 
-        return res.json({
-          reply:
-            "You can usually get there by bus or public transport 😊 I recommend checking Google Maps for the best route.",
-          language: userLanguage,
-          intent
-        })
-
+        return res.json(
+          buildResponse({
+            reply:
+              "You can usually get there by bus or public transport 😊 I recommend checking Google Maps for the best route.",
+            language: userLanguage,
+            intent
+          })
+        )
       }
 
       // 🎯 GENERAL
@@ -1874,11 +1890,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       reply += ":"
 
-      return res.json({
-        reply,
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply,
+          language: userLanguage,
+          intent
+        })
+      )
     }
 
     console.log("🧠 INTENT:", intent, "| MSG:", userMessage)
@@ -1893,10 +1911,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("⚠️ DUPLICATE MESSAGE BLOCKED")
 
-      return res.json({
-        reply: "I'll give you more helpful details about that 👇",
-        language: userLanguage
-      })
+      return res.json(
+        buildResponse({
+          reply: "I'll give you more helpful details about that 👇",
+          language: userLanguage
+        })
+      )
     }
 
     // 👉 SOLO AQUÍ añadimos el mensaje
@@ -1965,12 +1985,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
         EX: 60 * 60 * 24 * 7
       })
 
-      return res.json({
-        reply: bestMatch.answer,
-        language: userLanguage,
-        intent
-      })
-
+      return res.json(
+        buildResponse({
+          reply: bestMatch.answer,
+          language: userLanguage,
+          intent
+        })
+      )
     }
 
     /* --- AI RESPONSE CACHE --- */
@@ -1991,12 +2012,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
         EX: 60 * 60 * 24 * 7
       });
 
-      return res.json({
-        reply: cachedReply,
-        language: userLanguage,
-        intent
-      });
-
+      return res.json(
+        buildResponse({
+          reply: cachedReply,
+          language: userLanguage,
+          intent
+        })
+      )
     }
 
 
@@ -2029,11 +2051,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("🚫 AI BLOCKED (low knowledge)")
 
-      return res.json({
-        reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
+          language: userLanguage,
+          intent
+        })
+      )
     }
 
     /* --- LOAD NEARBY CONTEXT (SMART) --- */
