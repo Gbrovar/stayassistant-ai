@@ -1590,7 +1590,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply:
-          "I can help you get there 😊 Where would you like to go? I can suggest the best option, whether it's a taxi or another way to get there.",
+          "I can help you get around 😊 Where do you need to go? I can suggest the best option.",
         language: userLanguage,
         intent
       })
@@ -1872,7 +1872,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🚫 AI STRICT BLOCK:", intent)
 
       return res.json({
-        reply: "I’m here to help 😊 Could you tell me a bit more about what you need?",
+        reply: "Could you clarify that a bit? 😊",
         language: userLanguage,
         intent
       })
@@ -1884,7 +1884,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     /* --- KNOWLEDGE QUALITY CHECK --- */
-    if (!knowledge || knowledge.length < 30) {
+    if (!knowledge || knowledge.length < 10) {
 
       console.log("🚫 AI BLOCKED (low knowledge)")
 
