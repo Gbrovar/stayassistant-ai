@@ -77,12 +77,15 @@ body {
 /* --- TOPBAR PRO --- */
 
 .topbar {
-  height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid #1f2937;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 12px 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+  /* 🔥 CLAVE */
 }
 
 .topbar-title {
@@ -93,13 +96,24 @@ body {
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .usage-topbar {
   font-size: 12px;
   opacity: 0.8;
   margin-right: 10px;
+}
+
+.topbar button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #1f2937;
+  color: white;
+  font-size: 13px;
 }
 
 .topbar-warning {
@@ -507,6 +521,7 @@ body {
 .page {
   max-width: 1100px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .page-header {
@@ -594,6 +609,15 @@ body {
   margin-top: 6px;
 }
 
+.menu-btn {
+  display: none;
+  background: #1f2937;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: white;
+}
+
 @media (max-width: 480px) {
 
   .auth-card {
@@ -624,6 +648,24 @@ body {
 
   .sidebar.open {
     left: 0;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page {
+    padding: 0;
+  }
+
+  .menu-btn {
+    display: block;
   }
 
 }

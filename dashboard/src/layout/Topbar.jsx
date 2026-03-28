@@ -38,7 +38,7 @@ export default function Topbar() {
 
   return (
 
-    <div className="topbar page">
+    <div className="topbar">
 
       {conversion?.show && conversion.location === "topbar" && (
         <div style={{
@@ -66,6 +66,15 @@ export default function Topbar() {
           ●
         </span>
       )}
+
+      <button
+        className="menu-btn"
+        onClick={() => {
+          document.querySelector(".sidebar")?.classList.toggle("open")
+        }}
+      >
+        ☰
+      </button>
 
       <strong>
         {plan.toUpperCase()} PLAN
