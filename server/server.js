@@ -421,6 +421,10 @@ async function checkUsageAndCost(propertyId) {
   const sub = await getRealSubscription(propertyId)
   const plan = sub.plan || "free"
 
+  /* ----------------------------
+     🟥 FREE PLAN → HARD LIMIT
+  ---------------------------- */
+
   if (plan === "free" && usageRatio >= 1) {
     return {
       allowed: false,
@@ -429,28 +433,33 @@ async function checkUsageAndCost(propertyId) {
     }
   }
 
-  // 🔥 PAYWALL LOGIC
+  /* ----------------------------
+     🟢 PAID PLANS → NEVER BLOCK
+  ---------------------------- */
 
-  if (usageRatio < 0.8) {
-    return { allowed: true, mode: "normal" }
+  if (plan !== "free") {
+
+    if (usageRatio < 0.8) {
+      return { allowed: true, mode: "normal" }
+    }
+
+    if (usageRatio < 1) {
+      return { allowed: true, mode: "warning" }
+    }
+
+    if (usageRatio < 1.5) {
+      return { allowed: true, mode: "degraded" }
+    }
+
+    // 🔥 MUY IMPORTANTE → sigue permitido
+    return {
+      allowed: true,
+      mode: "overage"
+    }
   }
 
-  if (usageRatio < 1) {
-    return { allowed: true, mode: "warning" }
-  }
-
-  if (usageRatio < 1.2) {
-    return { allowed: true, mode: "degraded" }
-  }
-
-
-
-  // 🚨 HARD BLOCK
-  return {
-    allowed: false,
-    mode: "blocked",
-    reason: "limit_exceeded"
-  }
+  /* fallback */
+  return { allowed: true, mode: "normal" }
 }
 
 function detectUpgradeSignal({ usage, cost, plan, messages, conversations }) {
@@ -1436,6 +1445,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     let plan = sub.plan || "free"
 
+    /* --- INTENT DETECTION --- */
+    const intent = detectIntent(userMessage)
+
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
 
@@ -1456,8 +1468,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       });
     }
 
-    /* --- INTENT DETECTION --- */
-    const intent = detectIntent(userMessage)
+
 
     const text = userMessage.toLowerCase()
 
