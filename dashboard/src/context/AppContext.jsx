@@ -234,12 +234,35 @@ export function AppProvider({ children }) {
             const limitValue = forecastData.usage_limit || limits[subData.plan || "free"]
             const limitReachedValue = usageValue >= limitValue
 
-            const conversionState = computeConversionState({
-                usage: usageValue,
-                subscription: subData,
-                limitReached: limitReachedValue,
-                ltv: forecastData?.ltv || null
-            })
+            // 🔥 PRIORIDAD BACKEND UPGRADE
+            let conversionState = null
+
+            if (forecastData?.upgrade) {
+
+                conversionState = {
+                    show: true,
+                    level:
+                        forecastData.upgrade.urgency === "high"
+                            ? "critical"
+                            : forecastData.upgrade.urgency === "medium"
+                                ? "high"
+                                : "medium",
+                    type: "backend",
+                    message: forecastData.upgrade.message,
+                    cta: "Upgrade now",
+                    location: "topbar"
+                }
+
+            } else {
+
+                conversionState = computeConversionState({
+                    usage: usageValue,
+                    subscription: subData,
+                    limitReached: limitReachedValue,
+                    ltv: forecastData?.ltv || null
+                })
+
+            }
 
             setConversion(conversionState)
 

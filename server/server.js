@@ -3679,15 +3679,31 @@ app.get("/billing/forecast/:propertyId", authenticate, async (req, res) => {
 
   const total = basePrice + overageCost
 
+  // 🔥 LOAD UPGRADE SIGNAL
+  const upgradeRaw = await redis.get(`stayassistant:ltv:${propertyId}`)
+
+  let upgrade = null
+
+  if (upgradeRaw) {
+    const parsed = JSON.parse(upgradeRaw)
+
+    if (parsed?.strategy) {
+      upgrade = parsed.strategy
+    }
+  }
+
   res.json({
     plan,
     base_price: basePrice,
     usage,
-    usage_limit: usageLimit, // 🔥 rename consistente
+    usage_limit: usageLimit,
     cost,
     overage_cost: overageCost,
-    estimated_total: total
+    estimated_total: total,
+    upgrade // 🔥 NEW
   })
+
+
 })
 
 /* --- COST TRACKING --- */
