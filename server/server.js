@@ -1608,12 +1608,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     if (intent === "taxi") {
 
-      return res.json(
-        buildResponse({
-          reply: answer,
-          intent
-        })
-      )
+      return res.json({
+        reply:
+          "I can help you arrange a taxi 😊 Where do you need to go?",
+        language: userLanguage,
+        intent
+      })
 
     }
 
@@ -2011,11 +2011,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("🚫 AI STRICT BLOCK:", intent)
 
-      return res.json({
-        reply: "Let me help you with that 😊",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "Let me help you with that 😊",
+          intent
+        })
+      )
     }
 
     /* --- KNOWLEDGE SELECTION (AI Brain V2) --- */
@@ -2146,11 +2147,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("OpenAI timeout or error:", err.message)
 
-      return res.json({
-        reply: "I'm sorry, I'm having trouble answering right now. Please try again in a moment.",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "I'm sorry, I'm having trouble answering right now. Please try again in a moment.",
+          intent,
+          error: true
+        })
+      )
 
     }
 
@@ -2592,24 +2595,30 @@ app.post("/chat", chatLimiter, async (req, res) => {
       EX: 60 * 60 * 24 * 30 // 30 días
     })
 
-    res.json({
-      reply: shortReply,
-      language: detectedLanguage,
-      intent: intent,
-      upgrade: upgradeTrigger ? {
-        type: strategy?.type,
-        urgency: strategy?.urgency,
-        message: strategy?.message
-      } : null
-    });
+    res.json(
+      buildResponse({
+        reply: shortReply,
+        intent,
+        upgrade: upgradeTrigger
+          ? {
+            type: strategy?.type,
+            urgency: strategy?.urgency,
+            message: strategy?.message
+          }
+          : null
+      })
+    )
 
   } catch (error) {
 
     console.error("OpenAI error:", error);
 
-    res.status(500).json({
-      reply: "Sorry, something went wrong."
-    });
+    res.status(500).json(
+      buildResponse({
+        reply: "Sorry, something went wrong.",
+        error: true
+      })
+    )
 
   }
 
