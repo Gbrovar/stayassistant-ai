@@ -384,10 +384,11 @@ body {
 /* BILLING */
 
 .card {
-  background: #0f1b2b;
-  padding: 20px;
-  border-radius: 12px;
+  background: linear-gradient(180deg, #0f1b2b, #0b1220);
+  padding: 24px;
+  border-radius: 16px;
   margin-top: 20px;
+  border: 1px solid #1f2937;
 }
 
 .kpis {
@@ -437,12 +438,23 @@ body {
   border: none;
   cursor: pointer;
   font-weight: 500;
+
 }
 
 .btn-primary {
   background: #22c55e;
   color: white;
+  font-weight: 600;
 }
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-full {
+  width: 100%;
+}
+
 
 .btn-secondary {
   background: #1e293b;
@@ -511,4 +523,53 @@ body {
   padding: 12px 18px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.auth-card {
+  background: #0f172a;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.auth-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #94a3b8;
+  margin-top: 6px;
 }

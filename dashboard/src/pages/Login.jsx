@@ -1,39 +1,39 @@
-import {useState,useEffect} from "react"
-import {useNavigate} from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { API_URL } from "../api/config"
 import { Link } from "react-router-dom"
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
-export default function Login(){
+export default function Login() {
 
-  const [email,setEmail]=useState("")
-  const [password,setPassword]=useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const { showToast } = useContext(AppContext);
 
   const navigate = useNavigate()
 
-  useEffect(()=>{
+  useEffect(() => {
 
     const token = localStorage.getItem("token")
 
-    if(token){
+    if (token) {
       navigate("/")
     }
 
-  },[])
+  }, [])
 
-  async function login(){
+  async function login() {
 
-    const res = await fetch(`${API_URL}/auth/login`,{
+    const res = await fetch(`${API_URL}/auth/login`, {
 
-      method:"POST",
+      method: "POST",
 
-      headers:{
-        "Content-Type":"application/json"
+      headers: {
+        "Content-Type": "application/json"
       },
 
-      body:JSON.stringify({
+      body: JSON.stringify({
         email,
         password
       })
@@ -42,14 +42,14 @@ export default function Login(){
 
     const data = await res.json()
 
-    if(data.token){
+    if (data.token) {
 
-      localStorage.setItem("token",data.token)
-      localStorage.setItem("propertyId",data.propertyId)
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("propertyId", data.propertyId)
 
       navigate("/")
 
-    }else{
+    } else {
 
       showToast("Invalid login");
 
@@ -57,28 +57,21 @@ export default function Login(){
 
   }
 
-  return(
+  return (
 
     <div className="login-page">
 
-      <h1>StayAssistant Login</h1>
+      <h1 className="auth-title">Welcome back</h1>
+      <p className="auth-subtitle">Login to your dashboard</p>
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-      />
+      <div className="auth-form">
+        <input className="input" placeholder="Email" />
+        <input className="input" placeholder="Password" type="password" />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
-      />
-
-      <button onClick={login}>
-        Login
-      </button>
+        <button className="btn btn-primary btn-full">
+          Login
+        </button>
+      </div>
 
       <p>
         Don't have an account?
