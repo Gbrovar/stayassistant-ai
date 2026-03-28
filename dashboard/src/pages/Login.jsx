@@ -59,25 +59,44 @@ export default function Login() {
 
   return (
 
-    <div className="login-page">
+    <div className="centered">
+      <div className="auth-card">
 
-      <h1 className="auth-title">Welcome back</h1>
-      <p className="auth-subtitle">Login to your dashboard</p>
+        <h1 className="auth-title">Welcome back</h1>
+        <p className="auth-subtitle">Login to your dashboard</p>
 
-      <div className="auth-form">
-        <input className="input" placeholder="Email" />
-        <input className="input" placeholder="Password" type="password" />
+        <div className="auth-form">
+          <input
+            className="input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <button className="btn btn-primary btn-full">
-          Login
-        </button>
+          <input
+            className="input"
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button
+            className="btn btn-primary btn-full"
+            onClick={login}
+          >
+            Login
+          </button>
+        </div>
+
+        <p style={{ marginTop: 15, fontSize: 14 }}>
+          Don't have an account?{" "}
+          <Link to="/register" style={{ color: "#22c55e" }}>
+            Create property
+          </Link>
+        </p>
+
       </div>
-
-      <p>
-        Don't have an account?
-        <Link to="../register">Create property</Link>
-      </p>
-
     </div>
 
   )
