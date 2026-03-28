@@ -502,9 +502,11 @@ const chatLimiter = rateLimit({
   legacyHeaders: false,
 
   handler: (req, res) => {
-    res.status(429).json({
-      reply: "Too many requests. Please wait a moment."
-    })
+    res.status(429).json(
+      buildResponse({
+        reply: "Too many requests. Please wait a moment."
+      })
+    )
   }
 
 })
@@ -1711,7 +1713,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
           buildResponse({
             reply:
               "You can usually get to the airport by bus 😊 Routes vary depending on your location, so I recommend checking Google Maps for the best option.",
-            language: userLanguage,
             intent
           })
         )
@@ -1724,7 +1725,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
           buildResponse({
             reply:
               "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service.",
-            language: userLanguage,
             intent
           })
         )
@@ -1737,20 +1737,19 @@ app.post("/chat", chatLimiter, async (req, res) => {
           buildResponse({
             reply:
               "You can usually get there by bus or public transport 😊 I recommend checking Google Maps for the best route.",
-            language: userLanguage,
             intent
           })
         )
       }
 
       // 🎯 GENERAL
-      return res.json({
-        reply:
-          "Where do you need to go? I’ll suggest the best option 😊",
-        language: userLanguage,
-        intent
-      })
-
+      return res.json(
+        buildResponse({
+          reply:
+            "Where do you need to go? I’ll suggest the best option 😊",
+          intent
+        })
+      )
     }
 
     /* --- ANALYTICS TRACKING --- */
@@ -1893,7 +1892,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json(
         buildResponse({
           reply,
-          language: userLanguage,
           intent
         })
       )
@@ -1988,7 +1986,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json(
         buildResponse({
           reply: bestMatch.answer,
-          language: userLanguage,
           intent
         })
       )
@@ -2015,7 +2012,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json(
         buildResponse({
           reply: cachedReply,
-          language: userLanguage,
           intent
         })
       )
@@ -2054,7 +2050,6 @@ app.post("/chat", chatLimiter, async (req, res) => {
       return res.json(
         buildResponse({
           reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
-          language: userLanguage,
           intent
         })
       )
