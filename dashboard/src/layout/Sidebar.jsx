@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
 
-export default function Sidebar() {
+export default function Sidebar({ open }) {
 
 
   const { ltv } = useAnalytics()
 
   return (
 
-    <aside className="sidebar">
+    <aside className={`sidebar ${open ? "open" : ""}`}>
 
       <h2 className="logo">StayAssistant</h2>
 

@@ -1,22 +1,13 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom"
-import { useEffect } from "react"
-import { AppProvider } from "./context/AppContext"
+import { useEffect, useState } from "react"
 import { useApp } from "./context/AppContext"
-
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
-
-
 import Install from "./pages/Install"
 import Branding from "./pages/Branding"
-
-import Preview from "./pages/Preview"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Billing from "./pages/Billing"
-import Onboarding from "./pages/_legacy/Onboarding"
-
-import Property from "./pages/_legacy/Property"
 import ConversationsPage from "./pages/ConversationsPage"
 import AnalyticsPage from "./pages/AnalyticsPage"
 import InsightsPage from "./pages/InsightsPage"
@@ -25,11 +16,14 @@ import OverviewPage from "./pages/OverviewPage"
 import AdminDashboard from "./pages/AdminDashboard"
 
 
+
 function ProtectedLayout({ children }) {
   const location = useLocation()
   const { limitReached } = useApp()
 
   const token = localStorage.getItem("token")
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   if (!token) {
     return <Navigate to="/login" />
@@ -48,11 +42,18 @@ function ProtectedLayout({ children }) {
 
     <div className="dashboard">
 
-      <Sidebar />
+      <Sidebar open={sidebarOpen} />
+
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <div className="main">
 
-        <Topbar />
+        <Topbar setSidebarOpen={setSidebarOpen} />
 
         {/* ✅ AQUÍ VA EL BLOQUE */}
         {limitReached && (
@@ -82,36 +83,36 @@ export default function App() {
 
   return (
 
-    
-      <Routes>
 
-        {/* PUBLIC ROUTES */}
+    <Routes>
 
-        <Route path="/login" element={<Login />} />
+      {/* PUBLIC ROUTES */}
 
-        <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/register" element={<Register />} />
 
 
-        {/* PROTECTED ROUTES */}
+      {/* PROTECTED ROUTES */}
 
-        <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
+      <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
 
-        <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
-        <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
-        <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
-        <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
-        <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
-        <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
-        <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
+      <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
+      <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
+      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+      <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
+      <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
+      <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
+      <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
 
-        <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
 
-        {/* FALLBACK */}
+      {/* FALLBACK */}
 
-        <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/" />} />
 
-      </Routes>
-    
+    </Routes>
+
 
   )
 

@@ -1,11 +1,9 @@
 import { useApp } from "../context/AppContext"
 import { useEffect, useState } from "react"
 
-export default function Topbar() {
-
+export default function Topbar({ setSidebarOpen }) {
 
   const { subscription, usage, conversion } = useApp()
-
 
   if (!subscription) return null
 
@@ -38,6 +36,7 @@ export default function Topbar() {
 
   return (
 
+
     <div className="topbar">
 
       {conversion?.show && conversion.location === "topbar" && (
@@ -69,9 +68,7 @@ export default function Topbar() {
 
       <button
         className="menu-btn"
-        onClick={() => {
-          document.querySelector(".sidebar")?.classList.toggle("open")
-        }}
+        onClick={() => setSidebarOpen(prev => !prev)}
       >
         ☰
       </button>
