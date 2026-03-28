@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 
 export default function Branding() {
@@ -11,6 +13,7 @@ export default function Branding() {
     const [propertyName, setPropertyName] = useState("")
     const [buttonText, setButtonText] = useState("")
     const [primaryColor, setPrimaryColor] = useState("")
+    const { showToast } = useContext(AppContext);
 
     useEffect(() => {
 
@@ -54,7 +57,7 @@ export default function Branding() {
 
         })
 
-        alert("Branding saved")
+        showToast("Branding saved");
 
         window.location.reload()
 

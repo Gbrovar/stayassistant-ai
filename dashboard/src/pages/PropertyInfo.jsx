@@ -2,10 +2,13 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 export default function PropertyInfo() {
 
     const propertyId = getPropertyId()
+    const { showToast } = useContext(AppContext);
 
     const [form, setForm] = useState({
         checkin: "",
@@ -53,7 +56,7 @@ export default function PropertyInfo() {
             body: JSON.stringify(form)
         })
 
-        alert("Property info saved")
+        showToast("Property info saved");
 
     }
 

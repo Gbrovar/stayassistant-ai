@@ -2,11 +2,14 @@ import {useState,useEffect} from "react"
 import {useNavigate} from "react-router-dom"
 import { API_URL } from "../api/config"
 import { Link } from "react-router-dom"
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 export default function Login(){
 
   const [email,setEmail]=useState("")
   const [password,setPassword]=useState("")
+  const { showToast } = useContext(AppContext);
 
   const navigate = useNavigate()
 
@@ -48,7 +51,7 @@ export default function Login(){
 
     }else{
 
-      alert("Invalid login")
+      showToast("Invalid login");
 
     }
 

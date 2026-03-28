@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 import useAnalytics from "../hooks/useAnalytics"
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 import {
   BarChart,
@@ -29,6 +31,8 @@ export default function Analytics() {
   } = useAnalytics()
 
   const isPro = plan !== "free"
+
+  const { showToast } = useContext(AppContext);
 
   /* --- PREPARE CHART DATA --- */
 
@@ -277,7 +281,7 @@ export default function Analytics() {
 
           const data = await res.json()
 
-          alert("Optimizations applied 🚀")
+          showToast("Optimizations applied 🚀");
           window.location.reload()
 
         }}
