@@ -1295,6 +1295,23 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
 });
 
+function buildResponse({
+  reply = "",
+  intent = null,
+  places = null,
+  upgrade = null,
+  limit_reached = false,
+  error = false
+}) {
+  return {
+    reply,
+    intent,
+    places,
+    upgrade,
+    limit_reached,
+    error
+  }
+}
 
 /* --- chat endpoint --- */
 app.post("/chat", chatLimiter, async (req, res) => {
@@ -1307,9 +1324,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const chatToken = req.headers["x-chat-token"]
 
     if (!chatToken) {
-      return res.status(401).json({
-        reply: "Unauthorized"
-      })
+      return res.status(401).json(
+        buildResponse({
+          reply: "Unauthorized",
+          error: true
+        })
+      )
     }
 
     let decoded
@@ -1317,15 +1337,21 @@ app.post("/chat", chatLimiter, async (req, res) => {
     try {
       decoded = jwt.verify(chatToken, process.env.JWT_SECRET)
     } catch {
-      return res.status(401).json({
-        reply: "Invalid token"
-      })
+      return res.status(401).json(
+        buildResponse({
+          reply: "Invalid token",
+          error: true
+        })
+      )
     }
 
     if (decoded.type !== "chat") {
-      return res.status(403).json({
-        reply: "Invalid token type"
-      })
+      return res.status(401).json(
+        buildResponse({
+          reply: "Invalid token type",
+          error: true
+        })
+      )
     }
 
     const propertyId = decoded.propertyId
@@ -1333,9 +1359,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const visitorId = req.body.visitorId;
 
     if (!visitorId || decoded.visitorId !== visitorId) {
-      return res.status(403).json({
-        reply: "Invalid visitor"
-      });
+      return res.status(401).json(
+        buildResponse({
+          reply: "Invalid visitor",
+          error: true
+        })
+      )
     }
 
     // 🛡️ ANTI-SPAM POR VISITOR (AISLADO)
@@ -1420,13 +1449,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       if (currentDemoUsage >= DEMO_LIMIT) {
 
-        return res.json({
-          reply:
-            "Thanks for trying StayAssistant. This demo allows a limited number of questions.",
-          demo_limit: true,
-          language: userLanguage,
-          intent
-        })
+        return res.json(
+          buildResponse({
+            reply: "Thanks for trying StayAssistant. This demo allows a limited number of questions.",
+            intent: null,
+            limit_reached: true
+          })
+        )
 
       }
 
@@ -1452,14 +1481,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const control = await checkUsageAndCost(propertyId)
 
     if (!control.allowed) {
-
-      return res.json({
-        reply: "I'm sorry, I'm unable to assist further at the moment. Please contact the property directly.",
-        limit_reached: true,
-        internal_upgrade_signal: true,
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: "I'm sorry, I'm unable to assist further at the moment. Please contact the property directly.",
+          intent: null,
+          limit_reached: true
+        })
+      )
     }
 
     if (!property) {
@@ -1497,11 +1525,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
         const response = await fetch(url)
         const data = await response.json()
 
-        return res.json({
-          reply: "Here are some great places nearby 😊",
-          intent,
-          places: data.items || []
-        })
+        return res.json(
+          buildResponse({
+            reply: "Here are some great places nearby 😊",
+            intent,
+            places: data.items?.length ? data.items : null
+          })
+        )
 
       } catch (err) {
 
@@ -1578,12 +1608,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     if (intent === "taxi") {
 
-      return res.json({
-        reply:
-          "I can help you arrange a taxi 😊 Where do you need to go?",
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: answer,
+          intent
+        })
+      )
 
     }
 
@@ -1601,11 +1631,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
         answer += `Password: ${info.wifi_password}.`
       }
 
-      return res.json({
-        reply: answer,
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: answer,
+          intent
+        })
+      )
     }
 
 
@@ -1632,11 +1663,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
         answer += `Check-out: before ${info.checkout}.`
       }
 
-      return res.json({
-        reply: answer.trim(),
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: answer,
+          intent
+        })
+      )
     }
 
     if (intent === "checkout") {
@@ -1648,11 +1680,12 @@ app.post("/chat", chatLimiter, async (req, res) => {
         answer += ` Check-in starts at ${info.checkin}.`
       }
 
-      return res.json({
-        reply: answer,
-        language: userLanguage,
-        intent
-      })
+      return res.json(
+        buildResponse({
+          reply: answer,
+          intent
+        })
+      )
     }
 
 
