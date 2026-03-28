@@ -22,6 +22,8 @@ export default function useAnalytics() {
 
     useEffect(() => {
 
+        if (!token || !propertyId) return
+
         async function loadAnalytics() {
 
             try {
@@ -153,13 +155,27 @@ export default function useAnalytics() {
 
         }
 
-        loadAnalytics()
+        let interval
 
-        const interval = setInterval(() => {
-            loadAnalytics()
-        }, 15000) // cada 15s
+        async function init() {
 
-        return () => clearInterval(interval)
+            await loadAnalytics()
+
+            interval = setInterval(() => {
+
+                // 🔥 SOLO si la pestaña está activa
+                if (document.visibilityState === "visible") {
+                    loadAnalytics()
+                }
+
+            }, 60000) // 🔥 60s en vez de 15s
+        }
+
+        init()
+
+        return () => {
+            if (interval) clearInterval(interval)
+        }
 
     }, [propertyId, token])
 
