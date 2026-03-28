@@ -38,7 +38,7 @@ export default function Topbar() {
 
   return (
 
-    <div className="topbar">
+    <div className="topbar page">
 
       {conversion?.show && conversion.location === "topbar" && (
         <div style={{

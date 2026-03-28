@@ -7,7 +7,7 @@ body {
 
 .dashboard {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .sidebar {
@@ -65,8 +65,13 @@ body {
 }
 
 .content {
-
   padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+  }
 }
 
 /* --- TOPBAR PRO --- */
@@ -156,7 +161,6 @@ body {
 /* INSTALL PAGE STYLE */
 
 .install-code {
-
   background: #0b1220;
   border: 1px solid #1f2937;
   padding: 16px;
@@ -165,7 +169,8 @@ body {
   font-family: monospace;
   color: #22c55e;
   overflow: auto;
-
+  word-break: break-all;
+  font-size: 13px;
 }
 
 .copy-btn {
@@ -602,6 +607,23 @@ body {
 
   .btn-primary {
     padding: 14px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: fixed;
+    left: -240px;
+    top: 0;
+    height: 100%;
+    z-index: 1000;
+    transition: 0.3s;
+  }
+
+  .sidebar.open {
+    left: 0;
   }
 
 }
