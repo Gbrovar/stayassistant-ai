@@ -82,7 +82,7 @@ export default function App() {
 
   return (
 
-    <AppProvider>
+    
       <Routes>
 
         {/* PUBLIC ROUTES */}
@@ -111,7 +111,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
-    </AppProvider>
+    
 
   )
 

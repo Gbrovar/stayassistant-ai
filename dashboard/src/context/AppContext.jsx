@@ -2,16 +2,19 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 
 export const AppContext = createContext()
-const [toast, setToast] = useState(null)
+
 
 export function AppProvider({ children }) {
 
+    const [toast, setToast] = useState(null)
+    
     const limits = {
         free: 100,
         pro: 1500,
         business: 5000
     }
 
+    
     const [subscription, setSubscription] = useState(null)
     const [forecast, setForecast] = useState(null)
     const [usage, setUsage] = useState(0)
