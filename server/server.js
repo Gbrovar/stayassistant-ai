@@ -1547,7 +1547,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         return res.json(
           buildResponse({
-            reply: "I can recommend great places nearby 😊 What type of food do you prefer?",
+            reply: "I can recommend great places nearby 😊 Do you prefer local food, something quick, or a nice restaurant?",
             intent
           })
         )
@@ -1592,7 +1592,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
         return res.json(
           buildResponse({
-            reply: "I couldn't load nearby places right now, but I can help 😊",
+            reply: "I couldn't load nearby places right now, but I can still recommend restaurants, cafes, or activities 😊 What would you like?",
             intent
           })
         )
@@ -1613,7 +1613,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     ) {
       return res.json(
         buildResponse({
-          reply: "I'm here to help with your stay. Could you provide a bit more detail?",
+          reply: "I can help with your stay 😊 Try asking something like 'WiFi password', 'check-in time', or 'restaurants nearby'.",
           intent
         })
       )
@@ -1911,7 +1911,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json(
         buildResponse({
-          reply: "I'll give you more helpful details about that 👇",
+          reply: "Let me add a bit more detail to help you 👇",
           language: userLanguage
         })
       )
@@ -2031,7 +2031,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json(
         buildResponse({
-          reply: "Let me help you with that 😊",
+          reply: "I can help with things like check-in, WiFi, restaurants, or transport 😊 What do you need?",
           intent
         })
       )
@@ -2049,7 +2049,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json(
         buildResponse({
-          reply: "I'm not sure about that, but I’ll try to help. Could you rephrase your question?",
+          reply: "I'm not sure about that yet, but I can help with your stay 😊 You can ask about WiFi, check-in, or nearby places.",
           intent
         })
       )
