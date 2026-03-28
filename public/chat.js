@@ -48,6 +48,70 @@ function detectBrowserLanguage() {
 
 const savedLang = localStorage.getItem("stayassistant_lang");
 
+function renderPlacesFromBackend(places) {
+
+    const messages = document.getElementById("messages");
+
+    let title = "Nearby places you may like:";
+
+    if (selectedLanguage === "Español") {
+        title = "Lugares cercanos que podrían interesarte:";
+    }
+
+    if (selectedLanguage === "Deutsch") {
+        title = "Orte in der Nähe:";
+    }
+
+    messages.innerHTML += `
+        <div class="bot-wrapper">
+            <div class="bot-avatar">📍</div>
+            <div class="bot-message"><b>${title}</b></div>
+        </div>
+    `;
+
+    places.forEach(place => {
+
+        let distanceText = "";
+
+        if (place.distance) {
+            distanceText = place.distance > 1000
+                ? `📍 ${(place.distance / 1000).toFixed(1)} km<br>`
+                : `📍 ${place.distance} m<br>`;
+        }
+
+        let etaText = "";
+        if (place.distance) {
+            const minutes = Math.max(1, Math.round(place.distance / 84));
+            etaText = `🚶 ${minutes} min<br>`;
+        }
+
+        let openStatus = "";
+        if (place.open === true) openStatus = "🟢 Open";
+        if (place.open === false) openStatus = "🔴 Closed";
+
+        messages.innerHTML += `
+            <div class="bot-wrapper">
+                <div class="bot-avatar">📍</div>
+                <div class="bot-message">
+                    <b>${place.name}</b><br>
+                    ⭐ ${place.rating} ${openStatus}<br>
+                    ${distanceText}
+                    ${etaText}
+                    📍 ${place.address}<br><br>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + place.address)}"
+                       target="_blank"
+                       class="maps-btn">
+                       Open in Google Maps
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
 /* --- CHAT TOKEN INIT --- */
 
 async function initChatToken() {
@@ -869,18 +933,26 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         if (typing) typing.remove();
 
-        messages.innerHTML += `
-            <div class="bot-wrapper">
-            <div class="bot-avatar">🤖</div>
-            <div class="bot-message">${data.reply}</div>
-            </div>
+        if (data.places && data.places.length) {
+
+            renderPlacesFromBackend(data.places)
+
+        } else {
+
+            messages.innerHTML += `
+                <div class="bot-wrapper">
+                <div class="bot-avatar">🤖</div>
+                <div class="bot-message">${data.reply}</div>
+                </div>
             `;
+
+        }
 
         /* primero recomendaciones */
 
         if (data.reply && !data.reply.includes("something went wrong")) {
             const detectedIntent = data.intent || null;
-            await showRecommendations(detectedIntent || userText)
+            //await showRecommendations(detectedIntent || userText)
         }
 
         /* luego quick actions */

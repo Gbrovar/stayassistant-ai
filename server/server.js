@@ -1451,14 +1451,29 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       console.log("🍽️ DIRECT RESTAURANTS FLOW")
 
-      return res.json({
-        //reply: "Here are some great options nearby:",
-        reply:
-          "I can recommend some great places nearby 😊 What are you in the mood for — something casual, local, or a specific cuisine like sushi or pizza?",
-        language: userLanguage,
-        intent
-      })
+      try {
 
+        const url = `${req.protocol}://${req.get("host")}/property/${propertyId}/places/restaurants`
+
+        const response = await fetch(url)
+        const data = await response.json()
+
+        return res.json({
+          reply: "Here are some great places nearby 😊",
+          intent,
+          places: data.items || []
+        })
+
+      } catch (err) {
+
+        console.log("Places fetch error:", err)
+
+        return res.json({
+          reply: "I can recommend great places nearby 😊 What type of food do you prefer?",
+          intent
+        })
+
+      }
     }
 
     const allowedAIIntents = ["other", "activities"]
