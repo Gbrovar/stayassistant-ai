@@ -1448,6 +1448,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const text = userMessage.toLowerCase()
 
+    const wantsPublicTransport =
+      text.includes("public") ||
+      text.includes("bus") ||
+      text.includes("metro") ||
+      text.includes("train") ||
+      text.includes("transporte público") ||
+      text.includes("autobús")
+
     const isAirport =
       text.includes("airport") ||
       text.includes("aeropuerto") ||
@@ -1595,17 +1603,43 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     if (intent === "transport") {
 
-      if (isAirport) {
+      // 🎯 AEROPUERTO + TRANSPORTE PÚBLICO
+      if (isAirport && wantsPublicTransport) {
 
         return res.json({
           reply:
-            "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service. If you prefer, I can also suggest other options.",
+            "You can usually get to the airport by bus 😊 Routes vary depending on your location, so I recommend checking Google Maps for the best option.",
           language: userLanguage,
           intent
         })
 
       }
 
+      // 🎯 AEROPUERTO NORMAL
+      if (isAirport) {
+
+        return res.json({
+          reply:
+            "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service.",
+          language: userLanguage,
+          intent
+        })
+
+      }
+
+      // 🎯 GENERAL + TRANSPORTE PÚBLICO
+      if (wantsPublicTransport) {
+
+        return res.json({
+          reply:
+            "You can usually get there by bus or public transport 😊 I recommend checking Google Maps for the best route.",
+          language: userLanguage,
+          intent
+        })
+
+      }
+
+      // 🎯 GENERAL
       return res.json({
         reply:
           "Where do you need to go? I’ll suggest the best option 😊",
