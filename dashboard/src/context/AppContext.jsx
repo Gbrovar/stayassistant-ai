@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 
-const AppContext = createContext()
+export const AppContext = createContext()
+const [toast, setToast] = useState(null)
 
 export function AppProvider({ children }) {
 
@@ -206,6 +207,14 @@ export function AppProvider({ children }) {
         return null
     }
 
+    function showToast(message) {
+        setToast(message)
+
+        setTimeout(() => {
+            setToast(null)
+        }, 2500)
+    }
+
     useEffect(() => {
         loadData()
     }, [])
@@ -282,8 +291,14 @@ export function AppProvider({ children }) {
             loading,
             limit,
             limitReached,
-            conversion
+            conversion,
+            showToast
         }}>
+            {toast && (
+                <div className="toast">
+                    {toast}
+                </div>
+            )}
             {children}
         </AppContext.Provider>
     )
