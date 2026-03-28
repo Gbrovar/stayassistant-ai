@@ -1446,6 +1446,13 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- INTENT DETECTION --- */
     const intent = detectIntent(userMessage)
 
+    const text = userMessage.toLowerCase()
+
+    const isAirport =
+      text.includes("airport") ||
+      text.includes("aeropuerto") ||
+      text.includes("flug") // alemán básico
+
     // 🔥 FIX 5 — PRIORIDAD RESTAURANTS (SIN AI)
     if (intent === "restaurants") {
 
@@ -1588,9 +1595,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     if (intent === "transport") {
 
+      if (isAirport) {
+
+        return res.json({
+          reply:
+            "The easiest way to get to the airport is by taxi 😊 You can use Uber or a local taxi service. If you prefer, I can also suggest other options.",
+          language: userLanguage,
+          intent
+        })
+
+      }
+
       return res.json({
         reply:
-          "I can help you get around 😊 Where do you need to go? I can suggest the best option.",
+          "Where do you need to go? I’ll suggest the best option 😊",
         language: userLanguage,
         intent
       })
