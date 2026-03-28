@@ -1,27 +1,30 @@
-import {useState} from "react"
-import {useNavigate} from "react-router-dom"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { API_URL } from "../api/config"
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
-export default function Register(){
+export default function Register() {
 
   const navigate = useNavigate()
 
-  const [propertyName,setPropertyName]=useState("")
-  const [email,setEmail]=useState("")
-  const [password,setPassword]=useState("")
+  const { showToast } = useContext(AppContext);
+  const [propertyName, setPropertyName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-  async function register(){
+  async function register() {
 
-    const res = await fetch(`${API_URL}/auth/register`,{
+    const res = await fetch(`${API_URL}/auth/register`, {
 
-      method:"POST",
+      method: "POST",
 
-      headers:{
-        "Content-Type":"application/json"
+      headers: {
+        "Content-Type": "application/json"
       },
 
-      body:JSON.stringify({
-        property_name:propertyName,
+      body: JSON.stringify({
+        property_name: propertyName,
         email,
         password
       })
@@ -30,51 +33,64 @@ export default function Register(){
 
     const data = await res.json()
 
-    if(data.token){
+    if (data.token) {
 
-      localStorage.setItem("token",data.token)
-      localStorage.setItem("propertyId",data.propertyId)
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("propertyId", data.propertyId)
       localStorage.setItem("propertyName", propertyName)
 
       navigate("/property")
 
-    }else{
+    } else {
 
-      alert("Registration failed")
+      showToast("Registration failed")
 
     }
 
   }
 
-  return(
+  return (
 
-    <div className="login-page">
+    <div className="centered">
+      <div className="auth-card">
 
-      <h1>Create your StayAssistant</h1>
+        <h1 className="auth-title">Create your StayAssistant</h1>
+        <p className="auth-subtitle">Start in 30 seconds</p>
 
-      <input
-        placeholder="Property name"
-        value={propertyName}
-        onChange={(e)=>setPropertyName(e.target.value)}
-      />
+        <div className="auth-form">
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-      />
+          <input
+            className="input"
+            placeholder="Property name"
+            value={propertyName}
+            onChange={(e) => setPropertyName(e.target.value)}
+          />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
-      />
+          <input
+            className="input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <button onClick={register}>
-        Create property
-      </button>
+          <input
+            className="input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
+          <button
+            className="btn btn-primary btn-full"
+            onClick={register}
+          >
+            Create property
+          </button>
+
+        </div>
+
+      </div>
     </div>
 
   )
