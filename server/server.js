@@ -1452,7 +1452,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🍽️ DIRECT RESTAURANTS FLOW")
 
       return res.json({
-        reply: "Here are some great options nearby:",
+        //reply: "Here are some great options nearby:",
+        reply:
+          "I can recommend some great places nearby 😊 What are you in the mood for — something casual, local, or a specific cuisine like sushi or pizza?",
         language: userLanguage,
         intent
       })
@@ -1483,7 +1485,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply:
-          "You can easily order a taxi using Uber or a local taxi service. Let me know if you need help with directions.",
+          "I can help you arrange a taxi 😊 Where do you need to go?",
         language: userLanguage,
         intent
       })
@@ -1573,7 +1575,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return res.json({
         reply:
-          "Public transport options such as bus or metro are available nearby. Let me know your destination and I can help.",
+          "I can help you get there 😊 Where would you like to go? I can suggest the best option, whether it's a taxi or another way to get there.",
         language: userLanguage,
         intent
       })
@@ -1855,7 +1857,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
       console.log("🚫 AI STRICT BLOCK:", intent)
 
       return res.json({
-        reply: "I can help with that. Could you rephrase your question?",
+        reply: "I’m here to help 😊 Could you tell me a bit more about what you need?",
         language: userLanguage,
         intent
       })
