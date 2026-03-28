@@ -138,7 +138,7 @@ export default function Billing() {
                     <strong>Estimated bill:</strong> €{forecast.estimated_total.toFixed(2)}
                 </div>
 
-                {forecast.overage_cost > 0 && (
+                {subscription.plan !== "free" && forecast.overage_cost > 0 && (
                     <div style={{ color: "#f59e0b", marginTop: 5 }}>
                         +€{forecast.overage_cost.toFixed(2)} extra usage
                     </div>

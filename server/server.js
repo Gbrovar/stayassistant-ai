@@ -418,6 +418,17 @@ async function checkUsageAndCost(propertyId) {
 
   const usageRatio = usage / limit
 
+  const sub = await getRealSubscription(propertyId)
+  const plan = sub.plan || "free"
+
+  if (plan === "free" && usageRatio >= 1) {
+    return {
+      allowed: false,
+      mode: "blocked",
+      reason: "free_limit_reached"
+    }
+  }
+
   // 🔥 PAYWALL LOGIC
 
   if (usageRatio < 0.8) {
@@ -431,6 +442,8 @@ async function checkUsageAndCost(propertyId) {
   if (usageRatio < 1.2) {
     return { allowed: true, mode: "degraded" }
   }
+
+
 
   // 🚨 HARD BLOCK
   return {
@@ -2197,7 +2210,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const currentUsage = Number(await redis.get(usageKey) || 0)
 
-      if (currentUsage > limit) {
+      if (currentUsage > limit && plan !== "free") {
 
         const overageKey = `stayassistant:overage:${propertyId}:${month}`
 
