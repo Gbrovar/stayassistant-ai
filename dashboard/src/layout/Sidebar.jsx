@@ -19,7 +19,7 @@ export default function Sidebar({ open, setSidebarOpen }) {
 
       <nav>
 
-        <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Overview
         </NavLink>
 
