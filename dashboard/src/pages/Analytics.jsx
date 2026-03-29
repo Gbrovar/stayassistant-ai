@@ -3,6 +3,7 @@ import { API_URL } from "../api/config"
 import useAnalytics from "../hooks/useAnalytics"
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import Button from "../components/UI/Button"
 
 import {
   BarChart,
@@ -175,13 +176,13 @@ export default function Analytics() {
             <li>✔️ Advanced insights</li>
           </ul>
 
-          <button
+          <Button
             className="btn-primary"
             style={{ marginTop: 15 }}
             onClick={() => window.location.href = "/dashboard/billing"}
           >
             Upgrade Plan
-          </button>
+          </Button>
 
         </div>
       )}
@@ -207,9 +208,9 @@ export default function Analytics() {
 
         <div className="card" style={{ marginTop: 20 }}>
           <p>⚠️ Unlock alerts to detect issues automatically</p>
-          <button onClick={() => window.location.href = "/dashboard/billing"}>
+          <Button onClick={() => window.location.href = "/dashboard/billing"}>
             Upgrade to Pro
-          </button>
+          </Button>
         </div>
 
       )}
@@ -250,9 +251,9 @@ export default function Analytics() {
             <h3>🤖 AI Insights</h3>
             <p>Unlock AI-powered recommendations to improve your property</p>
 
-            <button onClick={() => window.location.href = "/dashboard/billing"}>
+            <Button onClick={() => window.location.href = "/dashboard/billing"}>
               Upgrade to Pro
-            </button>
+            </Button>
           </div>
 
         )}
@@ -291,7 +292,7 @@ export default function Analytics() {
 
           <p>Improve your assistant performance automatically</p>
 
-          <button
+          <Button
             className="btn-primary btn-full"
             onClick={async () => {
 
@@ -316,7 +317,7 @@ export default function Analytics() {
             }}
           >
             ⚡ Auto Optimize Property
-          </button>
+          </Button>
 
         </div>
 
