@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { API_URL } from "../api/config"
+import Card from "../components/Card"
 
 export default function SetupWizard() {
 
