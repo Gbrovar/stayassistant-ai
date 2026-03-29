@@ -366,12 +366,22 @@ body {
 /* BILLING */
 
 .card {
-  background: linear-gradient(180deg, #0f1b2b, #0b1220);
-  padding: 24px;
-  border-radius: 16px;
-  margin-top: 20px;
-  border: 1px solid #1f2937;
-  transition: all 0.2s ease;
+  background: #0f172a;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.card-body {
+  opacity: 0.9;
 }
 
 .card:hover {
@@ -381,6 +391,37 @@ body {
 
 .card h3 {
   font-weight: 500;
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.alert.warning {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.alert.critical {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.opportunity {
+  padding: 15px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 10px;
+}
+
+.primary-btn {
+  margin-top: 10px;
+  background: #6366f1;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
 }
 
 .kpis {
