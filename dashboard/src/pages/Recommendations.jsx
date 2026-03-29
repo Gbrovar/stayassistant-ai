@@ -104,8 +104,6 @@ export default function Recommendations() {
     return (
 
         <div>
-
-            <h2>Local Recommendations</h2>
             <p className="field-hint">
                 Recommended: add 3–5 restaurants for best guest experience.
             </p>

@@ -3,6 +3,7 @@ import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import Toast from "../components/UI/Toast"
+import Button from "../components/UI/Button"
 
 export default function FAQEditor() {
 
@@ -111,9 +112,6 @@ export default function FAQEditor() {
 
         <div>
 
-            <h2>FAQ</h2>
-
-
             <Card>
 
                 {faq.map((item, index) => (
@@ -122,6 +120,7 @@ export default function FAQEditor() {
 
                         <input
                             className="input"
+                            
                             value={item.question}
                             onChange={(e) => updateQuestion(index, e.target.value)}
                             placeholder="Question"
@@ -136,9 +135,9 @@ export default function FAQEditor() {
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
 
-                            <button className="btn btn-secondary">
+                            <Button className="btn btn-secondary">
                                 Delete
-                            </button>
+                            </Button>
 
                         </div>
 
@@ -146,13 +145,13 @@ export default function FAQEditor() {
 
                 ))}
 
-                <button className="btn btn-primary" onClick={addFaq}>
+                <Button className="btn btn-primary" onClick={addFaq}>
                     Add Question
-                </button>
+                </Button>
 
-                <button className="btn btn-primary" onClick={save} disabled={loading}>
+                <Button className="btn btn-primary" onClick={save} disabled={loading}>
                     {loading ? "Saving..." : "Save FAQ"}
-                </button>
+                </Button>
 
             </Card>
 

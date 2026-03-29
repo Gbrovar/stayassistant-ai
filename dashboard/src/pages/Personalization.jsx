@@ -6,8 +6,6 @@ export default function Personalization(){
 
     <div>
 
-      <h2>Personalization</h2>
-
       <Card>
 
         <p>

@@ -68,8 +68,6 @@ export default function Branding() {
 
         <div>
 
-            <h2>Branding</h2>
-
             <Card>
 
                 <div className="branding-field">
