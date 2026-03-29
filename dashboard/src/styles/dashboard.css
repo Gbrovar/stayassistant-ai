@@ -670,7 +670,7 @@ body {
 
   .sidebar {
     position: fixed;
-    left: -240px;
+    left: -260px;
     top: 0;
     height: 100%;
     z-index: 1000;
