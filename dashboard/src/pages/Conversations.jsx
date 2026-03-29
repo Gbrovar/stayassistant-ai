@@ -183,7 +183,7 @@ export default function Conversations() {
                   {selected.messages.map((m, i) => (
 
                     <div
-                      key={i}
+                      key={`${selected.id}-${i}`}
                       className={
                         m.role === "user"
                           ? "message-user"
