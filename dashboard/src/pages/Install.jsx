@@ -2,9 +2,12 @@ import { getPropertyId } from "../api/auth"
 import Card from "../components/Card"
 import CopyButton from "../components/CopyButton"
 import { API_URL } from "../api/config"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function Install() {
+
+    const [copied, setCopied] = useState(false)
+    const [tested, setTested] = useState(false)
 
     const propertyId = getPropertyId()
 
@@ -23,9 +26,23 @@ export default function Install() {
 
             <div className="stack">
 
+                <div className="card">
+
+                    <div style={{ fontWeight: 600 }}>
+                        Installation progress
+                    </div>
+
+                    <div style={{ marginTop: 10, fontSize: 14 }}>
+                        {(copied ? 1 : 0) + (tested ? 1 : 0)} / 2 steps completed
+                    </div>
+
+                </div>
+
                 <Card>
 
-                    <h3>Step 1 — Copy your widget</h3>
+                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
+                        {copied ? "✅" : "⬜"} Step 1 — Copy your widget
+                    </div>
                     <p className="subtitle">
                         This is your unique AI concierge script
                     </p>
@@ -40,6 +57,7 @@ export default function Install() {
                     </pre>
 
                     <CopyButton
+                        onClick={() => setCopied(true)}
                         text={script}
                         onCopy={() => {
 
@@ -64,7 +82,9 @@ export default function Install() {
 
                 <Card>
 
-                    <h3>Step 2 — Add to your website</h3>
+                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
+                        ⬜ Step 2 — Add to your website
+                    </div>
                     <p className="subtitle">
                         Paste it before the closing <code>{"</body>"}</code> tag
                     </p>
@@ -89,7 +109,9 @@ export default function Install() {
 
                 <Card>
 
-                    <h3>Step 3 — Test your AI concierge</h3>
+                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
+                        {tested ? "✅" : "⬜"} Step 3 — Test your AI concierge
+                    </div>
                     <p className="subtitle">
                         Open a live preview and see how guests interact
                     </p>
@@ -98,8 +120,11 @@ export default function Install() {
                         Once installed, open your website and test the concierge.
                     </p>
 
-                    <button className="btn btn-primary"
+                    <Button
+                        variant="primary"
                         onClick={async () => {
+
+                            setTested(true)
 
                             const token = localStorage.getItem("token")
 
@@ -119,7 +144,7 @@ export default function Install() {
                         }}
                     >
                         Open test chat
-                    </button>
+                    </Button>
 
                 </Card>
 
