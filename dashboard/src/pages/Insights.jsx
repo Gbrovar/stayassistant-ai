@@ -11,7 +11,14 @@ export default function Insights() {
   const [suggestions, setSuggestions] = useState([])
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(true)
+  const [expanded, setExpanded] = useState({})
+
   const insights = generateBusinessInsights(suggestions)
+
+  const isExpanded = expanded[idx]
+  const text = s.suggested_answer
+  const shortText = text.slice(0, 200)
 
   async function addToFAQ(question, answer) {
     await fetch(`${API_URL}/property/${propertyId}/faq`, {
@@ -28,6 +35,8 @@ export default function Insights() {
 
   useEffect(() => {
     async function load() {
+      setLoading(true)
+
       const res = await fetch(
         `${API_URL}/analytics/${propertyId}/faq-suggestions-ai`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -35,10 +44,18 @@ export default function Insights() {
 
       const data = await res.json()
       setSuggestions(data.suggestions || [])
+      setLoading(false)
     }
 
     load()
   }, [propertyId, token])
+
+  function toggleExpand(index) {
+    setExpanded(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }))
+  }
 
   function generateBusinessInsights(suggestions) {
 
@@ -66,6 +83,14 @@ export default function Insights() {
     }
 
     return insights
+  }
+
+  if (loading) {
+    return (
+      <div className="card">
+        <p>Analyzing guest conversations...</p>
+      </div>
+    )
   }
 
   return (
@@ -111,8 +136,17 @@ export default function Insights() {
           <h3>{s.question}</h3>
 
           <p className="suggested-answer">
-            {s.suggested_answer}
+            {isExpanded ? text : shortText + "..."}
           </p>
+
+          {text.length > 200 && (
+            <button
+              className="btn-link"
+              onClick={() => toggleExpand(idx)}
+            >
+              {isExpanded ? "Show less" : "Show more"}
+            </button>
+          )}
 
           <button
             className="btn-primary btn-full"

@@ -14,6 +14,7 @@ import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 import AdminDashboard from "./pages/AdminDashboard"
+import { BrowserRouter } from "react-router-dom"
 
 
 
@@ -83,36 +84,36 @@ export default function App() {
 
   return (
 
+    <BrowserRouter basename="/dashboard">
+      <Routes>
 
-    <Routes>
+        {/* PUBLIC ROUTES */}
 
-      {/* PUBLIC ROUTES */}
+        <Route path="/login" element={<Login />} />
 
-      <Route path="/login" element={<Login />} />
-
-      <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
 
 
-      {/* PROTECTED ROUTES */}
+        {/* PROTECTED ROUTES */}
 
-      <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
+        <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
 
-      <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
-      <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
-      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
-      <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
-      <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
-      <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
-      <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
+        <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
+        <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
+        <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+        <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
+        <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
+        <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
+        <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
 
-      <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
 
-      {/* FALLBACK */}
+        {/* FALLBACK */}
 
-      <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" />} />
 
-    </Routes>
-
+      </Routes>
+    </BrowserRouter>
 
   )
 
