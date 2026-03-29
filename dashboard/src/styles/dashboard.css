@@ -172,14 +172,21 @@ body {
 .install-code {
   background: #0b1220;
   border: 1px solid #1f2937;
-  padding: 16px;
+  padding: 14px;
   border-radius: 8px;
   margin: 16px 0;
   font-family: monospace;
   color: #22c55e;
-  overflow: auto;
-  word-break: break-all;
-  font-size: 13px;
+
+  overflow-x: auto;
+  /* 🔥 clave */
+  white-space: pre-wrap;
+  /* 🔥 clave */
+  word-break: break-word;
+  /* 🔥 clave */
+
+  font-size: 12px;
+  /* 🔥 mejor en móvil */
 }
 
 .copy-btn {
@@ -462,6 +469,7 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .page-header {
@@ -626,6 +634,15 @@ body {
 
   .kpis {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .install-code {
+    font-size: 11px;
+    padding: 12px;
+  }
+
+  .card {
+    padding: 18px;
   }
 
 }

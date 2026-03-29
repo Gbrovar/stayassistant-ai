@@ -53,7 +53,7 @@ export default function Install() {
                         <code>{" </body> "}</code> tag.
                     </p>
 
-                    <pre className="install-code">
+                    <pre className="install-code" style={{ maxWidth: "100%" }}>
                         {script}
                     </pre>
 
@@ -95,7 +95,7 @@ export default function Install() {
                         <code>{" </body> "}</code>.
                     </p>
 
-                    <pre className="install-code">
+                    <pre className="install-code" style={{ maxWidth: "100%" }}>
                         {`<body>
 
                     ... your website ...
