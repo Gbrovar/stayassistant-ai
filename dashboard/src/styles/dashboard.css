@@ -622,6 +622,25 @@ body {
   max-width: 80%;
 }
 
+/* ANALYTICS */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.label {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
 @media (max-width: 480px) {
 
   .auth-card {
@@ -729,6 +748,10 @@ body {
     height: 100%;
     max-height: none;
     z-index: 999;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
   }
 
 

@@ -49,8 +49,7 @@ export default function Analytics() {
   if (loading) {
 
     return (
-      <div>
-        <h1>Analytics</h1>
+      <div className="stack">
         <p>Loading analytics...</p>
       </div>
     )
@@ -79,6 +78,34 @@ export default function Analytics() {
       <h2>Analytics</h2>
 
       {/* 🚀 UPGRADE SIGNAL */}
+
+      <div className="kpis">
+
+        <div className="card">
+          <div className="label">Total Messages</div>
+          <div className="value">{totalMessages}</div>
+        </div>
+
+        <div className="card">
+          <div className="label">Top Intent</div>
+          <div className="value">{topIntents[0]?.intent || "-"}</div>
+        </div>
+
+        <div className="card">
+          <div className="label">Peak Hour</div>
+          <div className="value">
+            {Object.entries(peakHours)[0]?.[0] || "-"}:00
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="label">Status</div>
+          <div className="value">
+            {totalMessages > 0 ? "Active" : "Idle"}
+          </div>
+        </div>
+
+      </div>
 
       {upgradeSignal === "upgrade_soft" && (
         <div style={{
@@ -262,107 +289,69 @@ export default function Analytics() {
         </div>
       )}
 
-      <button
-        style={{ marginTop: 10 }}
-        onClick={async () => {
+      <div className="card">
 
-          const propertyId = localStorage.getItem("propertyId")
-          const token = localStorage.getItem("token")
+        <h3>⚡ Optimization</h3>
 
-          const res = await fetch(
-            `${API_URL}/analytics/${propertyId}/auto-optimize`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`
+        <p>Improve your assistant performance automatically</p>
+
+        <button
+          className="btn-primary btn-full"
+          onClick={async () => {
+
+            const propertyId = localStorage.getItem("propertyId")
+            const token = localStorage.getItem("token")
+
+            const res = await fetch(
+              `${API_URL}/analytics/${propertyId}/auto-optimize`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
               }
-            }
-          )
+            )
 
-          const data = await res.json()
+            await res.json()
 
-          showToast("Optimizations applied 🚀");
-          window.location.reload()
+            showToast("Optimizations applied 🚀")
+            window.location.reload()
 
-        }}
-      >
-        ⚡ Auto Optimize Property
-      </button>
-
-      {/* TOTAL MESSAGES */}
-
-      <div style={{ marginTop: 30 }}>
-
-        <h3>Total messages</h3>
-
-        <div className="analytics-card">
-
-          {totalMessages}
-
-        </div>
+          }}
+        >
+          ⚡ Auto Optimize Property
+        </button>
 
       </div>
 
+      <div className="analytics-grid">
 
-      {/* TOP INTENTS */}
+        {/* TOP INTENTS */}
+        <div className="card">
+          <h3>Top guest requests</h3>
 
-      <div style={{ marginTop: 50 }}>
-
-        <h3>Top guest requests</h3>
-
-        <div style={{ width: "100%", height: 300 }}>
-
-          <ResponsiveContainer width="100%" height={300}>
-
+          <ResponsiveContainer width="100%" height={250}>
             <BarChart data={intentData}>
-
               <XAxis dataKey="name" />
-
               <YAxis />
-
               <Tooltip />
-
-              <Bar
-                dataKey="value"
-                fill="#22c55e"
-              />
-
+              <Bar dataKey="value" fill="#22c55e" />
             </BarChart>
-
           </ResponsiveContainer>
-
         </div>
 
-      </div>
+        {/* PEAK HOURS */}
+        <div className="card">
+          <h3>Peak hours</h3>
 
-
-      {/* PEAK HOURS */}
-
-      <div style={{ marginTop: 50 }}>
-
-        <h3>Peak hours</h3>
-
-        <div style={{ width: "100%", height: 300 }}>
-
-          <ResponsiveContainer width="100%" height={300}>
-
+          <ResponsiveContainer width="100%" height={250}>
             <BarChart data={hourData}>
-
               <XAxis dataKey="hour" />
-
               <YAxis />
-
               <Tooltip />
-
-              <Bar
-                dataKey="messages"
-                fill="#3b82f6"
-              />
-
+              <Bar dataKey="messages" fill="#3b82f6" />
             </BarChart>
-
           </ResponsiveContainer>
-
         </div>
 
       </div>
