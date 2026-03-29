@@ -14,7 +14,6 @@ import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 import AdminDashboard from "./pages/AdminDashboard"
-import { BrowserRouter } from "react-router-dom"
 
 
 
@@ -84,20 +83,15 @@ export default function App() {
 
   return (
 
-    <BrowserRouter basename="/dashboard">
       <Routes>
 
         {/* PUBLIC ROUTES */}
-
         <Route path="/login" element={<Login />} />
-
         <Route path="/register" element={<Register />} />
 
 
         {/* PROTECTED ROUTES */}
-
         <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
-
         <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
         <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
         <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
@@ -109,11 +103,9 @@ export default function App() {
         <Route path="/admin" element={<AdminDashboard />} />
 
         {/* FALLBACK */}
-
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
-    </BrowserRouter>
 
   )
 
