@@ -98,7 +98,10 @@ export default function Insights() {
       {insights.length > 0 && (
         <div className="card">
 
-          <h3>📊 Business Insights</h3>
+          <h3 style={{ marginBottom: 10 }}>📊 Business Insights</h3>
+          <p className="muted">
+            AI detected patterns in guest behavior
+          </p>
 
           {insights.map((i, idx) => (
             <p key={idx} style={{ marginTop: 10 }}>
@@ -111,45 +114,64 @@ export default function Insights() {
 
       {suggestions.length === 0 && (
 
-        <div className="analytics-card">
-          No new suggestions yet.
+        <div className="card">
+          <p style={{ opacity: 0.7 }}>
+            No suggestions yet. Your AI will generate insights once guests interact more.
+          </p>
         </div>
 
       )}
 
-      {suggestions.map(s => (
+      <div className="stack">
+        {suggestions.map(s => (
 
-        <div
-          key={s.question}
-          className="analytics-card"
-          style={{
-            borderLeft: s.count >= 5 ? "4px solid #ef4444" : "4px solid #22c55e"
-          }}
-        >
-
-          <p>
-            {s.count >= 5
-              ? `🔥 High demand: asked ${s.count} times`
-              : `Asked ${s.count} times`}
-          </p>
-
-          <h3>{s.question}</h3>
-
-          <p className="suggested-answer">
-            {s.suggested_answer}
-          </p>
-
-          <button
-            className="btn btn-primary"
-            onClick={() => addToFAQ(s.question, s.suggested_answer)}
+          <div
+            className="card"
+            style={{
+              borderLeft: s.count >= 5
+                ? "3px solid #ef4444"
+                : "3px solid #22c55e"
+            }}
           >
-            Add to FAQ
-          </button>
 
-        </div>
+            <p style={{
+              fontSize: 12,
+              fontWeight: 600,
+              marginBottom: 6,
+              color: s.count >= 5 ? "#f87171" : "#94a3b8"
+            }}>
+              {s.count >= 5
+                ? `🔥 High demand — ${s.count} requests`
+                : `${s.count} requests`}
+            </p>
 
-      ))}
+            <h3 style={{ marginBottom: 8 }}>
+              {s.question}
+            </h3>
 
+            <p
+              className="suggested-answer"
+              style={{
+                opacity: 0.8,
+                lineHeight: 1.5,
+                maxHeight: 120,
+                overflow: "hidden"
+              }}
+            >
+              {s.suggested_answer}
+            </p>
+
+            <button
+              className="btn btn-primary btn-full"
+              onClick={() => addToFAQ(s.question, s.suggested_answer)}
+            >
+              Add to FAQ
+            </button>
+
+          </div>
+
+        ))}
+      </div>
     </div>
 
   )

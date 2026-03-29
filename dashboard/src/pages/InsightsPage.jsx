@@ -2,13 +2,19 @@ import Insights from "./Insights"
 
 export default function InsightsPage() {
   return (
-    <div>
-      <h1>AI Insights</h1>
-      <p>Improve your concierge using AI-generated suggestions.</p>
+    <div className="page">
 
-      <div style={{ marginTop: 30 }}>
+      <div className="page-header">
+        <h1 className="page-title">AI Insights</h1>
+        <p className="page-subtitle">
+          Improve your concierge using AI-generated suggestions
+        </p>
+      </div>
+
+      <div className="stack">
         <Insights />
       </div>
+
     </div>
   )
 }
