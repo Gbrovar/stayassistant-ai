@@ -9,6 +9,7 @@ export default function Conversations() {
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
   const { limitReached } = useApp()
 
 
@@ -62,6 +63,19 @@ export default function Conversations() {
 
   }, [propertyId, token])
 
+  useEffect(() => {
+
+    function handleResize() {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+
+  }, [])
 
   if (loading) {
     return <div>Loading conversations...</div>
@@ -126,7 +140,7 @@ export default function Conversations() {
                     if (limitReached) return
                     setSelected(c)
 
-                    if (window.innerWidth < 768) {
+                    if (isMobile) {
                       document.querySelector(".conversation-detail")?.classList.add("open")
                     }
                   }}
@@ -158,7 +172,7 @@ export default function Conversations() {
 
           <div className="conversation-detail">
 
-            {window.innerWidth < 768 && selected && (
+            {isMobile && selected && (
               <button
                 className="btn-secondary"
                 style={{ marginBottom: 10 }}
