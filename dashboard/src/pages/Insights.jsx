@@ -112,7 +112,10 @@ export default function Insights() {
       {/* EMPTY STATE */}
       {suggestions.length === 0 && (
         <div className="card">
-          <p>No suggestions yet. AI will generate insights soon.</p>
+          <p>
+            Your AI is learning from guest interactions.
+            Insights will appear as soon as enough data is collected.
+          </p>
         </div>
       )}
 
