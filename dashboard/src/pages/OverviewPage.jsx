@@ -72,7 +72,7 @@ export default function OverviewPage() {
               </div>
 
               {/* STEP 3 */}
-              <div>
+              <div className="onboarding-step">
                 {usage > 0 ? "✅" : "⬜"} Receive your first message
               </div>
 
