@@ -70,9 +70,14 @@ export default function Conversations() {
   if (conversations.length === 0) {
     return (
       <div>
-        <h2>Guest Conversations</h2>
+        <div className="page-header">
+          <h2 className="page-title">Guest Conversations</h2>
+          <p className="page-subtitle">
+            Monitor how your AI concierge interacts with guests
+          </p>
+        </div>
 
-        <div className="analytics-card">
+        <div className="card">
           No guest conversations yet.
         </div>
       </div>
@@ -96,7 +101,12 @@ export default function Conversations() {
 
       <div className="conversations-page">
 
-        <h2>Guest Conversations</h2>
+        <div className="page-header">
+          <h2 className="page-title">Guest Conversations</h2>
+          <p className="page-subtitle">
+            Monitor how your AI concierge interacts with guests
+          </p>
+        </div>
 
         <div className="conversations-layout">
 
@@ -110,9 +120,16 @@ export default function Conversations() {
 
                 <div
                   key={c.id}
-                  className="conversation-item"
+                  className={`conversation-item ${selected?.id === c.id ? "active" : ""}`}
                   style={{ opacity: limitReached ? 0.5 : 1 }}  // 👈 AQUÍ VA
-                  onClick={() => !limitReached && setSelected(c)}
+                  onClick={() => {
+                    if (limitReached) return
+                    setSelected(c)
+
+                    if (window.innerWidth < 768) {
+                      document.querySelector(".conversation-detail")?.classList.add("open")
+                    }
+                  }}
                 >
 
                   <strong>Guest</strong>
@@ -141,32 +158,43 @@ export default function Conversations() {
 
           <div className="conversation-detail">
 
+            {window.innerWidth < 768 && selected && (
+              <button
+                className="btn-secondary"
+                style={{ marginBottom: 10 }}
+                onClick={() => {
+                  setSelected(null)
+                  document.querySelector(".conversation-detail")?.classList.remove("open")
+                }}
+              >
+                ← Back
+              </button>
+            )}
+
             {!selected && <p>Select a conversation</p>}
 
             {selected && (
 
-              <div>
+              <div className="stack">
 
                 <h3>Conversation {selected.id}</h3>
 
-                {selected.messages.map((m, i) => (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {selected.messages.map((m, i) => (
 
-                  <div
-                    key={i}
-                    className={
-                      m.role === "user"
-                        ? "message-user"
-                        : "message-ai"
-                    }
-                  >
+                    <div
+                      key={i}
+                      className={
+                        m.role === "user"
+                          ? "message-user"
+                          : "message-ai"
+                      }
+                    >
+                      {m.content}
+                    </div>
 
-                    <strong>{m.role}</strong>
-
-                    <p>{m.content}</p>
-
-                  </div>
-
-                ))}
+                  ))}
+                </div>
 
               </div>
 
