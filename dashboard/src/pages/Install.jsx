@@ -3,6 +3,7 @@ import Card from "../components/Card"
 import CopyButton from "../components/CopyButton"
 import { API_URL } from "../api/config"
 import { useEffect, useState } from "react"
+import Button from "../components/UI/Button"
 
 export default function Install() {
 
