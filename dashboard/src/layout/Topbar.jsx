@@ -1,5 +1,6 @@
 import { useApp } from "../context/AppContext"
 import { useEffect, useState } from "react"
+import Button from "../components/UI/Button"
 
 export default function Topbar({ setSidebarOpen }) {
 
@@ -84,7 +85,8 @@ export default function Topbar({ setSidebarOpen }) {
         </div>
 
         {conversion?.show && conversion.location === "topbar" && (
-          <button
+          <Button
+            variant="primary"
             style={{
               background:
                 conversion.level === "critical"
@@ -105,17 +107,18 @@ export default function Topbar({ setSidebarOpen }) {
               : conversion.level === "high"
                 ? "⚡ Upgrade"
                 : "Upgrade"}
-          </button>
+          </Button>
         )}
 
-        <button
+        <Button
+          variant="secondary"
           onClick={() => {
             localStorage.clear()
             window.location.href = "/login"
           }}
         >
           Logout
-        </button>
+        </Button>
 
       </div>
 

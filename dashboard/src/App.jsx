@@ -42,7 +42,7 @@ function ProtectedLayout({ children }) {
 
     <div className="dashboard">
 
-      <Sidebar open={sidebarOpen} />
+      <Sidebar open={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {sidebarOpen && (
         <div

@@ -1,8 +1,13 @@
 import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
 
-export default function Sidebar({ open }) {
+export default function Sidebar({ open, setSidebarOpen }) {
 
+  function handleClick() {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false)
+    }
+  }
 
   const { ltv } = useAnalytics()
 
@@ -18,27 +23,27 @@ export default function Sidebar({ open }) {
           Overview
         </NavLink>
 
-        <NavLink to="/conversations" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/conversations" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Conversations
         </NavLink>
 
-        <NavLink to="/analytics" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/analytics" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Analytics
         </NavLink>
 
-        <NavLink to="/insights" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/insights" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           AI Insights
         </NavLink>
 
-        <NavLink to="/property" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/property" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Property Setup
         </NavLink>
 
-        <NavLink to="/install" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/install" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Install
         </NavLink>
 
-        <NavLink to="/billing" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/billing" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Billing
           {ltv?.strategy && (
             <span style={{
@@ -52,7 +57,7 @@ export default function Sidebar({ open }) {
           )}
         </NavLink>
 
-        <NavLink to="/admin" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/admin" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Admin
         </NavLink>
 
