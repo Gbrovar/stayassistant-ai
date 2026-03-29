@@ -8,6 +8,7 @@ export default function Insights() {
   const token = localStorage.getItem("token")
 
   const [suggestions, setSuggestions] = useState([])
+  const [expanded, setExpanded] = useState({})
 
   const insights = generateBusinessInsights(suggestions)
 
@@ -88,15 +89,13 @@ export default function Insights() {
 
     <div>
 
-      <h2>AI Insights</h2>
-
       <p style={{ fontSize: 13, opacity: 0.7 }}>
         This question is not covered in your FAQ.
       </p>
 
       {/* 🔥 AQUÍ VA BUSINESS INSIGHTS */}
       {insights.length > 0 && (
-        <div className="card">
+        <div className="card" style={{ marginBottom: suggestions.length ? 10 : 0 }}>
 
           <h3 style={{ marginBottom: 10 }}>📊 Business Insights</h3>
           <p className="muted">
@@ -154,12 +153,33 @@ export default function Insights() {
               style={{
                 opacity: 0.8,
                 lineHeight: 1.5,
-                maxHeight: 120,
+                maxHeight: expanded[s.question] ? "none" : 120,
                 overflow: "hidden"
               }}
             >
               {s.suggested_answer}
             </p>
+
+            {s.suggested_answer.length > 180 && (
+              <button
+                style={{
+                  marginTop: 8,
+                  fontSize: 12,
+                  background: "none",
+                  border: "none",
+                  color: "#60a5fa",
+                  cursor: "pointer"
+                }}
+                onClick={() =>
+                  setExpanded(prev => ({
+                    ...prev,
+                    [s.question]: !prev[s.question]
+                  }))
+                }
+              >
+                {expanded[s.question] ? "Show less" : "Show more"}
+              </button>
+            )}
 
             <button
               className="btn btn-primary btn-full"
