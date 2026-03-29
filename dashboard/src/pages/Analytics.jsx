@@ -83,32 +83,24 @@ export default function Analytics() {
 
       <div className="kpis">
 
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card" >
           <div className="label">Total Messages</div>
           <div className="value">{totalMessages}</div>
         </div>
 
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card" >
           <div className="label">Top Intent</div>
           <div className="value">{topIntents[0]?.intent || "-"}</div>
         </div>
 
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card">
           <div className="label">Peak Hour</div>
           <div className="value">
             {Object.entries(peakHours)[0]?.[0] || "-"}:00
           </div>
         </div>
 
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card" >
           <div className="label">Status</div>
           <div className="value">
             {totalMessages > 0 ? "Active" : "Idle"}
@@ -161,9 +153,7 @@ export default function Analytics() {
       {/* 💰 UPGRADE IMPACT CARD */}
 
       {upgradeSignal && (
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card" >
 
           <h3>🚀 Upgrade Opportunity</h3>
 
@@ -285,9 +275,7 @@ export default function Analytics() {
           </div>
         )}
 
-        <div className="card" style={{
-          border: "1px solid #22c55e"
-        }}>
+        <div className="card" >
 
           <h3>⚡ Optimization</h3>
 
@@ -327,9 +315,7 @@ export default function Analytics() {
           <div className="analytics-grid">
 
             {/* TOP INTENTS */}
-            <div className="card" style={{
-              border: "1px solid #22c55e"
-            }}>
+            <div className="card" >
               <h3 style={{ marginBottom: 10 }}>Top guest requests</h3>
 
               <ResponsiveContainer width="100%" height={250}>
@@ -343,9 +329,7 @@ export default function Analytics() {
             </div>
 
             {/* PEAK HOURS */}
-            <div className="card" style={{
-              border: "1px solid #22c55e"
-            }}>
+            <div className="card" >
               <h3>Peak hours</h3>
 
               <ResponsiveContainer width="100%" height={250}>

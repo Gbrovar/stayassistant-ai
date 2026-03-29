@@ -135,7 +135,37 @@ export default function Insights() {
                 : "3px solid #22c55e"
             }}
           >
-            {/* contenido igual */}
+            <p style={{
+              fontSize: 12,
+              fontWeight: 600,
+              marginBottom: 6,
+              color: s.count >= 5 ? "#f87171" : "#94a3b8"
+            }}>
+              {s.count >= 5
+                ? `🔥 High demand — ${s.count} requests`
+                : `${s.count} requests`}
+            </p>
+
+            <h3 style={{ marginBottom: 8 }}>
+              {s.question}
+            </h3>
+
+            <p
+              className="suggested-answer"
+              style={{
+                opacity: 0.8,
+                lineHeight: 1.5
+              }}
+            >
+              {s.suggested_answer}
+            </p>
+
+            <button
+              className="btn btn-primary btn-full"
+              onClick={() => addToFAQ(s.question, s.suggested_answer)}
+            >
+              Add to FAQ
+            </button>
           </div>
 
         ))}
@@ -153,7 +183,37 @@ export default function Insights() {
                   : "3px solid #22c55e"
               }}
             >
-              {/* contenido igual */}
+              <p style={{
+                fontSize: 12,
+                fontWeight: 600,
+                marginBottom: 6,
+                color: s.count >= 5 ? "#f87171" : "#94a3b8"
+              }}>
+                {s.count >= 5
+                  ? `🔥 High demand — ${s.count} requests`
+                  : `${s.count} requests`}
+              </p>
+
+              <h3 style={{ marginBottom: 8 }}>
+                {s.question}
+              </h3>
+
+              <p
+                className="suggested-answer"
+                style={{
+                  opacity: 0.8,
+                  lineHeight: 1.5
+                }}
+              >
+                {s.suggested_answer}
+              </p>
+
+              <button
+                className="btn btn-primary btn-full"
+                onClick={() => addToFAQ(s.question, s.suggested_answer)}
+              >
+                Add to FAQ
+              </button>
             </div>
 
           ))}
