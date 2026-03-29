@@ -48,9 +48,15 @@ export default function OverviewPage() {
         {conversion?.show && conversion.location === "overview" && (
 
 
-          <div className="card">
+          <div
+            className="card"
+            style={{
+              border: "1px solid rgba(34,197,94,0.4)",
+              background: "linear-gradient(180deg, #0f1b2b, #0b1220)"
+            }}
+          >
 
-            <h3>
+            <h3 style={{ marginBottom: 8 }}>
               {conversion.level === "critical"
                 ? "🚨 Action required"
                 : conversion.level === "high"
@@ -65,7 +71,7 @@ export default function OverviewPage() {
                 variant="primary"
                 onClick={() => window.location.href = "/dashboard/billing"}
               >
-                {conversion.cta}
+                Upgrade plan →
               </Button>
             </div>
 
@@ -73,28 +79,34 @@ export default function OverviewPage() {
 
         )}
 
-        <p>Overview of your AI concierge performance.</p>
-
         <div className="kpis">
 
           <div className="card">
-            <h3>Messages</h3>
-            <p>{totalMessages}</p>
+            <div style={{ fontSize: 13, opacity: 0.6 }}>Messages</div>
+            <div style={{ fontSize: 22, fontWeight: 600, marginTop: 6 }}>
+              {totalMessages}
+            </div>
           </div>
 
           <div className="card">
-            <h3>Top Request</h3>
-            <p>{topIntents[0]?.intent || "-"}</p>
+            <div style={{ fontSize: 13, opacity: 0.6 }}>Top Request</div>
+            <div style={{ fontSize: 22, fontWeight: 600, marginTop: 6 }}>
+              {topIntents[0]?.intent || "-"}
+            </div>
           </div>
 
           <div className="card">
-            <h3>Peak Hour</h3>
-            <p>{peak}</p>
+            <div style={{ fontSize: 13, opacity: 0.6 }}>Peak Hour</div>
+            <div style={{ fontSize: 22, fontWeight: 600, marginTop: 6 }}>
+              {peak}
+            </div>
           </div>
 
           <div className="card">
-            <h3>Status</h3>
-            <p>{usage === 0 ? "Idle" : "Active"}</p>
+            <div style={{ fontSize: 13, opacity: 0.6 }}>Status</div>
+            <div style={{ fontSize: 22, fontWeight: 600, marginTop: 6 }}>
+              {usage === 0 ? "Idle" : "Active"}
+            </div>
           </div>
 
         </div>
@@ -103,7 +115,7 @@ export default function OverviewPage() {
 
         <div className="card">
 
-          <h3>Your usage</h3>
+          <div style={{ fontSize: 14, opacity: 0.7 }}>Your usage</div>
 
           <p>
             <strong>{usage}</strong> / {limit} messages this month
@@ -122,9 +134,15 @@ export default function OverviewPage() {
 
         <div className="card">
 
-          <h3>Quick insights</h3>
+          <div style={{ fontSize: 14, opacity: 0.7 }}>Quick insights</div>
 
           <p>Total messages: {usage}</p>
+
+          <p style={{ marginTop: 6, opacity: 0.7 }}>
+            {usage < 10
+              ? "Start using your assistant to unlock insights"
+              : "Your assistant is actively helping guests"}
+          </p>
 
           <p>
             Status: {usage === 0 ? "No activity yet" : "Active"}
