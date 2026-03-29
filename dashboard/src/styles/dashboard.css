@@ -136,36 +136,35 @@ body {
   color: #94a3b8;
 }
 
+.onboarding-step {
+  padding: 10px;
+  border-radius: 8px;
+  background: #0f172a;
+  transition: all 0.2s ease;
+}
+
+.onboarding-step:hover {
+  background: #1e293b;
+}
+
 /* STATISTICS STYLE */
 
 .stat-item {
-
   display: flex;
-
   justify-content: space-between;
-
   padding: 10px 0;
-
   border-bottom: 1px solid #1f2937;
-
 }
 
 .stat-item:last-child {
-
   border-bottom: none;
-
 }
 
 .stat-item b {
-
   background: #1f2937;
-
   padding: 4px 10px;
-
   border-radius: 8px;
-
   color: #22c55e;
-
 }
 
 /* INSTALL PAGE STYLE */
@@ -196,139 +195,84 @@ body {
 }
 
 .copy-btn:hover {
-
   opacity: 0.9;
-
 }
 
 /* FAQ EDITOR */
 
 .faq-row {
-
   display: flex;
-
   gap: 10px;
-
   margin-bottom: 10px;
-
 }
 
 .faq-row input {
-
   flex: 1;
-
   padding: 8px;
-
   background: #0f172a;
-
   border: 1px solid #1f2937;
-
   color: white;
-
   border-radius: 6px;
-
 }
 
 .faq-row button {
-
   background: #ef4444;
-
   border: none;
-
   padding: 6px 10px;
-
   border-radius: 6px;
-
   cursor: pointer;
-
   color: white;
-
 }
 
 /* BRANDING */
 
 .branding-field {
-
   display: flex;
-
   flex-direction: column;
-
   margin-bottom: 15px;
-
 }
 
 .branding-field input {
-
   padding: 8px;
-
   background: #0f172a;
-
   border: 1px solid #1f2937;
-
   color: white;
-
   border-radius: 6px;
-
 }
 
 .save-btn {
-
   background: #22c55e;
-
   border: none;
-
   padding: 10px 16px;
-
   border-radius: 8px;
-
   cursor: pointer;
-
   color: white;
-
 }
 
 /* RECOMMENDATIONS */
 
 .rec-row {
-
   display: flex;
-
   gap: 10px;
-
   margin-bottom: 10px;
-
 }
 
 .rec-row input {
-
   flex: 1;
-
   padding: 8px;
-
   background: #0f172a;
-
   border: 1px solid #1f2937;
-
   color: white;
-
   border-radius: 6px;
-
 }
 
 .rec-row button {
-
   background: #ef4444;
-
   border: none;
-
   padding: 6px 10px;
-
   border-radius: 6px;
-
   cursor: pointer;
-
   color: white;
-
 }
 
 /* CONVERSATION */
@@ -363,17 +307,11 @@ body {
 }
 
 .preview-frame {
-
   width: 100%;
-
   height: 600px;
-
   border: none;
-
   border-radius: 10px;
-
   background: white;
-
 }
 
 .activation-banner {

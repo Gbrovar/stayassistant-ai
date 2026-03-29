@@ -45,6 +45,43 @@ export default function OverviewPage() {
 
       <div className="stack">
 
+        {/* ONBOARDING CHECKLIST */}
+
+        {(!ltv || usage === 0) && (
+
+          <div className="card">
+
+            <div style={{ fontWeight: 600, marginBottom: 10 }}>
+              🚀 Get started
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+
+              {/* STEP 1 */}
+              <div className="onboarding-step"
+                onClick={() => window.location.href = "/dashboard/property"}
+              >
+                {ltv ? "✅" : "⬜"} Setup your property
+              </div>
+
+              {/* STEP 2 */}
+              <div className="onboarding-step"
+                onClick={() => window.location.href = "/dashboard/install"}
+              >
+                ⬜ Install the widget
+              </div>
+
+              {/* STEP 3 */}
+              <div>
+                {usage > 0 ? "✅" : "⬜"} Receive your first message
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
+
         {conversion?.show && conversion.location === "overview" && (
 
 
