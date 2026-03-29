@@ -103,7 +103,7 @@ export default function SetupWizard() {
 
     return (
 
-        <div>
+        <Card style={{ opacity: 0.85 }}>
 
             <h2>Property Information</h2>
 
@@ -189,14 +189,14 @@ export default function SetupWizard() {
 
             </div>
 
-            <button  className="btn btn-primary" onClick={generate} disabled={loading}>
+            <button  className="btn btn-secondary" onClick={generate} disabled={loading}>
 
                 {loading ? "Generating..." : "Generate AI Concierge"}
 
             </button>
             {loading && <p>Setting up your AI concierge...</p>}
 
-        </div>
+        </Card>
 
     )
 

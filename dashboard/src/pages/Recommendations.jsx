@@ -114,7 +114,7 @@ export default function Recommendations() {
 
                 {items.map((item, index) => (
 
-                    <div key={index} className="rec-row">
+                    <div key={index} className="rec-row" style={{ marginBottom: 10 }}>
 
                         <input className="input"
                             value={item.name}
@@ -128,9 +128,11 @@ export default function Recommendations() {
                             onChange={(e) => updateDescription(index, e.target.value)}
                         />
 
-                        <button onClick={() => removeItem(index)}>
+                        <button className="btn btn-secondary" onClick={() => removeItem(index)}>
                             Delete
                         </button>
+
+
 
                     </div>
 

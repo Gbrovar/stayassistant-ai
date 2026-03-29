@@ -52,7 +52,7 @@ export default function Personalization(){
 
         </div>
 
-        <button className="save-btn">
+        <button className="btn btn-primary">
           Save personalization
         </button>
 

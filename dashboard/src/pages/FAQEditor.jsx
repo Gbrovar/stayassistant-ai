@@ -120,8 +120,19 @@ export default function FAQEditor() {
 
                     <div className="card" style={{ marginBottom: 12 }}>
 
-                        <input className="input" placeholder="Question" />
-                        <textarea className="input" placeholder="Answer" />
+                        <input
+                            className="input"
+                            value={item.question}
+                            onChange={(e) => updateQuestion(index, e.target.value)}
+                            placeholder="Question"
+                        />
+
+                        <textarea
+                            className="input"
+                            value={item.answer}
+                            onChange={(e) => updateAnswer(index, e.target.value)}
+                            placeholder="Answer"
+                        />
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
 

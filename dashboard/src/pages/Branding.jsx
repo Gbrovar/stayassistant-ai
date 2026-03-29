@@ -108,7 +108,7 @@ export default function Branding() {
 
                 </div>
 
-                <button className="save-btn" onClick={save}>
+                <button className="btn btn-primary" onClick={save}>
                     Save
                 </button>
 

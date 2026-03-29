@@ -21,11 +21,7 @@ export default function PropertySetupPage() {
 
             <div className="stack">
 
-                <Section title="1. Property Information">
-                    <SetupWizard />
-                </Section>
-
-                <Section title="1.1 Property Info (Editable)">
+                <Section title="1. Property Info">
                     <PropertyInfo />
                 </Section>
 
@@ -43,6 +39,10 @@ export default function PropertySetupPage() {
 
                 <Section title="5. Widget Branding">
                     <Branding />
+                </Section>
+
+                <Section title="🚀 Initial Setup (one-time)">
+                    <SetupWizard />
                 </Section>
 
             </div>
