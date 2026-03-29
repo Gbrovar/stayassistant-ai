@@ -42,6 +42,7 @@ export default function Install() {
 
             if (html.includes("stayassistantai.com/widget.js")) {
                 setDetected(true)
+                setTested(true)
                 localStorage.setItem("install_tested", "true")
             } else {
                 setDetected(false)
@@ -79,15 +80,16 @@ export default function Install() {
 
                     <div style={{ marginTop: 10 }}>
 
-                        {detected === null && "Not checked yet"}
+                        {checking && "Checking installation..."}
+                        {!checking && detected === null && "Click to check installation"}
                         {detected === true && "✅ Widget detected on your site"}
-                        {detected === false && "❌ Not detected yet"}
+                        {detected === false && "Not detected yet (this may take a few seconds after install)"}
 
                     </div>
 
                     <div style={{ marginTop: 12 }}>
                         <Button
-                            variant="secondary"
+                            variant={detected ? "primary" : "secondary"}
                             onClick={checkInstallation}
                             disabled={checking}
                         >
