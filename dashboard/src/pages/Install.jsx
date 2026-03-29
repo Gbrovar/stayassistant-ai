@@ -7,8 +7,13 @@ import Button from "../components/UI/Button"
 
 export default function Install() {
 
-    const [copied, setCopied] = useState(false)
-    const [tested, setTested] = useState(false)
+    const [copied, setCopied] = useState(() => {
+        return localStorage.getItem("install_copied") === "true"
+    })
+
+    const [tested, setTested] = useState(() => {
+        return localStorage.getItem("install_tested") === "true"
+    })
 
     const [siteUrl, setSiteUrl] = useState("")
     const [detected, setDetected] = useState(null)
@@ -25,13 +30,6 @@ export default function Install() {
         }
     }, [siteUrl])
 
-    {
-        detected && (
-            <div style={{ marginTop: 10, opacity: 0.7 }}>
-                Your AI concierge is live 🎉
-            </div>
-        )
-    }
 
     async function checkInstallation() {
         if (!siteUrl) return
@@ -44,6 +42,7 @@ export default function Install() {
 
             if (html.includes("stayassistantai.com/widget.js")) {
                 setDetected(true)
+                localStorage.setItem("install_tested", "true")
             } else {
                 setDetected(false)
             }
@@ -71,6 +70,12 @@ export default function Install() {
                     <div style={{ fontWeight: 600 }}>
                         Installation status
                     </div>
+
+                    {detected && (
+                        <div style={{ marginTop: 10, opacity: 0.7 }}>
+                            Your AI concierge is live 🎉
+                        </div>
+                    )}
 
                     <div style={{ marginTop: 10 }}>
 
@@ -107,7 +112,7 @@ export default function Install() {
                     </div>
 
                     <div style={{ marginTop: 10, fontSize: 14 }}>
-                        {(copied ? 1 : 0) + (tested ? 1 : 0)} / 2 steps completed
+                        {(copied ? 1 : 0) + ((tested || detected) ? 1 : 0)} / 2 steps completed
                     </div>
 
                 </div>
@@ -131,7 +136,10 @@ export default function Install() {
                     </pre>
 
                     <CopyButton
-                        onClick={() => setCopied(true)}
+                        onClick={() => {
+                            setCopied(true)
+                            localStorage.setItem("install_copied", "true")
+                        }}
                         text={script}
                         onCopy={() => {
 
@@ -199,6 +207,7 @@ export default function Install() {
                         onClick={async () => {
 
                             setTested(true)
+                            localStorage.setItem("install_tested", "true")
 
                             const token = localStorage.getItem("token")
 
