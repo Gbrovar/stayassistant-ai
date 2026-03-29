@@ -83,7 +83,7 @@ export default function Install() {
                         {checking && "Checking installation..."}
                         {!checking && detected === null && "Click to check installation"}
                         {detected === true && "✅ Widget detected on your site"}
-                        {detected === false && "Not detected yet (this may take a few seconds after install)"}
+                        {detected === false && "Not detected yet (some websites may block automatic detection)"}
 
                     </div>
 
@@ -94,6 +94,11 @@ export default function Install() {
                             disabled={checking}
                         >
                             {checking ? "Checking..." : "Check installation"}
+                            {detected === false && (
+                                <div style={{ marginTop: 10, fontSize: 13, opacity: 0.6 }}>
+                                    If you already installed it, open your site and test the chat.
+                                </div>
+                            )}
                         </Button>
                     </div>
 
