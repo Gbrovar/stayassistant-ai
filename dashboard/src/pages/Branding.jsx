@@ -97,6 +97,12 @@ export default function Branding() {
                 <div className="branding-field">
 
                     <label>Primary color</label>
+                    <div style={{
+                        height: 36,
+                        borderRadius: 6,
+                        background: primaryColor,
+                        marginTop: 10
+                    }} />
 
                     <input
                         type="color"

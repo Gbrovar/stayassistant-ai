@@ -106,7 +106,7 @@ export default function SetupWizard() {
 
         <Card style={{ opacity: 0.85 }}>
 
-            <h2>Property Information</h2>
+
 
             <p>Configure your AI concierge in seconds.</p>
 
@@ -190,7 +190,7 @@ export default function SetupWizard() {
 
             </div>
 
-            <button  className="btn btn-secondary" onClick={generate} disabled={loading}>
+            <button  className="btn btn-primary" onClick={generate} disabled={loading}>
 
                 {loading ? "Generating..." : "Generate AI Concierge"}
 

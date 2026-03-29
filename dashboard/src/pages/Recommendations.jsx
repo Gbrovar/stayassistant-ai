@@ -112,37 +112,45 @@ export default function Recommendations() {
 
                 {items.map((item, index) => (
 
-                    <div key={index} className="rec-row" style={{ marginBottom: 10 }}>
+                    <Card key={index} style={{ marginBottom: 12 }}>
 
-                        <input className="input"
-                            value={item.name}
-                            placeholder="Name"
-                            onChange={(e) => updateName(index, e.target.value)}
-                        />
+                        <div style={{ marginBottom: 10 }}>
+                            <input className="input"
+                                value={item.name}
+                                placeholder="Place name"
+                                onChange={(e) => updateName(index, e.target.value)}
+                            />
+                        </div>
 
-                        <input className="input"
-                            value={item.description}
-                            placeholder="Description"
-                            onChange={(e) => updateDescription(index, e.target.value)}
-                        />
+                        <div style={{ marginBottom: 10 }}>
+                            <input className="input"
+                                value={item.description}
+                                placeholder="Description"
+                                onChange={(e) => updateDescription(index, e.target.value)}
+                            />
+                        </div>
 
-                        <button className="btn btn-secondary" onClick={() => removeItem(index)}>
-                            Delete
-                        </button>
+                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <button className="btn btn-secondary" onClick={() => removeItem(index)}>
+                                Delete
+                            </button>
+                        </div>
 
-
-
-                    </div>
+                    </Card>
 
                 ))}
 
-                <button className="btn btn-primary" onClick={addItem}>
-                    Add recommendation
-                </button>
+                <div style={{ display: "flex", gap: 10 }}>
 
-                <button  className="btn btn-primary" onClick={save}>
-                    Save
-                </button>
+                    <button className="btn btn-primary" onClick={addItem}>
+                        Add recommendation
+                    </button>
+
+                    <button className="btn btn-primary" onClick={save}>
+                        Save
+                    </button>
+
+                </div>
 
             </Card>
 

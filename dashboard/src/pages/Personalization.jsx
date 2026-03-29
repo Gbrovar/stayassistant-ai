@@ -22,11 +22,11 @@ export default function Personalization(){
 
         </div>
 
-        <div className="branding-field">
+        <div className="branding-field" style={{ marginBottom: 14 }}>
 
           <label>Widget position</label>
 
-          <select>
+          <select className="input">
 
             <option>Bottom right</option>
             <option>Bottom left</option>
@@ -35,11 +35,11 @@ export default function Personalization(){
 
         </div>
 
-        <div className="branding-field">
+        <div className="branding-field" style={{ marginBottom: 14 }}>
 
           <label>Default language</label>
 
-          <select>
+          <select className="input">
 
             <option>Auto detect</option>
             <option>English</option>

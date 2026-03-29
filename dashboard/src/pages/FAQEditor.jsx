@@ -116,11 +116,11 @@ export default function FAQEditor() {
 
                 {faq.map((item, index) => (
 
-                    <div className="card" style={{ marginBottom: 12 }}>
+                    <Card style={{ marginBottom: 12 }}>
 
                         <input
                             className="input"
-                            
+
                             value={item.question}
                             onChange={(e) => updateQuestion(index, e.target.value)}
                             placeholder="Question"
@@ -135,23 +135,27 @@ export default function FAQEditor() {
 
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
 
-                            <Button className="btn btn-secondary">
+                            <Button variant="secondary" onClick={() => removeFaq(index)}>
                                 Delete
                             </Button>
 
                         </div>
 
-                    </div>
+                    </Card>
 
                 ))}
 
-                <Button className="btn btn-primary" onClick={addFaq}>
-                    Add Question
-                </Button>
+                <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
 
-                <Button className="btn btn-primary" onClick={save} disabled={loading}>
-                    {loading ? "Saving..." : "Save FAQ"}
-                </Button>
+                    <Button onClick={addFaq}>
+                        Add Question
+                    </Button>
+
+                    <Button onClick={save}>
+                        {loading ? "Saving..." : "Save FAQ"}
+                    </Button>
+
+                </div>
 
             </Card>
 
