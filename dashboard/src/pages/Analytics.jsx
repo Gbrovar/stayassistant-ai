@@ -292,7 +292,7 @@ export default function Analytics() {
 
           <p>Improve your assistant performance automatically</p>
 
-          <Button
+          <button
             className="btn-primary btn-full"
             onClick={async () => {
 
@@ -317,7 +317,7 @@ export default function Analytics() {
             }}
           >
             ⚡ Auto Optimize Property
-          </Button>
+          </button>
 
         </div>
 
