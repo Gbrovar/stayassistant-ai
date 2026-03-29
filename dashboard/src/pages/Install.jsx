@@ -10,6 +10,51 @@ export default function Install() {
     const [copied, setCopied] = useState(false)
     const [tested, setTested] = useState(false)
 
+    const [siteUrl, setSiteUrl] = useState("")
+    const [detected, setDetected] = useState(null)
+    const [checking, setChecking] = useState(false)
+
+    useEffect(() => {
+        const saved = localStorage.getItem("property_url")
+        if (saved) setSiteUrl(saved)
+    }, [])
+
+    useEffect(() => {
+        if (siteUrl) {
+            checkInstallation()
+        }
+    }, [siteUrl])
+
+    {
+        detected && (
+            <div style={{ marginTop: 10, opacity: 0.7 }}>
+                Your AI concierge is live 🎉
+            </div>
+        )
+    }
+
+    async function checkInstallation() {
+        if (!siteUrl) return
+
+        try {
+            setChecking(true)
+
+            const res = await fetch(siteUrl)
+            const html = await res.text()
+
+            if (html.includes("stayassistantai.com/widget.js")) {
+                setDetected(true)
+            } else {
+                setDetected(false)
+            }
+
+        } catch (e) {
+            setDetected(false)
+        } finally {
+            setChecking(false)
+        }
+    }
+
     const propertyId = getPropertyId()
 
     const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}"></script>`
@@ -20,6 +65,34 @@ export default function Install() {
 
             <div className="page-header">
                 <h1 className="page-title">Install StayAssistant</h1>
+
+                <div className="card">
+
+                    <div style={{ fontWeight: 600 }}>
+                        Installation status
+                    </div>
+
+                    <div style={{ marginTop: 10 }}>
+
+                        {detected === null && "Not checked yet"}
+                        {detected === true && "✅ Widget detected on your site"}
+                        {detected === false && "❌ Not detected yet"}
+
+                    </div>
+
+                    <div style={{ marginTop: 12 }}>
+                        <Button
+                            variant="secondary"
+                            onClick={checkInstallation}
+                            disabled={checking}
+                        >
+                            {checking ? "Checking..." : "Check installation"}
+                        </Button>
+                    </div>
+
+                </div>
+
+
                 <p className="page-subtitle">
                     Get your AI concierge live in under 2 minutes
                 </p>
