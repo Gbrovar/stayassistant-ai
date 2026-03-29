@@ -62,7 +62,7 @@ export default function Analytics() {
       <div>
         <h2>Analytics</h2>
 
-        <div className="analytics-card">
+        <div className="card" >
           Analytics will appear once guests start using the assistant.
         </div>
 
@@ -81,24 +81,32 @@ export default function Analytics() {
 
       <div className="kpis">
 
-        <div className="card">
+        <div className="card" style={{
+          border: "1px solid #22c55e"
+        }}>
           <div className="label">Total Messages</div>
           <div className="value">{totalMessages}</div>
         </div>
 
-        <div className="card">
+        <div className="card" style={{
+          border: "1px solid #22c55e"
+        }}>
           <div className="label">Top Intent</div>
           <div className="value">{topIntents[0]?.intent || "-"}</div>
         </div>
 
-        <div className="card">
+        <div className="card" style={{
+          border: "1px solid #22c55e"
+        }}>
           <div className="label">Peak Hour</div>
           <div className="value">
             {Object.entries(peakHours)[0]?.[0] || "-"}:00
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" style={{
+          border: "1px solid #22c55e"
+        }}>
           <div className="label">Status</div>
           <div className="value">
             {totalMessages > 0 ? "Active" : "Idle"}
@@ -151,38 +159,25 @@ export default function Analytics() {
       {/* 💰 UPGRADE IMPACT CARD */}
 
       {upgradeSignal && (
-        <div style={{
-          marginTop: 20,
-          padding: 20,
-          borderRadius: 12,
-          background: "#0f172a",
-          color: "white"
+        <div className="card" style={{
+          border: "1px solid #22c55e"
         }}>
 
-          <h3 style={{ marginBottom: 10 }}>
-            🚀 Unlock more value from your concierge
-          </h3>
+          <h3>🚀 Upgrade Opportunity</h3>
 
-          <p style={{ opacity: 0.8 }}>
-            You're approaching system limits. Upgrading ensures:
+          <p className="muted">
+            You're approaching system limits. Upgrade to unlock full performance.
           </p>
 
-          <ul style={{ marginTop: 10, paddingLeft: 20 }}>
-            <li>✔️ More guest conversations</li>
-            <li>✔️ Faster AI responses</li>
-            <li>✔️ Advanced insights & automation</li>
+          <ul style={{ marginTop: 10 }}>
+            <li>✔️ More conversations</li>
+            <li>✔️ Faster responses</li>
+            <li>✔️ Advanced insights</li>
           </ul>
 
           <button
-            style={{
-              marginTop: 15,
-              background: "#22c55e",
-              color: "black",
-              padding: "10px 16px",
-              borderRadius: 8,
-              fontWeight: "bold",
-              cursor: "pointer"
-            }}
+            className="btn-primary"
+            style={{ marginTop: 15 }}
             onClick={() => window.location.href = "/dashboard/billing"}
           >
             Upgrade Plan
@@ -191,20 +186,17 @@ export default function Analytics() {
         </div>
       )}
 
+
       {isPro ? (
 
         alerts.length > 0 && (
           <div style={{ marginTop: 20 }}>
             {alerts.map((a, idx) => (
-              <div
-                key={idx}
-                style={{
-                  background: a.level === "critical" ? "#7f1d1d" : "#78350f",
-                  padding: 12,
-                  borderRadius: 8,
-                  marginBottom: 10
-                }}
-              >
+              <div className="card" style={{
+                borderLeft: a.level === "critical"
+                  ? "3px solid #ef4444"
+                  : "3px solid #f59e0b"
+              }}>
                 ⚠️ {a.text}
               </div>
             ))}
@@ -213,7 +205,7 @@ export default function Analytics() {
 
       ) : (
 
-        <div className="analytics-card" style={{ marginTop: 20 }}>
+        <div className="card" style={{ marginTop: 20 }}>
           <p>⚠️ Unlock alerts to detect issues automatically</p>
           <button onClick={() => window.location.href = "/dashboard/billing"}>
             Upgrade to Pro
@@ -222,136 +214,146 @@ export default function Analytics() {
 
       )}
 
-      {insights.length > 0 && (
-        <div className="analytics-card" style={{ marginTop: 20 }}>
+      <div className="stack">
 
-          <h3>📊 Business Insights</h3>
+        {insights.length > 0 && (
+          <div className="card" style={{ marginTop: 20 }}>
 
-          {insights.map((i, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {i.text}
-            </p>
-          ))}
+            <h3>📊 Business Insights</h3>
 
-        </div>
-      )}
+            {insights.map((i, idx) => (
+              <p key={idx} style={{ marginTop: 10 }}>
+                {i.text}
+              </p>
+            ))}
 
-      {isPro ? (
+          </div>
+        )}
 
-        aiInsights.length > 0 && (
-          <div className="analytics-card" style={{ marginTop: 20 }}>
+        {isPro ? (
+
+          aiInsights.length > 0 && (
+            <div className="card" style={{ marginTop: 20 }}>
+              <h3>🤖 AI Insights</h3>
+
+              {aiInsights.map((text, idx) => (
+                <div key={idx} style={{ marginTop: 15 }}>
+                  <p>{text.replace(/\*\*/g, "")}</p>
+                </div>
+              ))}
+            </div>
+          )
+
+        ) : (
+
+          <div className="card" style={{ marginTop: 20 }}>
             <h3>🤖 AI Insights</h3>
+            <p>Unlock AI-powered recommendations to improve your property</p>
 
-            {aiInsights.map((text, idx) => (
+            <button onClick={() => window.location.href = "/dashboard/billing"}>
+              Upgrade to Pro
+            </button>
+          </div>
+
+        )}
+
+        {semanticInsights.length > 0 && (
+          <div className="card" style={{ marginTop: 20 }}>
+
+            <h3>🧠 Conversation Insights</h3>
+
+            {semanticInsights.map((text, idx) => (
               <div key={idx} style={{ marginTop: 15 }}>
                 <p>{text.replace(/\*\*/g, "")}</p>
               </div>
             ))}
+
           </div>
-        )
+        )}
 
-      ) : (
+        {conversationScore && (
+          <div className="card" style={{ marginTop: 20 }}>
 
-        <div className="analytics-card" style={{ marginTop: 20 }}>
-          <h3>🤖 AI Insights</h3>
-          <p>Unlock AI-powered recommendations to improve your property</p>
+            <h3>📊 Conversation Quality</h3>
 
-          <button onClick={() => window.location.href = "/dashboard/billing"}>
-            Upgrade to Pro
-          </button>
-        </div>
+            <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
+            <p>Satisfaction: {conversationScore.satisfaction?.toFixed(1)} / 10</p>
+            <p>Friction: {conversationScore.friction?.toFixed(1)} / 10</p>
 
-      )}
+          </div>
+        )}
 
-      {semanticInsights.length > 0 && (
-        <div className="analytics-card" style={{ marginTop: 20 }}>
+        <div className="card" style={{
+          border: "1px solid #22c55e"
+        }}>
 
-          <h3>🧠 Conversation Insights</h3>
+          <h3>⚡ Optimization</h3>
 
-          {semanticInsights.map((text, idx) => (
-            <div key={idx} style={{ marginTop: 15 }}>
-              <p>{text.replace(/\*\*/g, "")}</p>
-            </div>
-          ))}
+          <p>Improve your assistant performance automatically</p>
 
-        </div>
-      )}
+          <button
+            className="btn-primary btn-full"
+            onClick={async () => {
 
-      {conversationScore && (
-        <div className="analytics-card" style={{ marginTop: 20 }}>
+              const propertyId = localStorage.getItem("propertyId")
+              const token = localStorage.getItem("token")
 
-          <h3>📊 Conversation Quality</h3>
-
-          <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
-          <p>Satisfaction: {conversationScore.satisfaction?.toFixed(1)} / 10</p>
-          <p>Friction: {conversationScore.friction?.toFixed(1)} / 10</p>
-
-        </div>
-      )}
-
-      <div className="card">
-
-        <h3>⚡ Optimization</h3>
-
-        <p>Improve your assistant performance automatically</p>
-
-        <button
-          className="btn-primary btn-full"
-          onClick={async () => {
-
-            const propertyId = localStorage.getItem("propertyId")
-            const token = localStorage.getItem("token")
-
-            const res = await fetch(
-              `${API_URL}/analytics/${propertyId}/auto-optimize`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: `Bearer ${token}`
+              const res = await fetch(
+                `${API_URL}/analytics/${propertyId}/auto-optimize`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
                 }
-              }
-            )
+              )
 
-            await res.json()
+              await res.json()
 
-            showToast("Optimizations applied 🚀")
-            window.location.reload()
+              showToast("Optimizations applied 🚀")
+              window.location.reload()
 
-          }}
-        >
-          ⚡ Auto Optimize Property
-        </button>
+            }}
+          >
+            ⚡ Auto Optimize Property
+          </button>
 
-      </div>
-
-      <div className="analytics-grid">
-
-        {/* TOP INTENTS */}
-        <div className="card">
-          <h3>Top guest requests</h3>
-
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={intentData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="value" fill="#22c55e" />
-            </BarChart>
-          </ResponsiveContainer>
         </div>
 
-        {/* PEAK HOURS */}
-        <div className="card">
-          <h3>Peak hours</h3>
+        <div className="analytics-grid">
 
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={hourData}>
-              <XAxis dataKey="hour" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="messages" fill="#3b82f6" />
-            </BarChart>
-          </ResponsiveContainer>
+          {/* TOP INTENTS */}
+          <div className="card" style={{
+            border: "1px solid #22c55e"
+          }}>
+            <h3 style={{ marginBottom: 10 }}>Top guest requests</h3>
+
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={intentData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#22c55e" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* PEAK HOURS */}
+          <div className="card" style={{
+            border: "1px solid #22c55e"
+          }}>
+            <h3>Peak hours</h3>
+
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={hourData}>
+                <XAxis dataKey="hour" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="messages" fill="#3b82f6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
         </div>
 
       </div>
