@@ -4,6 +4,7 @@ import useAnalytics from "../hooks/useAnalytics"
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import Button from "../components/UI/Button"
+import LockedFeature from "../components/monetization/LockedFeature"
 
 import {
   BarChart,
@@ -321,41 +322,45 @@ export default function Analytics() {
 
         </div>
 
-        <div className="analytics-grid">
+        <LockedFeature title="Unlock advanced analytics">
 
-          {/* TOP INTENTS */}
-          <div className="card" style={{
-            border: "1px solid #22c55e"
-          }}>
-            <h3 style={{ marginBottom: 10 }}>Top guest requests</h3>
+          <div className="analytics-grid">
 
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={intentData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#22c55e" />
-              </BarChart>
-            </ResponsiveContainer>
+            {/* TOP INTENTS */}
+            <div className="card" style={{
+              border: "1px solid #22c55e"
+            }}>
+              <h3 style={{ marginBottom: 10 }}>Top guest requests</h3>
+
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={intentData}>
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#22c55e" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* PEAK HOURS */}
+            <div className="card" style={{
+              border: "1px solid #22c55e"
+            }}>
+              <h3>Peak hours</h3>
+
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={hourData}>
+                  <XAxis dataKey="hour" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="messages" fill="#3b82f6" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
           </div>
 
-          {/* PEAK HOURS */}
-          <div className="card" style={{
-            border: "1px solid #22c55e"
-          }}>
-            <h3>Peak hours</h3>
-
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={hourData}>
-                <XAxis dataKey="hour" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="messages" fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-        </div>
+        </LockedFeature>
 
       </div>
 

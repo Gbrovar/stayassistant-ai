@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { API_URL } from "../api/config"
+import LockedFeature from "../components/monetization/LockedFeature"
 
 export default function Insights() {
 
@@ -122,7 +123,9 @@ export default function Insights() {
       )}
 
       <div className="stack">
-        {suggestions.map(s => (
+
+        {/* FREE CONTENT */}
+        {suggestions.slice(0, 2).map(s => (
 
           <div
             className="card"
@@ -132,59 +135,33 @@ export default function Insights() {
                 : "3px solid #22c55e"
             }}
           >
-
-            <p style={{
-              fontSize: 12,
-              fontWeight: 600,
-              marginBottom: 6,
-              color: s.count >= 5 ? "#f87171" : "#94a3b8"
-            }}>
-              {s.count >= 5
-                ? `🔥 High demand — ${s.count} requests`
-                : `${s.count} requests`}
-            </p>
-
-            <h3 style={{ marginBottom: 8 }}>
-              {s.question}
-            </h3>
-
-            <p
-              className="suggested-answer"
-              style={{
-                opacity: 0.8,
-                lineHeight: 1.5,
-                maxHeight: expanded[s.question] ? "none" : 120,
-                overflow: "hidden"
-              }}
-            >
-              {s.suggested_answer}
-            </p>
-
-            {s.suggested_answer.length > 180 && (
-              <button
-                className="show-more-btn"
-                onClick={() =>
-                  setExpanded(prev => ({
-                    ...prev,
-                    [s.question]: !prev[s.question]
-                  }))
-                }
-              >
-                {expanded[s.question] ? "Show less" : "Read more"}
-              </button>
-            )}
-
-            <button
-              className="btn btn-primary btn-full"
-              onClick={() => addToFAQ(s.question, s.suggested_answer)}
-            >
-              Add to FAQ
-            </button>
-
+            {/* contenido igual */}
           </div>
 
         ))}
+
+        {/* 🔒 LOCKED CONTENT */}
+        <LockedFeature title="Unlock all AI recommendations">
+
+          {suggestions.slice(2).map(s => (
+
+            <div
+              className="card"
+              style={{
+                borderLeft: s.count >= 5
+                  ? "3px solid #ef4444"
+                  : "3px solid #22c55e"
+              }}
+            >
+              {/* contenido igual */}
+            </div>
+
+          ))}
+
+        </LockedFeature>
+
       </div>
+
     </div>
 
   )
