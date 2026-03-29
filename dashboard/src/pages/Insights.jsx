@@ -9,16 +9,10 @@ export default function Insights() {
   const token = localStorage.getItem("token")
 
   const [suggestions, setSuggestions] = useState([])
-  const navigate = useNavigate()
-
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState({})
 
-  const insights = generateBusinessInsights(suggestions)
-
-  const isExpanded = expanded[idx]
-  const text = s.suggested_answer
-  const shortText = text.slice(0, 200)
+  const navigate = useNavigate()
 
   async function addToFAQ(question, answer) {
     await fetch(`${API_URL}/property/${propertyId}/faq`, {
@@ -85,6 +79,8 @@ export default function Insights() {
     return insights
   }
 
+  const insights = generateBusinessInsights(suggestions)
+
   if (loading) {
     return (
       <div className="card">
@@ -120,53 +116,57 @@ export default function Insights() {
       )}
 
       {/* FREE */}
-      {suggestions.slice(0, 2).map((s, idx) => (
-        <div
-          key={s.question + idx}
-          className="card"
-          style={{
-            borderLeft: s.count >= 5
-              ? "2px solid #ef4444"
-              : "2px solid #22c55e"
-          }}
-        >
-          <p style={{ fontSize: 12, marginBottom: 6 }}>
-            {s.count >= 5
-              ? `🔥 High demand — ${s.count}`
-              : `${s.count} requests`}
-          </p>
+      {suggestions.slice(0, 2).map((s, idx) => {
 
-          <h3>{s.question}</h3>
+        const isExpanded = expanded[idx]
+        const text = s.suggested_answer
+        const shortText = text.slice(0, 200)
 
-          <p className="suggested-answer">
-            {isExpanded ? text : shortText + "..."}
-          </p>
-
-          {text.length > 200 && (
-            <button
-              className="btn-link"
-              onClick={() => toggleExpand(idx)}
-            >
-              {isExpanded ? "Show less" : "Show more"}
-            </button>
-          )}
-
-          <button
-            className="btn-primary btn-full"
-            onClick={() => addToFAQ(s.question, s.suggested_answer)}
+        return (
+          <div
+            key={s.question + idx}
+            className="card"
+            style={{
+              borderLeft: s.count >= 5
+                ? "2px solid #ef4444"
+                : "2px solid #22c55e"
+            }}
           >
-            Add to FAQ
-          </button>
-        </div>
-      ))}
+            <p style={{ fontSize: 12, marginBottom: 6 }}>
+              {s.count >= 5
+                ? `🔥 High demand — ${s.count}`
+                : `${s.count} requests`}
+            </p>
+
+            <h3>{s.question}</h3>
+
+            <p className="suggested-answer">
+              {isExpanded ? text : shortText + "..."}
+            </p>
+
+            {text.length > 200 && (
+              <button
+                className="btn-link"
+                onClick={() => toggleExpand(idx)}
+              >
+                {isExpanded ? "Show less" : "Show more"}
+              </button>
+            )}
+
+            <button
+              className="btn-primary btn-full"
+              onClick={() => addToFAQ(s.question, s.suggested_answer)}
+            >
+              Add to FAQ
+            </button>
+          </div>
+        )
+      })}
 
       {/* LOCKED */}
       <LockedFeature title="Unlock all AI recommendations">
         {suggestions.slice(2).map((s, idx) => (
-          <div
-            key={s.question + idx}
-            className="card"
-          >
+          <div key={s.question + idx} className="card">
             <h3>{s.question}</h3>
             <p>{s.suggested_answer}</p>
           </div>
