@@ -62,13 +62,10 @@ body {
 
 .content {
   padding: 30px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 20px 16px;
-  }
-}
 
 /* --- TOPBAR PRO --- */
 
@@ -589,6 +586,10 @@ body {
 
 @media (max-width: 768px) {
 
+  .content {
+    padding: 20px 16px;
+  }
+
   .sidebar {
     position: fixed;
     left: -240px;
@@ -626,6 +627,8 @@ body {
 
   .page {
     padding: 0;
+    max-width: 100%;
+    margin: 0;
   }
 
   .menu-btn {
@@ -643,6 +646,13 @@ body {
 
   .card {
     padding: 18px;
+    margin-top: 0;
   }
+
+  .stack {
+    gap: 20px;
+  }
+
+
 
 }
