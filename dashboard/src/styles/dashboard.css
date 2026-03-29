@@ -372,7 +372,7 @@ body {
   margin-top: 0;
   margin-bottom: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 
 }
 
@@ -387,7 +387,7 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: #334155;
 }
 
@@ -586,7 +586,7 @@ body {
 }
 
 .btn-primary {
-  background: #22c55e;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   font-weight: 600;
   padding: 12px;

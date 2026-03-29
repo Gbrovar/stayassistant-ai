@@ -9,49 +9,35 @@ export default function Insights() {
   const token = localStorage.getItem("token")
 
   const [suggestions, setSuggestions] = useState([])
-  const [expanded, setExpanded] = useState({})
+  const navigate = useNavigate()
 
   const insights = generateBusinessInsights(suggestions)
 
-  const navigate = useNavigate()
-
   async function addToFAQ(question, answer) {
-
     await fetch(`${API_URL}/property/${propertyId}/faq`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        question,
-        answer
-      })
+      body: JSON.stringify({ question, answer })
     })
 
     navigate("/property")
-
   }
 
   useEffect(() => {
-
     async function load() {
-
       const res = await fetch(
         `${API_URL}/analytics/${propertyId}/faq-suggestions-ai`,
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
 
       const data = await res.json()
-
       setSuggestions(data.suggestions || [])
-
     }
 
     load()
-
   }, [propertyId, token])
 
   function generateBusinessInsights(suggestions) {
@@ -63,167 +49,93 @@ export default function Insights() {
 
     if (restaurants && restaurants.count >= 5) {
       insights.push({
-        type: "revenue",
-        text: "Guests are frequently asking about restaurants. Adding recommendations will improve guest satisfaction and reduce friction."
+        text: "Guests frequently ask about restaurants. Add recommendations to improve satisfaction."
       })
     }
 
     if (activities && activities.count >= 5) {
       insights.push({
-        type: "experience",
-        text: "Guests are looking for activities. You can enhance their stay by suggesting local experiences."
+        text: "Guests look for activities. Suggest experiences to improve their stay."
       })
     }
 
     if (suggestions.length === 0) {
       insights.push({
-        type: "positive",
-        text: "Your FAQ is well optimized. Guests are not asking repetitive questions."
+        text: "Your FAQ is well optimized. No repeated questions detected."
       })
     }
 
     return insights
   }
 
-
   return (
+    <div className="stack">
 
-    <div>
-
-      <p style={{ fontSize: 13, opacity: 0.7 }}>
-        This question is not covered in your FAQ.
-      </p>
-
-      {/* 🔥 AQUÍ VA BUSINESS INSIGHTS */}
+      {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
-        <div className="card" style={{ marginBottom: suggestions.length ? 10 : 0 }}>
-
-          <h3 style={{ marginBottom: 10 }}>📊 Business Insights</h3>
-          <p className="muted">
-            AI detected patterns in guest behavior
-          </p>
+        <div className="card">
+          <h3>📊 Business Insights</h3>
 
           {insights.map((i, idx) => (
             <p key={idx} style={{ marginTop: 10 }}>
               {i.text}
             </p>
           ))}
-
         </div>
       )}
 
+      {/* EMPTY STATE */}
       {suggestions.length === 0 && (
-
         <div className="card">
-          <p style={{ opacity: 0.7 }}>
-            No suggestions yet. Your AI will generate insights once guests interact more.
-          </p>
+          <p>No suggestions yet. AI will generate insights soon.</p>
         </div>
-
       )}
 
-      <div className="stack">
+      {/* FREE */}
+      {suggestions.slice(0, 2).map((s, idx) => (
+        <div
+          key={s.question + idx}
+          className="card"
+          style={{
+            borderLeft: s.count >= 5
+              ? "2px solid #ef4444"
+              : "2px solid #22c55e"
+          }}
+        >
+          <p style={{ fontSize: 12, marginBottom: 6 }}>
+            {s.count >= 5
+              ? `🔥 High demand — ${s.count}`
+              : `${s.count} requests`}
+          </p>
 
-        {/* FREE CONTENT */}
-        {suggestions.slice(0, 2).map(s => (
+          <h3>{s.question}</h3>
 
-          <div
-            className="card"
-            style={{
-              borderLeft: s.count >= 5
-                ? "3px solid #ef4444"
-                : "3px solid #22c55e"
-            }}
+          <p className="suggested-answer">
+            {s.suggested_answer}
+          </p>
+
+          <button
+            className="btn-primary btn-full"
+            onClick={() => addToFAQ(s.question, s.suggested_answer)}
           >
-            <p style={{
-              fontSize: 12,
-              fontWeight: 600,
-              marginBottom: 6,
-              color: s.count >= 5 ? "#f87171" : "#94a3b8"
-            }}>
-              {s.count >= 5
-                ? `🔥 High demand — ${s.count} requests`
-                : `${s.count} requests`}
-            </p>
+            Add to FAQ
+          </button>
+        </div>
+      ))}
 
-            <h3 style={{ marginBottom: 8 }}>
-              {s.question}
-            </h3>
-
-            <p
-              className="suggested-answer"
-              style={{
-                opacity: 0.8,
-                lineHeight: 1.5
-              }}
-            >
-              {s.suggested_answer}
-            </p>
-
-            <button
-              className="btn btn-primary btn-full"
-              onClick={() => addToFAQ(s.question, s.suggested_answer)}
-            >
-              Add to FAQ
-            </button>
+      {/* LOCKED */}
+      <LockedFeature title="Unlock all AI recommendations">
+        {suggestions.slice(2).map((s, idx) => (
+          <div
+            key={s.question + idx}
+            className="card"
+          >
+            <h3>{s.question}</h3>
+            <p>{s.suggested_answer}</p>
           </div>
-
         ))}
-
-        {/* 🔒 LOCKED CONTENT */}
-        <LockedFeature title="Unlock all AI recommendations">
-
-          {suggestions.slice(2).map(s => (
-
-            <div
-              className="card"
-              style={{
-                borderLeft: s.count >= 5
-                  ? "3px solid #ef4444"
-                  : "3px solid #22c55e"
-              }}
-            >
-              <p style={{
-                fontSize: 12,
-                fontWeight: 600,
-                marginBottom: 6,
-                color: s.count >= 5 ? "#f87171" : "#94a3b8"
-              }}>
-                {s.count >= 5
-                  ? `🔥 High demand — ${s.count} requests`
-                  : `${s.count} requests`}
-              </p>
-
-              <h3 style={{ marginBottom: 8 }}>
-                {s.question}
-              </h3>
-
-              <p
-                className="suggested-answer"
-                style={{
-                  opacity: 0.8,
-                  lineHeight: 1.5
-                }}
-              >
-                {s.suggested_answer}
-              </p>
-
-              <button
-                className="btn btn-primary btn-full"
-                onClick={() => addToFAQ(s.question, s.suggested_answer)}
-              >
-                Add to FAQ
-              </button>
-            </div>
-
-          ))}
-
-        </LockedFeature>
-
-      </div>
+      </LockedFeature>
 
     </div>
-
   )
-
 }
