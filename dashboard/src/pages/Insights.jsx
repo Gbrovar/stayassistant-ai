@@ -162,14 +162,7 @@ export default function Insights() {
 
             {s.suggested_answer.length > 180 && (
               <button
-                style={{
-                  marginTop: 8,
-                  fontSize: 12,
-                  background: "none",
-                  border: "none",
-                  color: "#60a5fa",
-                  cursor: "pointer"
-                }}
+                className="show-more-btn"
                 onClick={() =>
                   setExpanded(prev => ({
                     ...prev,
@@ -177,7 +170,7 @@ export default function Insights() {
                   }))
                 }
               >
-                {expanded[s.question] ? "Show less" : "Show more"}
+                {expanded[s.question] ? "Show less" : "Read more"}
               </button>
             )}
 
