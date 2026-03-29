@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 import { useApp } from "../context/AppContext"
+import useResponsive from "../hooks/useResponsive"
 
 export default function Conversations() {
 
@@ -9,7 +10,7 @@ export default function Conversations() {
   const [conversations, setConversations] = useState([])
   const [selected, setSelected] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const { isMobile } = useResponsive()
   const { limitReached } = useApp()
 
 
@@ -63,19 +64,6 @@ export default function Conversations() {
 
   }, [propertyId, token])
 
-  useEffect(() => {
-
-    function handleResize() {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    window.addEventListener("resize", handleResize)
-
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-
-  }, [])
 
   if (loading) {
     return <div>Loading conversations...</div>

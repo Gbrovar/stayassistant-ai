@@ -1,15 +1,17 @@
 import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
+import useResponsive from "../hooks/useResponsive"
 
 export default function Sidebar({ open, setSidebarOpen }) {
 
   function handleClick() {
-    if (window.innerWidth < 768) {
+    if (isMobile) {
       setSidebarOpen(false)
     }
   }
 
   const { ltv } = useAnalytics()
+  const { isMobile } = useResponsive()
 
   return (
 
