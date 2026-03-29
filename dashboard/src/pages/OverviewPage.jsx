@@ -1,5 +1,6 @@
 import { useApp } from "../context/AppContext"
 import useAnalytics from "../hooks/useAnalytics"
+import Button from "../components/UI/Button"
 
 export default function OverviewPage() {
 
@@ -33,108 +34,105 @@ export default function OverviewPage() {
 
   return (
 
-    <div>
+    <div className="page">
 
-      <h1>Dashboard</h1>
-
-      {conversion?.show && conversion.location === "overview" && (
-
-        <div className="card" style={{
-          marginTop: 20,
-          border:
-            conversion.level === "critical"
-              ? "2px solid #dc2626"
-              : conversion.level === "high"
-                ? "2px solid #f59e0b"
-                : "2px solid #3b82f6"
-        }}>
-
-          <h3>
-            {conversion.level === "critical"
-              ? "🚨 Action required"
-              : conversion.level === "high"
-                ? "⚠️ Attention needed"
-                : "💡 Opportunity"}
-          </h3>
-
-          <p>{conversion.message}</p>
-
-          <button
-            onClick={() => window.location.href = "/billing"}
-            style={{
-              marginTop: 10,
-              background: "#22c55e",
-              color: "black",
-              fontWeight: "bold"
-            }}
-          >
-            {conversion.cta}
-          </button>
-
-        </div>
-
-      )}
-
-      <p>Overview of your AI concierge performance.</p>
-
-      <div className="kpis">
-
-        <div className="card">
-          <h3>Messages</h3>
-          <p>{totalMessages}</p>
-        </div>
-
-        <div className="card">
-          <h3>Top Request</h3>
-          <p>{topIntents[0]?.intent || "-"}</p>
-        </div>
-
-        <div className="card">
-          <h3>Peak Hour</h3>
-          <p>{peak}</p>
-        </div>
-
-        <div className="card">
-          <h3>Status</h3>
-          <p>{usage === 0 ? "Idle" : "Active"}</p>
-        </div>
-
-      </div>
-
-      {/* USAGE CARD */}
-
-      <div className="card" style={{ marginTop: 30 }}>
-
-        <h3>Your usage</h3>
-
-        <p>
-          <strong>{usage}</strong> / {limit} messages this month
+      <div className="page-header">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-subtitle">
+          Overview of your AI concierge performance.
         </p>
+      </div>
 
-        <div className="usage-bar">
-          <div
-            className="usage-fill"
-            style={{ width: `${percentage}%` }}
-          />
+      <div className="stack">
+
+        {conversion?.show && conversion.location === "overview" && (
+
+
+          <div className="card">
+
+            <h3>
+              {conversion.level === "critical"
+                ? "🚨 Action required"
+                : conversion.level === "high"
+                  ? "⚠️ Attention needed"
+                  : "💡 Opportunity"}
+            </h3>
+
+            <p>{conversion.message}</p>
+
+            <div style={{ marginTop: 12 }}>
+              <Button
+                variant="primary"
+                onClick={() => window.location.href = "/dashboard/billing"}
+              >
+                {conversion.cta}
+              </Button>
+            </div>
+
+          </div>
+
+        )}
+
+        <p>Overview of your AI concierge performance.</p>
+
+        <div className="kpis">
+
+          <div className="card">
+            <h3>Messages</h3>
+            <p>{totalMessages}</p>
+          </div>
+
+          <div className="card">
+            <h3>Top Request</h3>
+            <p>{topIntents[0]?.intent || "-"}</p>
+          </div>
+
+          <div className="card">
+            <h3>Peak Hour</h3>
+            <p>{peak}</p>
+          </div>
+
+          <div className="card">
+            <h3>Status</h3>
+            <p>{usage === 0 ? "Idle" : "Active"}</p>
+          </div>
+
+        </div>
+
+        {/* USAGE CARD */}
+
+        <div className="card">
+
+          <h3>Your usage</h3>
+
+          <p>
+            <strong>{usage}</strong> / {limit} messages this month
+          </p>
+
+          <div className="usage-bar">
+            <div
+              className="usage-fill"
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+
+        </div>
+
+        {/* QUICK INSIGHTS */}
+
+        <div className="card">
+
+          <h3>Quick insights</h3>
+
+          <p>Total messages: {usage}</p>
+
+          <p>
+            Status: {usage === 0 ? "No activity yet" : "Active"}
+          </p>
+
         </div>
 
       </div>
-
-      {/* QUICK INSIGHTS */}
-
-      <div style={{ marginTop: 30 }} className="card">
-
-        <h3>Quick insights</h3>
-
-        <p>Total messages: {usage}</p>
-
-        <p>
-          Status: {usage === 0 ? "No activity yet" : "Active"}
-        </p>
-
-      </div>
-
-
     </div>
 
   )

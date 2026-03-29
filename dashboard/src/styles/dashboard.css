@@ -629,6 +629,10 @@ body {
     padding: 14px;
   }
 
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -674,6 +678,10 @@ body {
 
   .menu-btn {
     display: block;
+  }
+
+  .kpis {
+    grid-template-columns: 1fr 1fr;
   }
 
 }
