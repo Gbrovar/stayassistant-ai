@@ -424,6 +424,50 @@ body {
   cursor: pointer;
 }
 
+.upgrade-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  color: white;
+}
+
+.upgrade-card.urgent {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.upgrade-content h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.upgrade-content p {
+  margin: 5px 0 0;
+  opacity: 0.9;
+}
+
+.upgrade-btn {
+  background: white;
+  color: #111;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.inline-upgrade {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(99,102,241,0.1);
+}
+
 .kpis {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
