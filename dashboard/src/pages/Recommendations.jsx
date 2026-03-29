@@ -116,13 +116,13 @@ export default function Recommendations() {
 
                     <div key={index} className="rec-row">
 
-                        <input
+                        <input className="input"
                             value={item.name}
                             placeholder="Name"
                             onChange={(e) => updateName(index, e.target.value)}
                         />
 
-                        <input
+                        <input className="input"
                             value={item.description}
                             placeholder="Description"
                             onChange={(e) => updateDescription(index, e.target.value)}
@@ -136,11 +136,11 @@ export default function Recommendations() {
 
                 ))}
 
-                <button onClick={addItem}>
+                <button className="btn btn-primary" onClick={addItem}>
                     Add recommendation
                 </button>
 
-                <button onClick={save}>
+                <button  className="btn btn-primary" onClick={save}>
                     Save
                 </button>
 

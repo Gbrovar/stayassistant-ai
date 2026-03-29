@@ -62,20 +62,21 @@ export default function PropertyInfo() {
 
     return (
 
-        <div>
-
-            <h2>Property Info</h2>
+        <div className="form-group">
+            <h4 className="form-group-title">Stay details</h4>
 
             <Card>
 
-                <div className="branding-field">
-                    <label>Check-in</label>
-                    <input name="checkin" value={form.checkin} onChange={handleChange} />
-                </div>
+                <div className="grid-2">
+                    <div className="branding-field">
+                        <label>Check-in</label>
+                        <input className="input" name="checkin" value={form.checkin} onChange={handleChange} />
+                    </div>
 
-                <div className="branding-field">
-                    <label>Check-out</label>
-                    <input name="checkout" value={form.checkout} onChange={handleChange} />
+                    <div className="branding-field">
+                        <label>Check-out</label>
+                        <input className="input" name="checkout" value={form.checkout} onChange={handleChange} />
+                    </div>
                 </div>
 
                 <div className="branding-field">
@@ -98,15 +99,15 @@ export default function PropertyInfo() {
 
                 <div className="branding-field">
                     <label>WiFi name</label>
-                    <input name="wifi_name" value={form.wifi_name} onChange={handleChange} />
+                    <input className="input" name="wifi_name" value={form.wifi_name} onChange={handleChange} />
                 </div>
 
                 <div className="branding-field">
                     <label>WiFi password</label>
-                    <input name="wifi_password" value={form.wifi_password} onChange={handleChange} />
+                    <input className="input" name="wifi_password" value={form.wifi_password} onChange={handleChange} />
                 </div>
 
-                <button className="save-btn" onClick={save}>
+                <button className="btn btn-primary" onClick={save}>
                     Save
                 </button>
 

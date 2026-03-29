@@ -202,6 +202,24 @@ body {
   opacity: 0.9;
 }
 
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group-title {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 /* FAQ EDITOR */
 
 .faq-row {

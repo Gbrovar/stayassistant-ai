@@ -118,33 +118,28 @@ export default function FAQEditor() {
 
                 {faq.map((item, index) => (
 
-                    <div key={index} className="faq-row">
+                    <div className="card" style={{ marginBottom: 12 }}>
 
-                        <input
-                            value={item.question}
-                            onChange={(e) => updateQuestion(index, e.target.value)}
-                            placeholder="Question"
-                        />
+                        <input className="input" placeholder="Question" />
+                        <textarea className="input" placeholder="Answer" />
 
-                        <input
-                            value={item.answer}
-                            onChange={(e) => updateAnswer(index, e.target.value)}
-                            placeholder="Answer"
-                        />
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
 
-                        <button onClick={() => removeFaq(index)}>
-                            Delete
-                        </button>
+                            <button className="btn btn-secondary">
+                                Delete
+                            </button>
+
+                        </div>
 
                     </div>
 
                 ))}
 
-                <button onClick={addFaq}>
+                <button className="btn btn-primary" onClick={addFaq}>
                     Add Question
                 </button>
 
-                <button onClick={save} disabled={loading}>
+                <button className="btn btn-primary" onClick={save} disabled={loading}>
                     {loading ? "Saving..." : "Save FAQ"}
                 </button>
 

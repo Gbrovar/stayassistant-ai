@@ -113,7 +113,7 @@ export default function SetupWizard() {
 
                 <label>Property address</label>
 
-                <input
+                <input className="input"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Street address"
@@ -125,7 +125,7 @@ export default function SetupWizard() {
 
                 <label>City</label>
 
-                <input
+                <input className="input"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                 />
@@ -136,7 +136,7 @@ export default function SetupWizard() {
 
                 <label>Country</label>
 
-                <input
+                <input className="input"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                 />
@@ -147,7 +147,7 @@ export default function SetupWizard() {
 
                 <label>Check-in</label>
 
-                <input
+                <input className="input"
                     value={checkin}
                     onChange={(e) => setCheckin(e.target.value)}
                 />
@@ -158,7 +158,7 @@ export default function SetupWizard() {
 
                 <label>Check-out</label>
 
-                <input
+                <input className="input"
                     value={checkout}
                     onChange={(e) => setCheckout(e.target.value)}
                 />
@@ -169,7 +169,7 @@ export default function SetupWizard() {
 
                 <label>Amenities (comma separated)</label>
 
-                <input
+                <input className="input"
                     value={amenities}
                     onChange={(e) => setAmenities(e.target.value)}
                     placeholder="wifi,pool,parking"
@@ -181,7 +181,7 @@ export default function SetupWizard() {
 
                 <label>Services (comma separated)</label>
 
-                <input
+                <input className="input"
                     value={services}
                     onChange={(e) => setServices(e.target.value)}
                     placeholder="airport transfer,bike rental"
@@ -189,7 +189,7 @@ export default function SetupWizard() {
 
             </div>
 
-            <button onClick={generate} disabled={loading}>
+            <button  className="btn btn-primary" onClick={generate} disabled={loading}>
 
                 {loading ? "Generating..." : "Generate AI Concierge"}
 
