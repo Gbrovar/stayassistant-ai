@@ -4341,6 +4341,61 @@ app.get("/billing/subscription", authenticate, async (req, res) => {
 
 })
 
+app.get("/billing/details", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+
+    const sub = await getRealSubscription(propertyId)
+
+    if (!sub?.stripeSubscription) {
+      return res.json({
+        renewal_date: null,
+        next_invoice: null
+      })
+    }
+
+    const stripeSub = await stripe.subscriptions.retrieve(
+      sub.stripeSubscription
+    )
+
+    // 📅 renewal date
+    const renewalDate = stripeSub.current_period_end
+
+    // 🧾 next invoice
+    let nextInvoice = null
+
+    try {
+      const invoice = await stripe.invoices.retrieveUpcoming({
+        customer: stripeSub.customer
+      })
+
+      nextInvoice = {
+        amount: invoice.amount_due / 100,
+        currency: invoice.currency,
+        date: invoice.next_payment_attempt
+      }
+
+    } catch (err) {
+      console.log("No upcoming invoice")
+    }
+
+    res.json({
+      renewal_date: renewalDate,
+      next_invoice: nextInvoice
+    })
+
+  } catch (err) {
+
+    console.error("Billing details error:", err)
+
+    res.status(500).json({ error: "failed" })
+
+  }
+
+})
+
 /* --- STRIPE BILLING PORTAL --- */
 app.post("/billing/portal", authenticate, async (req, res) => {
 

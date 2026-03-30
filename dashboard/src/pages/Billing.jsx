@@ -7,9 +7,11 @@ export default function Billing() {
     const { forecast, conversion } = useApp()
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
+    const [billingDetails, setBillingDetails] = useState(null)
 
     useEffect(() => {
         loadSubscription()
+        loadBillingDetails()
     }, [])
 
     useEffect(() => {
@@ -63,6 +65,16 @@ export default function Billing() {
         }
 
         window.location.href = data.url
+    }
+
+    async function loadBillingDetails() {
+
+        const res = await fetch(`${API_URL}/billing/details`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        const data = await res.json()
+        setBillingDetails(data)
     }
 
     async function cancelSubscription() {
@@ -131,6 +143,7 @@ export default function Billing() {
                     {subscription.plan.toUpperCase()}
                 </p>
 
+
                 {subscription.status === "cancel_scheduled" && (
                     <p style={{ color: "#f59e0b" }}>
                         Cancels at end of billing period
@@ -154,8 +167,41 @@ export default function Billing() {
                     />
                 </div>
 
+                {billingDetails?.renewal_date && (
+                    <p className="muted">
+                        Renews on:{" "}
+                        {new Date(billingDetails.renewal_date * 1000).toLocaleDateString()}
+                    </p>
+                )}
+
+                {billingDetails?.next_invoice && (
+                    <p className="muted">
+                        Next invoice: €{billingDetails.next_invoice.amount.toFixed(2)} on{" "}
+                        {new Date(billingDetails.next_invoice.date * 1000).toLocaleDateString()}
+                    </p>
+                )}
+
                 <p className="muted">
                     Estimated this month: €{forecast.estimated_total.toFixed(2)}
+                </p>
+
+                {billingDetails?.renewal_date && (
+                    <p className="muted">
+                        Renews on:{" "}
+                        {new Date(billingDetails.renewal_date * 1000).toLocaleDateString()}
+                    </p>
+                )}
+
+                {billingDetails?.next_invoice && (
+                    <p className="muted">
+                        Next invoice: €{billingDetails.next_invoice.amount.toFixed(2)} on{" "}
+                        {new Date(billingDetails.next_invoice.date * 1000).toLocaleDateString()}
+                    </p>
+                )}
+
+                <p className="muted">
+                    Cost per message: €
+                    {(forecast.cost / Math.max(usage, 1)).toFixed(4)}
                 </p>
 
             </div>
