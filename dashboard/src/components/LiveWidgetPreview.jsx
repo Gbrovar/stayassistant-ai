@@ -38,7 +38,7 @@ export default function LiveWidgetPreview({ propertyId, refresh }) {
                 position: "relative",
                 height: 600,
                 borderRadius: 16,
-                background: "#0b1220",
+                //background: "#0b1220",
                 overflow: "hidden"
             }}
         >
