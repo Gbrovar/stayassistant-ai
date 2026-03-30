@@ -220,14 +220,17 @@
         };
 
         if (config.preview) {
+
             iframe.style.opacity = "1";
             iframe.style.transform = "translateY(0) scale(1)";
             iframe.style.pointerEvents = "auto";
 
-            // 👇 ocultar botón en preview
-            //button.style.display = "none";
-        }
+            // 👇 botón visible pero sin animaciones intrusivas
+            button.style.display = "block";
 
+            // 👇 evitar interferir con dashboard scroll
+            document.body.style.overflow = "auto";
+        }
     }
 
     window.StayAssistant = {
