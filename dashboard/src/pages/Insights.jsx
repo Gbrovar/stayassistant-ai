@@ -15,17 +15,51 @@ export default function Insights() {
   const navigate = useNavigate()
 
   async function addToFAQ(question, answer) {
+
+  try {
+
+    // 1. Obtener FAQ actual
+    const res = await fetch(`${API_URL}/property/${propertyId}/faq`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await res.json()
+    const currentFaq = data.faq || []
+
+    // 2. Evitar duplicados
+    const exists = currentFaq.some(f => f.question === question)
+
+    if (exists) {
+      alert("This FAQ already exists")
+      return
+    }
+
+    // 3. Crear nuevo array
+    const updatedFaq = [
+      ...currentFaq,
+      { question, answer }
+    ]
+
+    // 4. Guardar TODO el array
     await fetch(`${API_URL}/property/${propertyId}/faq`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ question, answer })
+      body: JSON.stringify({ faq: updatedFaq })
     })
 
+    // 5. UX feedback
     navigate("/property")
+
+  } catch (err) {
+    console.error(err)
+    alert("Error adding FAQ")
   }
+}
 
   useEffect(() => {
     async function load() {
