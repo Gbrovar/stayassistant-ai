@@ -20,10 +20,6 @@ export default function LiveWidgetPreview({ propertyId, refresh }) {
             existingButton.remove()
         }
 
-        if (config.preview) {
-            button.style.pointerEvents = "none"; // opcional
-        }
-
         const script = document.createElement("script")
         script.id = "stayassistant-widget"
         script.src = `${import.meta.env.VITE_API_URL}/widget.js`
