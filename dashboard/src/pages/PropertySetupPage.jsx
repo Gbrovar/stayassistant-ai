@@ -37,26 +37,22 @@ export default function PropertySetupPage() {
                 {/* LEFT SIDE */}
                 <div className="stack">
 
-                    <Section title="1. Property Info">
+                    <Section title="Step 1 — Your property">
                         <PropertyInfo />
                     </Section>
 
-                    <Section title="2. Assistant Settings">
+                    <Section title="Step 2 — Your assistant">
                         <Personalization />
                     </Section>
 
-                    <Section title="3. FAQ">
+                    <Section title="Step 3 — What it can answer">
                         <FAQEditor />
-                    </Section>
-
-                    <Section title="4. Local Recommendations">
                         <Recommendations />
                     </Section>
 
-                    <Section title="5. Widget Branding">
+                    <Section title="Step 4 — Look & feel">
                         <Branding />
                     </Section>
-
                 </div>
 
                 {/* RIGHT SIDE → LIVE WIDGET */}
