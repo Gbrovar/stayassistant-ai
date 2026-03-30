@@ -59,8 +59,6 @@ export default function Branding() {
 
         showToast("Branding saved");
 
-        window.location.reload()
-
     }
 
 

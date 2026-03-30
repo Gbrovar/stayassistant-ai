@@ -5,6 +5,7 @@ import Branding from "./Branding"
 import Personalization from "./Personalization"
 import Section from "../components/UI/Section"
 import PropertyInfo from "./PropertyInfo"
+import Preview from "./Preview"
 
 export default function PropertySetupPage() {
 
@@ -25,24 +26,24 @@ export default function PropertySetupPage() {
                     <PropertyInfo />
                 </Section>
 
-                <Section title="2. FAQ">
+                <Section title="2. Assistant Settings">
+                    <Personalization />
+                </Section>
+
+                <Section title="3. FAQ">
                     <FAQEditor />
                 </Section>
 
-                <Section title="3. Local Recommendations">
+                <Section title="4. Local Recommendations">
                     <Recommendations />
-                </Section>
-
-                <Section title="4. Assistant Settings">
-                    <Personalization />
                 </Section>
 
                 <Section title="5. Widget Branding">
                     <Branding />
                 </Section>
 
-                <Section title="🚀 Initial Setup (one-time)">
-                    <SetupWizard />
+                <Section title="6. Live Preview">
+                    <Preview />
                 </Section>
 
             </div>

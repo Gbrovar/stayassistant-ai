@@ -10,16 +10,20 @@ export default function Preview() {
 
   const [widgetInstalled, setWidgetInstalled] = useState(true)
 
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const { refreshPreview } = useApp()
+
   const previewUrl =
     `${window.location.origin}/chat.html?embed=true&property=${propertyId}`
 
   useEffect(() => {
 
-    async function loadStatus(){
+    async function loadStatus() {
 
-      const res = await fetch(`${API_URL}/onboarding/status`,{
-        headers:{
-          Authorization:`Bearer ${getToken()}`
+      const res = await fetch(`${API_URL}/onboarding/status`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`
         }
       })
 
@@ -31,7 +35,7 @@ export default function Preview() {
 
     loadStatus()
 
-  },[])
+  }, [])
 
   return (
 
@@ -57,12 +61,19 @@ export default function Preview() {
 
       <Card>
 
+        {/*    
         <iframe
           src={previewUrl}
           className="preview-frame"
           title="Widget Preview"
         />
+      */}
 
+        <iframe
+          key={refreshPreview}
+          src={previewUrl}
+          className="preview-frame"
+        />
       </Card>
 
       <div className="preview-actions">

@@ -96,7 +96,7 @@ export default function Recommendations() {
 
         })
 
-        alert("Recommendations saved")
+        showToast("Recommendations saved")
 
     }
 

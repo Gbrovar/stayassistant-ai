@@ -26,6 +26,8 @@ function ProtectedLayout({ children }) {
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const [refreshPreview, setRefreshPreview] = useState(0)
+
   if (!token) {
     return <Navigate to="/login" />
   }
