@@ -5,20 +5,17 @@ export default function LiveWidgetPreview({ propertyId, refresh }) {
     useEffect(() => {
         if (!propertyId) return
 
-        // limpiar widget anterior
         // eliminar script anterior
         const existingScript = document.getElementById("stayassistant-widget")
         if (existingScript) existingScript.remove()
 
-        // eliminar iframe previo
-        const existingIframe = document.querySelector("iframe[src*='chat.html']")
+        // eliminar iframe previo (seguro)
+        const existingIframe = document.getElementById("stayassistant-iframe")
         if (existingIframe) existingIframe.remove()
 
-        // eliminar botón previo
-        const existingButton = document.querySelector("button")
-        if (existingButton && existingButton.innerText.includes("Concierge")) {
-            existingButton.remove()
-        }
+        // eliminar botón previo (seguro)
+        const existingButton = document.getElementById("stayassistant-button")
+        if (existingButton) existingButton.remove()
 
         const script = document.createElement("script")
         script.id = "stayassistant-widget"
@@ -29,7 +26,7 @@ export default function LiveWidgetPreview({ propertyId, refresh }) {
             if (window.StayAssistant) {
                 window.StayAssistant.init({
                     propertyId,
-                    preview: true // 👈 clave
+                    preview: true
                 })
             }
         }
