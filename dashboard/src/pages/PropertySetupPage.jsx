@@ -23,7 +23,7 @@ export default function PropertySetupPage() {
             <div className="page-header">
                 <h1 className="page-title">Property Setup</h1>
                 <p className="page-subtitle">
-                    Configure your AI concierge step by step.
+                    Set up your AI concierge in minutes.
                 </p>
             </div>
 
@@ -81,7 +81,7 @@ export default function PropertySetupPage() {
                         opacity: 0.6,
                         marginBottom: 8
                     }}>
-                        Live preview of your concierge
+                        See how your concierge responds in real time
                     </div>
 
                     <LiveWidgetPreview
