@@ -57,7 +57,7 @@ export default function Install() {
 
     const propertyId = getPropertyId()
 
-    const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}"></script>`
+    const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}" defer></script>`
 
     return (
 
@@ -83,7 +83,11 @@ export default function Install() {
                         {checking && "Checking installation..."}
                         {!checking && detected === null && "Click to check installation"}
                         {detected === true && "✅ Widget detected on your site"}
-                        {detected === false && "Not detected yet (some websites may block automatic detection)"}
+                        {detected === false && (
+                            <div style={{ marginTop: 10, fontSize: 13, opacity: 0.6 }}>
+                                Detection may fail on some websites. Please open your site and check if the chat appears.
+                            </div>
+                        )}
 
                     </div>
 
@@ -197,6 +201,25 @@ export default function Install() {
 
 
                 <Card>
+
+                    <input
+                        type="text"
+                        placeholder="https://yourwebsite.com"
+                        value={siteUrl}
+                        onChange={(e) => {
+                            setSiteUrl(e.target.value)
+                            localStorage.setItem("property_url", e.target.value)
+                        }}
+                        style={{
+                            width: "100%",
+                            marginTop: 10,
+                            padding: 10,
+                            borderRadius: 8,
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            background: "#0b1220",
+                            color: "white"
+                        }}
+                    />
 
                     <div style={{ fontWeight: 600, marginBottom: 8 }}>
                         {tested ? "✅" : "⬜"} Step 3 — Test your AI concierge
