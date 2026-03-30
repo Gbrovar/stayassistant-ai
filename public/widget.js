@@ -217,7 +217,7 @@
             iframe.style.pointerEvents = "auto";
 
             // 👇 ocultar botón en preview
-            button.style.display = "none";
+            //button.style.display = "none";
         }
 
     }
