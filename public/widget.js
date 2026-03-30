@@ -37,6 +37,7 @@
         /* botón flotante */
 
         button = document.createElement("button");
+        button.id = "stayassistant-button";
 
         button.innerText = branding.button_text || "💬 Concierge";
 
@@ -138,6 +139,7 @@
         /* iframe del chat */
 
         iframe = document.createElement("iframe");
+        iframe.id = "stayassistant-iframe";
 
         iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}&preview=${config.preview ? "true" : "false"}`;
 
