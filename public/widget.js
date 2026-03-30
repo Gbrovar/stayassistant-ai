@@ -40,7 +40,7 @@
 
         button.innerText = branding.button_text || "💬 Concierge";
 
-        button.style.position = isPreview ? "absolute" : "fixed";
+        button.style.position = "fixed";
         button.style.bottom = "25px";
         button.style.right = "25px";
         button.style.background = branding.primary_color;
@@ -143,7 +143,7 @@
 
         const isMobile = window.innerWidth < 600;
 
-        iframe.style.position = isPreview ? "absolute" : "fixed";
+        iframe.style.position = "fixed";
         iframe.style.border = "none";
         iframe.style.zIndex = "9998";
 
