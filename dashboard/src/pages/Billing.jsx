@@ -8,10 +8,12 @@ export default function Billing() {
     const [subscription, setSubscription] = useState(null)
     const token = localStorage.getItem("token")
     const [billingDetails, setBillingDetails] = useState(null)
+    const [invoices, setInvoices] = useState([])
 
     useEffect(() => {
         loadSubscription()
         loadBillingDetails()
+        loadInvoices()
     }, [])
 
     useEffect(() => {
@@ -75,6 +77,16 @@ export default function Billing() {
 
         const data = await res.json()
         setBillingDetails(data)
+    }
+
+    async function loadInvoices() {
+
+        const res = await fetch(`${API_URL}/billing/invoices`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        const data = await res.json()
+        setInvoices(data)
     }
 
     async function cancelSubscription() {
@@ -167,6 +179,18 @@ export default function Billing() {
                     />
                 </div>
 
+                {usageRatio > 0.8 && (
+                    <div className="usage-alert warning">
+                        ⚠️ You’re close to your limit
+                    </div>
+                )}
+
+                {usageRatio >= 1 && (
+                    <div className="usage-alert danger">
+                        🚨 You exceeded your plan — extra charges may apply
+                    </div>
+                )}
+
                 {billingDetails?.renewal_date && (
                     <p className="muted">
                         Renews on:{" "}
@@ -184,20 +208,6 @@ export default function Billing() {
                 <p className="muted">
                     Estimated this month: €{forecast.estimated_total.toFixed(2)}
                 </p>
-
-                {billingDetails?.renewal_date && (
-                    <p className="muted">
-                        Renews on:{" "}
-                        {new Date(billingDetails.renewal_date * 1000).toLocaleDateString()}
-                    </p>
-                )}
-
-                {billingDetails?.next_invoice && (
-                    <p className="muted">
-                        Next invoice: €{billingDetails.next_invoice.amount.toFixed(2)} on{" "}
-                        {new Date(billingDetails.next_invoice.date * 1000).toLocaleDateString()}
-                    </p>
-                )}
 
                 <p className="muted">
                     Cost per message: €
@@ -278,6 +288,48 @@ export default function Billing() {
                     >
                         Cancel subscription
                     </button>
+                )}
+
+            </div>
+
+            <div className="card" style={{ marginTop: 30 }}>
+
+                <h3>Invoices</h3>
+
+                {invoices.length === 0 ? (
+                    <p className="muted">No invoices yet</p>
+                ) : (
+                    <div className="invoice-list">
+
+                        {invoices.map(inv => (
+                            <div key={inv.id} className="invoice-row">
+
+                                <div>
+                                    <strong>€{inv.amount.toFixed(2)}</strong>
+                                    <p className="muted">
+                                        {new Date(inv.date * 1000).toLocaleDateString()}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <span className="status">
+                                        {inv.status}
+                                    </span>
+
+                                    <a
+                                        href={inv.pdf}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="btn-secondary"
+                                    >
+                                        Download PDF
+                                    </a>
+                                </div>
+
+                            </div>
+                        ))}
+
+                    </div>
                 )}
 
             </div>

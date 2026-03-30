@@ -598,6 +598,23 @@ body {
   border-radius: 4px;
 }
 
+.usage-alert {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.usage-alert.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.usage-alert.danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
 .plans {
   display: flex;
   gap: 20px;
@@ -646,12 +663,6 @@ body {
   width: 100%;
 }
 
-
-.btn-secondary {
-  background: #1e293b;
-  color: white;
-}
-
 .btn-disabled {
   background: #374151;
   color: #9ca3af;
@@ -665,6 +676,22 @@ body {
   cursor: pointer;
   margin-top: 8px;
   font-size: 13px;
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-secondary {
+  background: #1f2937;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
 }
 
 .input {

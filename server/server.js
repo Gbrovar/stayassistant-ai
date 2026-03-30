@@ -4396,6 +4396,44 @@ app.get("/billing/details", authenticate, async (req, res) => {
 
 })
 
+app.get("/billing/invoices", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+    const sub = await getRealSubscription(propertyId)
+
+    if (!sub?.stripeSubscription) {
+      return res.json([])
+    }
+
+    const stripeSub = await stripe.subscriptions.retrieve(
+      sub.stripeSubscription
+    )
+
+    const invoices = await stripe.invoices.list({
+      customer: stripeSub.customer,
+      limit: 10
+    })
+
+    const formatted = invoices.data.map(inv => ({
+      id: inv.id,
+      amount: inv.amount_paid / 100,
+      currency: inv.currency,
+      date: inv.created,
+      status: inv.status,
+      pdf: inv.invoice_pdf
+    }))
+
+    res.json(formatted)
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "failed" })
+  }
+
+})
+
 /* --- STRIPE BILLING PORTAL --- */
 app.post("/billing/portal", authenticate, async (req, res) => {
 
