@@ -652,6 +652,12 @@ body {
   color: white;
 }
 
+.btn-disabled {
+  background: #374151;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
 .btn-link {
   background: none;
   border: none;
