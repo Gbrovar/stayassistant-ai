@@ -22,26 +22,9 @@
 
     }
 
-    /* --- leer parámetros del script --- */
-
-    let propertyId = "demo_property";
-
-    try {
-
-        const url = new URL(script.src);
-        const params = new URLSearchParams(url.search);
-
-        propertyId = params.get("property") || "demo_property";
-
-    } catch (e) {
-
-        console.warn("StayAssistant: could not parse script URL");
-
-    }
-
-    console.log("StayAssistant widget loaded for property:", propertyId);
-
     function createWidget(config) {
+
+        const propertyId = config?.propertyId || "demo_property"; // ✅ FIX
 
         /* botón flotante */
 
@@ -148,7 +131,7 @@
 
         iframe = document.createElement("iframe");
 
-        iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}`;
+        iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}&preview=${config.preview ? "true" : "false"}`;
 
         const isMobile = window.innerWidth < 600;
 
@@ -228,6 +211,15 @@
 
         };
 
+        if (config.preview) {
+            iframe.style.opacity = "1";
+            iframe.style.transform = "translateY(0) scale(1)";
+            iframe.style.pointerEvents = "auto";
+
+            // 👇 ocultar botón en preview
+            button.style.display = "none";
+        }
+
     }
 
     window.StayAssistant = {
@@ -235,15 +227,28 @@
         init: function (config) {
 
             if (!config || !config.propertyId) {
-
                 console.error("StayAssistant: apartmentId is required");
                 return;
-
             }
 
             console.log("StayAssistant loaded for property:", config.propertyId);
 
-            createWidget(config);
+            fetch(`${API_BASE}/property/${config.propertyId}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.branding) {
+                        branding = data.branding;
+                    }
+
+                    createWidget(config); // ✅ SOLO UNA VEZ
+
+                })
+                .catch(() => {
+
+                    createWidget(config); // fallback
+
+                });
 
         }
 
@@ -301,23 +306,5 @@
 
     });
 
-    /* cargar branding desde backend */
-
-    fetch(`${API_BASE}/property/${propertyId}`)
-        .then(res => res.json())
-        .then(data => {
-
-            if (data.branding) {
-                branding = data.branding;
-            }
-
-            createWidget();
-
-        })
-        .catch(() => {
-
-            createWidget();
-
-        });
 
 })();
