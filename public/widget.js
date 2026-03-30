@@ -22,11 +22,17 @@
 
     }
 
-    const isPreview = config.preview === true;
+
 
     function createWidget(config) {
 
+        const isPreview = config.preview === true;
+
         const propertyId = config?.propertyId || "demo_property"; // ✅ FIX
+
+        const mountNode = config.preview
+            ? document.getElementById("widget-preview-container")
+            : document.body;
 
         /* botón flotante */
 
@@ -62,7 +68,7 @@
 
         }
 
-        document.body.appendChild(button);
+        mountNode.appendChild(button);
 
         let pulseInterval = setInterval(pulseButton, 9000);
 
@@ -168,7 +174,7 @@
         iframe.style.pointerEvents = "none";
         iframe.style.transition = "opacity .25s ease, transform .25s ease";
 
-        document.body.appendChild(iframe);
+        mountNode.appendChild(iframe);
 
         /* abrir / cerrar chat */
 
