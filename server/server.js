@@ -1039,7 +1039,7 @@ app.get("/property/:id/faq", authenticate, async (req, res) => {
 
 });
 
-/* --- UPDATE FAQ --- */
+/* --- UPDATE FAQ (FIXED) --- */
 app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   const propertyId = req.params.id
@@ -1050,45 +1050,53 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
 
   const { faq } = req.body
 
-  const property = await getProperty(propertyId)
+  console.log("📥 FAQ RECEIVED:", faq)
+
+  // ✅ VALIDACIÓN
+  if (!Array.isArray(faq)) {
+    return res.status(400).json({ error: "Invalid FAQ format" })
+  }
+
+  if (faq.length === 0) {
+    return res.status(400).json({ error: "FAQ cannot be empty" })
+  }
+
+  console.log("📤 FAQ SAVED:", cleanFaq)
+
+  // ✅ LIMPIEZA
+  const cleanFaq = faq.filter(f =>
+    f.question && f.answer
+  )
+
+  if (cleanFaq.length === 0) {
+    return res.status(400).json({ error: "Invalid FAQ content" })
+  }
+
+  // 🔥 CAMBIO CRÍTICO → usar loadProperty
+  const property = await loadProperty(propertyId)
 
   if (!property) {
     return res.status(404).json({ error: "property not found" })
   }
 
-  property.knowledge.faq = faq
+  // 🔒 PROTECCIÓN EXTRA
+  if (!property.knowledge) {
+    property.knowledge = {}
+  }
 
+  property.knowledge.faq = cleanFaq
   property.updatedAt = Date.now()
 
   await createProperty(property)
 
+  // 🧹 limpieza cache
   propertyCache.delete(propertyId)
-
   await invalidateAnalyticsCache(propertyId)
 
   triggerPrecompute(propertyId)
 
-  /* --- ONBOARDING STEP COMPLETE --- */
-
-  const onboardingKey = `stayassistant:onboarding:${propertyId}`
-
-  let onboarding = await redis.get(onboardingKey)
-
-  if (!onboarding) {
-    onboarding = {}
-  } else {
-    onboarding = JSON.parse(onboarding)
-  }
-
-  onboarding.faq = true
-
-  await redis.set(onboardingKey, JSON.stringify(onboarding))
-
-  res.json({
-    success: true
-  })
-
-});
+  res.json({ success: true })
+})
 
 /* --- GET BRANDING --- */
 app.get("/property/:id/branding", authenticate, async (req, res) => {
