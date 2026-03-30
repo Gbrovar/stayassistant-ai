@@ -5,9 +5,16 @@ import Branding from "./Branding"
 import Personalization from "./Personalization"
 import Section from "../components/UI/Section"
 import PropertyInfo from "./PropertyInfo"
-import Preview from "./Preview"
+import LiveWidgetPreview from "../components/LiveWidgetPreview"
+import { useContext } from "react"
+import { AppContext } from "../context/AppContext"
+import { getPropertyId } from "../api/auth"
+
 
 export default function PropertySetupPage() {
+
+    const { refreshPreview } = useContext(AppContext)
+    const propertyId = getPropertyId()
 
     return (
 
@@ -20,31 +27,58 @@ export default function PropertySetupPage() {
                 </p>
             </div>
 
-            <div className="stack">
+            <div style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 420px",
+                gap: 24,
+                alignItems: "start"
+            }}>
 
-                <Section title="1. Property Info">
-                    <PropertyInfo />
-                </Section>
+                {/* LEFT SIDE */}
+                <div className="stack">
 
-                <Section title="2. Assistant Settings">
-                    <Personalization />
-                </Section>
+                    <Section title="1. Property Info">
+                        <PropertyInfo />
+                    </Section>
 
-                <Section title="3. FAQ">
-                    <FAQEditor />
-                </Section>
+                    <Section title="2. Assistant Settings">
+                        <Personalization />
+                    </Section>
 
-                <Section title="4. Local Recommendations">
-                    <Recommendations />
-                </Section>
+                    <Section title="3. FAQ">
+                        <FAQEditor />
+                    </Section>
 
-                <Section title="5. Widget Branding">
-                    <Branding />
-                </Section>
+                    <Section title="4. Local Recommendations">
+                        <Recommendations />
+                    </Section>
 
-                <Section title="6. Live Preview">
-                    <Preview />
-                </Section>
+                    <Section title="5. Widget Branding">
+                        <Branding />
+                    </Section>
+
+                </div>
+
+                {/* RIGHT SIDE → LIVE WIDGET */}
+                <div style={{
+                    position: "sticky",
+                    top: 20
+                }}>
+
+                    <div style={{
+                        fontSize: 12,
+                        opacity: 0.6,
+                        marginBottom: 8
+                    }}>
+                        Live preview of your concierge
+                    </div>
+
+                    <LiveWidgetPreview
+                        propertyId={propertyId}
+                        refresh={refreshPreview}
+                    />
+
+                </div>
 
             </div>
 

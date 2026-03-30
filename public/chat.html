@@ -509,6 +509,7 @@
 
         const params = new URLSearchParams(window.location.search);
         const isEmbed = params.get("embed");
+        const isPreview = params.get("preview") === "true";
 
         if (isEmbed) {
 
@@ -518,6 +519,21 @@
 
             if (button) {
                 button.style.display = "none";
+            }
+        }
+
+        if (isPreview) {
+            document.body.classList.add("embed-mode");
+
+            const widget = document.getElementById("chat-widget");
+
+            if (widget) {
+                widget.classList.add("open"); // 👈 abierto por defecto
+            }
+
+            const button = document.getElementById("chat-button");
+            if (button) {
+                button.style.display = "none"; // 👈 ocultar botón en preview
             }
         }
 

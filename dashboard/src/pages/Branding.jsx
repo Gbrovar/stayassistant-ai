@@ -13,7 +13,7 @@ export default function Branding() {
     const [propertyName, setPropertyName] = useState("")
     const [buttonText, setButtonText] = useState("")
     const [primaryColor, setPrimaryColor] = useState("")
-    const { showToast } = useContext(AppContext);
+    const { showToast, setRefreshPreview } = useContext(AppContext);
 
     useEffect(() => {
 
