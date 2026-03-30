@@ -14,6 +14,7 @@ import InsightsPage from "./pages/InsightsPage"
 import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 import AdminDashboard from "./pages/AdminDashboard"
+import BillingSuccess from "./pages/BillingSuccess"
 
 
 
@@ -99,6 +100,8 @@ export default function App() {
         <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
         <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
         <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
+
+        <Route path="/billing/success" element={<BillingSuccess />} />
 
         <Route path="/admin" element={<AdminDashboard />} />
 

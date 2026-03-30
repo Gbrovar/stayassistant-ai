@@ -4079,7 +4079,7 @@ app.post("/billing/create-checkout", authenticate, async (req, res) => {
         }
       ],
 
-      success_url: "https://stayassistantai.com/dashboard?billing=success",
+      success_url: "https://www.stayassistantai.com/dashboard/billing/success",
 
       cancel_url: "https://stayassistantai.com/dashboard?billing=cancel",
 
