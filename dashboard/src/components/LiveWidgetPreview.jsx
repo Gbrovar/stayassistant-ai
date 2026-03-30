@@ -2,40 +2,40 @@ import { useEffect } from "react"
 
 export default function LiveWidgetPreview({ propertyId, refresh }) {
 
-  useEffect(() => {
-    if (!propertyId) return
+    useEffect(() => {
+        if (!propertyId) return
 
-    // limpiar widget anterior
-    const existing = document.getElementById("stayassistant-widget")
-    if (existing) existing.remove()
+        // limpiar widget anterior
+        const existing = document.getElementById("stayassistant-widget")
+        if (existing) existing.remove()
 
-    const script = document.createElement("script")
-    script.id = "stayassistant-widget"
-    script.src = `${import.meta.env.VITE_API_URL}/widget.js`
-    script.async = true
+        const script = document.createElement("script")
+        script.id = "stayassistant-widget"
+        script.src = `${import.meta.env.VITE_API_URL}/widget.js`
+        script.async = true
 
-    script.onload = () => {
-      if (window.StayAssistantWidget) {
-        window.StayAssistantWidget.init({
-          propertyId,
-          preview: true // 👈 clave
-        })
-      }
-    }
+        script.onload = () => {
+            if (window.StayAssistant) {
+                window.StayAssistant.init({
+                    propertyId,
+                    preview: true // 👈 clave
+                })
+            }
+        }
 
-    document.body.appendChild(script)
+        document.body.appendChild(script)
 
-  }, [propertyId, refresh])
+    }, [propertyId, refresh])
 
-  return (
-    <div style={{
-      position: "relative",
-      height: 600,
-      borderRadius: 16,
-      background: "#0b1220",
-      overflow: "hidden"
-    }}>
-      {/* Fondo simulando web */}
-    </div>
-  )
+    return (
+        <div style={{
+            position: "relative",
+            height: 600,
+            borderRadius: 16,
+            background: "#0b1220",
+            overflow: "hidden"
+        }}>
+            {/* Fondo simulando web */}
+        </div>
+    )
 }
