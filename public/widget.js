@@ -22,6 +22,8 @@
 
     }
 
+    const isPreview = config.preview === true;
+
     function createWidget(config) {
 
         const propertyId = config?.propertyId || "demo_property"; // ✅ FIX
@@ -32,7 +34,7 @@
 
         button.innerText = branding.button_text || "💬 Concierge";
 
-        button.style.position = "fixed";
+        button.style.position = isPreview ? "absolute" : "fixed";
         button.style.bottom = "25px";
         button.style.right = "25px";
         button.style.background = branding.primary_color;
@@ -135,7 +137,7 @@
 
         const isMobile = window.innerWidth < 600;
 
-        iframe.style.position = "fixed";
+        iframe.style.position = isPreview ? "absolute" : "fixed";
         iframe.style.border = "none";
         iframe.style.zIndex = "9998";
 
@@ -217,7 +219,7 @@
             iframe.style.pointerEvents = "auto";
 
             // 👇 ocultar botón en preview
-            //button.style.display = "none";
+            button.style.display = "none";
         }
 
     }

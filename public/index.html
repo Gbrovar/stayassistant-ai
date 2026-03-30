@@ -74,7 +74,15 @@
 
     </div>
 
-    <script src="/widget.js?property=demo_property"></script>
+    <script>
+        window.addEventListener("load", function () {
+            if (window.StayAssistant) {
+                StayAssistant.init({
+                    propertyId: "demo_property"
+                });
+            }
+        });
+    </script>
 
 </body>
 

@@ -23,18 +23,25 @@ export default function LiveWidgetPreview({ propertyId, refresh }) {
             }
         }
 
-        document.body.appendChild(script)
+        const container = document.getElementById("widget-preview-container")
+
+        if (container) {
+            container.appendChild(script)
+        }
 
     }, [propertyId, refresh])
 
     return (
-        <div style={{
-            position: "relative",
-            height: 600,
-            borderRadius: 16,
-            background: "#0b1220",
-            overflow: "hidden"
-        }}>
+        <div
+            id="widget-preview-container"
+            style={{
+                position: "relative",
+                height: 600,
+                borderRadius: 16,
+                background: "#0b1220",
+                overflow: "hidden"
+            }}
+        >
             {/* Fondo simulando web */}
         </div>
     )
