@@ -116,11 +116,11 @@ export default function FAQEditor() {
 
         <div>
 
-            <Card>
+
 
                 {faq.map((item, index) => (
 
-                    <Card style={{ marginBottom: 12 }}>
+                    <div style={{ marginBottom: 12 }}>
 
                         <input
                             className="input"
@@ -145,7 +145,7 @@ export default function FAQEditor() {
 
                         </div>
 
-                    </Card>
+                    </div>
 
                 ))}
 
@@ -161,7 +161,7 @@ export default function FAQEditor() {
 
                 </div>
 
-            </Card>
+
 
             {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 

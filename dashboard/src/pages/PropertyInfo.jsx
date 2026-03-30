@@ -63,7 +63,7 @@ export default function PropertyInfo() {
 
     return (
 
-        <Card>
+        <div>
 
             <div style={{ marginBottom: 16, opacity: 0.7 }}>
                 Stay details
@@ -109,7 +109,7 @@ export default function PropertyInfo() {
                 </button>
             </div>
 
-        </Card>
+        </div>
 
     )
 

@@ -114,11 +114,11 @@ export default function Recommendations() {
                 Recommended: add 3–5 restaurants for best guest experience.
             </p>
 
-            <Card>
+
 
                 {items.map((item, index) => (
 
-                    <Card key={index} style={{ marginBottom: 12 }}>
+                    <div key={index} style={{ marginBottom: 12 }}>
 
                         <div style={{ marginBottom: 10 }}>
                             <input className="input"
@@ -142,7 +142,7 @@ export default function Recommendations() {
                             </button>
                         </div>
 
-                    </Card>
+                    </div>
 
                 ))}
 
@@ -158,7 +158,6 @@ export default function Recommendations() {
 
                 </div>
 
-            </Card>
 
         </div>
 

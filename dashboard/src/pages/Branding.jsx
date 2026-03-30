@@ -66,8 +66,6 @@ export default function Branding() {
 
         <div>
 
-            <Card>
-
                 <div className="branding-field">
 
                     <label>Property name</label>
@@ -114,7 +112,6 @@ export default function Branding() {
                     Save
                 </button>
 
-            </Card>
 
         </div>
 

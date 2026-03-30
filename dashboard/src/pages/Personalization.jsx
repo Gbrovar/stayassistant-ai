@@ -4,9 +4,8 @@ export default function Personalization(){
 
   return(
 
-    <div>
+    <div style={{ maxWidth: 500 }}>
 
-      <Card>
 
         <p>
           Customize how your concierge interacts with guests.
@@ -54,7 +53,6 @@ export default function Personalization(){
           Save personalization
         </button>
 
-      </Card>
 
     </div>
 
