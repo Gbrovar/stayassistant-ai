@@ -1061,7 +1061,6 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
     return res.status(400).json({ error: "FAQ cannot be empty" })
   }
 
-  console.log("📤 FAQ SAVED:", cleanFaq)
 
   // ✅ LIMPIEZA
   const cleanFaq = faq.filter(f =>
@@ -1094,6 +1093,8 @@ app.post("/property/:id/faq", authenticate, async (req, res) => {
   await invalidateAnalyticsCache(propertyId)
 
   triggerPrecompute(propertyId)
+
+  console.log("📤 FAQ SAVED:", cleanFaq)
 
   res.json({ success: true })
 })
