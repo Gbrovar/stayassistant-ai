@@ -25,6 +25,7 @@ export function AppProvider({ children }) {
     const token = localStorage.getItem("token")
     const propertyId = localStorage.getItem("propertyId")
     const [conversion, setConversion] = useState(null)
+    const [refreshPreview, setRefreshPreview] = useState(0)
 
 
     function computeConversionState({
@@ -295,6 +296,8 @@ export function AppProvider({ children }) {
             limit,
             limitReached,
             conversion,
+            refreshPreview,
+            setRefreshPreview,
             showToast
         }}>
             {toast && (

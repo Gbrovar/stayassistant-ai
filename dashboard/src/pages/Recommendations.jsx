@@ -2,12 +2,16 @@ import { useEffect, useState } from "react"
 import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
+import { useContext } from "react"
+import { AppContext } from "../context/AppContext"
 
 export default function Recommendations() {
 
     const propertyId = getPropertyId()
 
     const [items, setItems] = useState([])
+
+    const { setRefreshPreview, showToast } = useContext(AppContext)
 
     useEffect(() => {
 
@@ -97,6 +101,8 @@ export default function Recommendations() {
         })
 
         showToast("Recommendations saved")
+
+        setRefreshPreview(prev => prev + 1)
 
     }
 

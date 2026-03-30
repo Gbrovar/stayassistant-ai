@@ -58,7 +58,7 @@ export default function Branding() {
         })
 
         showToast("Branding saved");
-
+        setRefreshPreview(prev => prev + 1)
     }
 
 

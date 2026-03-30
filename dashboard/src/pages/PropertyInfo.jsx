@@ -8,7 +8,7 @@ import { AppContext } from "../context/AppContext";
 export default function PropertyInfo() {
 
     const propertyId = getPropertyId()
-    const { showToast } = useContext(AppContext);
+    const { showToast, setRefreshPreview } = useContext(AppContext)
 
     const [form, setForm] = useState({
         checkin: "",
@@ -57,6 +57,7 @@ export default function PropertyInfo() {
         })
 
         showToast("Property info saved");
+        setRefreshPreview(prev => prev + 1)
 
     }
 

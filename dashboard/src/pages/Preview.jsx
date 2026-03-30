@@ -3,6 +3,9 @@ import Card from "../components/Card"
 import { getPropertyId, getToken } from "../api/auth"
 import { API_URL } from "../api/config"
 import { Link } from "react-router-dom"
+import { useContext } from "react"
+import { AppContext } from "../context/AppContext"
+
 
 export default function Preview() {
 
@@ -12,7 +15,7 @@ export default function Preview() {
 
   const [refreshKey, setRefreshKey] = useState(0)
 
-  const { refreshPreview } = useApp()
+  const { refreshPreview } = useContext(AppContext)
 
   const previewUrl =
     `${window.location.origin}/chat.html?embed=true&property=${propertyId}`

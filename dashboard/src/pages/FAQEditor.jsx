@@ -4,6 +4,8 @@ import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import Toast from "../components/UI/Toast"
 import Button from "../components/UI/Button"
+import { useContext } from "react"
+import { AppContext } from "../context/AppContext"
 
 export default function FAQEditor() {
 
@@ -12,6 +14,7 @@ export default function FAQEditor() {
     const [faq, setFaq] = useState([])
     const [loading, setLoading] = useState(false)
     const [toast, setToast] = useState(null)
+    const { setRefreshPreview } = useContext(AppContext)
 
     useEffect(() => {
 
@@ -97,6 +100,7 @@ export default function FAQEditor() {
             })
 
             setToast("FAQ saved successfully")
+            setRefreshPreview(prev => prev + 1)
 
         } catch (err) {
 
