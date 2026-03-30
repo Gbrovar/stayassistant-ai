@@ -28,6 +28,21 @@ export default function PropertySetupPage() {
             </div>
 
             <div style={{
+                display: "flex",
+                gap: 10,
+                marginBottom: 20
+            }}>
+                {["Property", "Assistant", "Knowledge", "Branding"].map((step, i) => (
+                    <div key={i} style={{
+                        flex: 1,
+                        height: 6,
+                        borderRadius: 4,
+                        background: "rgba(255,255,255,0.1)"
+                    }} />
+                ))}
+            </div>
+
+            <div style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 420px",
                 gap: 24,
