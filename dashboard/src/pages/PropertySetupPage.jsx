@@ -3,36 +3,28 @@ import Personalization from "./Personalization"
 import FAQEditor from "./FAQEditor"
 import Recommendations from "./Recommendations"
 import Branding from "./Branding"
-import LiveWidgetPreview from "../components/LiveWidgetPreview"
-import { useContext } from "react"
-import { AppContext } from "../context/AppContext"
-import { getPropertyId } from "../api/auth"
 
 export default function PropertySetupPage() {
-
-  const { refreshPreview } = useContext(AppContext)
-  const propertyId = getPropertyId()
 
   return (
     <div className="page">
 
-      {/* HEADER */}
-      <div className="page-header">
-        <h1 className="page-title">AI Concierge Setup</h1>
-        <p className="page-subtitle">
-          Configure your assistant and see changes instantly.
-        </p>
-      </div>
-
+      {/* WRAPPER CENTRADO */}
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 420px",
-        gap: 40,
-        alignItems: "start"
+        maxWidth: 820,
+        margin: "0 auto"
       }}>
 
-        {/* LEFT */}
-        <div className="stack" style={{ gap: 40 }}>
+        {/* HEADER */}
+        <div className="page-header">
+          <h1 className="page-title">Your AI concierge</h1>
+          <p className="page-subtitle">
+            Configure how your assistant works and responds to guests.
+          </p>
+        </div>
+
+        {/* CONTENT */}
+        <div className="stack" style={{ gap: 48 }}>
 
           {/* ESSENTIALS */}
           <div>
@@ -45,7 +37,7 @@ export default function PropertySetupPage() {
 
             <div className="section-content">
               <PropertyInfo />
-              <div style={{ height: 20 }} />
+              <div style={{ height: 24 }} />
               <Personalization />
             </div>
           </div>
@@ -61,7 +53,7 @@ export default function PropertySetupPage() {
 
             <div className="section-content">
               <FAQEditor />
-              <div style={{ height: 20 }} />
+              <div style={{ height: 24 }} />
               <Recommendations />
             </div>
           </div>
@@ -79,27 +71,6 @@ export default function PropertySetupPage() {
               <Branding />
             </div>
           </div>
-
-        </div>
-
-        {/* RIGHT → PREVIEW */}
-        <div style={{
-          position: "sticky",
-          top: 20
-        }}>
-
-          <div style={{
-            fontSize: 12,
-            color: "#64748b",
-            marginBottom: 10
-          }}>
-            Live preview
-          </div>
-
-          <LiveWidgetPreview
-            propertyId={propertyId}
-            refresh={refreshPreview}
-          />
 
         </div>
 
