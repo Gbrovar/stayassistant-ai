@@ -1,47 +1,41 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 export default function LiveWidgetPreview({ propertyId, refresh }) {
 
-    const [url, setUrl] = useState("")
+  useEffect(() => {
+    if (!propertyId) return
 
-    useEffect(() => {
-        const base = import.meta.env.VITE_API_URL || window.location.origin
+    // limpiar widget anterior
+    const existing = document.getElementById("stayassistant-widget")
+    if (existing) existing.remove()
 
-        setUrl(
-            `${base}/chat.html?preview=true&property=${propertyId}&t=${Date.now()}`
-        )
-    }, [propertyId, refresh])
+    const script = document.createElement("script")
+    script.id = "stayassistant-widget"
+    script.src = `${import.meta.env.VITE_API_URL}/widget.js`
+    script.async = true
 
-    return (
-        <div style={{
-            position: "relative",
-            width: "100%",
-            height: 600,
-            borderRadius: 16,
-            overflow: "hidden",
-            background: "#0b1220"
-        }}>
+    script.onload = () => {
+      if (window.StayAssistantWidget) {
+        window.StayAssistantWidget.init({
+          propertyId,
+          preview: true // 👈 clave
+        })
+      }
+    }
 
-            {/* Fondo fake web */}
-            <div style={{
-                position: "absolute",
-                inset: 0,
-                background: "#0b1220"
-            }} />
+    document.body.appendChild(script)
 
-            {/* Widget real */}
-            <iframe
-                src={url}
-                style={{
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none"
-                }}
-            />
+  }, [propertyId, refresh])
 
-        </div>
-    )
+  return (
+    <div style={{
+      position: "relative",
+      height: 600,
+      borderRadius: 16,
+      background: "#0b1220",
+      overflow: "hidden"
+    }}>
+      {/* Fondo simulando web */}
+    </div>
+  )
 }
