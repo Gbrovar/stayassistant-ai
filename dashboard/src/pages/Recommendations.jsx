@@ -114,7 +114,7 @@ export default function Recommendations() {
             <div style={{ fontSize: 13, marginBottom: 6, color: "#64748b" }}>
                 Recommendation
             </div>
-            
+
             <p className="field-hint">
                 Guests often ask where to eat. Add a few recommendations to improve responses.
             </p>
@@ -154,7 +154,7 @@ export default function Recommendations() {
             <div style={{ display: "flex", gap: 10 }}>
 
                 <button className="btn btn-primary" onClick={addItem}>
-                    Add recommendation
+                    + Add recommendation
                 </button>
 
                 <button className="btn btn-primary" onClick={save}>
