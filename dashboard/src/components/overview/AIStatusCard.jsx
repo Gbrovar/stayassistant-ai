@@ -1,3 +1,5 @@
+import { useApp } from "../../context/AppContext"
+
 export default function AIStatusCard() {
   const { usage, limit, subscription, conversion } = useApp()
 
