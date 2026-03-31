@@ -166,7 +166,153 @@ export default function PropertyInfo() {
             {saving && <div style={{ fontSize: 12, color: "#94a3b8" }}>Saving...</div>}
             {saved && <div style={{ fontSize: 12, color: "#22c55e" }}>Saved ✓</div>}
 
-            {/* resto igual que antes */}
+            {/* BASIC */}
+            <Section title="Basic info">
+                <Grid>
+                    <Input label="Property name" name="property_name" value={form.property_name} onChange={handleChange} />
+                    <Input label="Widget text" name="button_text" value={form.button_text} onChange={handleChange} />
+                </Grid>
+
+                <Textarea label="Welcome message" name="welcome_message" value={form.welcome_message} onChange={handleChange} />
+            </Section>
+
+            {/* LOCATION */}
+            <Section title="Location">
+                <Input label="Address" name="address" value={form.address} onChange={handleChange} />
+
+                <Grid>
+                    <Input label="City" name="city" value={form.city} onChange={handleChange} />
+                    <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+                </Grid>
+            </Section>
+
+            {/* CONTACT */}
+            <Section title="Contact">
+                <Grid>
+                    <Input label="Phone" name="phone" value={form.phone} onChange={handleChange} />
+                    <Input label="Email" name="email" value={form.email} onChange={handleChange} />
+                </Grid>
+            </Section>
+
+            {/* STAY */}
+            <Section title="Stay details">
+                <Grid>
+                    <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
+                    <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+                </Grid>
+
+                <Textarea label="Check-in instructions" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
+                <Textarea label="Late check-in" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
+            </Section>
+
+            {/* AMENITIES */}
+            <Section title="Amenities">
+                <Chips
+                    items={form.amenities}
+                    newValue={newAmenity}
+                    setNewValue={setNewAmenity}
+                    onAdd={(v) => addItem("amenities", v)}
+                    onRemove={(i) => removeItem("amenities", i)}
+                />
+            </Section>
+
+            {/* SERVICES */}
+            <Section title="Services">
+                <Chips
+                    items={form.services}
+                    newValue={newService}
+                    setNewValue={setNewService}
+                    onAdd={(v) => addItem("services", v)}
+                    onRemove={(i) => removeItem("services", i)}
+                />
+            </Section>
+
+        </div>
+    )
+}
+
+/* UI */
+
+function Section({ title, children }) {
+    return (
+        <div>
+            <h3 style={{ marginBottom: 10 }}>{title}</h3>
+            <div className="stack" style={{ gap: 14 }}>
+                {children}
+            </div>
+        </div>
+    )
+}
+
+function Grid({ children }) {
+    return (
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 12
+        }}>
+            {children}
+        </div>
+    )
+}
+
+function Input({ label, ...props }) {
+    return (
+        <div>
+            <label>{label}</label>
+            <input className="input" {...props} />
+        </div>
+    )
+}
+
+function Textarea({ label, ...props }) {
+    return (
+        <div>
+            <label>{label}</label>
+            <textarea className="input" {...props} />
+        </div>
+    )
+}
+
+function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
+    return (
+        <div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                {items.map((item, i) => (
+                    <div key={i} style={{
+                        padding: "6px 10px",
+                        borderRadius: 999,
+                        background: "rgba(99,102,241,0.15)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6
+                    }}>
+                        {item}
+                        <span
+                            style={{ cursor: "pointer", opacity: 0.6 }}
+                            onClick={() => onRemove(i)}
+                            onMouseEnter={(e) => e.target.style.opacity = 1}
+                            onMouseLeave={(e) => e.target.style.opacity = 0.6}
+                        >
+                            ✕
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            <div style={{ display: "flex", gap: 8 }}>
+                <input
+                    className="input"
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    placeholder="Add..."
+                />
+
+                <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
+                    Add
+                </button>
+            </div>
 
         </div>
     )
