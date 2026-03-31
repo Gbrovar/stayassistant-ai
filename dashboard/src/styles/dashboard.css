@@ -931,9 +931,8 @@ body {
   background: #0f172a;
   border-radius: 12px;
   border: 1px solid #1f2937;
-
   height: calc(100vh - 180px);
-  /* 🔥 clave */
+  padding: 20px;
   overflow-y: auto;
 }
 
@@ -961,9 +960,7 @@ body {
   border-radius: 12px;
   border: 1px solid #1f2937;
   padding: 20px;
-
   height: calc(100vh - 180px);
-  /* 🔥 clave */
   overflow-y: auto;
 }
 
