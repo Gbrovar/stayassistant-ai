@@ -9,31 +9,51 @@ export default function PropertyInfo() {
     const propertyId = getPropertyId()
     const { showToast, setRefreshPreview } = useContext(AppContext)
 
-    const [showAdvanced, setShowAdvanced] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [form, setForm] = useState({
+        property_name: "",
+        button_text: "",
+        welcome_message: "",
+
+        address: "",
+        city: "",
+        country: "",
+        postal_code: "",
+
+        phone: "",
+        email: "",
+
         checkin: "",
         checkout: "",
         checkin_instructions: "",
         late_checkin: "",
-        wifi_name: "",
-        wifi_password: ""
+
+        amenities: "",
+        services: ""
     })
 
     useEffect(() => {
         async function load() {
 
-            const res = await fetch(`${API_URL}/property/${propertyId}/property-info`, {
-                headers: {
-                    Authorization: "Bearer " + getToken()
-                }
-            })
+            const [infoRes, brandingRes] = await Promise.all([
+                fetch(`${API_URL}/property/${propertyId}/property-info`, {
+                    headers: { Authorization: "Bearer " + getToken() }
+                }),
+                fetch(`${API_URL}/property/${propertyId}/branding`, {
+                    headers: { Authorization: "Bearer " + getToken() }
+                })
+            ])
 
-            const data = await res.json()
+            const infoData = await infoRes.json()
+            const brandingData = await brandingRes.json()
 
-            if (data.property_info) {
-                setForm(data.property_info)
-            }
+            setForm(prev => ({
+                ...prev,
+                ...infoData.property_info,
+                property_name: brandingData.property_name,
+                button_text: brandingData.button_text
+            }))
         }
 
         load()
@@ -46,8 +66,11 @@ export default function PropertyInfo() {
         })
     }
 
-    async function save() {
+    async function saveAll() {
 
+        setLoading(true)
+
+        /* --- 1. PROPERTY INFO --- */
         await fetch(`${API_URL}/property/${propertyId}/property-info`, {
             method: "POST",
             headers: {
@@ -57,74 +80,128 @@ export default function PropertyInfo() {
             body: JSON.stringify(form)
         })
 
-        showToast("Property info saved");
+        /* --- 2. BRANDING --- */
+        await fetch(`${API_URL}/property/${propertyId}/branding`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getToken()
+            },
+            body: JSON.stringify({
+                property_name: form.property_name,
+                button_text: form.button_text,
+                primary_color: "#22c55e"
+            })
+        })
+
+        /* --- 3. SETUP (address + services) --- */
+        await fetch(`${API_URL}/property/setup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getToken()
+            },
+            body: JSON.stringify({
+                address: form.address,
+                city: form.city,
+                country: form.country,
+                amenities: form.amenities.split(","),
+                services: form.services.split(",")
+            })
+        })
+
+        showToast("Saved successfully")
         setRefreshPreview(prev => prev + 1)
 
+        setLoading(false)
     }
 
     return (
 
-        <>
-
-            <div style={{ marginBottom: 16, opacity: 0.7 }}>
-                Key stay details guests usually ask for
-            </div>
+        <div>
 
             {/* BASIC */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <Section title="Basic info">
 
-                <div>
-                    <label>Check-in</label>
-                    <input className="input" name="checkin" value={form.checkin} onChange={handleChange} />
-                </div>
+                <Input label="Property name" name="property_name" value={form.property_name} onChange={handleChange} />
+                <Input label="Widget button text" name="button_text" value={form.button_text} onChange={handleChange} />
+                <Input label="Welcome message" name="welcome_message" value={form.welcome_message} onChange={handleChange} />
 
-                <div>
-                    <label>Check-out</label>
-                    <input className="input" name="checkout" value={form.checkout} onChange={handleChange} />
-                </div>
+            </Section>
 
-            </div>
+            {/* LOCATION */}
+            <Section title="Location">
 
-            {/* TOGGLE */}
-            <button
-                className="show-more-btn"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-            >
-                {showAdvanced ? "Hide details" : "Show more settings"}
+                <Input label="Address" name="address" value={form.address} onChange={handleChange} />
+                <Input label="City" name="city" value={form.city} onChange={handleChange} />
+                <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+                <Input label="Postal code" name="postal_code" value={form.postal_code} onChange={handleChange} />
+
+            </Section>
+
+            {/* CONTACT */}
+            <Section title="Contact">
+
+                <Input label="Phone" name="phone" value={form.phone} onChange={handleChange} />
+                <Input label="Email" name="email" value={form.email} onChange={handleChange} />
+
+            </Section>
+
+            {/* STAY */}
+            <Section title="Stay details">
+
+                <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
+                <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+
+                <Textarea label="Check-in instructions" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
+                <Textarea label="Late check-in" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
+
+            </Section>
+
+            {/* SERVICES */}
+            <Section title="Services & amenities">
+
+                <Input label="Amenities (comma separated)" name="amenities" value={form.amenities} onChange={handleChange} />
+                <Input label="Services (comma separated)" name="services" value={form.services} onChange={handleChange} />
+
+            </Section>
+
+            <button className="btn btn-primary" onClick={saveAll} disabled={loading}>
+                {loading ? "Saving..." : "Save all"}
             </button>
 
-            {/* ADVANCED */}
-            {showAdvanced && (
-                <>
-                    <div style={{ marginTop: 14 }}>
-                        <label>Check-in instructions</label>
-                        <textarea className="input" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
-                    </div>
+        </div>
 
-                    <div style={{ marginTop: 14 }}>
-                        <label>Late check-in</label>
-                        <textarea className="input" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
-                    </div>
+    )
+}
 
-                    <div style={{ marginTop: 14 }}>
-                        <label>WiFi name</label>
-                        <input className="input" name="wifi_name" value={form.wifi_name} onChange={handleChange} />
-                    </div>
+/* --- UI COMPONENTS --- */
 
-                    <div style={{ marginTop: 14 }}>
-                        <label>WiFi password</label>
-                        <input className="input" name="wifi_password" value={form.wifi_password} onChange={handleChange} />
-                    </div>
-                </>
-            )}
-
-            <div style={{ marginTop: 18 }}>
-                <button className="btn btn-primary" onClick={save}>
-                    Save
-                </button>
+function Section({ title, children }) {
+    return (
+        <div style={{ marginBottom: 28 }}>
+            <h3 style={{ marginBottom: 10 }}>{title}</h3>
+            <div style={{ display: "grid", gap: 12 }}>
+                {children}
             </div>
+        </div>
+    )
+}
 
-        </>
+function Input({ label, ...props }) {
+    return (
+        <div>
+            <label>{label}</label>
+            <input className="input" {...props} />
+        </div>
+    )
+}
 
+function Textarea({ label, ...props }) {
+    return (
+        <div>
+            <label>{label}</label>
+            <textarea className="input" {...props} />
+        </div>
     )
 }
