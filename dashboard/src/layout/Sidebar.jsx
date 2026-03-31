@@ -4,14 +4,14 @@ import useResponsive from "../hooks/useResponsive"
 
 export default function Sidebar({ open, setSidebarOpen }) {
 
+  const { ltv } = useAnalytics()
+  const { isMobile } = useResponsive()
+
   function handleClick() {
     if (isMobile) {
       setSidebarOpen(false)
     }
   }
-
-  const { ltv } = useAnalytics()
-  const { isMobile } = useResponsive()
 
   return (
 

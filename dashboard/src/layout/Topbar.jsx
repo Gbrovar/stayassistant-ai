@@ -17,7 +17,10 @@ export default function Topbar({ setSidebarOpen }) {
   const plan = subscription.plan
   const limit = limits[plan] || 100
 
-  const percentage = (usage / limit) * 100
+  const safeUsage = usage || 0
+  const safeLimit = limit || 1
+
+  const percentage = (safeUsage / safeLimit) * 100
 
   function trackClick() {
     const variant = localStorage.getItem("sa_ab_variant")

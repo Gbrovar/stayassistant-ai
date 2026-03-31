@@ -3,7 +3,12 @@ import useAnalytics from "../../hooks/useAnalytics"
 export default function RevenueCard() {
   const { ltv, plan, totalMessages } = useAnalytics()
 
-  if (!ltv) return null
+  if (!ltv || typeof ltv !== "object") return null
+
+  const score =
+    typeof ltv.score === "number"
+      ? ltv.score.toFixed(2)
+      : "-"
 
   return (
     <div className="card">
@@ -12,22 +17,22 @@ export default function RevenueCard() {
       <div className="grid-2">
         <div>
           <p>Plan</p>
-          <strong>{plan}</strong>
+          <strong>{plan || "-"}</strong>
         </div>
 
         <div>
           <p>Messages</p>
-          <strong>{totalMessages}</strong>
+          <strong>{totalMessages ?? "-"}</strong>
         </div>
 
         <div>
           <p>Score</p>
-          <strong>{ltv.score?.toFixed(2)}</strong>
+          <strong>{score}</strong>
         </div>
 
         <div>
           <p>Strategy</p>
-          <strong>{ltv.strategy?.type}</strong>
+          <strong>{ltv.strategy?.type || "-"}</strong>
         </div>
       </div>
     </div>
