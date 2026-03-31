@@ -110,6 +110,11 @@ export default function Recommendations() {
     return (
 
         <div>
+
+            <div style={{ fontSize: 13, marginBottom: 6, color: "#64748b" }}>
+                Recommendation
+            </div>
+            
             <p className="field-hint">
                 Guests often ask where to eat. Add a few recommendations to improve responses.
             </p>
@@ -118,7 +123,7 @@ export default function Recommendations() {
 
             {items.map((item, index) => (
 
-                <div key={index} style={{ marginBottom: 12 }}>
+                <div key={index} className="rec-card">
 
                     <div style={{ marginBottom: 10 }}>
                         <input className="input"

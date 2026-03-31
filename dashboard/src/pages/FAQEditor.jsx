@@ -125,7 +125,11 @@ export default function FAQEditor() {
 
             {faq.map((item, index) => (
 
-                <div key={index} style={{ marginBottom: 12 }}>
+                <div key={index} className="faq-card">
+
+                    <div style={{ marginBottom: 8, fontSize: 12, color: "#64748b" }}>
+                        Question
+                    </div>
 
                     <input
                         className="input"
@@ -133,6 +137,10 @@ export default function FAQEditor() {
                         onChange={(e) => updateQuestion(index, e.target.value)}
                         placeholder="What time is check-in?"
                     />
+
+                    <div style={{ marginTop: 10, marginBottom: 8, fontSize: 12, color: "#64748b" }}>
+                        AI Answer
+                    </div>
 
                     <textarea
                         className="input"
@@ -154,11 +162,11 @@ export default function FAQEditor() {
             <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
 
                 <Button onClick={addFaq}>
-                    Add Question
+                    + Add question
                 </Button>
 
                 <Button onClick={save}>
-                    {loading ? "Saving..." : "Save FAQ"}
+                   Save knowledge  {loading ? "Saving..." : "Save FAQ"}
                 </Button>
 
             </div>
