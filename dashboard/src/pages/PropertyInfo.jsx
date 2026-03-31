@@ -29,9 +29,12 @@ export default function PropertyInfo() {
         checkin_instructions: "",
         late_checkin: "",
 
-        amenities: "",
-        services: ""
+        amenities: [],
+        services: []
     })
+
+    const [newAmenity, setNewAmenity] = useState("")
+    const [newService, setNewService] = useState("")
 
     useEffect(() => {
         async function load() {
@@ -51,8 +54,8 @@ export default function PropertyInfo() {
             setForm(prev => ({
                 ...prev,
                 ...infoData.property_info,
-                property_name: brandingData.property_name,
-                button_text: brandingData.button_text
+                property_name: brandingData.property_name || "",
+                button_text: brandingData.button_text || ""
             }))
         }
 
@@ -66,21 +69,54 @@ export default function PropertyInfo() {
         })
     }
 
+    /* ---------------- CHIPS ---------------- */
+
+    function addItem(type, value) {
+        if (!value.trim()) return
+
+        setForm(prev => ({
+            ...prev,
+            [type]: [...prev[type], value.trim()]
+        }))
+
+        type === "amenities" ? setNewAmenity("") : setNewService("")
+    }
+
+    function removeItem(type, index) {
+        const copy = [...form[type]]
+        copy.splice(index, 1)
+
+        setForm(prev => ({
+            ...prev,
+            [type]: copy
+        }))
+    }
+
+    /* ---------------- SAVE ---------------- */
+
     async function saveAll() {
 
         setLoading(true)
 
-        /* --- 1. PROPERTY INFO --- */
+        /* PROPERTY INFO */
         await fetch(`${API_URL}/property/${propertyId}/property-info`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getToken()
             },
-            body: JSON.stringify(form)
+            body: JSON.stringify({
+                checkin: form.checkin,
+                checkout: form.checkout,
+                checkin_instructions: form.checkin_instructions,
+                late_checkin: form.late_checkin,
+                phone: form.phone,
+                email: form.email,
+                welcome_message: form.welcome_message
+            })
         })
 
-        /* --- 2. BRANDING --- */
+        /* BRANDING */
         await fetch(`${API_URL}/property/${propertyId}/branding`, {
             method: "POST",
             headers: {
@@ -94,7 +130,7 @@ export default function PropertyInfo() {
             })
         })
 
-        /* --- 3. SETUP (address + services) --- */
+        /* SETUP */
         await fetch(`${API_URL}/property/setup`, {
             method: "POST",
             headers: {
@@ -105,8 +141,8 @@ export default function PropertyInfo() {
                 address: form.address,
                 city: form.city,
                 country: form.country,
-                amenities: form.amenities.split(","),
-                services: form.services.split(",")
+                amenities: form.amenities,
+                services: form.services
             })
         })
 
@@ -118,72 +154,98 @@ export default function PropertyInfo() {
 
     return (
 
-        <div>
+        <div className="stack" style={{ gap: 28 }}>
 
             {/* BASIC */}
             <Section title="Basic info">
+                <Grid>
+                    <Input label="Property name" name="property_name" value={form.property_name} onChange={handleChange} />
+                    <Input label="Widget text" name="button_text" value={form.button_text} onChange={handleChange} />
+                </Grid>
 
-                <Input label="Property name" name="property_name" value={form.property_name} onChange={handleChange} />
-                <Input label="Widget button text" name="button_text" value={form.button_text} onChange={handleChange} />
-                <Input label="Welcome message" name="welcome_message" value={form.welcome_message} onChange={handleChange} />
-
+                <Textarea label="Welcome message" name="welcome_message" value={form.welcome_message} onChange={handleChange} />
             </Section>
 
             {/* LOCATION */}
             <Section title="Location">
-
                 <Input label="Address" name="address" value={form.address} onChange={handleChange} />
-                <Input label="City" name="city" value={form.city} onChange={handleChange} />
-                <Input label="Country" name="country" value={form.country} onChange={handleChange} />
-                <Input label="Postal code" name="postal_code" value={form.postal_code} onChange={handleChange} />
 
+                <Grid>
+                    <Input label="City" name="city" value={form.city} onChange={handleChange} />
+                    <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+                </Grid>
             </Section>
 
             {/* CONTACT */}
             <Section title="Contact">
-
-                <Input label="Phone" name="phone" value={form.phone} onChange={handleChange} />
-                <Input label="Email" name="email" value={form.email} onChange={handleChange} />
-
+                <Grid>
+                    <Input label="Phone" name="phone" value={form.phone} onChange={handleChange} />
+                    <Input label="Email" name="email" value={form.email} onChange={handleChange} />
+                </Grid>
             </Section>
 
             {/* STAY */}
             <Section title="Stay details">
-
-                <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
-                <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+                <Grid>
+                    <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
+                    <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+                </Grid>
 
                 <Textarea label="Check-in instructions" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
                 <Textarea label="Late check-in" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
+            </Section>
 
+            {/* AMENITIES */}
+            <Section title="Amenities">
+                <Chips
+                    items={form.amenities}
+                    newValue={newAmenity}
+                    setNewValue={setNewAmenity}
+                    onAdd={(v) => addItem("amenities", v)}
+                    onRemove={(i) => removeItem("amenities", i)}
+                />
             </Section>
 
             {/* SERVICES */}
-            <Section title="Services & amenities">
-
-                <Input label="Amenities (comma separated)" name="amenities" value={form.amenities} onChange={handleChange} />
-                <Input label="Services (comma separated)" name="services" value={form.services} onChange={handleChange} />
-
+            <Section title="Services">
+                <Chips
+                    items={form.services}
+                    newValue={newService}
+                    setNewValue={setNewService}
+                    onAdd={(v) => addItem("services", v)}
+                    onRemove={(i) => removeItem("services", i)}
+                />
             </Section>
 
             <button className="btn btn-primary" onClick={saveAll} disabled={loading}>
-                {loading ? "Saving..." : "Save all"}
+                {loading ? "Saving..." : "Save"}
             </button>
 
         </div>
-
     )
 }
 
-/* --- UI COMPONENTS --- */
+/* ---------------- UI ---------------- */
 
 function Section({ title, children }) {
     return (
-        <div style={{ marginBottom: 28 }}>
+        <div>
             <h3 style={{ marginBottom: 10 }}>{title}</h3>
-            <div style={{ display: "grid", gap: 12 }}>
+            <div className="stack" style={{ gap: 14 }}>
                 {children}
             </div>
+        </div>
+    )
+}
+
+function Grid({ children }) {
+    return (
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 12
+        }}>
+            {children}
         </div>
     )
 }
@@ -202,6 +264,48 @@ function Textarea({ label, ...props }) {
         <div>
             <label>{label}</label>
             <textarea className="input" {...props} />
+        </div>
+    )
+}
+
+function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
+    return (
+        <div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                {items.map((item, i) => (
+                    <div key={i} style={{
+                        padding: "6px 10px",
+                        borderRadius: 999,
+                        background: "rgba(99,102,241,0.15)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6
+                    }}>
+                        {item}
+                        <span
+                            style={{ cursor: "pointer", opacity: 0.7 }}
+                            onClick={() => onRemove(i)}
+                        >
+                            ✕
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            <div style={{ display: "flex", gap: 8 }}>
+                <input
+                    className="input"
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    placeholder="Add..."
+                />
+
+                <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
+                    Add
+                </button>
+            </div>
+
         </div>
     )
 }

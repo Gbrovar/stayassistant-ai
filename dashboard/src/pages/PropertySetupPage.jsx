@@ -1,8 +1,6 @@
 import PropertyInfo from "./PropertyInfo"
-import Personalization from "./Personalization"
 import FAQEditor from "./FAQEditor"
 import Recommendations from "./Recommendations"
-import Branding from "./Branding"
 import LiveWidgetPreview from "../components/LiveWidgetPreview"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
@@ -43,7 +41,6 @@ export default function PropertySetupPage() {
             <div className="section-content">
               <PropertyInfo />
               <div style={{ height: 32 }} />
-              <Personalization />
             </div>
           </div>
 
@@ -61,17 +58,6 @@ export default function PropertySetupPage() {
             </div>
           </div>
 
-          {/* APPEARANCE */}
-          <div style={sectionWrapper}>
-            <SectionHeader
-              title="Appearance"
-              subtitle="Make your concierge match your brand."
-            />
-
-            <div className="section-content">
-              <Branding />
-            </div>
-          </div>
 
         </div>
 

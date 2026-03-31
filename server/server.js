@@ -1177,7 +1177,11 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
     checkin_instructions,
     late_checkin,
     wifi_name,
-    wifi_password
+    wifi_password,
+
+    phone,
+    email,
+    welcome_message
   } = req.body
 
   const property = await getProperty(propertyId)
@@ -1193,8 +1197,13 @@ app.post("/property/:id/property-info", authenticate, async (req, res) => {
     checkout,
     checkin_instructions,
     late_checkin,
+
     wifi_name,
-    wifi_password
+    wifi_password,
+
+    phone,
+    email,
+    welcome_message
   }
 
   property.updatedAt = Date.now()
