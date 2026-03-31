@@ -4,7 +4,6 @@ import { useApp } from "./context/AppContext"
 import Sidebar from "./layout/Sidebar"
 import Topbar from "./layout/Topbar"
 import Install from "./pages/Install"
-import Branding from "./pages/Branding"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Billing from "./pages/Billing"
@@ -95,7 +94,6 @@ export default function App() {
 
         {/* PROTECTED ROUTES */}
         <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
-        <Route path="/branding" element={<ProtectedLayout><Branding /></ProtectedLayout>} />
         <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
         <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
         <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
