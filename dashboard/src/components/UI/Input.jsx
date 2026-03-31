@@ -1,11 +1,14 @@
-export default function Input({ value, onChange, placeholder, type = "text" }) {
-
+export default function Input({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text"
+}) {
   return (
+    <div className="form-field">
+      {label && <label>{label}</label>}
 
-    <div style={{ marginBottom: 14 }}>
-      <label style={{ fontSize: 13, opacity: 0.7 }}>
-        Check-in
-      </label>
       <input
         className="input"
         value={value}
@@ -14,7 +17,5 @@ export default function Input({ value, onChange, placeholder, type = "text" }) {
         type={type}
       />
     </div>
-
   )
-
 }

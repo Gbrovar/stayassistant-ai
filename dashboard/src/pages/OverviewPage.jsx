@@ -7,20 +7,24 @@ import UpgradeCard from "../components/monetization/UpgradeCard"
 export default function OverviewPage() {
 
   return (
-    <div className="overview">
+    <div className="page">
 
-      <UpgradeCard />
-
-      <AIStatusCard />
-
-      <div className="grid">
-
-        <RevenueCard />
-        <AlertsCard />
-
+      <div className="page-header">
+        <h1 className="page-title">Dashboard</h1>
       </div>
 
-      <OpportunitiesCard />
+      <div className="page-content">
+
+        <AIStatusCard />
+
+        <div className="grid-2">
+          <RevenueCard />
+          <AlertsCard />
+        </div>
+
+        <OpportunitiesCard />
+
+      </div>
 
     </div>
   )

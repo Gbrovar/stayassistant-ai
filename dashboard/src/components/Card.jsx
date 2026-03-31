@@ -1,15 +1,7 @@
-export default function Card({ children, style, className = "" }) {
-
+export default function Card({ children, className = "" }) {
   return (
-    <div
-      className={`card ${className}`}
-      style={{
-        padding: "20px",
-        ...style
-      }}
-    >
+    <div className={`card ${className}`}>
       {children}
     </div>
   )
-
 }

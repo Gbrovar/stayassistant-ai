@@ -31,13 +31,13 @@ export default function OpportunitiesCard() {
           <p>{i.text}</p>
 
           {i.type === "revenue" && (
-            <button onClick={() => applyAction("add_restaurant_faq")}>
+            <button className="btn btn-primary" onClick={() => applyAction("add_restaurant_faq")}>
               Add recommendation FAQ
             </button>
           )}
 
           {i.type === "experience" && (
-            <button onClick={() => applyAction("add_activities_faq")}>
+            <button className="btn btn-primary" onClick={() => applyAction("add_activities_faq")}>
               Add activities FAQ
             </button>
           )}

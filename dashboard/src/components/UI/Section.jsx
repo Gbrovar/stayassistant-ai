@@ -1,17 +1,11 @@
 export default function Section({ title, children }) {
-
   return (
+    <div className="card card-highlight">
+      <h3 className="section-title">{title}</h3>
 
-    <section className="section" style={{ marginBottom: 32 }}>
-
-      <h2 className="section-title">{title}</h2>
-
-      <div className="section-content" style={{ marginTop: 16 }}>
+      <div className="stack">
         {children}
       </div>
-
-    </section>
-
+    </div>
   )
-
 }

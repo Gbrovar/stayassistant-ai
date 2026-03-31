@@ -16,22 +16,22 @@ export default function RevenueCard() {
 
       <div className="grid-2">
         <div>
-          <p>Plan</p>
+          <p className="text-muted">Plan</p>
           <strong>{plan || "-"}</strong>
         </div>
 
         <div>
-          <p>Messages</p>
+          <p className="text-muted">Messages</p>
           <strong>{totalMessages ?? "-"}</strong>
         </div>
 
         <div>
-          <p>Score</p>
+          <p className="text-muted">Score</p>
           <strong>{score}</strong>
         </div>
 
         <div>
-          <p>Strategy</p>
+          <p className="text-muted">Strategy</p>
           <strong>{ltv.strategy?.type || "-"}</strong>
         </div>
       </div>
