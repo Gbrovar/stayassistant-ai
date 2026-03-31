@@ -16,16 +16,23 @@ body {
   z-index: 900;
 }
 
-.dashboard {
+.layout {
   display: flex;
   min-height: 100vh;
+  overflow: hidden;
+  /* 🔥 importante */
 }
 
 .sidebar {
-  width: 220px;
-  height: 100vh;
   background: #111827;
   border-right: 1px solid #1f2937;
+  width: 240px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  /* 🔥 clave */
+  flex-shrink: 0;
   padding: 20px;
   z-index: 1000;
 }
@@ -38,12 +45,13 @@ body {
 .sidebar nav a,
 .sidebar nav a:visited {
   display: block;
-  padding: 10px;
+  padding: 10px 12px;
   margin-bottom: 6px;
   border-radius: 8px;
   cursor: pointer;
   color: #e5e7eb;
   text-decoration: none;
+  transition: background 0.2s ease;
 }
 
 .sidebar nav a:hover {
@@ -52,12 +60,15 @@ body {
 
 .sidebar nav a.active {
   background: #1f2937;
+  font-weight: 500;
+  /* 🔥 pequeño upgrade */
 }
 
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .content {
@@ -450,8 +461,8 @@ body {
 }
 
 .card-highlight {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card h3 {
@@ -1068,6 +1079,10 @@ textarea.input {
 
   .usage-topbar {
     font-size: 11px;
+  }
+
+  .main {
+    overflow-y: auto;
   }
 
 
