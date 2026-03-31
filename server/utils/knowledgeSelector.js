@@ -38,6 +38,22 @@ Instructions: ${k.property_info?.checkin_instructions || "Not provided"}
 ${buildUserContext()}
 `
 
+        case "location":
+        case "address":
+            return `
+PROPERTY LOCATION:
+
+Address:
+${k.address || "Not provided"}
+${k.postal_code || ""}
+${k.city || ""}
+${k.country || ""}
+
+INSTRUCTIONS:
+- If user asks for address → give it clearly
+- Keep answer short and direct
+`
+
         case "restaurants":
 
             const recs = (k.local_recommendations || []).slice(0, 5)

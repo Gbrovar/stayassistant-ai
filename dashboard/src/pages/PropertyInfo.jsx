@@ -41,21 +41,34 @@ export default function PropertyInfo() {
     useEffect(() => {
         async function load() {
 
-            const [infoRes, brandingRes] = await Promise.all([
+            const [infoRes, brandingRes, setupRes] = await Promise.all([
                 fetch(`${API_URL}/property/${propertyId}/property-info`, {
                     headers: { Authorization: "Bearer " + getToken() }
                 }),
                 fetch(`${API_URL}/property/${propertyId}/branding`, {
                     headers: { Authorization: "Bearer " + getToken() }
+                }),
+                fetch(`${API_URL}/property/${propertyId}`, {
+                    headers: { Authorization: "Bearer " + getToken() }
                 })
             ])
 
+            const setupData = await setupRes.json()
             const infoData = await infoRes.json()
             const brandingData = await brandingRes.json()
 
             setForm(prev => ({
                 ...prev,
                 ...infoData.property_info,
+
+                address: setupData.address || "",
+                city: setupData.city || "",
+                country: setupData.country || "",
+                postal_code: setupData.postal_code || "",
+
+                amenities: setupData.amenities || [],
+                services: setupData.services || [],
+
                 property_name: brandingData.property_name || prev.property_name,
                 button_text: brandingData.button_text || prev.button_text
             }))
@@ -141,6 +154,7 @@ export default function PropertyInfo() {
                         address: form.address,
                         city: form.city,
                         country: form.country,
+                        postal_code: form.postal_code,
                         amenities: form.amenities,
                         services: form.services
                     })

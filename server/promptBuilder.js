@@ -26,8 +26,18 @@ STYLE
 
 PROPERTY CONTEXT
 - Name: ${property.name}
-- Location: ${property.city || ""}, ${property.country || ""}
+- Location: ${property.address || ""}, ${property.postal_code || ""}, ${property.city || ""}, ${property.country || ""}
 - Type: ${property.type || "accommodation"}
+
+PROPERTY ADDRESS:
+${property.address || "Not provided"}
+${property.postal_code || ""}
+${property.city || ""}
+${property.country || ""}
+
+IMPORTANT:
+- This is the EXACT property location
+- If the guest asks for address → provide this directly
 
 WELCOME MESSAGE:
 ${property.knowledge?.property_info?.welcome_message || ""}
