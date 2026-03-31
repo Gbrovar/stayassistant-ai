@@ -95,8 +95,12 @@ ${k.property_info?.description || "Not provided"}
 Amenities:
 ${(k.amenities || []).slice(0, 5).join(", ")}
 
-Services:
-${(k.services || []).slice(0, 5).join(", ")}
+SERVICES AVAILABLE AT THE PROPERTY:
+${(k.services || []).map(s => `- ${s}`).join("\n") || "None provided"}
+
+IMPORTANT:
+- These services are CONFIRMED available at the property
+- You can confidently use them in responses
 
 INSTRUCTIONS:
 - Use this info ONLY if relevant

@@ -12,6 +12,9 @@ export default function PropertyInfo() {
     const [saving, setSaving] = useState(false)
     const [saved, setSaved] = useState(false)
 
+    const fallbackWelcome =
+        "Welcome 👋 I'm here to help you during your stay 😊"
+
     const [form, setForm] = useState({
         property_name: "",
         button_text: "",
@@ -94,6 +97,7 @@ export default function PropertyInfo() {
 
         try {
 
+            // PROPERTY INFO
             await fetch(`${API_URL}/property/${propertyId}/property-info`, {
                 method: "POST",
                 headers: {
@@ -111,6 +115,7 @@ export default function PropertyInfo() {
                 })
             })
 
+            // BRANDING
             await fetch(`${API_URL}/property/${propertyId}/branding`, {
                 method: "POST",
                 headers: {
@@ -124,20 +129,27 @@ export default function PropertyInfo() {
                 })
             })
 
-            await fetch(`${API_URL}/property/setup`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + getToken()
-                },
-                body: JSON.stringify({
-                    address: form.address,
-                    city: form.city,
-                    country: form.country,
-                    amenities: form.amenities,
-                    services: form.services
+            // 🚨 SETUP (FIXED)
+            if (form.address && form.city && form.country) {
+
+                await fetch(`${API_URL}/property/setup`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + getToken()
+                    },
+                    body: JSON.stringify({
+                        address: form.address,
+                        city: form.city,
+                        country: form.country,
+                        amenities: form.amenities,
+                        services: form.services
+                    })
                 })
-            })
+
+            } else {
+                console.log("⚠️ Setup skipped (missing address/city/country)")
+            }
 
             setSaved(true)
             setRefreshPreview(prev => prev + 1)
@@ -173,7 +185,13 @@ export default function PropertyInfo() {
                     <Input label="Widget text" name="button_text" value={form.button_text} onChange={handleChange} />
                 </Grid>
 
-                <Textarea label="Welcome message" name="welcome_message" value={form.welcome_message} onChange={handleChange} />
+                <textarea
+                    className="input"
+                    name="welcome_message"
+                    value={form.welcome_message || fallbackWelcome}
+                    placeholder={fallbackWelcome}
+                    onChange={handleChange}
+                />
             </Section>
 
             {/* LOCATION */}

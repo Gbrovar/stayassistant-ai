@@ -29,6 +29,9 @@ PROPERTY CONTEXT
 - Location: ${property.city || ""}, ${property.country || ""}
 - Type: ${property.type || "accommodation"}
 
+WELCOME MESSAGE:
+${property.knowledge?.property_info?.welcome_message || ""}
+
 TIME CONTEXT
 Current guest time: ${context}
 Use this naturally when relevant (meals, transport, etc.)
