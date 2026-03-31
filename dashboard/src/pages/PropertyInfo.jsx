@@ -54,8 +54,8 @@ export default function PropertyInfo() {
             setForm(prev => ({
                 ...prev,
                 ...infoData.property_info,
-                property_name: brandingData.property_name || "",
-                button_text: brandingData.button_text || ""
+                property_name: brandingData.property_name || prev.property_name,
+                button_text: brandingData.button_text || prev.button_text
             }))
         }
 
@@ -97,7 +97,6 @@ export default function PropertyInfo() {
 
         try {
 
-            // PROPERTY INFO
             await fetch(`${API_URL}/property/${propertyId}/property-info`, {
                 method: "POST",
                 headers: {
@@ -115,7 +114,6 @@ export default function PropertyInfo() {
                 })
             })
 
-            // BRANDING
             await fetch(`${API_URL}/property/${propertyId}/branding`, {
                 method: "POST",
                 headers: {
@@ -129,9 +127,7 @@ export default function PropertyInfo() {
                 })
             })
 
-            // 🚨 SETUP (FIXED)
             if (form.address && form.city && form.country) {
-
                 await fetch(`${API_URL}/property/setup`, {
                     method: "POST",
                     headers: {
@@ -146,7 +142,6 @@ export default function PropertyInfo() {
                         services: form.services
                     })
                 })
-
             } else {
                 console.log("⚠️ Setup skipped (missing address/city/country)")
             }
@@ -181,14 +176,27 @@ export default function PropertyInfo() {
             {/* BASIC */}
             <Section title="Basic info">
                 <Grid>
-                    <Input label="Property name" name="property_name" value={form.property_name} onChange={handleChange} />
-                    <Input label="Widget text" name="button_text" value={form.button_text} onChange={handleChange} />
+                    <Input
+                        label="Property name"
+                        name="property_name"
+                        value={form.property_name}
+                        placeholder="e.g. Villa Sunset, Hotel Central..."
+                        onChange={handleChange}
+                    />
+
+                    <Input
+                        label="Widget text"
+                        name="button_text"
+                        value={form.button_text}
+                        placeholder="e.g. Ask concierge"
+                        onChange={handleChange}
+                    />
                 </Grid>
 
-                <textarea
-                    className="input"
+                <Textarea
+                    label="Welcome message"
                     name="welcome_message"
-                    value={form.welcome_message || fallbackWelcome}
+                    value={form.welcome_message}
                     placeholder={fallbackWelcome}
                     onChange={handleChange}
                 />
@@ -196,19 +204,55 @@ export default function PropertyInfo() {
 
             {/* LOCATION */}
             <Section title="Location">
-                <Input label="Address" name="address" value={form.address} onChange={handleChange} />
+                <Input
+                    label="Address"
+                    name="address"
+                    value={form.address}
+                    placeholder="Street name and number"
+                    onChange={handleChange}
+                />
 
                 <Grid>
-                    <Input label="City" name="city" value={form.city} onChange={handleChange} />
-                    <Input label="Country" name="country" value={form.country} onChange={handleChange} />
+                    <Input
+                        label="City"
+                        name="city"
+                        value={form.city}
+                        placeholder="e.g. Barcelona"
+                        onChange={handleChange}
+                    />
+
+                    <Input
+                        label="Country"
+                        name="country"
+                        value={form.country}
+                        placeholder="e.g. Spain"
+                        onChange={handleChange}
+                    />
                 </Grid>
             </Section>
 
             {/* CONTACT */}
             <Section title="Contact">
+                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                    This will be shared with guests if they need to contact you.
+                </p>
+
                 <Grid>
-                    <Input label="Phone" name="phone" value={form.phone} onChange={handleChange} />
-                    <Input label="Email" name="email" value={form.email} onChange={handleChange} />
+                    <Input
+                        label="Phone"
+                        name="phone"
+                        value={form.phone}
+                        placeholder="+34 600 000 000"
+                        onChange={handleChange}
+                    />
+
+                    <Input
+                        label="Email"
+                        name="email"
+                        value={form.email}
+                        placeholder="contact@yourproperty.com"
+                        onChange={handleChange}
+                    />
                 </Grid>
             </Section>
 
@@ -219,12 +263,29 @@ export default function PropertyInfo() {
                     <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
                 </Grid>
 
-                <Textarea label="Check-in instructions" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
-                <Textarea label="Late check-in" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
+                <Textarea
+                    label="Check-in instructions"
+                    name="checkin_instructions"
+                    value={form.checkin_instructions}
+                    placeholder="Explain how guests should check in"
+                    onChange={handleChange}
+                />
+
+                <Textarea
+                    label="Late check-in"
+                    name="late_checkin"
+                    value={form.late_checkin}
+                    placeholder="Instructions for late arrivals"
+                    onChange={handleChange}
+                />
             </Section>
 
             {/* AMENITIES */}
             <Section title="Amenities">
+                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                    Facilities available for guests (e.g. WiFi, pool, air conditioning).
+                </p>
+
                 <Chips
                     items={form.amenities}
                     newValue={newAmenity}
@@ -236,6 +297,10 @@ export default function PropertyInfo() {
 
             {/* SERVICES */}
             <Section title="Services">
+                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                    Services you offer (e.g. airport transfer, breakfast, cleaning).
+                </p>
+
                 <Chips
                     items={form.services}
                     newValue={newService}
@@ -274,11 +339,11 @@ function Grid({ children }) {
     )
 }
 
-function Input({ label, ...props }) {
+function Input({ label, placeholder, ...props }) {
     return (
         <div>
             <label>{label}</label>
-            <input className="input" {...props} />
+            <input className="input" placeholder={placeholder} {...props} />
         </div>
     )
 }
@@ -324,7 +389,7 @@ function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
                     className="input"
                     value={newValue}
                     onChange={(e) => setNewValue(e.target.value)}
-                    placeholder="Add..."
+                    placeholder="Type and click Add..."
                 />
 
                 <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
