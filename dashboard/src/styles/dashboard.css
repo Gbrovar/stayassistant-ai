@@ -955,6 +955,38 @@ body {
 }
 
 
+/* 🔥 HOVER PREMIUM */
+
+.section-content {
+  transition: all 0.2s ease;
+}
+
+.section-content:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* 🔥 MÁS AIRE EN INPUTS */
+
+.input,
+textarea.input {
+  height: 44px;
+  border-radius: 10px;
+}
+
+/* 🔥 TEXTAREA MÁS NATURAL */
+
+textarea.input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* 🔥 SEPARACIÓN VISUAL SUAVE */
+
+.section-content>*:not(:last-child) {
+  margin-bottom: 18px;
+}
+
+
 
 @media (max-width: 480px) {
 

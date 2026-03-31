@@ -23,7 +23,7 @@ export default function PropertySetupPage() {
       }}>
 
         {/* HEADER */}
-        <div className="page-header">
+        <div className="page-header" style={{ marginBottom: 32 }}>
           <h1 className="page-title">Your AI concierge</h1>
           <p className="page-subtitle">
             Configure how your assistant works and responds to guests.
@@ -31,48 +31,42 @@ export default function PropertySetupPage() {
         </div>
 
         {/* CONTENT */}
-        <div className="stack" style={{ gap: 48 }}>
+        <div className="stack" style={{ gap: 56 }}>
 
           {/* ESSENTIALS */}
-          <div>
-            <div style={{ marginBottom: 12 }}>
-              <h2 style={{ fontSize: 18 }}>Essentials</h2>
-              <p style={{ fontSize: 13, color: "#94a3b8" }}>
-                Basic information your concierge needs to assist guests.
-              </p>
-            </div>
+          <div style={sectionWrapper}>
+            <SectionHeader
+              title="Essentials"
+              subtitle="Add the key details your guests usually ask for."
+            />
 
             <div className="section-content">
               <PropertyInfo />
-              <div style={{ height: 24 }} />
+              <div style={{ height: 32 }} />
               <Personalization />
             </div>
           </div>
 
           {/* KNOWLEDGE */}
-          <div>
-            <div style={{ marginBottom: 12 }}>
-              <h2 style={{ fontSize: 18 }}>Knowledge</h2>
-              <p style={{ fontSize: 13, color: "#94a3b8" }}>
-                Define what your concierge can answer and recommend.
-              </p>
-            </div>
+          <div style={sectionWrapper}>
+            <SectionHeader
+              title="Knowledge"
+              subtitle="Teach your concierge what guests ask most often."
+            />
 
             <div className="section-content">
               <FAQEditor />
-              <div style={{ height: 24 }} />
+              <div style={{ height: 32 }} />
               <Recommendations />
             </div>
           </div>
 
           {/* APPEARANCE */}
-          <div>
-            <div style={{ marginBottom: 12 }}>
-              <h2 style={{ fontSize: 18 }}>Appearance</h2>
-              <p style={{ fontSize: 13, color: "#94a3b8" }}>
-                Customize how your concierge looks to guests.
-              </p>
-            </div>
+          <div style={sectionWrapper}>
+            <SectionHeader
+              title="Appearance"
+              subtitle="Make your concierge match your brand."
+            />
 
             <div className="section-content">
               <Branding />
@@ -83,12 +77,12 @@ export default function PropertySetupPage() {
 
       </div>
 
-      {/* 🔥 WIDGET FLOTANTE (NO GRID) */}
+      {/* 🔥 WIDGET FLOTANTE */}
       <div style={{
         position: "fixed",
         bottom: 20,
         right: 20,
-        width: 360,
+        width: 340,
         zIndex: 100
       }}>
         <LiveWidgetPreview
@@ -99,4 +93,34 @@ export default function PropertySetupPage() {
 
     </div>
   )
+}
+
+/* 🔥 COMPONENTE HEADER (REUTILIZABLE) */
+function SectionHeader({ title, subtitle }) {
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <h2 style={{
+        fontSize: 20,
+        fontWeight: 600,
+        marginBottom: 4
+      }}>
+        {title}
+      </h2>
+
+      <p style={{
+        fontSize: 13,
+        color: "#94a3b8"
+      }}>
+        {subtitle}
+      </p>
+    </div>
+  )
+}
+
+/* 🔥 WRAPPER VISUAL (CLAVE UX) */
+const sectionWrapper = {
+  padding: "28px",
+  border: "1px solid rgba(255,255,255,0.05)",
+  borderRadius: 16,
+  background: "rgba(255,255,255,0.02)"
 }
