@@ -98,6 +98,21 @@ export default function FAQEditor() {
                 Add common questions your guests usually ask.
             </div>
 
+
+
+            {faq.length === 0 && (
+                <div style={{
+                    padding: 12,
+                    background: "rgba(255,255,255,0.03)",
+                    borderRadius: 10,
+                    marginBottom: 12,
+                    fontSize: 13,
+                    color: "#94a3b8"
+                }}>
+                    Start by adding common questions like check-in time or WiFi.
+                </div>
+            )}
+
             {faq.map((item, index) => (
 
                 <div key={index} style={{ marginBottom: 12 }}>

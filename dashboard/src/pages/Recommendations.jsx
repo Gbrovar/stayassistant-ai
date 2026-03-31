@@ -111,52 +111,52 @@ export default function Recommendations() {
 
         <div>
             <p className="field-hint">
-                Recommended: add 3–5 restaurants for best guest experience.
+                Guests often ask where to eat. Add a few recommendations to improve responses.
             </p>
 
 
 
-                {items.map((item, index) => (
+            {items.map((item, index) => (
 
-                    <div key={index} style={{ marginBottom: 12 }}>
+                <div key={index} style={{ marginBottom: 12 }}>
 
-                        <div style={{ marginBottom: 10 }}>
-                            <input className="input"
-                                value={item.name}
-                                placeholder="Place name"
-                                onChange={(e) => updateName(index, e.target.value)}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 10 }}>
-                            <input className="input"
-                                value={item.description}
-                                placeholder="Description"
-                                onChange={(e) => updateDescription(index, e.target.value)}
-                            />
-                        </div>
-
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <button className="btn btn-secondary" onClick={() => removeItem(index)}>
-                                Delete
-                            </button>
-                        </div>
-
+                    <div style={{ marginBottom: 10 }}>
+                        <input className="input"
+                            value={item.name}
+                            placeholder="Place name"
+                            onChange={(e) => updateName(index, e.target.value)}
+                        />
                     </div>
 
-                ))}
+                    <div style={{ marginBottom: 10 }}>
+                        <input className="input"
+                            value={item.description}
+                            placeholder="Description"
+                            onChange={(e) => updateDescription(index, e.target.value)}
+                        />
+                    </div>
 
-                <div style={{ display: "flex", gap: 10 }}>
-
-                    <button className="btn btn-primary" onClick={addItem}>
-                        Add recommendation
-                    </button>
-
-                    <button className="btn btn-primary" onClick={save}>
-                        Save
-                    </button>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <button className="btn btn-secondary" onClick={() => removeItem(index)}>
+                            Delete
+                        </button>
+                    </div>
 
                 </div>
+
+            ))}
+
+            <div style={{ display: "flex", gap: 10 }}>
+
+                <button className="btn btn-primary" onClick={addItem}>
+                    Add recommendation
+                </button>
+
+                <button className="btn btn-primary" onClick={save}>
+                    Save
+                </button>
+
+            </div>
 
 
         </div>
