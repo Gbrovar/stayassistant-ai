@@ -32,6 +32,19 @@ PROPERTY CONTEXT
 WELCOME MESSAGE:
 ${property.knowledge?.property_info?.welcome_message || ""}
 
+PROPERTY FEATURES:
+
+Amenities:
+${(property.knowledge?.amenities || []).join(", ") || "Not provided"}
+
+Services:
+${(property.knowledge?.services || []).join(", ") || "Not provided"}
+
+IMPORTANT:
+- These amenities and services are CONFIRMED available
+- You can use them confidently in answers
+- If user asks about facilities → use this data
+
 TIME CONTEXT
 Current guest time: ${context}
 Use this naturally when relevant (meals, transport, etc.)

@@ -87,27 +87,25 @@ ${buildUserContext()}
 
         default:
             return `
-PROPERTY CONTEXT:
+            PROPERTY CONTEXT:
 
-Description:
-${k.property_info?.description || "Not provided"}
+            Amenities:
+            ${(k.amenities || []).join(", ") || "None provided"}
 
-Amenities:
-${(k.amenities || []).slice(0, 5).join(", ")}
+            Services:
+            ${(k.services || []).map(s => `- ${s}`).join("\n") || "None provided"}
 
-SERVICES AVAILABLE AT THE PROPERTY:
-${(k.services || []).map(s => `- ${s}`).join("\n") || "None provided"}
+            House rules:
+            ${k.property_info?.house_rules || "Not provided"}
 
-IMPORTANT:
-- These services are CONFIRMED available at the property
-- You can confidently use them in responses
+            IMPORTANT:
+            - These are REAL data configured by the property
+            - If guest asks about facilities → use amenities
+            - If guest asks about what is offered → use services
+            - NEVER say something is unavailable if it is listed here
 
-INSTRUCTIONS:
-- Use this info ONLY if relevant
-- Do not hallucinate missing details
-
-${buildUserContext()}
-`
+            ${buildUserContext()}
+            `
     }
 
 }

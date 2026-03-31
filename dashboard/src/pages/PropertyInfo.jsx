@@ -29,6 +29,8 @@ export default function PropertyInfo() {
         checkout: "",
         checkin_instructions: "",
         late_checkin: "",
+        house_rules: "",
+        postal_code: "",
         amenities: [],
         services: []
     })
@@ -110,7 +112,8 @@ export default function PropertyInfo() {
                     late_checkin: form.late_checkin,
                     phone: form.phone,
                     email: form.email,
-                    welcome_message: form.welcome_message
+                    welcome_message: form.welcome_message,
+                    house_rules: form.house_rules,
                 })
             })
 
@@ -228,6 +231,14 @@ export default function PropertyInfo() {
                         placeholder="e.g. Spain"
                         onChange={handleChange}
                     />
+
+                    <Input
+                        label="Postal code"
+                        name="postal_code"
+                        value={form.postal_code}
+                        placeholder="e.g. 08001"
+                        onChange={handleChange}
+                    />
                 </Grid>
             </Section>
 
@@ -276,6 +287,20 @@ export default function PropertyInfo() {
                     name="late_checkin"
                     value={form.late_checkin}
                     placeholder="Instructions for late arrivals"
+                    onChange={handleChange}
+                />
+            </Section>
+
+            <Section title="House rules">
+                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                    Inform guests about important rules (e.g. no smoking, no parties).
+                </p>
+
+                <Textarea
+                    label="Rules"
+                    name="house_rules"
+                    value={form.house_rules}
+                    placeholder="e.g. No smoking inside. Quiet hours after 22:00."
                     onChange={handleChange}
                 />
             </Section>
