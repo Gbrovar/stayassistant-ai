@@ -40,7 +40,7 @@ IMPORTANT:
 - If the guest asks for address → provide this directly
 
 WELCOME MESSAGE:
-${property.knowledge?.property_info?.welcome_message || ""}
+${property.knowledge?.property_info?.welcome_message || "Welcome 👋 I'm here to help you during your stay 😊"}
 
 PROPERTY FEATURES:
 

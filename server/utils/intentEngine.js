@@ -78,6 +78,18 @@ export function detectIntent(text) {
       "abreise"
     ],
 
+    address: [
+      "address",
+      "direccion",
+      "dirección",
+      "where is",
+      "location",
+      "ubicacion",
+      "ubicación",
+      "donde esta",
+      "dónde está"
+    ],
+
     pharmacy: [
       "pharmacy",
       "farmacia",
@@ -148,6 +160,7 @@ export function detectIntent(text) {
   const priorityOrder = [
     "checkin",
     "checkout",
+    "address",
     "wifi",
     "taxi",
     "transport",

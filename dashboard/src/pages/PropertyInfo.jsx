@@ -178,10 +178,10 @@ export default function PropertyInfo() {
     useEffect(() => {
         const timeout = setTimeout(() => {
             saveAll()
-        }, 800)
+        }, 1200)
 
         return () => clearTimeout(timeout)
-    }, [form])
+    }, [JSON.stringify(form)])
 
     return (
 

@@ -44,10 +44,10 @@ ${buildUserContext()}
 PROPERTY LOCATION:
 
 Address:
-${k.address || "Not provided"}
-${k.postal_code || ""}
-${k.city || ""}
-${k.country || ""}
+${property.address || "Not provided"}
+${property.postal_code || ""}
+${property.city || ""}
+${property.country || ""}
 
 INSTRUCTIONS:
 - If user asks for address → give it clearly
@@ -106,10 +106,10 @@ ${buildUserContext()}
             PROPERTY CONTEXT:
 
             Amenities:
-            ${(k.amenities || []).join(", ") || "None provided"}
+            ${(property.amenities || []).join(", ") || "None provided"}
 
             Services:
-            ${(k.services || []).map(s => `- ${s}`).join("\n") || "None provided"}
+            ${(property.services || []).map(s => `- ${s}`).join("\n") || "None provided"}
 
             House rules:
             ${k.property_info?.house_rules || "Not provided"}
