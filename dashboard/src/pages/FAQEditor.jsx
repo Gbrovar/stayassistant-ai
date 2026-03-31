@@ -93,6 +93,16 @@ export default function FAQEditor() {
     return (
 
         <div>
+            <div style={{
+                background: "rgba(99,102,241,0.1)",
+                padding: 12,
+                borderRadius: 10,
+                marginBottom: 14,
+                fontSize: 13,
+                color: "#c7d2fe"
+            }}>
+                These answers power your AI concierge. Add the most common guest questions.
+            </div>
 
             <div style={{ marginBottom: 10, fontSize: 13, color: "#94a3b8" }}>
                 Add common questions your guests usually ask.

@@ -753,11 +753,11 @@ body {
 }
 
 .section {
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .section-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   opacity: 0.9;
 }
@@ -766,8 +766,9 @@ body {
   background: linear-gradient(180deg, #0f172a, #0b1220);
   border: 1px solid #1f2937;
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px;
   border-radius: 12px;
+  transition: all 0.2s ease;
 }
 
 /* limpiar inputs dentro de setup */
@@ -1003,10 +1004,6 @@ body {
 
 
 /* 🔥 HOVER PREMIUM */
-
-.section-content {
-  transition: all 0.2s ease;
-}
 
 .section-content:hover {
   border-color: rgba(99, 102, 241, 0.4);

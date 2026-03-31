@@ -183,8 +183,38 @@ export default function PropertyInfo() {
 
         <div className="stack" style={{ gap: 28 }}>
 
-            {saving && <div style={{ fontSize: 12, color: "#94a3b8" }}>Saving...</div>}
-            {saved && <div style={{ fontSize: 12, color: "#22c55e" }}>Saved ✓</div>}
+            <div style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 50,
+                marginBottom: 10
+            }}>
+                {saving && (
+                    <div style={{
+                        background: "#1f2937",
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        color: "#94a3b8",
+                        display: "inline-block"
+                    }}>
+                        Saving...
+                    </div>
+                )}
+
+                {saved && (
+                    <div style={{
+                        background: "rgba(34,197,94,0.15)",
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        color: "#22c55e",
+                        display: "inline-block"
+                    }}>
+                        Saved ✓
+                    </div>
+                )}
+            </div>
 
             {/* BASIC */}
             <Section title="Basic info">
