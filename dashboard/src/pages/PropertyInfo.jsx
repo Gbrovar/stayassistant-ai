@@ -30,7 +30,6 @@ export default function PropertyInfo() {
         checkin_instructions: "",
         late_checkin: "",
         house_rules: "",
-        postal_code: "",
         amenities: [],
         services: []
     })

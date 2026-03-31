@@ -749,7 +749,8 @@ body {
 
 .input:focus {
   outline: none;
-  border-color: #22c55e;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.3);
 }
 
 .section {
