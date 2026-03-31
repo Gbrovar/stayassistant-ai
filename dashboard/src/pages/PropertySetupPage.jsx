@@ -5,6 +5,7 @@ import LiveWidgetPreview from "../components/LiveWidgetPreview"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
 import { getPropertyId } from "../api/auth"
+import Section from "../components/UI/Section"
 
 export default function PropertySetupPage() {
 
@@ -14,56 +15,27 @@ export default function PropertySetupPage() {
   return (
     <div className="page">
 
-      {/* CONTENIDO CENTRADO */}
-      <div style={{
-        maxWidth: 820,
-        margin: "0 auto"
-      }}>
+      <div className="page-header">
+        <h1 className="page-title">Your AI concierge</h1>
+        <p className="page-subtitle">
+          Configure how your assistant works and responds to guests.
+        </p>
+      </div>
 
-        {/* HEADER */}
-        <div className="page-header" style={{ marginBottom: 32 }}>
-          <h1 className="page-title">Your AI concierge</h1>
-          <p className="page-subtitle">
-            Configure how your assistant works and responds to guests.
-          </p>
-        </div>
+      <div className="page-content">
 
-        {/* CONTENT */}
-        <div className="stack" style={{ gap: 56 }}>
+        <Section title="Essentials">
+          <PropertyInfo />
+        </Section>
 
-          {/* ESSENTIALS */}
-          <div style={sectionWrapper}>
-            <SectionHeader
-              title="Essentials"
-              subtitle="Add the key details your guests usually ask for."
-            />
-
-            <div className="section-content">
-              <PropertyInfo />
-              <div style={{ height: 32 }} />
-            </div>
-          </div>
-
-          {/* KNOWLEDGE */}
-          <div style={sectionWrapper}>
-            <SectionHeader
-              title="Knowledge"
-              subtitle="Teach your concierge what guests ask most often."
-            />
-
-            <div className="section-content">
-              <FAQEditor />
-              <div style={{ height: 32 }} />
-              <Recommendations />
-            </div>
-          </div>
-
-
-        </div>
+        <Section title="Knowledge">
+          <FAQEditor />
+          <Recommendations />
+        </Section>
 
       </div>
 
-      {/* 🔥 WIDGET FLOTANTE */}
+      {/* Widget preview */}
       <div style={{
         position: "fixed",
         bottom: 20,
@@ -79,34 +51,4 @@ export default function PropertySetupPage() {
 
     </div>
   )
-}
-
-/* 🔥 COMPONENTE HEADER (REUTILIZABLE) */
-function SectionHeader({ title, subtitle }) {
-  return (
-    <div style={{ marginBottom: 18 }}>
-      <h2 style={{
-        fontSize: 20,
-        fontWeight: 600,
-        marginBottom: 4
-      }}>
-        {title}
-      </h2>
-
-      <p style={{
-        fontSize: 13,
-        color: "#94a3b8"
-      }}>
-        {subtitle}
-      </p>
-    </div>
-  )
-}
-
-/* 🔥 WRAPPER VISUAL (CLAVE UX) */
-const sectionWrapper = {
-  padding: "28px",
-  border: "1px solid rgba(255,255,255,0.05)",
-  borderRadius: 16,
-  background: "rgba(255,255,255,0.02)"
 }
