@@ -1500,6 +1500,35 @@ app.post("/chat", chatLimiter, async (req, res) => {
     /* --- INTENT DETECTION --- */
     const intent = detectIntent(userMessage)
 
+
+    const addressParts = [
+      property.address,
+      property.postal_code,
+      property.city,
+      property.country
+    ].filter(Boolean)
+
+    const fullAddress = addressParts.join(", ")
+
+    if (intent === "address") {
+
+      if (!property.address) {
+        return res.json(
+          buildResponse({
+            reply: "The address is not available yet. Please contact the property.",
+            intent
+          })
+        )
+      }
+
+      return res.json(
+        buildResponse({
+          reply: fullAddress,
+          intent
+        })
+      )
+    }
+
     // 🛡️ UNIFIED CONTROL ENGINE
     const control = await checkUsageAndCost(propertyId)
 

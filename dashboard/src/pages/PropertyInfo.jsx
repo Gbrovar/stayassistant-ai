@@ -143,25 +143,21 @@ export default function PropertyInfo() {
                 })
             })
 
-            if (form.address && form.city && form.country) {
-                await fetch(`${API_URL}/property/setup`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer " + getToken()
-                    },
-                    body: JSON.stringify({
-                        address: form.address,
-                        city: form.city,
-                        country: form.country,
-                        postal_code: form.postal_code,
-                        amenities: form.amenities,
-                        services: form.services
-                    })
+            await fetch(`${API_URL}/property/setup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + getToken()
+                },
+                body: JSON.stringify({
+                    address: form.address || "",
+                    city: form.city || "",
+                    country: form.country || "",
+                    postal_code: form.postal_code || "",
+                    amenities: form.amenities || [],
+                    services: form.services || []
                 })
-            } else {
-                console.log("⚠️ Setup skipped (missing address/city/country)")
-            }
+            })
 
             setSaved(true)
             setRefreshPreview(prev => prev + 1)

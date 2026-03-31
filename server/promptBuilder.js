@@ -45,10 +45,10 @@ ${property.knowledge?.property_info?.welcome_message || "Welcome 👋 I'm here t
 PROPERTY FEATURES:
 
 Amenities:
-${(property.knowledge?.amenities || []).join(", ") || "Not provided"}
+${(property.amenities || []).join(", ") || "Not provided"}
 
 Services:
-${(property.knowledge?.services || []).join(", ") || "Not provided"}
+${(property.services || []).join(", ") || "Not provided"}
 
 IMPORTANT:
 - These amenities and services are CONFIRMED available
