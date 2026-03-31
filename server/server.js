@@ -758,7 +758,14 @@ app.get("/property/:id", async (req, res) => {
   res.json({
     id: property.id,
     name: property.name,
-    branding: property.branding
+    branding: property.branding,
+
+    address: property.address,
+    city: property.city,
+    country: property.country,
+    postal_code: property.postal_code,
+    amenities: property.amenities,
+    services: property.services
   })
 
 })
@@ -3722,15 +3729,19 @@ app.post("/property/setup", authenticate, async (req, res) => {
       address,
       city,
       country,
+      postal_code,
       amenities,
       services
     } = req.body
+
 
     const property = await getProperty(propertyId)
 
     if (!property) {
       return res.status(404).json({ error: "property not found" })
     }
+
+    property.postal_code = postal_code
 
     /* --- GOOGLE GEOCODING --- */
 
