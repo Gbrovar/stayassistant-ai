@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import { useContext } from "react";
@@ -9,6 +8,8 @@ export default function PropertyInfo() {
 
     const propertyId = getPropertyId()
     const { showToast, setRefreshPreview } = useContext(AppContext)
+
+    const [showAdvanced, setShowAdvanced] = useState(false)
 
     const [form, setForm] = useState({
         checkin: "",
@@ -63,45 +64,59 @@ export default function PropertyInfo() {
 
     return (
 
-        <div>
+        <>
 
             <div style={{ marginBottom: 16, opacity: 0.7 }}>
-                Stay details
+                Key stay details guests usually ask for
             </div>
 
+            {/* BASIC */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
 
                 <div>
-                    <label style={{ fontSize: 13, opacity: 0.7 }}>Check-in</label>
+                    <label>Check-in</label>
                     <input className="input" name="checkin" value={form.checkin} onChange={handleChange} />
                 </div>
 
                 <div>
-                    <label style={{ fontSize: 13, opacity: 0.7 }}>Check-out</label>
+                    <label>Check-out</label>
                     <input className="input" name="checkout" value={form.checkout} onChange={handleChange} />
                 </div>
 
             </div>
 
-            <div style={{ marginTop: 14 }}>
-                <label style={{ fontSize: 13, opacity: 0.7 }}>Check-in instructions</label>
-                <textarea name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
-            </div>
+            {/* TOGGLE */}
+            <button
+                className="show-more-btn"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+            >
+                {showAdvanced ? "Hide details" : "Show more settings"}
+            </button>
 
-            <div style={{ marginTop: 14 }}>
-                <label style={{ fontSize: 13, opacity: 0.7 }}>Late check-in instructions</label>
-                <textarea name="late_checkin" value={form.late_checkin} onChange={handleChange} />
-            </div>
+            {/* ADVANCED */}
+            {showAdvanced && (
+                <>
+                    <div style={{ marginTop: 14 }}>
+                        <label>Check-in instructions</label>
+                        <textarea className="input" name="checkin_instructions" value={form.checkin_instructions} onChange={handleChange} />
+                    </div>
 
-            <div style={{ marginTop: 14 }}>
-                <label style={{ fontSize: 13, opacity: 0.7 }}>WiFi name</label>
-                <input className="input" name="wifi_name" value={form.wifi_name} onChange={handleChange} />
-            </div>
+                    <div style={{ marginTop: 14 }}>
+                        <label>Late check-in</label>
+                        <textarea className="input" name="late_checkin" value={form.late_checkin} onChange={handleChange} />
+                    </div>
 
-            <div style={{ marginTop: 14 }}>
-                <label style={{ fontSize: 13, opacity: 0.7 }}>WiFi password</label>
-                <input className="input" name="wifi_password" value={form.wifi_password} onChange={handleChange} />
-            </div>
+                    <div style={{ marginTop: 14 }}>
+                        <label>WiFi name</label>
+                        <input className="input" name="wifi_name" value={form.wifi_name} onChange={handleChange} />
+                    </div>
+
+                    <div style={{ marginTop: 14 }}>
+                        <label>WiFi password</label>
+                        <input className="input" name="wifi_password" value={form.wifi_password} onChange={handleChange} />
+                    </div>
+                </>
+            )}
 
             <div style={{ marginTop: 18 }}>
                 <button className="btn btn-primary" onClick={save}>
@@ -109,8 +124,7 @@ export default function PropertyInfo() {
                 </button>
             </div>
 
-        </div>
+        </>
 
     )
-
 }

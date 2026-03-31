@@ -1,14 +1,11 @@
-import Card from "../components/Card"
-
 export default function Personalization(){
 
   return(
 
     <div style={{ maxWidth: 500 }}>
 
-
-        <p>
-          Customize how your concierge interacts with guests.
+        <p style={{ color: "#94a3b8", fontSize: 13 }}>
+          Define how your assistant talks to guests.
         </p>
 
         <div className="branding-field">
@@ -26,10 +23,8 @@ export default function Personalization(){
           <label>Widget position</label>
 
           <select className="input">
-
             <option>Bottom right</option>
             <option>Bottom left</option>
-
           </select>
 
         </div>
@@ -39,12 +34,10 @@ export default function Personalization(){
           <label>Default language</label>
 
           <select className="input">
-
             <option>Auto detect</option>
             <option>English</option>
             <option>Español</option>
             <option>Deutsch</option>
-
           </select>
 
         </div>
@@ -53,9 +46,7 @@ export default function Personalization(){
           Save personalization
         </button>
 
-
     </div>
 
   )
-
 }

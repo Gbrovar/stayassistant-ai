@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import Toast from "../components/UI/Toast"
@@ -38,47 +37,26 @@ export default function FAQEditor() {
 
 
     function updateQuestion(index, value) {
-
         const copy = [...faq]
-
         copy[index].question = value
-
         setFaq(copy)
-
     }
-
 
     function updateAnswer(index, value) {
-
         const copy = [...faq]
-
         copy[index].answer = value
-
         setFaq(copy)
-
     }
-
 
     function addFaq() {
-
-        setFaq([
-            ...faq,
-            { question: "", answer: "" }
-        ])
-
+        setFaq([...faq, { question: "", answer: "" }])
     }
-
 
     function removeFaq(index) {
-
         const copy = [...faq]
-
         copy.splice(index, 1)
-
         setFaq(copy)
-
     }
-
 
     async function save() {
 
@@ -116,59 +94,53 @@ export default function FAQEditor() {
 
         <div>
 
+            <div style={{ marginBottom: 10, fontSize: 13, color: "#94a3b8" }}>
+                Add common questions your guests usually ask.
+            </div>
 
+            {faq.map((item, index) => (
 
-                {faq.map((item, index) => (
+                <div key={index} style={{ marginBottom: 12 }}>
 
-                    <div style={{ marginBottom: 12 }}>
+                    <input
+                        className="input"
+                        value={item.question}
+                        onChange={(e) => updateQuestion(index, e.target.value)}
+                        placeholder="What time is check-in?"
+                    />
 
-                        <input
-                            className="input"
+                    <textarea
+                        className="input"
+                        value={item.answer}
+                        onChange={(e) => updateAnswer(index, e.target.value)}
+                        placeholder="Check-in starts at 3pm..."
+                    />
 
-                            value={item.question}
-                            onChange={(e) => updateQuestion(index, e.target.value)}
-                            placeholder="Question"
-                        />
-
-                        <textarea
-                            className="input"
-                            value={item.answer}
-                            onChange={(e) => updateAnswer(index, e.target.value)}
-                            placeholder="Answer"
-                        />
-
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
-
-                            <Button variant="secondary" onClick={() => removeFaq(index)}>
-                                Delete
-                            </Button>
-
-                        </div>
-
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
+                        <Button variant="secondary" onClick={() => removeFaq(index)}>
+                            Delete
+                        </Button>
                     </div>
-
-                ))}
-
-                <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-
-                    <Button onClick={addFaq}>
-                        Add Question
-                    </Button>
-
-                    <Button onClick={save}>
-                        {loading ? "Saving..." : "Save FAQ"}
-                    </Button>
 
                 </div>
 
+            ))}
 
+            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+
+                <Button onClick={addFaq}>
+                    Add Question
+                </Button>
+
+                <Button onClick={save}>
+                    {loading ? "Saving..." : "Save FAQ"}
+                </Button>
+
+            </div>
 
             {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
         </div>
 
-
-
     )
-
 }
