@@ -14,7 +14,7 @@ export default function RevenueCard() {
     <div className="card">
       <h3>Revenue Insights</h3>
 
-      <div className="grid-2">
+      <div className="grid grid-2">
         <div>
           <p className="text-muted">Plan</p>
           <strong>{plan || "-"}</strong>

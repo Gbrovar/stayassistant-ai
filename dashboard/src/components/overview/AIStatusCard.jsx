@@ -23,7 +23,9 @@ export default function AIStatusCard() {
 
       <div className="card-header">
         <h3>AI Status</h3>
-        <span style={{ color }}>{status}</span>
+        <span className={`status status-${status.toLowerCase().replace(" ", "-")}`}>
+          {status}
+        </span>
       </div>
 
       <div className="card-body">

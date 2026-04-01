@@ -10,7 +10,7 @@ export default function AlertsCard() {
       <h3>Alerts</h3>
 
       {alerts.map((a, i) => (
-        <div key={i} className={`alert ${a.level}`}>
+        <div key={i} className={`alert alert-${a.level}`}>
           {a.text}
         </div>
       ))}
