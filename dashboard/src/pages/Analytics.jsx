@@ -47,7 +47,7 @@ export default function Analytics() {
   }))
 
   if (loading) {
-    return <div className="stack"><p>Loading analytics...</p></div>
+    return <div className="stack-lg"><p>Loading analytics...</p></div>
   }
 
   if (!hasData) {
@@ -59,30 +59,30 @@ export default function Analytics() {
   }
 
   return (
-    <div className="stack">
+    <div className="stack-lg">
 
       {/* KPIs */}
-      <div className="kpis">
+      <div className="grid grid-4">
         <div className="card">
-          <div className="label">Total Messages</div>
-          <div className="value">{totalMessages}</div>
+          <div className="text-muted">Total Messages</div>
+          <div className="kpi-value">{totalMessages}</div>
         </div>
 
         <div className="card">
-          <div className="label">Top Intent</div>
-          <div className="value">{topIntents[0]?.intent || "-"}</div>
+          <div className="text-muted">Top Intent</div>
+          <div className="kpi-value">{topIntents[0]?.intent || "-"}</div>
         </div>
 
         <div className="card">
-          <div className="label">Peak Hour</div>
-          <div className="value">
+          <div className="text-muted">Peak Hour</div>
+          <div className="kpi-value">
             {Object.entries(peakHours)[0]?.[0] || "-"}:00
           </div>
         </div>
 
         <div className="card">
-          <div className="label">Status</div>
-          <div className="value">
+          <div className="text-muted">Status</div>
+          <div className="kpi-value">
             {totalMessages > 0 ? "Active" : "Idle"}
           </div>
         </div>
@@ -90,65 +90,61 @@ export default function Analytics() {
 
       {/* 🚀 UPGRADE SIGNAL */}
       {upgradeSignal && (
-        <div className={`upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
+        <div className={`card card-highlight upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
           <div className="upgrade-content">
-            <h3>
+            <h3 className="title-md">
               {upgradeSignal === "upgrade_strong"
-                ? "🚀 High usage detected"
-                : "⚡ Growing usage"}
+                ? "High usage detected"
+                : "Growing usage"}
             </h3>
             <p>
               Upgrade to handle more guests and unlock full performance.
             </p>
           </div>
 
-          <button
-            className="upgrade-btn"
-            onClick={() => navigate("/billing")}
-          >
+          <Button onClick={() => navigate("/billing")}>
             Upgrade
-          </button>
+          </Button>
         </div>
       )}
 
       {/* ALERTS */}
       {isPro ? (
         alerts.length > 0 && (
-          <div className="stack">
-            {alerts.map((a, idx) => (
-              <div
-                key={idx}
-                className="card alert"
-                style={{
-                  borderLeft: a.level === "critical"
-                    ? "2px solid #ef4444"
-                    : "2px solid #f59e0b"
-                }}
-              >
-                ⚠️ {a.text}
-              </div>
-            ))}
+          <div className="stack-md">
+            {alerts.map((a, idx) => {
+              const level = a.level === "critical" ? "danger" : a.level
+
+              return (
+                <div
+                  key={idx}
+                  className={`card alert alert-${level}`}
+                >
+                  ⚠️ {a.text}
+                </div>
+              )
+            })}
           </div>
         )
       ) : (
         <div className="card">
-          <p>⚠️ Unlock alerts to detect issues automatically</p>
+          <p>Unlock alerts to detect issues automatically</p>
           <Button onClick={() => navigate("/billing")}>
             Upgrade to Pro
           </Button>
         </div>
       )}
 
-      {/* INSIGHTS */}
+      {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
         <div className="card">
-          <h3>📊 Business Insights</h3>
+          <h3 className="title-md">Business Insights</h3>
 
-          {insights.map((i, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {i.text}
-            </p>
-          ))}
+          <div className="stack-md">
+            {insights.map((i, idx) => (
+              <p key={idx}>{i.text}</p>
+            ))}
+          </div>
         </div>
       )}
 
@@ -156,18 +152,20 @@ export default function Analytics() {
       {isPro ? (
         aiInsights.length > 0 && (
           <div className="card">
-            <h3>🤖 AI Insights</h3>
+            <h3 className="title-md">AI Insights</h3>
 
-            {aiInsights.map((text, idx) => (
-              <p key={idx} style={{ marginTop: 10 }}>
-                {text.replace(/\*\*/g, "")}
-              </p>
-            ))}
+            <div className="stack-md">
+              {aiInsights.map((text, idx) => (
+                <p key={idx}>
+                  {text.replace(/\*\*/g, "")}
+                </p>
+              ))}
+            </div>
           </div>
         )
       ) : (
         <div className="card">
-          <h3>🤖 AI Insights</h3>
+          <h3 className="title-md">AI Insights</h3>
           <p>Unlock AI-powered recommendations</p>
           <Button onClick={() => navigate("/billing")}>
             Upgrade to Pro
@@ -178,32 +176,38 @@ export default function Analytics() {
       {/* CONVERSATION INSIGHTS */}
       {semanticInsights.length > 0 && (
         <div className="card">
-          <h3>🧠 Conversation Insights</h3>
+          <h3 className="title-md">Conversation Insights</h3>
 
-          {semanticInsights.map((text, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {text.replace(/\*\*/g, "")}
-            </p>
-          ))}
+          <div className="stack-md">
+            {semanticInsights.map((text, idx) => (
+              <p key={idx}>
+                {text.replace(/\*\*/g, "")}
+              </p>
+            ))}
+          </div>
         </div>
       )}
 
       {/* QUALITY */}
       {conversationScore && (
         <div className="card">
-          <h3>📊 Conversation Quality</h3>
-          <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
-          <p>Satisfaction: {conversationScore.satisfaction?.toFixed(1)} / 10</p>
-          <p>Friction: {conversationScore.friction?.toFixed(1)} / 10</p>
+          <h3 className="title-md">Conversation Quality</h3>
+
+          <div className="stack-md">
+            <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
+            <p>Satisfaction: {conversationScore.satisfaction?.toFixed(1)} / 10</p>
+            <p>Friction: {conversationScore.friction?.toFixed(1)} / 10</p>
+          </div>
         </div>
       )}
 
       {/* OPTIMIZATION */}
       <div className="card">
-        <h3>⚡ Optimization</h3>
+        <h3 className="title-md">Optimization</h3>
 
-        <button
-          className="btn-primary btn-full"
+        <Button
+          variant="primary"
+          full
           onClick={async () => {
 
             const propertyId = localStorage.getItem("propertyId")
@@ -217,16 +221,16 @@ export default function Analytics() {
             showToast("Optimizations applied 🚀")
           }}
         >
-          ⚡ Auto Optimize Property
-        </button>
+          Auto Optimize Property
+        </Button>
       </div>
 
       {/* LOCKED ANALYTICS */}
       <LockedFeature title="Unlock advanced analytics">
-        <div className="analytics-grid">
+        <div className="grid grid-2">
 
           <div className="card">
-            <h3>Top guest requests</h3>
+            <h3 className="title-md">Top guest requests</h3>
 
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={intentData}>
@@ -239,7 +243,7 @@ export default function Analytics() {
           </div>
 
           <div className="card">
-            <h3>Peak hours</h3>
+            <h3 className="title-md">Peak hours</h3>
 
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={hourData}>

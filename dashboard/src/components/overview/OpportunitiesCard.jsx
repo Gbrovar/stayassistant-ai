@@ -26,7 +26,7 @@ export default function OpportunitiesCard() {
       <h3>AI Opportunities</h3>
 
       {insights.map((i, index) => (
-        <div key={index} className="card-soft">
+        <div key={index} className="card card-soft">
 
           <p>{i.text}</p>
 

@@ -19,7 +19,7 @@ export default function AIStatusCard() {
   }
 
   return (
-    <div className="card card-highlight">
+    <div className="card">
 
       <div className="card-header">
         <h3>AI Status</h3>
