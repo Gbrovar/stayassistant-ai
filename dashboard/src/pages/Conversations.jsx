@@ -103,13 +103,6 @@ export default function Conversations() {
 
       <div className="conversations-page">
 
-        <div className="page-header">
-          <h2 className="page-title">Guest Conversations</h2>
-          <p className="page-subtitle">
-            Monitor how your AI concierge interacts with guests
-          </p>
-        </div>
-
         <div className="conversations-layout">
 
           <div className="conversations-list">
@@ -122,8 +115,10 @@ export default function Conversations() {
 
                 <div
                   key={c.id}
-                  className={`conversation-item ${selected?.id === c.id ? "active" : ""}`}
-                  style={{ opacity: limitReached ? 0.5 : 1 }}  // 👈 AQUÍ VA
+                  className={`conversation-item 
+                    ${selected?.id === c.id ? "active" : ""} 
+                    ${limitReached ? "disabled" : ""}
+                  `}
                   onClick={() => {
                     if (limitReached) return
                     setSelected(c)
@@ -179,9 +174,12 @@ export default function Conversations() {
 
               <div className="stack">
 
-                <h3>Conversation {selected.id}</h3>
+                <div className="chat-header">
+                  <h3>Conversation</h3>
+                  <span className="text-muted">{selected.id}</span>
+                </div>
 
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="messages">
                   {selected.messages.map((m, i) => (
 
                     <div
