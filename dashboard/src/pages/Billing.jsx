@@ -269,30 +269,32 @@ export default function Billing() {
             </div>
 
             {/* PORTAL */}
-            <div className="card" style={{ marginTop: 30 }}>
+            <div className="card billing-section">
 
                 <h3>Manage billing</h3>
 
-                <button onClick={openPortal}>
-                    Open billing portal
-                </button>
+                <div className="billing-actions">
 
-                {subscription.plan !== "free" && subscription.status !== "cancel_scheduled" && (
                     <button
-                        onClick={cancelSubscription}
-                        style={{
-                            marginTop: 10,
-                            background: "#ef4444",
-                            color: "white"
-                        }}
+                        className="billing-portal-btn"
+                        onClick={openPortal}
                     >
-                        Cancel subscription
+                        Open billing portal
                     </button>
-                )}
 
+                    {subscription.plan !== "free" && subscription.status !== "cancel_scheduled" && (
+                        <button
+                            className="billing-cancel-btn"
+                            onClick={cancelSubscription}
+                        >
+                            Cancel subscription
+                        </button>
+                    )}
+
+                </div>
             </div>
 
-            <div className="card" style={{ marginTop: 30 }}>
+            <div className="card billing-section">
 
                 <h3>Invoices</h3>
 

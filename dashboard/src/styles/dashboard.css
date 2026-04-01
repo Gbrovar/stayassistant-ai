@@ -149,8 +149,104 @@ body {
   color: #94a3b8;
 }
 
+/* 🔥 BILLING IMPROVEMENTS */
+
 .billing {
-  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* spacing limpio */
+.billing-section {
+  margin-top: 8px;
+}
+
+/* CURRENT PLAN más importante */
+.billing .card:first-of-type {
+  padding: 24px;
+  border: 1px solid rgba(99,102,241,0.15);
+  background: linear-gradient(180deg, #0f172a, #0b1220);
+}
+
+/* plan actual título */
+.plan-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* barra uso más visible */
+.usage-bar {
+  margin-top: 12px;
+  height: 10px;
+}
+
+/* ALERT spacing */
+.usage-alert {
+  margin-top: 12px;
+}
+
+/* 🔥 PLAN CARDS MEJORADAS */
+.plan-card {
+  transition: all 0.2s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-3px);
+  border-color: #6366f1;
+}
+
+/* plan recomendado más fuerte */
+.plan-card.recommended {
+  border: 2px solid #6366f1;
+  box-shadow: 0 10px 30px rgba(99,102,241,0.15);
+}
+
+/* botón dentro de plan */
+.plan-card button {
+  margin-top: 14px;
+  width: 100%;
+}
+
+/* 🔥 BOTONES BILLING */
+.billing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.billing-actions button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* botón portal (primary secundario) */
+.billing-portal-btn {
+  background: #1f2937;
+  color: white;
+}
+
+/* botón cancel (menos agresivo visualmente) */
+.billing-cancel-btn {
+  background: rgba(239,68,68,0.1);
+  color: #ef4444;
+}
+
+/* hover cancel */
+.billing-cancel-btn:hover {
+  background: rgba(239,68,68,0.2);
+}
+
+/* 🔥 INVOICES */
+.invoice-row {
+  padding: 14px 0;
+}
+
+.invoice-row:hover {
+  background: rgba(255,255,255,0.02);
 }
 
 .plans {
@@ -578,7 +674,6 @@ body {
   cursor: pointer;
 }
 
-/* BILLING */
 
 .card {
   background: #0f172a;
