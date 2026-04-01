@@ -13,34 +13,40 @@ export default function PropertySetupPage() {
   const propertyId = getPropertyId()
 
   return (
-    <div className="page">
+    <div className="container">
 
       <div className="page-header">
-        <h1 className="page-title">Your AI concierge</h1>
+        <h1 className="title-lg">Your AI concierge</h1>
         <p className="page-subtitle">
           Configure how your assistant works and responds to guests.
         </p>
       </div>
 
-      <div className="page-content">
 
-        <Section title="Essentials">
-          <PropertyInfo />
-        </Section>
+        <div className="setup-layout">
 
-        <Section title="FAQ">
-          <div className="knowledge-block">
-            <FAQEditor />
+          <div className="setup-main">
+
+            <Section title="1. Basics">
+              <PropertyInfo />
+            </Section>
+
+            <Section title="2. Train your AI">
+              <FAQEditor />
+            </Section>
+
+            <Section title="3. Recommendations">
+              <Recommendations />
+            </Section>
+
           </div>
-        </Section>
 
-        <Section title="Recomendations">
-          <div className="knowledge-block">
-            <Recommendations />
+          <div className="setup-preview">
+            <LiveWidgetPreview />
           </div>
-        </Section>
 
-      </div>
+        </div>
+
 
       {/* Widget preview */}
       <div style={{

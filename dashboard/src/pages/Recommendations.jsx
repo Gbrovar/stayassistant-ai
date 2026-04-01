@@ -111,10 +111,9 @@ export default function Recommendations() {
 
         <div>
 
-            <p className="field-hint">
-                Guests often ask where to eat. Add a few recommendations to improve responses.
+            <p className="text-muted">
+                Add local recommendations to improve guest experience and reduce repetitive questions.
             </p>
-
 
 
             {items.map((item, index) => (

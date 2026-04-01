@@ -16,50 +16,50 @@ export default function Insights() {
 
   async function addToFAQ(question, answer) {
 
-  try {
+    try {
 
-    // 1. Obtener FAQ actual
-    const res = await fetch(`${API_URL}/property/${propertyId}/faq`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+      // 1. Obtener FAQ actual
+      const res = await fetch(`${API_URL}/property/${propertyId}/faq`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const data = await res.json()
+      const currentFaq = data.faq || []
+
+      // 2. Evitar duplicados
+      const exists = currentFaq.some(f => f.question === question)
+
+      if (exists) {
+        alert("This FAQ already exists")
+        return
       }
-    })
 
-    const data = await res.json()
-    const currentFaq = data.faq || []
+      // 3. Crear nuevo array
+      const updatedFaq = [
+        ...currentFaq,
+        { question, answer }
+      ]
 
-    // 2. Evitar duplicados
-    const exists = currentFaq.some(f => f.question === question)
+      // 4. Guardar TODO el array
+      await fetch(`${API_URL}/property/${propertyId}/faq`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ faq: updatedFaq })
+      })
 
-    if (exists) {
-      alert("This FAQ already exists")
-      return
+      // 5. UX feedback
+      navigate("/property")
+
+    } catch (err) {
+      console.error(err)
+      alert("Error adding FAQ")
     }
-
-    // 3. Crear nuevo array
-    const updatedFaq = [
-      ...currentFaq,
-      { question, answer }
-    ]
-
-    // 4. Guardar TODO el array
-    await fetch(`${API_URL}/property/${propertyId}/faq`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ faq: updatedFaq })
-    })
-
-    // 5. UX feedback
-    navigate("/property")
-
-  } catch (err) {
-    console.error(err)
-    alert("Error adding FAQ")
   }
-}
 
   useEffect(() => {
     async function load() {
@@ -128,23 +128,28 @@ export default function Insights() {
 
       {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
-        <div className="card">
-          <h3>📊 Business Insights</h3>
+        <div className="card card-highlight">
+          <div className="card-header">
+            <h3>AI Insights</h3>
+          </div>
 
-          {insights.map((i, idx) => (
-            <p key={idx} style={{ marginTop: 10 }}>
-              {i.text}
-            </p>
-          ))}
+          <div className="stack-md">
+            {insights.map((i, idx) => (
+              <div key={idx} className="insight-row">
+                <span>⚡</span>
+                <p>{i.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* EMPTY STATE */}
       {suggestions.length === 0 && (
-        <div className="card">
-          <p>
-            Your AI is learning from guest interactions.
-            Insights will appear as soon as enough data is collected.
+        <div className="card card-highlight">
+          <p className="text-muted">
+            Your AI is learning from guest conversations.
+            Insights will appear once enough data is collected.
           </p>
         </div>
       )}
@@ -159,18 +164,16 @@ export default function Insights() {
         return (
           <div
             key={s.question + idx}
-            className="card"
-            style={{
-              borderLeft: s.count >= 5
-                ? "2px solid #ef4444"
-                : "2px solid #22c55e"
-            }}
+            className={`card insight-card ${s.count >= 5 ? "high-demand" : "low-demand"
+              }`}
           >
-            <p style={{ fontSize: 12, marginBottom: 6 }}>
-              {s.count >= 5
-                ? `🔥 High demand — ${s.count}`
-                : `${s.count} requests`}
-            </p>
+            <div className="insight-header">
+              <span className={`badge-demand ${s.count >= 5 ? "high" : ""}`}>
+                {s.count >= 5 ? "🔥 High demand" : "Normal"}
+              </span>
+
+              <span className="text-muted">{s.count} requests</span>
+            </div>
 
             <h3>{s.question}</h3>
 
@@ -191,7 +194,7 @@ export default function Insights() {
               className="btn-primary btn-full"
               onClick={() => addToFAQ(s.question, s.suggested_answer)}
             >
-              Add to FAQ
+              + Add to FAQ
             </button>
           </div>
         )

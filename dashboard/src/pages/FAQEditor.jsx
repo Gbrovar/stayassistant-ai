@@ -93,19 +93,11 @@ export default function FAQEditor() {
     return (
 
         <div>
-            <div style={{
-                background: "rgba(99,102,241,0.1)",
-                padding: 12,
-                borderRadius: 10,
-                marginBottom: 14,
-                fontSize: 13,
-                color: "#c7d2fe"
-            }}>
-                These answers power your AI concierge. Add the most common guest questions.
-            </div>
-
-            <div style={{ marginBottom: 10, fontSize: 13, color: "#94a3b8" }}>
-                Add common questions your guests usually ask.
+            <div className="card card-highlight">
+                <p className="text-muted">
+                    These questions train your AI concierge.
+                    Add the most common things guests ask.
+                </p>
             </div>
 
 
@@ -166,7 +158,7 @@ export default function FAQEditor() {
                 </Button>
 
                 <Button onClick={save}>
-                   Save knowledge  {loading ? "Saving..." : "Save FAQ"}
+                    Save knowledge  {loading ? "Saving..." : "Save FAQ"}
                 </Button>
 
             </div>

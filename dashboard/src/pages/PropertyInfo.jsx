@@ -104,6 +104,20 @@ export default function PropertyInfo() {
         }))
     }
 
+    function Section({ title, children }) {
+        return (
+            <div className="card">
+                <div className="card-header">
+                    <h3>{title}</h3>
+                </div>
+
+                <div className="stack">
+                    {children}
+                </div>
+            </div>
+        )
+    }
+
     async function saveAll() {
 
         setSaving(true)
