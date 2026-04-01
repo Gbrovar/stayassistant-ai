@@ -30,7 +30,6 @@ export default function Install() {
         }
     }, [siteUrl])
 
-
     async function checkInstallation() {
         if (!siteUrl) return
 
@@ -59,80 +58,48 @@ export default function Install() {
 
     const script = `<script src="https://stayassistantai.com/widget.js?property=${propertyId}" defer></script>`
 
+    const stepsCompleted = (copied ? 1 : 0) + ((tested || detected) ? 1 : 0)
+
     return (
 
         <div className="page">
 
-            <div className="page-header">
-                <h1 className="page-title">Install StayAssistant</h1>
+            {/* 🔥 HEADER UNIFICADO */}
+            <div className="install-header-card">
 
-                <div className="card">
-
-                    <div style={{ fontWeight: 600 }}>
-                        Installation status
-                    </div>
-
-                    {detected && (
-                        <div style={{ marginTop: 10, opacity: 0.7 }}>
-                            Your AI concierge is live 🎉
+                <div className="install-header-top">
+                    <div>
+                        <div className="install-title">
+                            Install your AI concierge
                         </div>
-                    )}
-
-                    <div style={{ marginTop: 10 }}>
-
-                        {checking && "Checking installation..."}
-                        {!checking && detected === null && "Click to check installation"}
-                        {detected === true && "✅ Widget detected on your site"}
-                        {detected === false && (
-                            <div style={{ marginTop: 10, fontSize: 13, opacity: 0.6 }}>
-                                Detection may fail on some websites. Please open your site and check if the chat appears.
-                            </div>
-                        )}
-
+                        <div className="install-subtitle">
+                            Takes less than 2 minutes
+                        </div>
                     </div>
 
-                    <div style={{ marginTop: 12 }}>
-                        <Button
-                            variant={detected ? "primary" : "secondary"}
-                            onClick={checkInstallation}
-                            disabled={checking}
-                        >
-                            {checking ? "Checking..." : "Check installation"}
-                            {detected === false && (
-                                <div style={{ marginTop: 10, fontSize: 13, opacity: 0.6 }}>
-                                    If you already installed it, open your site and test the chat.
-                                </div>
-                            )}
-                        </Button>
+                    <div className="install-progress">
+                        {stepsCompleted} / 2
                     </div>
-
                 </div>
 
+                <div className="install-status">
+                    {detected === true && "🟢 Live on your website"}
+                    {detected === false && "⚠️ Not detected yet"}
+                    {detected === null && "Ready to install"}
+                </div>
 
-                <p className="page-subtitle">
-                    Get your AI concierge live in under 2 minutes
-                </p>
             </div>
 
             <div className="stack">
 
-                <div className="card">
+                {/* STEP 1 */}
+                <Card className="install-primary-step">
 
-                    <div style={{ fontWeight: 600 }}>
-                        Installation progress
+                    <div className="install-step-header">
+                        <span className={`step-dot ${copied ? "done" : ""}`}></span>
+                        <strong>Step 1 — Copy your widget</strong>
                     </div>
 
-                    <div style={{ marginTop: 10, fontSize: 14 }}>
-                        {(copied ? 1 : 0) + ((tested || detected) ? 1 : 0)} / 2 steps completed
-                    </div>
-
-                </div>
-
-                <Card>
-
-                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
-                        {copied ? "✅" : "⬜"} Step 1 — Copy your widget
-                    </div>
                     <p className="subtitle">
                         This is your unique AI concierge script
                     </p>
@@ -142,16 +109,16 @@ export default function Install() {
                         <code>{" </body> "}</code> tag.
                     </p>
 
-                    <pre className="install-code" style={{ maxWidth: "100%" }}>
+                    <pre className="install-code">
                         {script}
                     </pre>
 
                     <CopyButton
+                        text={script}
                         onClick={() => {
                             setCopied(true)
                             localStorage.setItem("install_copied", "true")
                         }}
-                        text={script}
                         onCopy={() => {
 
                             const token = localStorage.getItem("token")
@@ -170,14 +137,22 @@ export default function Install() {
                         }}
                     />
 
+                    {copied && (
+                        <div style={{ marginTop: 10, fontSize: 12, color: "#22c55e" }}>
+                            Copied ✓ Now paste it into your website
+                        </div>
+                    )}
+
                 </Card>
 
-
+                {/* STEP 2 */}
                 <Card>
 
-                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
-                        ⬜ Step 2 — Add to your website
+                    <div className="install-step-header">
+                        <span className={`step-dot ${copied ? "done" : ""}`}></span>
+                        <strong>Step 2 — Add to your website</strong>
                     </div>
+
                     <p className="subtitle">
                         Paste it before the closing <code>{"</body>"}</code> tag
                     </p>
@@ -187,22 +162,36 @@ export default function Install() {
                         <code>{" </body> "}</code>.
                     </p>
 
-                    <pre className="install-code" style={{ maxWidth: "100%" }}>
+                    <div className="install-hint">
+                        Paste before &lt;/body&gt;
+                    </div>
+
+                    <pre className="install-code">
                         {`<body>
 
-                    ... your website ...
+    ... your website ...
 
-                    ${script}
+    ${script}
 
-                    </body>`}
+</body>`}
                     </pre>
 
                 </Card>
 
-
+                {/* STEP 3 */}
                 <Card>
 
+                    <div className="install-step-header">
+                        <span className={`step-dot ${(tested || detected) ? "done" : ""}`}></span>
+                        <strong>Step 3 — Test your AI concierge</strong>
+                    </div>
+
+                    <p className="subtitle">
+                        Open a live preview and see how guests interact
+                    </p>
+
                     <input
+                        className="input"
                         type="text"
                         placeholder="https://yourwebsite.com"
                         value={siteUrl}
@@ -210,27 +199,19 @@ export default function Install() {
                             setSiteUrl(e.target.value)
                             localStorage.setItem("property_url", e.target.value)
                         }}
-                        style={{
-                            width: "100%",
-                            marginTop: 10,
-                            padding: 10,
-                            borderRadius: 8,
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            background: "#0b1220",
-                            color: "white"
-                        }}
                     />
 
-                    <div style={{ fontWeight: 600, marginBottom: 8 }}>
-                        {tested ? "✅" : "⬜"} Step 3 — Test your AI concierge
-                    </div>
-                    <p className="subtitle">
-                        Open a live preview and see how guests interact
-                    </p>
+                    <div className="install-step-input-block">
 
-                    <p>
-                        Once installed, open your website and test the concierge.
-                    </p>
+                        {checking && "Checking installation..."}
+                        {!checking && detected === true && "✅ Widget detected"}
+                        {!checking && detected === false && (
+                            <div style={{ fontSize: 12, color: "#f59e0b" }}>
+                                Could not detect automatically. Open your site manually.
+                            </div>
+                        )}
+
+                    </div>
 
                     <Button
                         variant="primary"
@@ -261,9 +242,22 @@ export default function Install() {
 
                 </Card>
 
+                {/* CHECK BUTTON EXTRA */}
+                <div className="install-check-wrapper">
+
+                    <Button
+                        variant={detected ? "primary" : "secondary"}
+                        onClick={checkInstallation}
+                        disabled={checking}
+                    >
+                        {checking ? "Checking..." : "Check installation"}
+                    </Button>
+
+                </div>
+
             </div>
 
-        </div >
+        </div>
 
     )
 
