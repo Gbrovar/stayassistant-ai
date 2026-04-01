@@ -62,13 +62,13 @@ export default function Install() {
 
     return (
 
-        <div className="page">
+        <div className="container">
 
             {/* 🔥 HEADER UNIFICADO */}
-            <div className="install-header-card">
+            <div className="page-header">
 
                 <div className="install-header-top">
-                    <div>
+                    <div className="page-header">
                         <div className="install-title">
                             Install your AI concierge
                         </div>

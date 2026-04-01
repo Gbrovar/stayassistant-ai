@@ -117,12 +117,12 @@ export default function Billing() {
     const usageRatio = usage / limit
 
     return (
-        <div className="billing">
+        <div className="container">
 
             {/* HEADER */}
             <div className="page-header">
-                <h1>Billing</h1>
-                <p className="muted">
+                <h1 className="title-lg">Billing</h1>
+                <p className="page-subtitle">
                     Manage your plan and scale your AI concierge
                 </p>
             </div>
