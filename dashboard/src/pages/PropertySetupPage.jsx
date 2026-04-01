@@ -28,13 +28,13 @@ export default function PropertySetupPage() {
           <PropertyInfo />
         </Section>
 
-        <Section title="Knowledge">
+        <Section title="FAQ">
           <div className="knowledge-block">
             <FAQEditor />
           </div>
         </Section>
 
-        <Section title="Knowledge">
+        <Section title="Recomendations">
           <div className="knowledge-block">
             <Recommendations />
           </div>

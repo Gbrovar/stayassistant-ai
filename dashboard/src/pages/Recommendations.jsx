@@ -111,10 +111,6 @@ export default function Recommendations() {
 
         <div>
 
-            <div style={{ fontSize: 13, marginBottom: 6, color: "#64748b" }}>
-                Recommendation
-            </div>
-
             <p className="field-hint">
                 Guests often ask where to eat. Add a few recommendations to improve responses.
             </p>

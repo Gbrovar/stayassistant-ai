@@ -363,7 +363,7 @@ body {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, #6366f1, transparent);
+  /*background: linear-gradient(180deg, #6366f1, transparent);*/
   border-radius: 3px;
   opacity: 0.6;
 }
