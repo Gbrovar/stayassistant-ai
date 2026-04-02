@@ -117,6 +117,7 @@ body::before {
 
 .hero-left {
   max-width: 520px;
+  will-change: transform, opacity;
 }
 
 .badge {
@@ -179,6 +180,8 @@ body::before {
   padding: 28px;
   backdrop-filter: blur(20px);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.6);
+  will-change: transform;
+
 }
 
 .mockup.big {
@@ -270,13 +273,16 @@ section .container {
 
 /* SOLO afectamos contenido, no fondo */
 section > * {
-  opacity: 0.2;
-  transform: scale(0.96);
+  opacity: 0.15;
+  transform: scale(0.94);
+  filter: blur(6px);
+  transition: all 0.8s cubic-bezier(.2,.8,.2,1);
 }
 
 section.active > * {
   opacity: 1;
   transform: scale(1);
+  filter: blur(0);
 }
 
 h2 {

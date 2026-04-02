@@ -356,6 +356,21 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
+        function typeMessage(element, text, speed = 18) {
+            let i = 0;
+            element.innerText = "";
+
+            function typing() {
+                if (i < text.length) {
+                    element.innerText += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed + Math.random() * 20);
+                }
+            }
+
+            typing();
+        }
+
         // TYPING
         function showTyping() {
             const typing = document.createElement("div");
@@ -446,7 +461,8 @@
                         setTimeout(() => {
 
                             // 🔥 2. convertir typing en mensaje
-                            typing.innerHTML = msg.text;
+                            typing.innerHTML = "";
+                            typeMessage(typing, msg.text);
                             typing.classList.remove("typing");
                             typing.classList.add("ai");
 
@@ -497,7 +513,29 @@
         const chatElement = document.querySelector(".interactive-chat");
         if (chatElement) chatObserver.observe(chatElement);
 
+        document.querySelectorAll(".btn").forEach(btn => {
+
+            btn.addEventListener("mousemove", (e) => {
+
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const moveX = (x - rect.width / 2) * 0.2;
+                const moveY = (y - rect.height / 2) * 0.2;
+
+                btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+
+            btn.addEventListener("mouseleave", () => {
+                btn.style.transform = "translate(0,0)";
+            });
+
+        });
+
     </script>
+
+
 
 </body>
 
