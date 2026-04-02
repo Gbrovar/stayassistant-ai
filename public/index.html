@@ -68,7 +68,9 @@
                 Trusted by modern Airbnb hosts worldwide
             </div>
         </div>
-
+        <div class="scroll-indicator">
+            Scroll
+        </div>
 
     </section>
 
@@ -185,6 +187,32 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 🔥 ACTIVE SECTION SYSTEM
+        const sections = document.querySelectorAll("section");
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    sections.forEach(s => s.classList.remove("active"));
+                    entry.target.classList.add("active");
+                }
+            });
+        }, {
+            threshold: 0.6
+        });
+
+        sections.forEach(section => sectionObserver.observe(section));
+
+        // 🔥 PARALLAX LIGHT
+        window.addEventListener("scroll", () => {
+            const scrollY = window.scrollY;
+
+            document.querySelectorAll(".mockup").forEach(el => {
+                el.style.transform = `translateY(${scrollY * -0.05}px)`;
+            });
+        });
+
     </script>
 
     <script>

@@ -18,6 +18,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
 
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+
   background:
     radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.15), transparent 40%),
     radial-gradient(circle at 80% 0%, rgba(99, 102, 241, 0.15), transparent 40%),
@@ -54,7 +58,7 @@ body {
   left: 10%;
   right: 10%;
   height: 1px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .step {
@@ -80,7 +84,14 @@ body {
 
 /* HERO */
 .hero {
+  position: relative;
+  z-index: 2;
   padding: 0;
+}
+
+.product {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-split {
@@ -221,12 +232,22 @@ section {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  margin-top: 0;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.8s cubic-bezier(.2, .8, .2, 1),
+    opacity 0.8s ease;
+  opacity: 0.3;
+  transform: scale(0.98);
 }
 
-/* quitar margin viejo */
-section {
-  margin-top: 0;
+/* 🔥 FOCUS EFFECT */
+section.active {
+  opacity: 1;
+  transform: scale(1);
 }
+
 
 section .container {
   width: 100%;
@@ -288,6 +309,28 @@ h2 {
 }
 
 /* SCROLL ANIMATION PRO */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  opacity: 0.5;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(80px) scale(0.96);
@@ -328,6 +371,16 @@ h2 {
   inset: 0;
   background: radial-gradient(circle at 70% 40%, rgba(34, 197, 94, 0.15), transparent 40%);
   pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, transparent, #020617);
 }
 
 /* MONEY TAG */
@@ -529,6 +582,12 @@ h2 {
   color: var(--green);
   margin-bottom: 10px;
 }
+
+/* 🔥 SCROLL SNAP SYSTEM */
+html {
+  scroll-behavior: smooth;
+}
+
 
 @media (max-width: 900px) {
 
