@@ -184,15 +184,46 @@
         const chat = document.getElementById("chat");
         const revenueEl = document.getElementById("revenue");
 
-        let revenue = 0;
         let loopTimeout;
 
+        // 🎲 ESCENARIOS
+        const scenarios = [
+            {
+                name: "Anna",
+                messages: [
+                    { type: "guest", text: "Hi, can I check in early?" },
+                    { type: "ai", text: "Early check-in available for €25 😊", revenue: 25 },
+                    { type: "guest", text: "And late checkout?" },
+                    { type: "ai", text: "Late checkout available for €30", revenue: 30 }
+                ]
+            },
+            {
+                name: "John",
+                messages: [
+                    { type: "guest", text: "Do you offer airport pickup?" },
+                    { type: "ai", text: "Yes! Airport transfer available for €40 🚗", revenue: 40 },
+                    { type: "guest", text: "Nice, anything else?" },
+                    { type: "ai", text: "We also offer breakfast for €15 ☕", revenue: 15 }
+                ]
+            },
+            {
+                name: "Sophie",
+                messages: [
+                    { type: "guest", text: "Can I bring an extra guest?" },
+                    { type: "ai", text: "Extra guest fee is €20 per night", revenue: 20 },
+                    { type: "guest", text: "Do you have late checkout?" },
+                    { type: "ai", text: "Late checkout available for €35", revenue: 35 }
+                ]
+            }
+        ];
+
+        // RESET
         function clearChat() {
             chat.innerHTML = "";
-            revenue = 0;
             revenueEl.innerText = "€0";
         }
 
+        // ADD MESSAGE
         function addMessage(text, type) {
             const msg = document.createElement("div");
             msg.className = `message ${type}`;
@@ -201,6 +232,7 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
+        // TYPING
         function showTyping() {
             const typing = document.createElement("div");
             typing.className = "message ai typing";
@@ -213,6 +245,7 @@
             if (el) el.remove();
         }
 
+        // 💸 ANIMATE REVENUE
         function animateRevenue(amount) {
             let current = 0;
 
@@ -220,66 +253,66 @@
                 current += 1;
                 revenueEl.innerText = `€${current}`;
 
-                if (current >= amount) {
-                    clearInterval(interval);
-                    revenue = amount;
-                }
-            }, 25);
+                if (current >= amount) clearInterval(interval);
+            }, 20);
         }
 
-        function runConversation() {
-
+        // 🚀 RUN SCENARIO
+        function runScenario() {
             clearChat();
 
-            // 1. guest
-            setTimeout(() => {
-                addMessage("Hi, what time is check-in?", "guest");
-            }, 400);
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
 
-            // 2. typing
-            let typing1;
-            setTimeout(() => {
-                typing1 = showTyping();
-            }, 1200);
+            let time = 400;
+            let totalRevenue = 0;
 
-            // 3. ai response
-            setTimeout(() => {
-                removeTyping(typing1);
-                addMessage("Check-in is from 3pm. Early check-in available for €25 😊", "ai");
-            }, 2200);
+            scenario.messages.forEach((msg, index) => {
 
-            // 4. guest
-            setTimeout(() => {
-                addMessage("Can I check out late?", "guest");
-            }, 4000);
+                if (msg.type === "guest") {
+                    setTimeout(() => {
+                        addMessage(`${scenario.name}: ${msg.text}`, "guest");
+                    }, time);
+                    time += 1000;
+                }
 
-            // 5. typing
-            let typing2;
-            setTimeout(() => {
-                typing2 = showTyping();
-            }, 5200);
+                if (msg.type === "ai") {
 
-            // 6. ai + revenue
-            setTimeout(() => {
-                removeTyping(typing2);
-                addMessage("Late checkout available for €30", "ai");
-                animateRevenue(30);
-            }, 6500);
+                    let typing;
+
+                    setTimeout(() => {
+                        typing = showTyping();
+                    }, time);
+
+                    time += 900;
+
+                    setTimeout(() => {
+                        removeTyping(typing);
+                        addMessage(msg.text, "ai");
+
+                        if (msg.revenue) {
+                            totalRevenue += msg.revenue;
+                            animateRevenue(totalRevenue);
+                        }
+
+                    }, time);
+
+                    time += 1200;
+                }
+            });
 
         }
 
-        // LOOP INTELIGENTE
+        // LOOP
         function startLoop() {
-            runConversation();
+            runScenario();
 
-            loopTimeout = setInterval(() => {
-                runConversation();
-            }, 14000); // 🔥 más lento = más premium
+            setInterval(() => {
+                runScenario();
+            }, 16000); // más largo = más premium
         }
 
         startLoop();
     </script>
-
 
 </body>
 
