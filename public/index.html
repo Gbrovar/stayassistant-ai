@@ -315,22 +315,31 @@
 
                     const typingDuration = getTypingDuration(msg.text);
 
-                    // quitar typing + mostrar mensaje
                     setTimeout(() => {
 
-                        removeTyping(typing);
+                        // 🔥 1. fade previo (micro transición)
+                        typing.style.transition = "all 0.2s ease";
+                        typing.style.opacity = 0.6;
 
-                        const delay = 100 + Math.random() * 150;
+                        const dots = typing.querySelector(".typing-dots");
+                        if (dots) dots.style.opacity = 0;
 
                         setTimeout(() => {
-                            addMessage(msg.text, "ai");
+
+                            // 🔥 2. convertir typing en mensaje
+                            typing.innerHTML = msg.text;
+                            typing.classList.remove("typing");
+                            typing.classList.add("ai");
+
+                            // 🔥 3. devolver opacidad
+                            typing.style.opacity = 1;
 
                             if (msg.revenue) {
                                 totalRevenue += msg.revenue;
                                 animateRevenue(totalRevenue);
                             }
 
-                        }, delay);
+                        }, 120); // micro delay humano
 
                     }, time + typingDuration);
 
