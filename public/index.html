@@ -355,41 +355,42 @@
 
         });
 
-        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        document.addEventListener("DOMContentLoaded", () => {
 
-        // mostrar/ocultar botón
-        if (scrollTopBtn) {
+            const scrollTopBtn = document.getElementById("scrollTopBtn");
 
-            // 🔥 mostrar según sección (NO scrollTop)
+            if (!scrollTopBtn) {
+                console.warn("Scroll button not found");
+                return;
+            }
+
+            const heroSection = document.querySelector(".hero");
+
             const btnObserver = new IntersectionObserver((entries) => {
 
                 entries.forEach(entry => {
 
-                    if (entry.target.classList.contains("hero")) {
-
-                        if (entry.isIntersecting) {
-                            scrollTopBtn.classList.remove("visible");
-                        } else {
-                            scrollTopBtn.classList.add("visible");
-                        }
-
+                    if (entry.isIntersecting) {
+                        scrollTopBtn.classList.remove("visible");
+                    } else {
+                        scrollTopBtn.classList.add("visible");
                     }
 
                 });
 
             }, {
-                threshold: 0.3,
-                root: main // 🔥 CLAVE ABSOLUTA
+                root: document.querySelector("main"),
+                threshold: 0.1,
+                rootMargin: "-30% 0px"
             });
 
-            const heroSection = document.querySelector(".hero");
             if (heroSection) btnObserver.observe(heroSection);
 
-            // click
             scrollTopBtn.addEventListener("click", () => {
-                smoothScrollTo(main, 0, 600);
+                smoothScrollTo(document.querySelector("main"), 0, 600);
             });
-        }
+
+        });
 
     </script>
 
