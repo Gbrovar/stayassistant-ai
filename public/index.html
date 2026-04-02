@@ -268,6 +268,17 @@
             }, 20);
         }
 
+        function getTypingDuration(text) {
+            const base = 400; // tiempo mínimo
+            const perChar = 25 + Math.random() * 20; // velocidad de escritura
+            if (text.includes("€")) base += 200;
+            if (text.includes("😊")) base += 150;
+
+            const variance = Math.random() * 300; // naturalidad
+
+            return base + (text.length * perChar) + variance;
+        }
+
         // 🚀 RUN SCENARIO
         function runScenario() {
             clearChat();
@@ -294,9 +305,10 @@
                         typing = showTyping();
                     }, time);
 
-                    time += 600 + Math.random() * 600;
+                    const typingDuration = getTypingDuration(msg.text);
+                    time += typingDuration;
 
-                    const delay = 150 + Math.random() * 200;
+                    const delay = 100 + Math.random() * 150;
 
                     setTimeout(() => {
                         removeTyping(typing);
