@@ -366,16 +366,21 @@
                 entries.forEach(entry => {
 
                     if (entry.target.classList.contains("hero")) {
+
                         if (entry.isIntersecting) {
                             scrollTopBtn.classList.remove("visible");
                         } else {
                             scrollTopBtn.classList.add("visible");
                         }
+
                     }
 
                 });
 
-            }, { threshold: 0.3 });
+            }, {
+                threshold: 0.3,
+                root: main // 🔥 CLAVE ABSOLUTA
+            });
 
             const heroSection = document.querySelector(".hero");
             if (heroSection) btnObserver.observe(heroSection);
