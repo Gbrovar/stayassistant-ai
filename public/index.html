@@ -246,7 +246,7 @@
 
                     const items = entry.target.querySelectorAll('.reveal-item');
                     items.forEach((el, i) => {
-                        setTimeout(() => el.classList.add('visible'), i * 120);
+                        setTimeout(() => el.classList.add('visible'), i * 90);
                     });
                 }
             });
@@ -350,7 +350,7 @@
 
             if (isScrolling) return;
 
-            if (Math.abs(e.deltaY) < 10) return;
+            if (Math.abs(e.deltaY) < 5) return;
 
             clearTimeout(scrollTimeout);
 
@@ -360,9 +360,9 @@
                 targetIndex = Math.max(currentIndex - 1, 0);
             }
 
-            scrollTimeout = setTimeout(() => {
+            requestAnimationFrame(() => {
                 scrollToSection(targetIndex);
-            }, 80); // 🔥 micro delay = sensación iOS
+            });
 
         }, { passive: false });
 
@@ -397,7 +397,7 @@
                 translateY(${scrollY * -0.15}px)
                 scale(${1 - scrollY * 0.0003})
             `;
-                hero.style.opacity = 1 - scrollY * 0.0008;
+                hero.style.opacity = 1 - scrollY * 0.0005;
             }
 
             // 🎯 MOCKUP PARALLAX PRO
@@ -405,7 +405,7 @@
                 el.style.transform = `
                 perspective(1200px)
                 rotateY(-4deg)
-                scale(${1 + scrollY * 0.00025})
+                scale(${1 + scrollY * 0.00015})
                 translateY(${scrollY * -0.15}px)
             `;
             });
