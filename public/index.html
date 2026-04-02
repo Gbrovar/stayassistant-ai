@@ -359,14 +359,28 @@
 
         // mostrar/ocultar botón
         if (scrollTopBtn) {
-            main.addEventListener("scroll", (e) => {
-                if (e.target.scrollTop > 150) {
-                    scrollTopBtn.classList.add("visible");
-                } else {
-                    scrollTopBtn.classList.remove("visible");
-                }
-            });
 
+            // 🔥 mostrar según sección (NO scrollTop)
+            const btnObserver = new IntersectionObserver((entries) => {
+
+                entries.forEach(entry => {
+
+                    if (entry.target.classList.contains("hero")) {
+                        if (entry.isIntersecting) {
+                            scrollTopBtn.classList.remove("visible");
+                        } else {
+                            scrollTopBtn.classList.add("visible");
+                        }
+                    }
+
+                });
+
+            }, { threshold: 0.3 });
+
+            const heroSection = document.querySelector(".hero");
+            if (heroSection) btnObserver.observe(heroSection);
+
+            // click
             scrollTopBtn.addEventListener("click", () => {
                 smoothScrollTo(main, 0, 600);
             });
