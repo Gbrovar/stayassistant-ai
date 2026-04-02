@@ -448,16 +448,18 @@
 
         function typeMessage(element, text, speed = 18) {
             let i = 0;
-            element.innerText = "";
+            let buffer = "";
 
             function typing() {
                 if (i < text.length) {
-                    element.innerText += text.charAt(i);
+                    buffer += text[i];
+                    element.textContent = buffer; // 🔥 clave
                     i++;
                     setTimeout(typing, speed + Math.random() * 20);
                 }
             }
 
+            element.textContent = "";
             typing();
         }
 
