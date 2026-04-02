@@ -165,11 +165,13 @@
                 </a>
             </div>
         </section>
+
+        <footer class="footer">
+            © 2026 StayAssistant AI
+        </footer>
     </main>
 
-    <footer class="footer">
-        © 2026 StayAssistant AI
-    </footer>
+
 
     <!-- SCROLL ANIMATION -->
     <script>
@@ -205,8 +207,8 @@
         sections.forEach(section => sectionObserver.observe(section));
 
         // 🔥 PARALLAX LIGHT
-        window.addEventListener("scroll", () => {
-            const scrollY = window.scrollY;
+        document.querySelector("main").addEventListener("scroll", (e) => {
+            const scrollY = e.target.scrollTop;
 
             document.querySelectorAll(".mockup").forEach(el => {
                 el.style.transform = `
