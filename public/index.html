@@ -231,19 +231,30 @@
         }
 
         // 👉 WHEEL CONTROL (CLAVE)
+        let targetIndex = 0;
+        let scrollTimeout;
+
         main.addEventListener("wheel", (e) => {
+
+            e.preventDefault(); // 🔥 clave
 
             if (isScrolling) return;
 
-            if (Math.abs(e.deltaY) < 30) return;
+            if (Math.abs(e.deltaY) < 10) return;
+
+            clearTimeout(scrollTimeout);
 
             if (e.deltaY > 0) {
-                scrollToSection(currentIndex + 1);
+                targetIndex = Math.min(currentIndex + 1, sections.length);
             } else {
-                scrollToSection(currentIndex - 1);
+                targetIndex = Math.max(currentIndex - 1, 0);
             }
 
-        });
+            scrollTimeout = setTimeout(() => {
+                scrollToSection(targetIndex);
+            }, 80); // 🔥 micro delay = sensación iOS
+
+        }, { passive: false });
 
         // 👉 ACTIVE SECTION + SYNC INDEX
         const sectionObserver = new IntersectionObserver((entries) => {
@@ -265,17 +276,30 @@
         sections.forEach(section => sectionObserver.observe(section));
 
         // 🔥 PARALLAX LIGHT
-        document.querySelector("main").addEventListener("scroll", (e) => {
+        main.addEventListener("scroll", (e) => {
+
             const scrollY = e.target.scrollTop;
 
+            // 🎯 HERO TEXT SCALE
+            const hero = document.querySelector(".hero-left");
+            if (hero) {
+                hero.style.transform = `
+                translateY(${scrollY * -0.15}px)
+                scale(${1 - scrollY * 0.0003})
+            `;
+                hero.style.opacity = 1 - scrollY * 0.0008;
+            }
+
+            // 🎯 MOCKUP PARALLAX PRO
             document.querySelectorAll(".mockup").forEach(el => {
                 el.style.transform = `
-                    perspective(1200px)
-                    rotateY(-4deg)
-                    scale(${1 + scrollY * 0.0002})
-                    translateY(${scrollY * -0.12}px)
-                `;
+                perspective(1200px)
+                rotateY(-4deg)
+                scale(${1 + scrollY * 0.00025})
+                translateY(${scrollY * -0.15}px)
+            `;
             });
+
         });
 
     </script>
@@ -454,7 +478,25 @@
             }, 20000); // más premium aún
         }
 
-        startLoop();
+        let chatStarted = false;
+
+        const chatObserver = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting && !chatStarted) {
+                    chatStarted = true;
+                    startLoop();
+                }
+
+            });
+
+        }, { threshold: 0.6 });
+
+        // observar hero chat
+        const chatElement = document.querySelector(".interactive-chat");
+        if (chatElement) chatObserver.observe(chatElement);
+
     </script>
 
 </body>
