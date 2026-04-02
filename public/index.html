@@ -16,6 +16,10 @@
         <a href="/chat.html" class="btn small">Try Demo</a>
     </nav>
 
+    <div class="global-revenue">
+        +€<span id="globalRevenue">0</span> generated
+    </div>
+
     <main>
         <!-- HERO -->
         <section class="hero">
@@ -35,7 +39,7 @@
                         and generates revenue from every conversation.
                     </p>
                     <div class="cta-group">
-                        <a href="/chat.html" class="btn primary">Start free trial</a>
+                        <a href="/chat.html" class="btn primary" id="mainCTA">Start free trial</a>
                         <a href="/chat.html" class="btn ghost">View demo</a>
                     </div>
 
@@ -230,6 +234,28 @@
             }, 700);
         }
 
+        const mainCTA = document.getElementById("mainCTA");
+
+        const ctaObserver = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.target.classList.contains("pricing") && entry.isIntersecting) {
+                    mainCTA.innerText = "Start generating revenue";
+                }
+
+                if (entry.target.classList.contains("hero") && entry.isIntersecting) {
+                    mainCTA.innerText = "Start free trial";
+                }
+
+            });
+
+        }, { threshold: 0.6 });
+
+        document.querySelectorAll("section").forEach(section => {
+            ctaObserver.observe(section);
+        });
+
         // 👉 WHEEL CONTROL (CLAVE)
         let targetIndex = 0;
         let scrollTimeout;
@@ -391,12 +417,20 @@
         }
 
         // 💸 ANIMATE REVENUE
+        const globalRevenueEl = document.getElementById("globalRevenue");
+
         function animateRevenue(amount) {
             let current = parseInt(revenueEl.innerText.replace("€", "")) || 0;
 
             const interval = setInterval(() => {
                 current += 1;
                 revenueEl.innerText = `€${current}`;
+
+                // 🔥 GLOBAL COUNTER
+                if (globalRevenueEl) {
+                    let global = parseInt(globalRevenueEl.innerText) || 0;
+                    globalRevenueEl.innerText = global + 1;
+                }
 
                 if (current >= amount) clearInterval(interval);
             }, 20);
