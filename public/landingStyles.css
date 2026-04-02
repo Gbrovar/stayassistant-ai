@@ -121,6 +121,18 @@ body::before {
   padding: 0;
 }
 
+.highlight {
+  color: #22c55e;
+  text-shadow: 0 0 20px rgba(34,197,94,0.4);
+}
+
+.hero-proof {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(34,197,94,0.9);
+  font-weight: 500;
+}
+
 .product {
   position: relative;
   z-index: 1;
@@ -136,6 +148,18 @@ body::before {
 .hero-left {
   max-width: 520px;
   will-change: transform, opacity;
+  animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .badge {
@@ -203,7 +227,10 @@ body::before {
 }
 
 .mockup.big {
-  transform: perspective(1200px) rotateY(-4deg) scale(1.02);
+  transform: perspective(1200px) rotateY(-6deg) scale(1.05);
+  box-shadow:
+    0 60px 160px rgba(0,0,0,0.8),
+    0 0 60px rgba(34,197,94,0.2);
 }
 
 /* CHAT */
@@ -628,8 +655,10 @@ h2 {
 /* REVENUE COUNTER */
 .revenue-counter {
   margin-top: 20px;
-  font-size: 14px;
   color: var(--muted);
+  font-size: 16px;
+  color: #22c55e;
+  font-weight: 600;
 }
 
 #revenue {
