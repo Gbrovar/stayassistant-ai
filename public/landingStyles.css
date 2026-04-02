@@ -416,7 +416,7 @@ h2 {
   left: 0;
   right: 0;
   height: 160px;
-  background: linear-gradient(to bottom, transparent, #020617);
+  /*background: linear-gradient(to bottom, transparent, #020617);*/
 }
 
 /* MONEY TAG */
