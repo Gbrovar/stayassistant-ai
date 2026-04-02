@@ -350,8 +350,9 @@ h2 {
 
 /* typing effect */
 .typing{
-  opacity:0.5;
+  opacity:0.4;
   font-style:italic;
+  letter-spacing:2px;
 }
 
 /* smoother appearance */

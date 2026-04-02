@@ -185,53 +185,100 @@
         const revenueEl = document.getElementById("revenue");
 
         let revenue = 0;
+        let loopTimeout;
 
-        function addMessage(text, type, delay = 0) {
-            setTimeout(() => {
-                const msg = document.createElement("div");
-                msg.className = `message ${type}`;
-                msg.innerText = text;
-                chat.appendChild(msg);
-                chat.scrollTop = chat.scrollHeight;
-            }, delay);
+        function clearChat() {
+            chat.innerHTML = "";
+            revenue = 0;
+            revenueEl.innerText = "€0";
         }
 
-        function addRevenue(amount) {
+        function addMessage(text, type) {
+            const msg = document.createElement("div");
+            msg.className = `message ${type}`;
+            msg.innerText = text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showTyping() {
+            const typing = document.createElement("div");
+            typing.className = "message ai typing";
+            typing.innerText = "...";
+            chat.appendChild(typing);
+            return typing;
+        }
+
+        function removeTyping(el) {
+            if (el) el.remove();
+        }
+
+        function animateRevenue(amount) {
             let current = 0;
-            const target = revenue + amount;
 
             const interval = setInterval(() => {
                 current += 1;
                 revenueEl.innerText = `€${current}`;
-                if (current >= target) {
+
+                if (current >= amount) {
                     clearInterval(interval);
-                    revenue = target;
+                    revenue = amount;
                 }
-            }, 20);
+            }, 25);
         }
 
         function runConversation() {
-            chat.innerHTML = `<div class="message guest">Hi, what time is check-in?</div>`;
 
+            clearChat();
+
+            // 1. guest
             setTimeout(() => {
-                addMessage("Check-in is from 3pm. Early check-in available for €25 😊", "ai");
-            }, 800);
+                addMessage("Hi, what time is check-in?", "guest");
+            }, 400);
 
+            // 2. typing
+            let typing1;
+            setTimeout(() => {
+                typing1 = showTyping();
+            }, 1200);
+
+            // 3. ai response
+            setTimeout(() => {
+                removeTyping(typing1);
+                addMessage("Check-in is from 3pm. Early check-in available for €25 😊", "ai");
+            }, 2200);
+
+            // 4. guest
             setTimeout(() => {
                 addMessage("Can I check out late?", "guest");
-            }, 2000);
+            }, 4000);
 
+            // 5. typing
+            let typing2;
             setTimeout(() => {
+                typing2 = showTyping();
+            }, 5200);
+
+            // 6. ai + revenue
+            setTimeout(() => {
+                removeTyping(typing2);
                 addMessage("Late checkout available for €30", "ai");
-                addRevenue(30);
-            }, 3000);
+                animateRevenue(30);
+            }, 6500);
+
         }
 
-        // loop infinito
-        runConversation();
-        setInterval(runConversation, 7000);
-    </script>
+        // LOOP INTELIGENTE
+        function startLoop() {
+            runConversation();
 
+            loopTimeout = setInterval(() => {
+                runConversation();
+            }, 14000); // 🔥 más lento = más premium
+        }
+
+        startLoop();
+    </script>
 
 
 </body>
