@@ -252,7 +252,7 @@
 
         // 💸 ANIMATE REVENUE
         function animateRevenue(amount) {
-            let current = 0;
+            let current = parseInt(revenueEl.innerText.replace("€", "")) || 0;
 
             const interval = setInterval(() => {
                 current += 1;
@@ -275,7 +275,7 @@
 
                 if (msg.type === "guest") {
                     setTimeout(() => {
-                        addMessage(`${scenario.name}: ${msg.text}`, "guest");
+                        addMessage(msg.text, "guest");
                     }, time);
                     time += 1000;
                 }
@@ -313,7 +313,7 @@
 
             setInterval(() => {
                 runScenario();
-            }, 16000); // más largo = más premium
+            }, 20000); // más premium aún
         }
 
         startLoop();
