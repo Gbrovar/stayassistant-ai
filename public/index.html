@@ -202,6 +202,34 @@
         const sections = document.querySelectorAll("section");
         const main = document.querySelector("main");
 
+        function smoothScrollTo(container, target, duration) {
+            const start = container.scrollTop;
+            const distance = target - start;
+            let startTime = null;
+
+            function ease(t) {
+                return t < 0.5
+                    ? 4 * t * t * t
+                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            }
+
+            function animation(currentTime) {
+                if (!startTime) startTime = currentTime;
+
+                const time = currentTime - startTime;
+                const progress = Math.min(time / duration, 1);
+
+                container.scrollTop = start + distance * ease(progress);
+
+                if (time < duration) {
+                    requestAnimationFrame(animation);
+                }
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+
         let currentIndex = 0;
         let isScrolling = false;
 
@@ -225,33 +253,6 @@
             const target = sections[index].offsetTop;
 
             smoothScrollTo(main, target, 600);
-
-            function smoothScrollTo(container, target, duration) {
-                const start = container.scrollTop;
-                const distance = target - start;
-                let startTime = null;
-
-                function ease(t) {
-                    return t < 0.5
-                        ? 4 * t * t * t
-                        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                }
-
-                function animation(currentTime) {
-                    if (!startTime) startTime = currentTime;
-
-                    const time = currentTime - startTime;
-                    const progress = Math.min(time / duration, 1);
-
-                    container.scrollTop = start + distance * ease(progress);
-
-                    if (time < duration) {
-                        requestAnimationFrame(animation);
-                    }
-                }
-
-                requestAnimationFrame(animation);
-            }
 
             currentIndex = index;
 
@@ -357,18 +358,19 @@
         const scrollTopBtn = document.getElementById("scrollTopBtn");
 
         // mostrar/ocultar botón
-        main.addEventListener("scroll", (e) => {
-            if (e.target.scrollTop > 300) {
-                scrollTopBtn.classList.add("visible");
-            } else {
-                scrollTopBtn.classList.remove("visible");
-            }
-        });
+        if (scrollTopBtn) {
+            main.addEventListener("scroll", (e) => {
+                if (e.target.scrollTop > 150) {
+                    scrollTopBtn.classList.add("visible");
+                } else {
+                    scrollTopBtn.classList.remove("visible");
+                }
+            });
 
-        // acción click
-        scrollTopBtn.addEventListener("click", () => {
-            smoothScrollTo(main, 0, 600);
-        });
+            scrollTopBtn.addEventListener("click", () => {
+                smoothScrollTo(main, 0, 600);
+            });
+        }
 
     </script>
 
