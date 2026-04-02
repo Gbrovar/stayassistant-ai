@@ -46,26 +46,19 @@
 
             <div class="hero-right">
                 <div class="mockup big">
-                    <div class="chat">
+                    <div class="chat interactive-chat">
 
-                        <div class="message guest delay-1">
-                            Hi, what time is check-in?
+                        <div class="chat" id="chat">
+
+                            <div class="message guest">Hi, what time is check-in?</div>
+
+                            <div class="message ai typing" id="typing-1">...</div>
+
                         </div>
 
-                        <div class="message ai delay-2">
-                            Check-in is from 3pm. Early check-in available for €25 😊
+                        <div class="revenue-counter">
+                            Revenue generated: <span id="revenue">€0</span>
                         </div>
-
-                        <div class="message guest delay-3">
-                            Can I check out late?
-                        </div>
-
-
-                        <div class="message ai revenue">
-                            Late checkout available for €30.
-                            <span class="money">+€30</span>
-                        </div>
-
 
                     </div>
                 </div>
@@ -186,6 +179,60 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
+
+    <script>
+        const chat = document.getElementById("chat");
+        const revenueEl = document.getElementById("revenue");
+
+        let revenue = 0;
+
+        function addMessage(text, type, delay = 0) {
+            setTimeout(() => {
+                const msg = document.createElement("div");
+                msg.className = `message ${type}`;
+                msg.innerText = text;
+                chat.appendChild(msg);
+                chat.scrollTop = chat.scrollHeight;
+            }, delay);
+        }
+
+        function addRevenue(amount) {
+            let current = 0;
+            const target = revenue + amount;
+
+            const interval = setInterval(() => {
+                current += 1;
+                revenueEl.innerText = `€${current}`;
+                if (current >= target) {
+                    clearInterval(interval);
+                    revenue = target;
+                }
+            }, 20);
+        }
+
+        function runConversation() {
+            chat.innerHTML = `<div class="message guest">Hi, what time is check-in?</div>`;
+
+            setTimeout(() => {
+                addMessage("Check-in is from 3pm. Early check-in available for €25 😊", "ai");
+            }, 800);
+
+            setTimeout(() => {
+                addMessage("Can I check out late?", "guest");
+            }, 2000);
+
+            setTimeout(() => {
+                addMessage("Late checkout available for €30", "ai");
+                addRevenue(30);
+            }, 3000);
+        }
+
+        // loop infinito
+        runConversation();
+        setInterval(runConversation, 7000);
+    </script>
+
+
 
 </body>
 

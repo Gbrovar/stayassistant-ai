@@ -317,3 +317,49 @@ h2 {
     transform: translateY(-10px);
   }
 }
+
+/* INTERACTIVE CHAT */
+.clickable{
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.clickable:hover{
+  background:rgba(255,255,255,0.12);
+  transform:translateX(4px);
+}
+
+/* RESPONSE AREA */
+#chat-response{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* REVENUE COUNTER */
+.revenue-counter{
+  margin-top:20px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+#revenue{
+  color:#22c55e;
+  font-weight:600;
+}
+
+/* typing effect */
+.typing{
+  opacity:0.5;
+  font-style:italic;
+}
+
+/* smoother appearance */
+.message{
+  animation:fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(6px);}
+  to{opacity:1; transform:none;}
+}
