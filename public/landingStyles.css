@@ -81,11 +81,9 @@ body::before {
   width: 2px;
   height: 40px;
 
-  background: linear-gradient(
-    to bottom,
-    rgba(34,197,94,0.6),
-    rgba(34,197,94,0.1)
-  );
+  background: linear-gradient(to bottom,
+      rgba(34, 197, 94, 0.6),
+      rgba(34, 197, 94, 0.1));
 
   transform: translateX(-50%);
 }
@@ -106,15 +104,26 @@ body::before {
   border-radius: 50%;
 
   background: #22c55e;
-  box-shadow: 0 0 20px rgba(34,197,94,0.8);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
 
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: translateX(-50%) scale(1); opacity: 1; }
-  50% { transform: translateX(-50%) scale(1.4); opacity: 0.5; }
-  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.4);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
 }
 
 .step:nth-child(1) {
@@ -130,9 +139,9 @@ body::before {
 .step:nth-child(3) {
   opacity: 1;
   transform: scale(1.05);
-  border: 1px solid rgba(34,197,94,0.3);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   box-shadow:
-    0 30px 80px rgba(34,197,94,0.2);
+    0 30px 80px rgba(34, 197, 94, 0.2);
   border-radius: 20px;
 }
 
@@ -145,10 +154,10 @@ body::before {
   font-size: 140px;
   font-weight: 800;
 
-  color: rgba(34,197,94,0.08);
+  color: rgba(34, 197, 94, 0.08);
   letter-spacing: -5px;
 
-  transition: all 0.4s cubic-bezier(.2,.8,.2,1);
+  transition: all 0.4s cubic-bezier(.2, .8, .2, 1);
 }
 
 .step:hover {
@@ -159,7 +168,7 @@ body::before {
 .step:hover .step-number {
   color: rgba(34, 197, 94, 0.08);
   transform: translateX(-50%) scale(1.05);
-  color: rgba(34,197,94,0.2);
+  color: rgba(34, 197, 94, 0.2);
 }
 
 .step h3 {
@@ -435,6 +444,13 @@ h2 {
 }
 
 /* PRICING */
+.pricing-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
 .price-card {
   position: relative;
   overflow: hidden;
@@ -446,7 +462,7 @@ h2 {
       rgba(255, 255, 255, 0.02));
 
   border: 1px solid var(--border);
-  opacity: 0;
+  opacity: 0.85;
   transform: translateY(40px) scale(0.95);
   transition: all 0.8s cubic-bezier(.2, .8, .2, 1);
 }
@@ -469,13 +485,21 @@ h2 {
 }
 
 .price-card.highlight {
+  opacity: 1;
   transform: scale(1.1);
-
   border: 1px solid rgba(34, 197, 94, 0.4);
-
   box-shadow:
     0 40px 120px rgba(34, 197, 94, 0.25),
     inset 0 0 40px rgba(34, 197, 94, 0.1);
+}
+
+.price-card.highlight .price {
+  color: #22c55e;
+  text-shadow: 0 0 20px rgba(34,197,94,0.4);
+}
+
+.pricing-container .price-card.highlight {
+  transform: scale(1.08);
 }
 
 .pricing.active .price-card {
@@ -503,6 +527,35 @@ h2 {
   box-shadow:
     0 40px 120px rgba(34, 197, 94, 0.25),
     inset 0 0 40px rgba(34, 197, 94, 0.1);
+}
+
+.price-card .btn {
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.roi-badge {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #22c55e;
+  font-weight: 600;
+
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.3);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.features {
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.features li {
+  margin-bottom: 8px;
 }
 
 /* SCROLL ANIMATION PRO */
@@ -613,7 +666,7 @@ h2 {
       rgba(255, 255, 255, 0.02));
   border: 1px solid var(--border);
   backdrop-filter: blur(20px);
-  transition: all 0.35s cubic-bezier(.2,.8,.2,1);
+  transition: all 0.35s cubic-bezier(.2, .8, .2, 1);
 }
 
 .value-intro {
@@ -689,11 +742,9 @@ h2 {
   position: absolute;
   inset: 0;
 
-  background: radial-gradient(
-    circle at 60% 40%,
-    rgba(34,197,94,0.08),
-    transparent 60%
-  );
+  background: radial-gradient(circle at 60% 40%,
+      rgba(34, 197, 94, 0.08),
+      transparent 60%);
 
   pointer-events: none;
 }
@@ -708,11 +759,11 @@ h2 {
   transform: scale(1.08) translateY(-10px);
   z-index: 2;
 
-  border: 1px solid rgba(34,197,94,0.5);
+  border: 1px solid rgba(34, 197, 94, 0.5);
 
   box-shadow:
-    0 50px 140px rgba(34,197,94,0.3),
-    0 0 80px rgba(34,197,94,0.25);
+    0 50px 140px rgba(34, 197, 94, 0.3),
+    0 0 80px rgba(34, 197, 94, 0.25);
 }
 
 /* TAG DE VALOR */
@@ -723,8 +774,8 @@ h2 {
   color: #22c55e;
   font-weight: 600;
 
-  background: rgba(34,197,94,0.1);
-  border: 1px solid rgba(34,197,94,0.3);
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   padding: 4px 10px;
   border-radius: 999px;
 }
@@ -995,6 +1046,10 @@ main {
 
   section {
     margin-top: 80px;
+  }
+
+  .pricing-container {
+    grid-template-columns: 1fr;
   }
 
 }
