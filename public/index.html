@@ -269,7 +269,7 @@
         }
 
         function getTypingDuration(text) {
-            const base = 400; // tiempo mínimo
+            let base = 400; // tiempo mínimo
             const perChar = 25 + Math.random() * 20; // velocidad de escritura
             if (text.includes("€")) base += 200;
             if (text.includes("😊")) base += 150;
@@ -281,6 +281,13 @@
 
         // 🚀 RUN SCENARIO
         function runScenario() {
+            chat.style.opacity = 0;
+
+            setTimeout(() => {
+                clearChat();
+                chat.style.opacity = 1;
+            }, 300);
+
             clearChat();
 
             const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
@@ -301,17 +308,19 @@
 
                     let typing;
 
+                    // mostrar typing
                     setTimeout(() => {
                         typing = showTyping();
                     }, time);
 
                     const typingDuration = getTypingDuration(msg.text);
-                    time += typingDuration;
 
-                    const delay = 100 + Math.random() * 150;
-
+                    // quitar typing + mostrar mensaje
                     setTimeout(() => {
+
                         removeTyping(typing);
+
+                        const delay = 100 + Math.random() * 150;
 
                         setTimeout(() => {
                             addMessage(msg.text, "ai");
@@ -323,9 +332,10 @@
 
                         }, delay);
 
-                    }, time);
+                    }, time + typingDuration);
 
-                    time += 1200;
+                    // avanzar tiempo total correctamente
+                    time += typingDuration + 1000;
                 }
             });
 
