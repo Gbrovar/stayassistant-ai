@@ -241,7 +241,13 @@
         function showTyping() {
             const typing = document.createElement("div");
             typing.className = "message ai typing";
-            typing.innerText = "...";
+            typing.innerHTML = `
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                `;
             chat.appendChild(typing);
             return typing;
         }
@@ -288,16 +294,22 @@
                         typing = showTyping();
                     }, time);
 
-                    time += 900;
+                    time += 600 + Math.random() * 600;
+
+                    const delay = 150 + Math.random() * 200;
 
                     setTimeout(() => {
                         removeTyping(typing);
-                        addMessage(msg.text, "ai");
 
-                        if (msg.revenue) {
-                            totalRevenue += msg.revenue;
-                            animateRevenue(totalRevenue);
-                        }
+                        setTimeout(() => {
+                            addMessage(msg.text, "ai");
+
+                            if (msg.revenue) {
+                                totalRevenue += msg.revenue;
+                                animateRevenue(totalRevenue);
+                            }
+
+                        }, delay);
 
                     }, time);
 
