@@ -190,19 +190,63 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // 🔥 ACTIVE SECTION SYSTEM
-        const sections = document.querySelectorAll("section");
+        // 🔥 SECTION SYSTEM + SCROLL CONTROL (V9)
 
+        const sections = document.querySelectorAll("section");
+        const main = document.querySelector("main");
+
+        let currentIndex = 0;
+        let isScrolling = false;
+
+        // 👉 SCROLL TO SECTION
+        function scrollToSection(index) {
+            if (index < 0 || index >= sections.length) return;
+
+            isScrolling = true;
+
+            sections[index].scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            currentIndex = index;
+
+            setTimeout(() => {
+                isScrolling = false;
+            }, 700);
+        }
+
+        // 👉 WHEEL CONTROL (CLAVE)
+        main.addEventListener("wheel", (e) => {
+
+            if (isScrolling) return;
+
+            if (Math.abs(e.deltaY) < 30) return;
+
+            if (e.deltaY > 0) {
+                scrollToSection(currentIndex + 1);
+            } else {
+                scrollToSection(currentIndex - 1);
+            }
+
+        });
+
+        // 👉 ACTIVE SECTION + SYNC INDEX
         const sectionObserver = new IntersectionObserver((entries) => {
+
             entries.forEach(entry => {
+
                 if (entry.isIntersecting) {
+
                     sections.forEach(s => s.classList.remove("active"));
                     entry.target.classList.add("active");
+
+                    currentIndex = [...sections].indexOf(entry.target);
                 }
+
             });
-        }, {
-            threshold: 0.6
-        });
+
+        }, { threshold: 0.6 });
 
         sections.forEach(section => sectionObserver.observe(section));
 
@@ -214,10 +258,9 @@
                 el.style.transform = `
                     perspective(1200px)
                     rotateY(-4deg)
-                    scale(1.02)
-                    transition: transform 0.8s cubic-bezier(.2,.8,.2,1),
-                    opacity 0.6s ease;
-                    `;
+                    scale(${1 + scrollY * 0.0002})
+                    translateY(${scrollY * -0.12}px)
+                `;
             });
         });
 
