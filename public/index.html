@@ -166,9 +166,12 @@
             </div>
         </section>
 
-        <footer class="footer">
-            © 2026 StayAssistant AI
-        </footer>
+        <!-- FOOTER -->
+        <section class="footer-section">
+            <div class="footer">
+                © 2026 StayAssistant AI
+            </div>
+        </section>
     </main>
 
 
@@ -200,7 +203,18 @@
 
         // 👉 SCROLL TO SECTION
         function scrollToSection(index) {
-            if (index < 0 || index >= sections.length) return;
+
+            // permitir llegar al final (footer)
+            if (index < 0) return;
+
+            if (index >= sections.length) {
+                main.scrollTo({
+                    top: main.scrollHeight,
+                    behavior: "smooth"
+                });
+                currentIndex = sections.length;
+                return;
+            }
 
             isScrolling = true;
 

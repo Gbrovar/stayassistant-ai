@@ -390,6 +390,16 @@ h2 {
   color: var(--muted);
 }
 
+.footer-section {
+  min-height: 60vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 40px;
+
+  scroll-snap-align: end;
+}
+
 /* GLOW SYSTEM */
 .hero::before {
   content: "";
