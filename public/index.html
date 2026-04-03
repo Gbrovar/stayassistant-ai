@@ -328,11 +328,7 @@
 
         // 🔥 SECTION SYSTEM + SCROLL CONTROL (V9)
 
-        let sections;
-
-        function updateSections() {
-            sections = document.querySelectorAll("section");
-        }
+        const sections = document.querySelectorAll("section");
         const main = document.querySelector("main");
         const isMobile = window.innerWidth < 900;
 
@@ -373,8 +369,6 @@
             // permitir llegar al final (footer)
             if (index < 0) return;
 
-            if (index >= sections.length) return;
-            /*
             if (index >= sections.length) {
                 main.scrollTo({
                     top: main.scrollHeight,
@@ -383,7 +377,6 @@
                 currentIndex = sections.length;
                 return;
             }
-                */
 
             isScrolling = true;
 
@@ -858,7 +851,6 @@
         document.getElementById("nav-container").innerHTML = renderNav();
 
         document.getElementById("footer-section").innerHTML = renderFooter(true);
-        updateSections();
     </script>
 
     <button id="scrollTopBtn">↑</button>
