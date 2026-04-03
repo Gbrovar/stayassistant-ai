@@ -696,6 +696,33 @@ h2 {
   opacity: 1;
 }
 
+.value-left {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.value-left .card:first-child {
+  transform: translateX(-10px);
+}
+
+.value-left .card:last-child {
+  transform: translateX(10px);
+}
+
+.card.small {
+  min-height: 160px;
+}
+
+.card.large {
+  min-height: 100%;
+  padding: 50px;
+}
+
+.card.highlight {
+  transform: scale(1.05) translateY(-6px);
+}
+
 .value-container {
   display: flex;
   flex-direction: column;
@@ -718,9 +745,9 @@ h2 {
 /* GRID NO SIMÉTRICO */
 .value-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  grid-template-rows: auto auto;
-  gap: 30px;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 40px;
+  align-items: stretch;
 }
 
 .value-grid .card:nth-child(1) {
