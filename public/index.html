@@ -271,6 +271,7 @@
             </div>
         </section>
 
+        <!-- CONTACT -->
         <section id="contact" class="reveal">
             <div class="container" style="text-align:center;">
                 <h2>Contact</h2>
@@ -279,12 +280,12 @@
             </div>
         </section>
 
-        
+        <!-- FOOTER -->
+        <section id="footer-section"></section>
 
-        
+
     </main>
 
-    <div id="footer-container"></div>
 
 
     <!-- COOKIES -->
@@ -368,6 +369,8 @@
             // permitir llegar al final (footer)
             if (index < 0) return;
 
+            if (index >= sections.length) return;
+            /*
             if (index >= sections.length) {
                 main.scrollTo({
                     top: main.scrollHeight,
@@ -376,6 +379,7 @@
                 currentIndex = sections.length;
                 return;
             }
+                */
 
             isScrolling = true;
 
@@ -849,9 +853,7 @@
 
         document.getElementById("nav-container").innerHTML = renderNav();
 
-        document
-            .querySelector("main")
-            .insertAdjacentHTML("beforeend", renderFooter(true));
+        document.getElementById("footer-section").innerHTML = renderFooter(true);
     </script>
 
     <button id="scrollTopBtn">↑</button>
