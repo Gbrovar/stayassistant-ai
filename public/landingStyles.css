@@ -340,6 +340,10 @@ body::before {
   gap: 14px;
 }
 
+.chat-mobile {
+  display: none;
+}
+
 .guest {
   background: rgba(255, 255, 255, 0.06);
 }
@@ -1166,7 +1170,23 @@ main {
   }
 
   .hero-right {
-    order: -1;
+    display: none;
+  }
+
+  .interactive-chat {
+    max-height: 320px;
+    min-height: 220px;
+    overflow: hidden;
+  }
+
+  .chat {
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .chat-mobile {
+    display: block;
+    padding-top: 20px;
   }
 
   .mockup.big {

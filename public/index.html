@@ -88,6 +88,21 @@
 
         </section>
 
+        <!-- CHAT MOBILE -->
+        <section class="chat-mobile">
+            <div class="container">
+                <div class="mockup">
+                    <div class="chat interactive-chat">
+                        <div class="chat" id="chat-mobile"></div>
+
+                        <div class="revenue-counter">
+                            +<span id="revenue-mobile">€0</span> earned
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- PRODUCT PREVIEW -->
         <section class="product reveal">
             <div class="container">
@@ -490,8 +505,8 @@
             });
         }
 
-        const chat = document.getElementById("chat");
-        const revenueEl = document.getElementById("revenue");
+        const chats = document.querySelectorAll("#chat, #chat-mobile");
+        const revenueEls = document.querySelectorAll("#revenue, #revenue-mobile");
 
         let loopTimeout;
 
@@ -528,19 +543,21 @@
 
         // RESET
         function clearChat() {
-            chat.innerHTML = "";
-            revenueEl.innerText = "€0";
+            chats.forEach(chat => chat.innerHTML = "");
+            revenueEls.forEach(el => el.innerText = "€0");
         }
 
         // ADD MESSAGE
         function addMessage(text, type) {
-            const msg = document.createElement("div");
-            msg.className = `message ${type}`;
-            msg.innerText = text;
-            chat.appendChild(msg);
-            chat.scrollTop = chat.scrollHeight;
+            chats.forEach(chat => {
+                const msg = document.createElement("div");
+                msg.className = `message ${type}`;
+                msg.innerText = text;
+                chat.appendChild(msg);
+                chat.scrollTop = chat.scrollHeight;
+            });
         }
-
+        
         function typeMessage(element, text, speed = 18) {
             let i = 0;
             let buffer = "";
