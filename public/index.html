@@ -9,22 +9,19 @@
 </head>
 
 <div id="cookieBanner" class="cookie-banner">
-    <div class="cookie-content">
-        <span>
-            We use cookies to improve your experience.
-        </span>
+    <div class="cookie-inner">
+
+        <div class="cookie-text">
+            <strong>We use cookies</strong>
+            <span>to improve your experience and analytics.</span>
+        </div>
 
         <div class="cookie-actions">
-            <button onclick="acceptCookies()" class="btn primary">
+            <button onclick="acceptCookies()" class="btn primary cookie-btn">
                 Accept
             </button>
         </div>
-    </div>
 
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-
-    <div class="nav-links" id="navLinks">
-        ...
     </div>
 </div>
 
@@ -34,16 +31,13 @@
     <nav class="nav">
         <div class="logo">StayAssistant</div>
 
-        <div style="display:flex; gap:16px; align-items:center;">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
+        <div class="nav-links" id="navLinks">
             <a href="/chat.html" class="btn ghost">Try Demo</a>
-
             <a href="#contact" class="btn ghost">Contact</a>
-
             <a href="/dashboard/login" class="btn ghost">Login</a>
-
             <a href="/dashboard/register" class="btn primary">Register</a>
-
         </div>
     </nav>
 
