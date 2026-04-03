@@ -43,8 +43,9 @@ body::before {
 
 @keyframes bgShift {
   0% {
-    transform: scale(1) translate(0,0);
+    transform: scale(1) translate(0, 0);
   }
+
   100% {
     transform: scale(1.1) translate(-2%, -2%);
   }
@@ -290,12 +291,10 @@ body::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.2),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
   opacity: 0;
   transition: 0.4s;
 }
@@ -648,6 +647,7 @@ h2 {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -1113,6 +1113,25 @@ main {
 
 @media (max-width: 900px) {
 
+  .container {
+    padding: 0 20px;
+  }
+
+  h2 {
+    font-size: 26px;
+    margin-bottom: 40px;
+  }
+
+  main {
+    scroll-snap-type: none;
+  }
+
+  section {
+    scroll-snap-align: none;
+    min-height: auto;
+    padding: 100px 0;
+  }
+
   .hero-split {
     grid-template-columns: 1fr;
     gap: 60px;
@@ -1124,6 +1143,32 @@ main {
 
   .hero {
     padding: 120px 0 60px;
+  }
+
+  .hero-left {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .hero-proof {
+    font-size: 13px;
+  }
+
+  .hero-right {
+    order: -1;
+  }
+
+  .mockup.big {
+    padding: 20px;
   }
 
   h1 {
@@ -1140,6 +1185,44 @@ main {
 
   .pricing-container {
     grid-template-columns: 1fr;
+  }
+
+  .value-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .value-left {
+    gap: 24px;
+  }
+
+  .card,
+  .card.large {
+    transform: none !important;
+    padding: 24px;
+  }
+
+  .how-container {
+    gap: 50px;
+  }
+
+  .step-number {
+    font-size: 80px;
+    top: -10px;
+  }
+
+  .step {
+    padding: 20px;
+  }
+
+
+  .price-card {
+    padding: 30px;
+  }
+
+  .price-card.highlight {
+    transform: none;
   }
 
 }

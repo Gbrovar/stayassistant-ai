@@ -21,7 +21,7 @@
         + €<span id="globalRevenue">0</span> generated
     </div>
     -->
-    
+
     <main>
         <!-- HERO -->
         <section class="hero">
@@ -456,6 +456,13 @@
     </script>
 
     <script>
+
+        if (window.innerWidth < 900) {
+            document.querySelectorAll('.card').forEach(card => {
+                card.onmousemove = null;
+            });
+        }
+        
         const chat = document.getElementById("chat");
         const revenueEl = document.getElementById("revenue");
 
