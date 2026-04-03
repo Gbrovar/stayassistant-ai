@@ -723,14 +723,14 @@
             }, 20000); // más premium aún
         }
 
-        let chatStarted = false;
+        let chatStarted = new WeakSet();
 
         const chatObserver = new IntersectionObserver((entries) => {
 
             entries.forEach(entry => {
 
-                if (entry.isIntersecting && !chatStarted) {
-                    chatStarted = true;
+                if (entry.isIntersecting && !chatStarted.has(entry.target)) {
+                    chatStarted.add(entry.target);
                     startLoop();
                 }
 
@@ -738,12 +738,6 @@
 
         }, { threshold: 0.6 });
 
-        // observar hero chat
-        document.querySelectorAll(".interactive-chat").forEach(el => {
-            chatObserver.observe(el);
-        });
-        
-        if (chatElement) chatObserver.observe(chatElement);
 
         document.querySelectorAll(".btn").forEach(btn => {
 
