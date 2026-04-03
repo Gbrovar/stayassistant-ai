@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="landingStyles.css" />
 </head>
 
+<div id="cookieBanner" style="
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#0f172a;
+padding:16px 20px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.1);
+z-index:999;
+display:none;
+">
+    <span style="font-size:14px;">
+        We use cookies to improve your experience.
+    </span>
+
+    <button onclick="acceptCookies()" class="btn primary" style="margin-left:10px;">
+        Accept
+    </button>
+</div>
+
 <body>
 
     <!-- NAV -->
@@ -255,15 +276,40 @@
             </div>
         </section>
 
+        <section id="contact" class="reveal">
+            <div class="container" style="text-align:center;">
+                <h2>Contact</h2>
+                <p>Questions? Partnerships?</p>
+                <p style="color:#22c55e;">info@mainbrostudio.com</p>
+            </div>
+        </section>
+
         <!-- FOOTER -->
         <section class="footer-section">
             <div class="footer">
                 © 2026 StayAssistant AI
+
+                <div style="margin-top:10px;">
+                    <a href="/privacy.html">Privacy</a> ·
+                    <a href="/cookies.html">Cookies</a> ·
+                    <a href="/terms.html">Terms</a>
+                </div>
             </div>
         </section>
     </main>
 
 
+    <!-- COOKIES -->
+    <script>
+        function acceptCookies() {
+            localStorage.setItem("cookiesAccepted", "true");
+            document.getElementById("cookieBanner").style.display = "none";
+        }
+
+        if (!localStorage.getItem("cookiesAccepted")) {
+            document.getElementById("cookieBanner").style.display = "block";
+        }
+    </script>
 
     <!-- SCROLL ANIMATION -->
     <script>
