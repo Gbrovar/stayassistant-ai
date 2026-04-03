@@ -69,8 +69,6 @@
 
                                 <div class="message guest">Hi, what time is check-in?</div>
 
-                                <div class="message ai typing" id="typing-1">...</div>
-
                             </div>
 
                             <div class="revenue-counter">
@@ -737,6 +735,10 @@
             });
 
         }, { threshold: 0.6 });
+
+        document.querySelectorAll(".interactive-chat").forEach(el => {
+            chatObserver.observe(el);
+        });
 
 
         document.querySelectorAll(".btn").forEach(btn => {
