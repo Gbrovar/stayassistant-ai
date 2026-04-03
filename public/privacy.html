@@ -10,9 +10,7 @@
 
 <body>
 
-    <nav class="nav">
-        <div class="logo">StayAssistant</div>
-    </nav>
+    <div id="nav-container"></div>
 
     <div class="legal-page">
 
@@ -91,6 +89,15 @@
         </p>
 
     </div>
+
+    <div id="footer-container"></div>
+
+    <script type="module">
+        import { renderNav, renderFooter } from './components.js';
+
+        document.getElementById("nav-container").innerHTML = renderNav();
+        document.getElementById("footer-container").innerHTML = renderFooter(false);
+    </script>
 
 </body>
 

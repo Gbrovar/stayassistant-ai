@@ -4573,6 +4573,20 @@ app.get("/debug/hours/:propertyId", async (req, res) => {
 })
 
 
+/* ROUTING */
+app.get('/legal/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/privacy.html'));
+});
+
+app.get('/legal/cookies', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/cookies.html'));
+});
+
+app.get('/legal/terms', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/terms.html'));
+});
+
+
 /* --- server port --- */
 
 const PORT = process.env.PORT || 3000;
