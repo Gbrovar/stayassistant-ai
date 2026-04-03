@@ -1282,6 +1282,33 @@ main {
   border-color: rgba(34, 197, 94, 0.4);
 }
 
+.legal-page {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 40px 24px;
+  line-height: 1.7;
+}
+
+.legal-page h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.legal-page h2 {
+  font-size: 22px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.legal-page p {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.legal-page a {
+  color: #22c55e;
+}
+
 @media (max-width: 600px) {
   .cookie-inner {
     flex-direction: column;
