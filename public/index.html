@@ -13,12 +13,25 @@
 
         <div class="cookie-text">
             <strong>We use cookies</strong>
-            <span>to improve your experience and analytics.</span>
+
+            <span>
+                We use cookies to improve your experience, analyze traffic, and personalize content.
+                You can accept all cookies or manage your preferences.
+            </span>
+
+            <div class="cookie-links">
+                <a href="/privacy.html">Privacy Policy</a>
+                <a href="/cookies.html">Cookies Policy</a>
+            </div>
         </div>
 
         <div class="cookie-actions">
-            <button onclick="acceptCookies()" class="btn primary cookie-btn">
-                Accept
+            <button class="btn ghost" onclick="rejectCookies()">
+                Reject
+            </button>
+
+            <button onclick="acceptCookies()" class="btn primary">
+                Accept all
             </button>
         </div>
 
@@ -304,6 +317,11 @@
 
         function acceptCookies() {
             localStorage.setItem("cookiesAccepted", "true");
+            banner.classList.remove("visible");
+        }
+
+        function rejectCookies() {
+            localStorage.setItem("cookiesAccepted", "rejected");
             banner.classList.remove("visible");
         }
 
