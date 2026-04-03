@@ -8,25 +8,24 @@
     <link rel="stylesheet" href="landingStyles.css" />
 </head>
 
-<div id="cookieBanner" style="
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#0f172a;
-padding:16px 20px;
-border-radius:12px;
-border:1px solid rgba(255,255,255,0.1);
-z-index:999;
-display:none;
-">
-    <span style="font-size:14px;">
-        We use cookies to improve your experience.
-    </span>
+<div id="cookieBanner" class="cookie-banner">
+    <div class="cookie-content">
+        <span>
+            We use cookies to improve your experience.
+        </span>
 
-    <button onclick="acceptCookies()" class="btn primary" style="margin-left:10px;">
-        Accept
-    </button>
+        <div class="cookie-actions">
+            <button onclick="acceptCookies()" class="btn primary">
+                Accept
+            </button>
+        </div>
+    </div>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <div class="nav-links" id="navLinks">
+        ...
+    </div>
 </div>
 
 <body>
@@ -287,12 +286,18 @@ display:none;
         <!-- FOOTER -->
         <section class="footer-section">
             <div class="footer">
-                © 2026 StayAssistant AI
+                <div class="footer-inner">
 
-                <div style="margin-top:10px;">
-                    <a href="/privacy.html">Privacy</a> ·
-                    <a href="/cookies.html">Cookies</a> ·
-                    <a href="/terms.html">Terms</a>
+                    <div class="footer-brand">
+                        © 2026 StayAssistant AI
+                    </div>
+
+                    <div class="footer-links">
+                        <a href="/privacy.html">Privacy</a>
+                        <a href="/cookies.html">Cookies</a>
+                        <a href="/terms.html">Terms</a>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -301,13 +306,17 @@ display:none;
 
     <!-- COOKIES -->
     <script>
+        const banner = document.getElementById("cookieBanner");
+
         function acceptCookies() {
             localStorage.setItem("cookiesAccepted", "true");
-            document.getElementById("cookieBanner").style.display = "none";
+            banner.classList.remove("visible");
         }
 
         if (!localStorage.getItem("cookiesAccepted")) {
-            document.getElementById("cookieBanner").style.display = "block";
+            setTimeout(() => {
+                banner.classList.add("visible");
+            }, 800);
         }
     </script>
 
@@ -552,6 +561,10 @@ display:none;
             document.querySelectorAll('.card').forEach(card => {
                 card.onmousemove = null;
             });
+        }
+
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("open");
         }
 
         if (isMobile) {
