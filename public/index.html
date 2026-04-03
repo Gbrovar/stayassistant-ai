@@ -729,7 +729,10 @@
 
                 if (entry.isIntersecting && !chatStarted.has(entry.target)) {
                     chatStarted.add(entry.target);
-                    startLoop();
+                    if (!window.chatLoopStarted) {
+                        window.chatLoopStarted = true;
+                        startLoop();
+                    }
                 }
 
             });
