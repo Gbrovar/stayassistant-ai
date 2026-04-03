@@ -555,11 +555,12 @@ section {
 /* 🔥 FOOTER COMO SECCIÓN REAL */
 #footer-section {
   min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 /* 🔥 FOCUS EFFECT */
@@ -836,15 +837,6 @@ h2 {
   margin: 0 auto;
 }
 
-.footer-section {
-  min-height: 60vh;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 40px;
-
-  scroll-snap-align: end;
-}
 
 .footer a {
   color: rgba(255, 255, 255, 0.5);
@@ -861,7 +853,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  gap: 40px;
   font-size: 13px;
   color: var(--muted);
 }

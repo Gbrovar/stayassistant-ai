@@ -20,7 +20,6 @@ export function renderFooter(isLanding = false) {
     // 🔥 IMPORTANTE: comportamiento distinto
     if (isLanding) {
         return `
-        <div class="footer-section">
             <div class="footer">
                 <div class="footer-inner">
                     <div class="footer-brand">
@@ -34,7 +33,6 @@ export function renderFooter(isLanding = false) {
                     </div>
                 </div>
             </div>
-        </div>
         `;
     }
 
