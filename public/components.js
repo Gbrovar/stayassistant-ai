@@ -9,7 +9,7 @@ export function renderNav() {
                 <a href="/" class="btn ghost">Home</a>
                 <a href="/chat.html" class="btn ghost">Demo</a>
                 <a href="/dashboard/login" class="btn ghost">Login</a>
-                <a href="/dashboard/register" class="btn primary">Start</a>
+                <a href="/dashboard/register" class="btn primary">Sign up</a>
             </div>
         </nav>
     `;
