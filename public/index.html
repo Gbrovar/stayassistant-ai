@@ -125,11 +125,11 @@
                     </div>
 
                     <div class="card highlight large">
-                        <div class="card big reveal-item">
-                            <h3>Runs automatically</h3>
-                            <p>Set it once. Your AI keeps generating revenue 24/7.</p>
-                            <span class="value-tag">0 effort</span>
-                        </div>
+
+                        <h3>Runs automatically</h3>
+                        <p>Set it once. Your AI keeps generating revenue 24/7.</p>
+                        <span class="value-tag">0 effort</span>
+
                     </div>
                 </div>
 
@@ -688,6 +688,26 @@
 
             btn.addEventListener("mouseleave", () => {
                 btn.style.transform = "translate(0,0)";
+            });
+
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const rotateX = (y / rect.height - 0.5) * -6;
+                const rotateY = (x / rect.width - 0.5) * 6;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
             });
 
         });
