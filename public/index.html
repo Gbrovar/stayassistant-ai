@@ -262,6 +262,7 @@
 
         const sections = document.querySelectorAll("section");
         const main = document.querySelector("main");
+        const isMobile = window.innerWidth < 900;
 
         function smoothScrollTo(container, target, duration) {
             const start = container.scrollTop;
@@ -348,27 +349,30 @@
         let targetIndex = 0;
         let scrollTimeout;
 
-        main.addEventListener("wheel", (e) => {
+        if (!isMobile) {
 
-            e.preventDefault(); // 🔥 clave
+            main.addEventListener("wheel", (e) => {
 
-            if (isScrolling) return;
+                e.preventDefault();
 
-            if (Math.abs(e.deltaY) < 5) return;
+                if (isScrolling) return;
+                if (Math.abs(e.deltaY) < 5) return;
 
-            clearTimeout(scrollTimeout);
+                clearTimeout(scrollTimeout);
 
-            if (e.deltaY > 0) {
-                targetIndex = Math.min(currentIndex + 1, sections.length);
-            } else {
-                targetIndex = Math.max(currentIndex - 1, 0);
-            }
+                if (e.deltaY > 0) {
+                    targetIndex = Math.min(currentIndex + 1, sections.length);
+                } else {
+                    targetIndex = Math.max(currentIndex - 1, 0);
+                }
 
-            requestAnimationFrame(() => {
-                scrollToSection(targetIndex);
-            });
+                requestAnimationFrame(() => {
+                    scrollToSection(targetIndex);
+                });
 
-        }, { passive: false });
+            }, { passive: false });
+
+        }
 
         // 👉 ACTIVE SECTION + SYNC INDEX
         const sectionObserver = new IntersectionObserver((entries) => {
@@ -390,31 +394,34 @@
         sections.forEach(section => sectionObserver.observe(section));
 
         // 🔥 PARALLAX LIGHT
-        main.addEventListener("scroll", (e) => {
 
-            const scrollY = e.target.scrollTop;
+        if (!isMobile) {
 
-            // 🎯 HERO TEXT SCALE
-            const hero = document.querySelector(".hero-left");
-            if (hero) {
-                hero.style.transform = `
+            main.addEventListener("scroll", (e) => {
+
+                const scrollY = e.target.scrollTop;
+
+                const hero = document.querySelector(".hero-left");
+                if (hero) {
+                    hero.style.transform = `
                 translateY(${scrollY * -0.15}px)
                 scale(${1 - scrollY * 0.0003})
-            `;
-                hero.style.opacity = 1 - scrollY * 0.0005;
-            }
+                `;
+                    hero.style.opacity = 1 - scrollY * 0.0005;
+                }
 
-            // 🎯 MOCKUP PARALLAX PRO
-            document.querySelectorAll(".mockup").forEach(el => {
-                el.style.transform = `
+                document.querySelectorAll(".mockup").forEach(el => {
+                    el.style.transform = `
                 perspective(1200px)
                 rotateY(-4deg)
                 scale(${1 + scrollY * 0.00015})
                 translateY(${scrollY * -0.15}px)
-            `;
+                `;
+                });
+
             });
 
-        });
+        }
 
         document.addEventListener("DOMContentLoaded", () => {
 
@@ -453,6 +460,20 @@
 
         });
 
+        if (isMobile) {
+
+            // quitar transforms residuales
+            document.querySelectorAll('.mockup').forEach(el => {
+                el.style.transform = 'none';
+            });
+
+            document.querySelectorAll('.hero-left').forEach(el => {
+                el.style.transform = 'none';
+                el.style.opacity = '1';
+            });
+
+        }
+
     </script>
 
     <script>
@@ -462,7 +483,13 @@
                 card.onmousemove = null;
             });
         }
-        
+
+        if (isMobile) {
+            document.querySelectorAll(".btn").forEach(btn => {
+                btn.onmousemove = null;
+            });
+        }
+
         const chat = document.getElementById("chat");
         const revenueEl = document.getElementById("revenue");
 
