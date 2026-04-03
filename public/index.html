@@ -557,7 +557,7 @@
                 chat.scrollTop = chat.scrollHeight;
             });
         }
-        
+
         function typeMessage(element, text, speed = 18) {
             let i = 0;
             let buffer = "";
@@ -577,17 +577,27 @@
 
         // TYPING
         function showTyping() {
-            const typing = document.createElement("div");
-            typing.className = "message ai typing";
-            typing.innerHTML = `
-                <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+
+            const typingElements = [];
+
+            chats.forEach(chat => {
+
+                const typing = document.createElement("div");
+                typing.className = "message ai typing";
+                typing.innerHTML = `
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 `;
-            chat.appendChild(typing);
-            return typing;
+
+                chat.appendChild(typing);
+                typingElements.push(typing);
+
+            });
+
+            return typingElements;
         }
 
         function removeTyping(el) {
@@ -598,20 +608,21 @@
         const globalRevenueEl = document.getElementById("globalRevenue");
 
         function animateRevenue(amount) {
-            let current = parseInt(revenueEl.innerText.replace("€", "")) || 0;
 
-            const interval = setInterval(() => {
-                current += 1;
-                revenueEl.innerText = `€${current}`;
+            revenueEls.forEach(el => {
 
-                // 🔥 GLOBAL COUNTER
-                if (globalRevenueEl) {
-                    let global = parseInt(globalRevenueEl.innerText) || 0;
-                    globalRevenueEl.innerText = global + 1;
-                }
+                let current = parseInt(el.innerText.replace("€", "")) || 0;
 
-                if (current >= amount) clearInterval(interval);
-            }, 20);
+                const interval = setInterval(() => {
+                    current += 1;
+                    el.innerText = `€${current}`;
+
+                    if (current >= amount) clearInterval(interval);
+
+                }, 20);
+
+            });
+
         }
 
         function getTypingDuration(text) {
@@ -627,11 +638,17 @@
 
         // 🚀 RUN SCENARIO
         function runScenario() {
-            chat.style.opacity = 0;
+            chats.forEach(chat => {
+                chat.style.opacity = 0;
+            });
 
             setTimeout(() => {
                 clearChat();
-                chat.style.opacity = 1;
+
+                chats.forEach(chat => {
+                    chat.style.opacity = 1;
+                });
+
             }, 300);
 
             clearChat();
@@ -652,47 +669,47 @@
 
                 if (msg.type === "ai") {
 
-                    let typing;
+                    let typingElements;
 
-                    // mostrar typing
                     setTimeout(() => {
-                        typing = showTyping();
+                        typingElements = showTyping();
                     }, time);
 
                     const typingDuration = getTypingDuration(msg.text);
 
                     setTimeout(() => {
 
-                        // 🔥 1. fade previo (micro transición)
-                        typing.style.transition = "all 0.2s ease";
-                        typing.style.opacity = 0.6;
+                        typingElements.forEach(typing => {
 
-                        const dots = typing.querySelector(".typing-dots");
-                        if (dots) dots.style.opacity = 0;
+                            typing.style.transition = "all 0.2s ease";
+                            typing.style.opacity = 0.6;
 
-                        setTimeout(() => {
+                            const dots = typing.querySelector(".typing-dots");
+                            if (dots) dots.style.opacity = 0;
 
-                            // 🔥 2. convertir typing en mensaje
-                            typing.innerHTML = "";
-                            typeMessage(typing, msg.text);
-                            typing.classList.remove("typing");
-                            typing.classList.add("ai");
+                            setTimeout(() => {
 
-                            // 🔥 3. devolver opacidad
-                            typing.style.opacity = 1;
+                                typing.innerHTML = "";
+                                typeMessage(typing, msg.text);
+                                typing.classList.remove("typing");
+                                typing.classList.add("ai");
+                                typing.style.opacity = 1;
 
-                            if (msg.revenue) {
-                                totalRevenue += msg.revenue;
-                                animateRevenue(totalRevenue);
-                            }
+                            }, 120);
 
-                        }, 120); // micro delay humano
+                        });
+
+                        if (msg.revenue) {
+                            totalRevenue += msg.revenue;
+                            animateRevenue(totalRevenue);
+                        }
 
                     }, time + typingDuration);
 
-                    // avanzar tiempo total correctamente
                     time += typingDuration + 1000;
                 }
+
+
             });
 
         }
@@ -722,7 +739,10 @@
         }, { threshold: 0.6 });
 
         // observar hero chat
-        const chatElement = document.querySelector(".interactive-chat");
+        document.querySelectorAll(".interactive-chat").forEach(el => {
+            chatObserver.observe(el);
+        });
+        
         if (chatElement) chatObserver.observe(chatElement);
 
         document.querySelectorAll(".btn").forEach(btn => {
