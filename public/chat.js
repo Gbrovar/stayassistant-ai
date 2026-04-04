@@ -960,6 +960,8 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         const typing = document.getElementById("typing");
 
+        const preResponse = document.querySelector(".pre-response");
+
         const isSimple = data.reply && data.reply.length < 60;
 
         const delay = isSimple
@@ -967,8 +969,6 @@ async function sendMessage(forcedText = null, displayLabel = null) {
             : Math.min(900, Math.max(400, (data.reply || "").length * 10));
 
         setTimeout(() => {
-
-            const preResponse = document.querySelector(".pre-response");
 
             if (typing) typing.remove();
             if (preResponse) preResponse.remove();
