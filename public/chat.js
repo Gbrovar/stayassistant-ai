@@ -960,22 +960,37 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         const typing = document.getElementById("typing");
 
-        if (typing) typing.remove();
+        const isSimple = data.reply && data.reply.length < 60;
 
-        if (data.places && data.places.length) {
+        const delay = isSimple
+            ? 250
+            : Math.min(900, Math.max(400, (data.reply || "").length * 10));
 
-            renderPlacesFromBackend(data.places)
+        setTimeout(() => {
 
-        } else {
+            if (typing) typing.remove();
 
-            messages.innerHTML += `
-                <div class="bot-wrapper">
-                <div class="bot-avatar">🤖</div>
-                <div class="bot-message">${data.reply}</div>
-                </div>
-            `;
+            if (data.places && data.places.length) {
 
-        }
+                renderPlacesFromBackend(data.places);
+
+            } else {
+
+                messages.innerHTML += `
+                    <div class="bot-wrapper">
+                    <div class="bot-avatar">🤖</div>
+                    <div class="bot-message">${data.reply}</div>
+                    </div>
+                `;
+
+            }
+
+            messages.scrollTo({
+                top: messages.scrollHeight,
+                behavior: "smooth"
+            });
+
+        }, delay); // 👈 puedes ajustar (300–700 ideal)
 
         /* primero recomendaciones */
 
