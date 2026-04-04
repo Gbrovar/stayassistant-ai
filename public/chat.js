@@ -968,7 +968,10 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         setTimeout(() => {
 
+            const preResponse = document.querySelector(".pre-response");
+
             if (typing) typing.remove();
+            if (preResponse) preResponse.remove();
 
             if (data.places && data.places.length) {
 
