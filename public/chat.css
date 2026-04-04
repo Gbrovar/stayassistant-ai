@@ -513,14 +513,14 @@ body.embed-mode #chat-widget {
 
 
 /* =========================
-   MINIMAL HOSPITALITY PRO
+   MINIMAL HOSPITALITY FINAL
 ========================= */
 
 [data-theme="minimal"] {
 
     --bg-main: #fdfcf9;
     --bg-widget: #ffffff;
-    --bg-secondary: #f7f5f2;
+    --bg-soft: #f7f5f2;
 
     --text-primary: #1f2937;
     --text-secondary: #4b5563;
@@ -528,8 +528,8 @@ body.embed-mode #chat-widget {
 
     --border: #ece7e1;
 
-    --accent-soft: #d1fae5;
-    --accent-main: #6ee7b7;
+    --accent: #7dd3fc;
+    --accent-soft: #e0f2fe;
 }
 
 /* BACKGROUND */
@@ -543,8 +543,9 @@ body.embed-mode #chat-widget {
 [data-theme="minimal"] #chat-widget {
     background: #ffffff;
     border: 1px solid #ece7e1;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.06);
     border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.06);
 }
 
 /* HEADER */
@@ -555,7 +556,7 @@ body.embed-mode #chat-widget {
     padding: 16px 18px;
 }
 
-/* FIX DARK HEADER */
+/* FIX HEADER DARK */
 
 [data-theme="minimal"] #chat-widget h3 {
     background: transparent !important;
@@ -573,8 +574,6 @@ body.embed-mode #chat-widget {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    opacity: 0.9;
 }
 
 /* ONLINE DOT */
@@ -583,11 +582,11 @@ body.embed-mode #chat-widget {
     content: "";
     width: 8px;
     height: 8px;
-    background: #6ee7b7;
+    background: #7dd3fc;
     border-radius: 50%;
 }
 
-/* CLOSE */
+/* CLOSE BUTTON */
 
 [data-theme="minimal"] #close-chat {
     color: #9ca3af;
@@ -597,45 +596,43 @@ body.embed-mode #chat-widget {
     color: #1f2937;
 }
 
-/* MESSAGES CONTAINER */
+/* MESSAGES */
 
 [data-theme="minimal"] #messages {
     padding: 26px;
     gap: 18px;
 }
 
-/* BOT MESSAGE (ORGÁNICO) */
+/* BOT MESSAGE */
 
 [data-theme="minimal"] .bot-message {
-    background: #f7f5f2;
+    background: #f3efe9;
     border: 1px solid #ece7e1;
     color: #1f2937;
 
     border-radius: 20px;
     padding: 12px 16px;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
 
-/* USER MESSAGE (SUAVE, NO NEGRO) */
+/* USER MESSAGE (CLAVE DIFERENCIACIÓN) */
 
 [data-theme="minimal"] .user {
-    background: #eef2f7;
+    background: #e7f0f7;
     color: #1f2937;
-
-    border: 1px solid #e5e7eb;
 
     border-radius: 20px;
     padding: 12px 16px;
 
-    box-shadow: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
 /* AVATAR */
 
 [data-theme="minimal"] .bot-avatar {
-    background: #f0fdf4;
-    color: #065f46;
+    background: #f0f9ff;
+    color: #0369a1;
     box-shadow: none;
 }
 
@@ -657,9 +654,32 @@ body.embed-mode #chat-widget {
 [data-theme="minimal"] #proactive-actions button:hover {
 
     background: #f7f5f2;
-    border-color: #d1fae5;
+    border-color: #e0f2fe;
 
     transform: translateY(-1px);
+}
+
+/* PLACE CARDS (MUY IMPORTANTE) */
+
+[data-theme="minimal"] .place-card {
+    background: #ffffff;
+    border: 1px solid #ece7e1;
+
+    border-radius: 18px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* MAP BUTTON */
+
+[data-theme="minimal"] .maps-btn {
+    background: #7dd3fc;
+    color: #0c4a6e;
+    border-radius: 8px;
+}
+
+[data-theme="minimal"] .maps-btn:hover {
+    background: #38bdf8;
 }
 
 /* INPUT AREA */
@@ -670,7 +690,7 @@ body.embed-mode #chat-widget {
     padding: 14px;
 }
 
-/* INPUT PÍLDORA */
+/* INPUT (PILL) */
 
 [data-theme="minimal"] input {
     background: #fdfcf9;
@@ -682,11 +702,11 @@ body.embed-mode #chat-widget {
 }
 
 [data-theme="minimal"] input:focus {
-    border-color: #6ee7b7;
-    box-shadow: 0 0 0 2px rgba(110,231,183,0.2);
+    border-color: #7dd3fc;
+    box-shadow: 0 0 0 2px rgba(125,211,252,0.2);
 }
 
-/* SEND BUTTON REDONDO (MUY IMPORTANTE) */
+/* SEND BUTTON (REDONDO + ACCENTO) */
 
 [data-theme="minimal"] button.send {
 
@@ -695,18 +715,18 @@ body.embed-mode #chat-widget {
 
     border-radius: 50%;
 
-    background: #6ee7b7;
-    color: #065f46;
+    background: #7dd3fc;
+    color: #0c4a6e;
 
-    box-shadow: 0 4px 12px rgba(110,231,183,0.3);
+    box-shadow: 0 4px 12px rgba(125,211,252,0.4);
 }
 
 [data-theme="minimal"] button.send:hover {
-    background: #34d399;
+    background: #38bdf8;
     transform: scale(1.08);
 }
 
-/* SCROLLBAR SUAVE */
+/* SCROLLBAR */
 
 [data-theme="minimal"] #messages::-webkit-scrollbar-thumb {
     background: #ece7e1;
