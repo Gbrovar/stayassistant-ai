@@ -109,7 +109,10 @@ function renderPlacesFromBackend(places) {
         `;
     });
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 }
 
 function getLimitMessage() {
@@ -665,7 +668,10 @@ async function showRecommendations(text) {
 
     }
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 
 }
 
@@ -871,7 +877,10 @@ async function sendMessage(forcedText = null, displayLabel = null) {
         `;
     }
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 
     try {
 
@@ -999,7 +1008,10 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
     }
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: "smooth"
+    });
 
 }
 
