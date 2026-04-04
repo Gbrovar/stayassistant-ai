@@ -196,6 +196,22 @@ body {
     font-size: 14.5px;
 }
 
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.message,
+.bot-wrapper {
+    animation: messageIn 0.25s ease;
+}
+
 .user {
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     border-radius: 14px;
