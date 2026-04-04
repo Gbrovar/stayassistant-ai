@@ -256,18 +256,12 @@ body {
 }
 
 .typing-dots span {
-
     width: 6px;
     height: 6px;
-
     background: #9ca3af;
-
     border-radius: 50%;
-
     display: inline-block;
-
-    animation: typingBounce 1.4s infinite ease-in-out;
-
+    animation: typingBounce 1.2s infinite ease-in-out;
 }
 
 .typing-dots span:nth-child(2) {
