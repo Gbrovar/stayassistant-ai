@@ -800,9 +800,8 @@ body.embed-mode #chat-widget {
 
 /* ************************* */
 
-
 /* =========================
-   LUXURY — REAL PREMIUM (NEW IDENTITY)
+   LUXURY — CONSISTENT SYSTEM (FINAL FIX)
 ========================= */
 
 [data-theme="luxury"] {
@@ -817,6 +816,8 @@ body.embed-mode #chat-widget {
     --accent: #A27B5C;
 
     --border: #3F4E4F;
+
+    --radius: 12px; /* 🔥 sistema unificado */
 }
 
 /* =========================
@@ -844,13 +845,13 @@ body.embed-mode #chat-widget {
     background: #2C3639;
     border: 1px solid #3F4E4F;
 
-    border-radius: 12px;
+    border-radius: var(--radius);
 
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
 /* =========================
-   HEADER (MUCHO MÁS ELEGANTE)
+   HEADER (FIX + DOT)
 ========================= */
 
 [data-theme="luxury"] .chat-header {
@@ -873,10 +874,12 @@ body.embed-mode #chat-widget {
     font-size: 15px;
     font-weight: 600;
 
-    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* DOT */
+/* 🔥 DOT COMO MINIMAL */
 
 [data-theme="luxury"] .chat-header h3::before {
 
@@ -886,12 +889,10 @@ body.embed-mode #chat-widget {
 
     background: #A27B5C;
     border-radius: 50%;
-
-    margin-right: 8px;
 }
 
 /* =========================
-   CHAT BUTTON (ELEGANTE)
+   CHAT BUTTON
 ========================= */
 
 [data-theme="luxury"] #chat-button {
@@ -900,13 +901,8 @@ body.embed-mode #chat-widget {
     color: #fff;
 
     border-radius: 999px;
-    border: none;
 
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-}
-
-[data-theme="luxury"] #chat-button:hover {
-    background: #8f684c;
 }
 
 /* =========================
@@ -923,9 +919,7 @@ body.embed-mode #chat-widget {
     line-height: 1.6;
 }
 
-/* =========================
-   BOT MESSAGE
-========================= */
+/* BOT */
 
 [data-theme="luxury"] .bot-message {
 
@@ -934,25 +928,19 @@ body.embed-mode #chat-widget {
 
     color: #DCD7C9;
 
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 12px 14px;
-
-    box-shadow: none;
 }
 
-/* =========================
-   USER MESSAGE (SOFISTICADO)
-========================= */
+/* USER */
 
 [data-theme="luxury"] .user {
 
     background: #A27B5C !important;
     color: #fff;
 
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 12px 14px;
-
-    box-shadow: none;
 }
 
 /* =========================
@@ -979,7 +967,7 @@ body.embed-mode #chat-widget {
 
     color: #DCD7C9;
 
-    border-radius: 999px;
+    border-radius: var(--radius); /* 🔥 clave */
 }
 
 [data-theme="luxury"] #quick-actions button:hover {
@@ -989,7 +977,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   PLACE CARDS (MUY IMPORTANTE)
+   CARDS
 ========================= */
 
 [data-theme="luxury"] .place-card {
@@ -997,25 +985,7 @@ body.embed-mode #chat-widget {
     background: #3F4E4F;
     border: 1px solid #2C3639;
 
-    border-radius: 12px;
-
-    box-shadow: none;
-}
-
-/* =========================
-   MAP BUTTON
-========================= */
-
-[data-theme="luxury"] .maps-btn {
-
-    background: #A27B5C;
-    color: #fff;
-
-    border-radius: 6px;
-}
-
-[data-theme="luxury"] .maps-btn:hover {
-    background: #8f684c;
+    border-radius: var(--radius);
 }
 
 /* =========================
@@ -1035,34 +1005,35 @@ body.embed-mode #chat-widget {
 
     color: #DCD7C9;
 
-    border-radius: 999px;
-}
-
-[data-theme="luxury"] input::placeholder {
-    color: #bfb8a6;
-}
-
-[data-theme="luxury"] input:focus {
-
-    border-color: #A27B5C;
+    border-radius: var(--radius); /* 🔥 FIX */
+    padding: 12px 14px;
 }
 
 /* =========================
-   SEND BUTTON
+   SEND BUTTON (NO CIRCLE)
 ========================= */
 
 [data-theme="luxury"] button.send {
 
-    border-radius: 50%;
+    width: 46px;
+    height: 42px;
+
+    border-radius: var(--radius); /* 🔥 clave */
 
     background: #A27B5C !important;
     color: #fff;
-
-    box-shadow: none;
 }
 
-[data-theme="luxury"] button.send:hover {
-    background: #8f684c;
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="luxury"] .maps-btn {
+
+    background: #A27B5C;
+    color: #fff;
+
+    border-radius: 8px;
 }
 
 /* =========================
