@@ -798,246 +798,277 @@ body.embed-mode #chat-widget {
     scrollbar-color: #ece7e1 transparent;
 }
 
+/* ************************* */
 
 
 /* =========================
-   LUXURY THEME (5⭐ HOTEL)
+   LUXURY — REAL PREMIUM (NEW IDENTITY)
 ========================= */
 
 [data-theme="luxury"] {
 
-    --bg-main: #0b0f1a;
-    --bg-widget: #111827;
-    --bg-soft: #1f2937;
+    --bg-main: #2C3639;
+    --bg-widget: #2C3639;
+    --bg-soft: #3F4E4F;
 
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
+    --text-primary: #DCD7C9;
+    --text-secondary: #bfb8a6;
 
-    --gold: #d4af37;
-    --gold-soft: #facc15;
+    --accent: #A27B5C;
 
-    --border: #2a3441;
+    --border: #3F4E4F;
 }
 
-/* TIPOGRAFÍA */
+/* =========================
+   BASE
+========================= */
 
 [data-theme="luxury"] body,
 [data-theme="luxury"] input,
 [data-theme="luxury"] button {
 
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto !important;
+    font-family: "Inter", sans-serif !important;
     letter-spacing: -0.2px;
-
-    background: radial-gradient(circle at top, #111827, #020617);
 }
 
-/* WIDGET */
+[data-theme="luxury"] body {
+    background: #2C3639;
+}
+
+/* =========================
+   WIDGET
+========================= */
 
 [data-theme="luxury"] #chat-widget {
 
-    background: linear-gradient(180deg, #111827, #020617);
-    border: 1px solid #2a3441;
+    background: #2C3639;
+    border: 1px solid #3F4E4F;
 
-    border-radius: 20px;
+    border-radius: 12px;
 
-    box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
-/* HEADER */
+/* =========================
+   HEADER (MUCHO MÁS ELEGANTE)
+========================= */
 
 [data-theme="luxury"] .chat-header {
 
-    background: linear-gradient(180deg, #111827, #020617);
-    border-bottom: 1px solid #2a3441;
+    background: #3F4E4F;
+    border-bottom: 1px solid #2C3639;
 
-    padding: 18px;
-
+    padding: 16px 18px;
 }
 
-/* TITLE */
+[data-theme="luxury"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0;
+}
 
 [data-theme="luxury"] .chat-header h3 {
 
-    color: var(--gold);
+    color: #DCD7C9;
 
+    font-size: 15px;
     font-weight: 600;
-    font-size: 16px;
 
-    letter-spacing: -0.3px;
-
+    letter-spacing: 0.2px;
 }
 
-/* GOLD DOT */
+/* DOT */
 
 [data-theme="luxury"] .chat-header h3::before {
 
     content: "";
-    width: 8px;
-    height: 8px;
-    background: var(--gold);
+    width: 6px;
+    height: 6px;
+
+    background: #A27B5C;
     border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
 
+    margin-right: 8px;
 }
 
-/* CLOSE */
-
-[data-theme="luxury"] #close-chat {
-    color: #6b7280;
-}
-
-[data-theme="luxury"] #close-chat:hover {
-    color: white;
-}
-
-/* CHAT BUTTON */
+/* =========================
+   CHAT BUTTON (ELEGANTE)
+========================= */
 
 [data-theme="luxury"] #chat-button {
 
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: #111827;
+    background: #A27B5C !important;
+    color: #fff;
 
     border-radius: 999px;
+    border: none;
 
-    box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
 }
 
 [data-theme="luxury"] #chat-button:hover {
-    transform: translateY(-2px);
+    background: #8f684c;
 }
 
-/* MESSAGES */
+/* =========================
+   MESSAGES
+========================= */
 
 [data-theme="luxury"] #messages {
-    padding: 26px;
-    gap: 18px;
+    padding: 24px;
+    gap: 16px;
 }
 
-/* BOT MESSAGE */
+[data-theme="luxury"] .message {
+    font-size: 14.5px;
+    line-height: 1.6;
+}
+
+/* =========================
+   BOT MESSAGE
+========================= */
 
 [data-theme="luxury"] .bot-message {
 
-    background: #1f2937;
-    border: 1px solid #2a3441;
+    background: #3F4E4F;
+    border: 1px solid #2C3639;
 
-    color: #e5e7eb;
+    color: #DCD7C9;
 
-    border-radius: 18px;
+    border-radius: 10px;
+    padding: 12px 14px;
 
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    box-shadow: none;
 }
 
-/* USER MESSAGE */
+/* =========================
+   USER MESSAGE (SOFISTICADO)
+========================= */
 
 [data-theme="luxury"] .user {
 
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: #111827;
+    background: #A27B5C !important;
+    color: #fff;
 
-    border-radius: 18px;
+    border-radius: 10px;
+    padding: 12px 14px;
 
-    box-shadow: 0 6px 20px rgba(212,175,55,0.4);
+    box-shadow: none;
 }
 
-/* AVATAR */
+/* =========================
+   AVATAR
+========================= */
 
 [data-theme="luxury"] .bot-avatar {
 
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: #111827;
+    background: #A27B5C;
+    color: #fff;
 
-    box-shadow: 0 4px 12px rgba(212,175,55,0.5);
+    box-shadow: none;
 }
 
-/* QUICK ACTIONS */
+/* =========================
+   QUICK ACTIONS
+========================= */
 
 [data-theme="luxury"] #quick-actions button,
 [data-theme="luxury"] #proactive-actions button {
 
-    background: #020617;
-    border: 1px solid #2a3441;
+    background: transparent;
+    border: 1px solid #3F4E4F;
 
-    color: #e5e7eb;
+    color: #DCD7C9;
 
     border-radius: 999px;
 }
 
 [data-theme="luxury"] #quick-actions button:hover {
 
-    border-color: var(--gold);
-    color: var(--gold);
-
+    border-color: #A27B5C;
+    color: #A27B5C;
 }
 
-/* PLACE CARDS */
+/* =========================
+   PLACE CARDS (MUY IMPORTANTE)
+========================= */
 
 [data-theme="luxury"] .place-card {
 
-    background: #111827;
-    border: 1px solid #2a3441;
+    background: #3F4E4F;
+    border: 1px solid #2C3639;
 
-    border-radius: 18px;
+    border-radius: 12px;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    box-shadow: none;
 }
 
-/* MAP BUTTON */
+/* =========================
+   MAP BUTTON
+========================= */
 
 [data-theme="luxury"] .maps-btn {
 
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: #111827;
+    background: #A27B5C;
+    color: #fff;
 
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
-/* INPUT */
+[data-theme="luxury"] .maps-btn:hover {
+    background: #8f684c;
+}
+
+/* =========================
+   INPUT
+========================= */
 
 [data-theme="luxury"] .input-area {
 
-    background: #020617;
-    border-top: 1px solid #2a3441;
+    background: #2C3639;
+    border-top: 1px solid #3F4E4F;
 }
 
 [data-theme="luxury"] input {
 
-    background: #111827;
-    border: 1px solid #2a3441;
+    background: #3F4E4F;
+    border: 1px solid #2C3639;
 
-    color: #e5e7eb;
+    color: #DCD7C9;
 
     border-radius: 999px;
 }
 
-[data-theme="luxury"] input:focus {
-
-    border-color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(212,175,55,0.2);
+[data-theme="luxury"] input::placeholder {
+    color: #bfb8a6;
 }
 
-/* SEND BUTTON */
+[data-theme="luxury"] input:focus {
+
+    border-color: #A27B5C;
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
 
 [data-theme="luxury"] button.send {
 
     border-radius: 50%;
 
-    background: linear-gradient(135deg, #d4af37, #facc15);
-    color: #111827;
+    background: #A27B5C !important;
+    color: #fff;
 
-    box-shadow: 0 6px 18px rgba(212,175,55,0.5);
+    box-shadow: none;
 }
 
 [data-theme="luxury"] button.send:hover {
-    transform: scale(1.08);
+    background: #8f684c;
 }
 
-/* SCROLL */
+/* =========================
+   SCROLL
+========================= */
 
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb {
-    background: #2a3441;
-}
-
-[data-theme="luxury"] #messages::-webkit-scrollbar-thumb:hover {
-    background: #374151;
+    background: #3F4E4F;
 }
