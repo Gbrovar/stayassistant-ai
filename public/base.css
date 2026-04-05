@@ -1,0 +1,29 @@
+:root {
+    /* DEFAULT TOKENS (fallback) */
+
+    --bg-main: #0b1220;
+    --bg-widget: #111827;
+    --bg-secondary: #1f2937;
+
+    --text-primary: #f9fafb;
+    --text-secondary: #e5e7eb;
+    --text-muted: #9ca3af;
+
+    --accent: #22c55e;
+    --accent-hover: #16a34a;
+
+    --border: #374151;
+
+    --radius-md: 14px;
+    --radius-lg: 20px;
+}
+
+/* reset mínimo */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}

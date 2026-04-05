@@ -1,0 +1,345 @@
+
+/* =========================
+   ZEN NOIR — DARK NEUMORPHISM
+   (ZEN EXACTO + DARK PALETTE)
+========================= */
+
+[data-theme="zen-noir"] {
+
+    --bg-main: #232323;
+    --bg-soft: #2c2c2c;
+    --bg-elevated: #303030;
+
+    --text-primary: #d6d6d6;
+    --text-secondary: #9a9a9a;
+
+    --accent: #7f8c98;
+
+    --shadow-light: rgba(255,255,255,0.04);
+    --shadow-dark: rgba(0,0,0,0.6);
+
+    --radius: 18px;
+}
+
+/* =========================
+   RESET
+========================= */
+
+[data-theme="zen-noir"] * {
+    border: none !important;
+}
+
+[data-theme="zen-noir"] #quick-actions button:hover,
+[data-theme="zen-noir"] #proactive-actions button:hover {
+    background: var(--bg-main) !important;
+}
+
+/* =========================
+   BASE
+========================= */
+
+[data-theme="zen-noir"] body {
+    background: var(--bg-main);
+}
+
+/* =========================
+   WIDGET
+========================= */
+
+[data-theme="zen-noir"] #chat-widget {
+
+    background: var(--bg-main);
+    border-radius: var(--radius);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+[data-theme="zen-noir"] .chat-header {
+
+    background: var(--bg-main);
+
+    margin: 10px;
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+
+    padding: 14px 16px;
+}
+
+[data-theme="zen-noir"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0 !important;
+    color: var(--text-primary);
+}
+
+[data-theme="zen-noir"] .chat-header h3 {
+
+    color: var(--text-primary);
+
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-theme="zen-noir"] .chat-header h3::before {
+
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+
+    border-radius: 50%;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+[data-theme="zen-noir"] #messages {
+    padding: 28px;
+    gap: 20px;
+}
+
+[data-theme="zen-noir"] .bot-wrapper {
+    margin-bottom: 8px;
+}
+
+/* BOT */
+
+[data-theme="zen-noir"] .bot-message {
+
+    background: var(--bg-soft);
+
+    border-radius: var(--radius);
+
+    padding: 16px 18px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+}
+
+/* USER */
+
+[data-theme="zen-noir"] .user {
+
+    background: var(--bg-elevated);
+
+    border-radius: var(--radius);
+
+    padding: 16px 18px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+[data-theme="zen-noir"] .bot-avatar {
+
+    background: var(--bg-soft);
+
+    color: var(--text-secondary);
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+[data-theme="zen-noir"] #quick-actions,
+[data-theme="zen-noir"] #proactive-actions {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+[data-theme="zen-noir"] #quick-actions button,
+[data-theme="zen-noir"] #proactive-actions button,
+[data-theme="zen-noir"] #messages button {
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 10px 16px;
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen-noir"] #quick-actions button:hover,
+[data-theme="zen-noir"] #proactive-actions button:hover,
+[data-theme="zen-noir"] #messages button:hover {
+
+    transform: translateY(-1px);
+}
+
+[data-theme="zen-noir"] #quick-actions button:active,
+[data-theme="zen-noir"] #proactive-actions button:active,
+[data-theme="zen-noir"] #messages button:active {
+
+    transform: scale(.94);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+[data-theme="zen-noir"] .input-area {
+
+    background: var(--bg-main);
+
+    margin: 14px;
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+[data-theme="zen-noir"] input {
+
+    background: var(--bg-soft);
+
+    border-radius: 999px;
+
+    padding: 12px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+[data-theme="zen-noir"] button.send {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--bg-main);
+
+    color: var(--accent);
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen-noir"] button.send:active {
+
+    transform: scale(.9);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="zen-noir"] .maps-btn {
+
+    background: var(--bg-main) !important;
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 8px 14px;
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+}
+
+/* =========================
+   CHAT BUTTON
+========================= */
+
+[data-theme="zen-noir"] #chat-button {
+
+    background: var(--bg-main) !important;
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+}
+
+/* =========================
+   SCROLL (DARK CARVED)
+========================= */
+
+[data-theme="zen-noir"] #messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="zen-noir"] #messages::-webkit-scrollbar-track {
+
+    background: var(--bg-main);
+
+    border-radius: 10px;
+
+    box-shadow:
+        inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+}
+
+[data-theme="zen-noir"] #messages::-webkit-scrollbar-thumb {
+
+    background: var(--bg-soft);
+
+    border-radius: 10px;
+
+    box-shadow:
+        2px 2px 5px var(--shadow-dark),
+        -2px -2px 5px var(--shadow-light);
+}
+
+[data-theme="zen-noir"] #messages::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+[data-theme="zen-noir"] #messages {
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a var(--bg-main);
+}

@@ -1,0 +1,386 @@
+
+
+/* =========================
+   ZEN V3.1 — TRUE NEUMORPHIC SYSTEM (IMPROVED)
+========================= */
+
+[data-theme="zen"] {
+
+    --bg-main: #EFF2F9;
+    --bg-soft: #E4EBF1;
+    --bg-elevated: #FFFFFF;
+
+    --text-primary: #6E7F8D;
+    --text-secondary: #9AA8B5;
+
+    --accent: #8FA2B7;
+
+    --shadow-light: #FFFFFF;
+    --shadow-dark: rgba(22,27,29,0.08);
+
+    --radius: 18px;
+}
+
+/* =========================
+   🔥 HARD RESET (CLAVE)
+========================= */
+
+[data-theme="zen"] * {
+    border: none !important;
+}
+
+/* elimina hover global */
+
+[data-theme="zen"] #quick-actions button:hover,
+[data-theme="zen"] #proactive-actions button:hover {
+    background: var(--bg-main) !important;
+    border: none !important;
+}
+
+/* =========================
+   BASE
+========================= */
+
+[data-theme="zen"] body {
+    background: var(--bg-main);
+}
+
+/* =========================
+   WIDGET
+========================= */
+
+[data-theme="zen"] #chat-widget {
+
+    background: var(--bg-main);
+    border-radius: var(--radius);
+    border: none !important;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+[data-theme="zen"] .chat-header {
+
+    background: var(--bg-main);
+
+    margin: 10px;
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+
+    padding: 14px 16px;
+}
+
+[data-theme="zen"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0 !important;
+    color: var(--text-primary)
+}
+
+[data-theme="zen"] .chat-header h3 {
+
+    color: var(--text-primary);
+
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-theme="zen"] .chat-header h3::before {
+
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+
+    border-radius: 50%;
+}
+
+/* =========================
+   MESSAGES (🔥 MÁS AIRE)
+========================= */
+
+[data-theme="zen"] #messages {
+    padding: 28px;
+    gap: 20px;
+}
+
+[data-theme="zen"] .bot-wrapper {
+    margin-bottom: 8px;
+}
+
+/* BOT */
+
+[data-theme="zen"] .bot-message {
+
+    background: var(--bg-soft);
+
+    border-radius: var(--radius);
+
+    padding: 16px 18px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+
+    transition: all .15s ease;
+}
+
+/* USER */
+
+[data-theme="zen"] .user {
+
+    background: var(--bg-elevated);
+
+    border-radius: var(--radius);
+
+    padding: 16px 18px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+[data-theme="zen"] .bot-avatar {
+
+    background: var(--bg-soft);
+
+    color: var(--text-secondary);
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+[data-theme="zen"] #quick-actions,
+[data-theme="zen"] #proactive-actions {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+[data-theme="zen"] #quick-actions button,
+[data-theme="zen"] #proactive-actions button,
+[data-theme="zen"] #messages button {
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 10px 16px;
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen"] #quick-actions button:hover,
+[data-theme="zen"] #proactive-actions button:hover,
+[data-theme="zen"] #messages button:hover {
+
+    transform: translateY(-1px);
+}
+
+[data-theme="zen"] #quick-actions button:active,
+[data-theme="zen"] #proactive-actions button:active,
+[data-theme="zen"] #messages button:active {
+
+    transform: scale(.94);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+[data-theme="zen"] .input-area {
+
+    background: var(--bg-main);
+
+    margin: 14px;
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+[data-theme="zen"] input {
+
+    background: var(--bg-soft);
+
+    border-radius: 999px;
+
+    padding: 12px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+[data-theme="zen"] button.send {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--bg-main);
+
+    color: var(--accent);
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen"] button.send:active {
+
+    transform: scale(.9);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="zen"] .maps-btn {
+
+    background: var(--bg-main) !important;
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 8px 14px;
+
+    box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen"] .maps-btn:hover {
+    transform: translateY(-1px);
+}
+
+[data-theme="zen"] .maps-btn:active {
+
+    transform: scale(.94);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   CHAT BUTTON
+========================= */
+
+[data-theme="zen"] #chat-button {
+
+    background: var(--bg-main) !important;
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    transition: all .12s ease;
+}
+
+[data-theme="zen"] #chat-button:active {
+
+    transform: scale(.94);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   🔥 SCROLL NEUMORPHIC REAL
+========================= */
+
+[data-theme="zen"] #messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-track {
+
+    background: var(--bg-main);
+
+    border-radius: 10px;
+
+    box-shadow:
+        inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb {
+
+    background: var(--bg-soft);
+
+    border-radius: 10px;
+
+    box-shadow:
+        2px 2px 5px var(--shadow-dark),
+        -2px -2px 5px var(--shadow-light);
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb:hover {
+    background: #d6dde6;
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb:active {
+
+    box-shadow:
+        inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+}
+
+/* FIREFOX */
+
+[data-theme="zen"] #messages {
+    scrollbar-width: thin;
+    scrollbar-color: #d6dde6 var(--bg-main);
+}

@@ -6,14 +6,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="chat.css">
+
+    <!-- THEMES -->
+    <link rel="stylesheet" href="themes/minimal.css">
+    <link rel="stylesheet" href="themes/luxury.css">
+    <link rel="stylesheet" href="themes/modern.css">
+    <link rel="stylesheet" href="themes/zen.css">
+    <link rel="stylesheet" href="themes/zen-noir.css">
+
     <title>StayAssistant AI</title>
 
 
 
 </head>
 
-<body data-theme="zen-noir">
+<script>
+    (function () {
+        const saved = localStorage.getItem("stayassistant_theme") || "default";
+        document.documentElement.setAttribute("data-theme", saved);
+    })();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const themeParam = urlParams.get("theme");
+
+    if (themeParam) {
+        document.documentElement.setAttribute("data-theme", themeParam);
+    }
+</script>
+
+<body>
 
     <script>
 
@@ -97,6 +121,13 @@
 
         }
 
+    </script>
+
+    <script type="module">
+        import { setTheme, getTheme } from "./theme.js";
+
+        // asegurar estado correcto
+        setTheme(getTheme());
     </script>
 
 </body>

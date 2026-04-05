@@ -1,0 +1,333 @@
+
+/* =========================
+   MINIMAL V6 — FINAL POLISH
+========================= */
+
+[data-theme="minimal"] {
+
+    --bg-main: #f9f7f3;
+    --bg-widget: #ffffff;
+    --bg-soft: #f5f1eb;
+
+    --text-primary: #4d463f;
+    /* 🔥 más suave */
+    --text-secondary: #8b8680;
+    --text-muted: #bdb6ae;
+
+    --accent: #aa8c62;
+    --accent-soft: #f2e8d9;
+
+    --radius-lg: 20px;
+    --radius-md: 16px;
+}
+
+/* =========================
+   BASE
+========================= */
+
+[data-theme="minimal"] body,
+[data-theme="minimal"] input,
+[data-theme="minimal"] button {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto !important;
+}
+
+[data-theme="minimal"] body {
+    background: linear-gradient(180deg, #f9f7f3, #f5f1eb);
+}
+
+/* =========================
+   WIDGET
+========================= */
+
+[data-theme="minimal"] #chat-widget {
+
+    background: var(--bg-widget);
+
+    border-radius: var(--radius-lg);
+
+    border: none;
+
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   HEADER (FIX FINAL)
+========================= */
+
+[data-theme="minimal"] .chat-header {
+
+    background: linear-gradient(180deg, #ffffff, #f9f7f3);
+
+    border: none;
+
+    padding: 16px 18px;
+}
+
+/* 🔥 eliminar cualquier fondo heredado */
+
+[data-theme="minimal"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0 !important;
+    color: #b1936a;
+}
+
+/* 🔥 NOMBRE HOTEL — AHORA PERFECTO */
+
+[data-theme="minimal"] .chat-header h3 {
+
+    color: var(--accent);
+    /* 🔥 clave */
+
+    font-size: 15.5px;
+    font-weight: 600;
+
+    letter-spacing: -0.2px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* DOT */
+
+[data-theme="minimal"] .chat-header h3::before {
+
+    content: "";
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+
+    border-radius: 50%;
+
+    opacity: 0.6;
+}
+
+/* CLOSE */
+
+[data-theme="minimal"] #close-chat {
+    color: var(--text-muted);
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+[data-theme="minimal"] #messages {
+    padding: 24px;
+    gap: 16px;
+}
+
+[data-theme="minimal"] .bot-message {
+
+    background: var(--bg-soft);
+
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 12px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="minimal"] .user {
+
+    background: var(--accent-soft);
+
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 12px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+[data-theme="minimal"] .bot-avatar {
+
+    background: #f3eee7;
+
+    color: #a89f93;
+
+    box-shadow: none;
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+[data-theme="minimal"] #quick-actions button,
+[data-theme="minimal"] #proactive-actions button {
+
+    background: var(--bg-main);
+
+    border: none;
+
+    border-radius: 999px;
+
+    padding: 10px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="minimal"] #quick-actions button:hover,
+[data-theme="minimal"] #proactive-actions button:hover,
+[data-theme="minimal"] #messages button:hover {
+
+    background: var(--accent-soft);
+}
+
+/* =========================
+   PLACE CARDS
+========================= */
+
+[data-theme="minimal"] .place-card {
+
+    background: #ffffff;
+
+    border: none;
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   🔥 MAP BUTTON (FIX TOTAL)
+========================= */
+
+[data-theme="minimal"] .maps-btn {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    text-decoration: none;
+
+    border: none;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="minimal"] .maps-btn:hover {
+
+    background: var(--accent);
+
+    color: white;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+[data-theme="minimal"] .input-area {
+
+    background: #ffffff;
+
+    border: none;
+
+    padding: 14px;
+
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="minimal"] input {
+
+    background: var(--bg-main);
+
+    border: none;
+
+    border-radius: 999px;
+
+    padding: 14px 18px;
+
+    color: var(--text-primary);
+
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="minimal"] input::placeholder {
+    color: var(--text-muted);
+}
+
+[data-theme="minimal"] input:focus {
+
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+[data-theme="minimal"] button.send {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--accent);
+
+    color: white;
+
+    border: none;
+
+    box-shadow: 0 6px 16px rgba(200, 169, 126, 0.35);
+}
+
+/* =========================
+   CHAT BUTTON
+========================= */
+
+[data-theme="minimal"] #chat-button {
+
+    background: var(--accent);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 999px;
+
+    box-shadow: 0 10px 30px rgba(200, 169, 126, 0.35);
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+[data-theme="minimal"] #messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+[data-theme="minimal"] #messages::-webkit-scrollbar-thumb {
+
+    background: #e8e2db;
+
+    border-radius: 10px;
+}
+
+[data-theme="minimal"] #messages {
+    scrollbar-color: #e8e2db transparent;
+}

@@ -141,7 +141,9 @@
         iframe = document.createElement("iframe");
         iframe.id = "stayassistant-iframe";
 
-        iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}&preview=${config.preview ? "true" : "false"}`;
+        const theme = localStorage.getItem("stayassistant_theme") || "default";
+
+        iframe.src = `${API_BASE}/chat.html?embed=true&property=${propertyId}&preview=${config.preview ? "true" : "false"}&theme=${theme}`;
 
         const isMobile = window.innerWidth < 600;
 

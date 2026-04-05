@@ -1,0 +1,388 @@
+
+/* =========================
+   LUXURY V4 — ULTRA PREMIUM
+========================= */
+
+[data-theme="luxury"] {
+
+    /* 🎨 COLOR SYSTEM REFINADO */
+
+    --bg-main: #181b1f;
+    --bg-widget: #1c2024;
+    --bg-soft: #23282e;
+
+    --text-primary: #d6d0c4;
+    --text-secondary: #a8a090;
+    --text-muted: #7e776b;
+
+    --accent: #d4b173;
+    --accent-soft: rgba(212,177,115,0.12);
+    --accent-strong: #b8965c;
+
+    --radius: 16px;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================
+   BACKGROUND (DEPTH REAL)
+========================= */
+
+[data-theme="luxury"] body {
+
+    background:
+        radial-gradient(circle at 20% 0%, rgba(212,177,115,0.06), transparent 40%),
+        radial-gradient(circle at 80% 100%, rgba(212,177,115,0.04), transparent 50%),
+        #121417;
+}
+
+/* =========================
+   WIDGET (MATERIAL)
+========================= */
+
+[data-theme="luxury"] #chat-widget {
+
+    background:
+        linear-gradient(180deg, #1f2327, #1c2024);
+
+    border-radius: var(--radius);
+
+    border: 1px solid rgba(255,255,255,0.03);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+
+    transition: all .4s var(--ease);
+}
+
+[data-theme="luxury"] #chat-widget:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+[data-theme="luxury"] #chat-button {
+
+    background: linear-gradient(135deg, #d4b173, #b8965c) !important;
+
+    color: #1c1f22;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.5),
+        0 6px 20px rgba(212,177,115,0.25);
+}
+
+/* =========================
+   HEADER (GLASS + DEPTH)
+========================= */
+
+[data-theme="luxury"] .chat-header {
+
+    background:
+        linear-gradient(180deg, rgba(40,45,50,0.9), rgba(28,32,36,0.9));
+
+    backdrop-filter: blur(8px);
+
+    border-bottom: 1px solid rgba(212,177,115,0.08);
+
+    padding: 18px 20px;
+}
+
+/* eliminar base */
+
+[data-theme="luxury"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0;
+    color: var(--accent)
+}
+
+/* título */
+
+[data-theme="luxury"] .chat-header h3 {
+
+    color: var(--accent);
+
+    font-size: 15.5px;
+    font-weight: 600;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* DOT CON GLOW */
+
+[data-theme="luxury"] .chat-header h3::before {
+
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 8px rgba(212,177,115,0.5);
+
+    opacity: 0.9;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+[data-theme="luxury"] #messages {
+    padding: 28px;
+    gap: 20px;
+}
+
+/* BOT */
+
+[data-theme="luxury"] .bot-message {
+
+    background:
+        linear-gradient(180deg, #262b30, #22272c);
+
+    border: none;
+
+    border-radius: var(--radius);
+
+    padding: 14px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+
+    transition: all .3s var(--ease);
+}
+
+[data-theme="luxury"] .bot-message:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.5);
+}
+
+[data-theme="luxury"] .bot-avatar {
+
+    background: linear-gradient(135deg, #d4b173, #b8965c);
+
+    color: #1c1f22;
+
+    box-shadow:
+        0 4px 12px rgba(212,177,115,0.25);
+}
+
+
+
+/* USER */
+
+[data-theme="luxury"] .user {
+
+    background:
+        linear-gradient(135deg, #d4b173, #b8965c);
+
+    color: #1c1f22;
+
+    border-radius: var(--radius);
+
+    padding: 14px 16px;
+
+    box-shadow:
+        0 8px 25px rgba(212,177,115,0.25);
+
+}
+
+/* =========================
+   BUTTONS (JEWEL EFFECT)
+========================= */
+
+[data-theme="luxury"] #quick-actions button,
+[data-theme="luxury"] #proactive-actions button,
+[data-theme="luxury"] #messages button {
+
+    background: rgba(255,255,255,0.02);
+
+    border: 1px solid rgba(212,177,115,0.2);
+
+    color: var(--text-secondary);
+
+    border-radius: 999px;
+
+    padding: 10px 16px;
+
+    transition: all .25s var(--ease);
+}
+
+/* hover con glow */
+
+[data-theme="luxury"] #quick-actions button:hover,
+[data-theme="luxury"] #proactive-actions button:hover,
+[data-theme="luxury"] #messages button:hover {
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px rgba(212,177,115,0.12),
+        0 8px 25px rgba(212,177,115,0.18);
+
+}
+
+/* =========================
+   CARDS
+========================= */
+
+[data-theme="luxury"] .place-card {
+
+    background:
+        linear-gradient(180deg, #262b30, #22272c);
+
+    border-radius: var(--radius);
+
+    border: none;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.5);
+
+}
+
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="luxury"] .maps-btn {
+
+    background: var(--accent-soft);
+
+    color: var(--accent);
+
+    border-radius: 999px;
+
+    padding: 8px 14px;
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] .maps-btn:hover {
+
+    background: var(--accent);
+
+    color: #1c1f22;
+
+    box-shadow: 0 8px 25px rgba(212,177,115,0.35);
+}
+
+/* =========================
+   INPUT (SOFT GLASS)
+========================= */
+
+[data-theme="luxury"] .input-area {
+
+    background: rgba(20,22,25,0.9);
+
+    backdrop-filter: blur(6px);
+
+    border-top: 1px solid rgba(255,255,255,0.04);
+
+    padding: 16px;
+}
+
+[data-theme="luxury"] input {
+
+    background: rgba(255,255,255,0.03);
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+    border-radius: var(--radius);
+
+    padding: 12px 14px;
+
+    color: var(--text-primary);
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] input:focus {
+
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 1px var(--accent),
+        0 0 0 4px rgba(212,177,115,0.12);
+}
+
+/* =========================
+   SEND BUTTON (JEWEL)
+========================= */
+
+[data-theme="luxury"] button.send {
+
+    width: 46px;
+    height: 42px;
+
+    border-radius: var(--radius);
+
+    background: linear-gradient(135deg, #d4b173, #b8965c);
+
+    color: #1c1f22;
+
+    box-shadow:
+        0 8px 25px rgba(212,177,115,0.35);
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] button.send:hover {
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 12px 35px rgba(212,177,115,0.45);
+}
+
+/* =========================
+   🔥 SCROLL FIX FINAL (LUXURY REAL)
+========================= */
+
+[data-theme="luxury"] #messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+[data-theme="luxury"] #messages::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+[data-theme="luxury"] #messages::-webkit-scrollbar-thumb {
+
+    background: rgba(212,177,115,0.18) !important;
+
+    border-radius: 10px;
+
+}
+
+[data-theme="luxury"] #messages::-webkit-scrollbar-thumb:hover {
+
+    background: rgba(212,177,115,0.45) !important;
+
+}
+
+/* 🔥 FIREFOX SUPPORT (CLAVE) */
+
+[data-theme="luxury"] #messages {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212,177,115,0.25) transparent;
+}
+
+/* ********************** */
