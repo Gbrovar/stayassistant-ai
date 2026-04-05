@@ -2,12 +2,17 @@ let LIMIT_REACHED = false
 
 const API_BASE = window.location.origin
 
-let conversationId = localStorage.getItem("stayassistant_conversation");
+const lastActive = localStorage.getItem("stayassistant_last_active");
 
-if (!conversationId) {
+const now = Date.now();
+
+if (!lastActive || now - lastActive > 1000 * 60 * 30) {
+    // 30 min → nueva conversación
     conversationId = crypto.randomUUID();
     localStorage.setItem("stayassistant_conversation", conversationId);
 }
+
+localStorage.setItem("stayassistant_last_active", now);
 
 /* DEMO VISITOR ID */
 
