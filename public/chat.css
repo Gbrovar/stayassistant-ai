@@ -1047,28 +1047,28 @@ body.embed-mode #chat-widget {
 /* ********************** */
 
 /* =========================
-   MODERN SAAS (CONVERSION THEME)
+   MODERN SAAS — FINAL (FULL OVERRIDE)
 ========================= */
 
 [data-theme="modern"] {
 
-    --bg-main: #0b1220;
-    --bg-widget: #0f172a;
-    --bg-soft: #1e293b;
+    --bg-main: #0B1220;
+    --bg-widget: #0F172A;
+    --bg-soft: #1E293B;
 
-    --text-primary: #f9fafb;
-    --text-secondary: #cbd5f5;
+    --text-primary: #F9FAFB;
+    --text-secondary: #94A3B8;
 
-    --accent: #3b82f6;
-    --accent-strong: #2563eb;
+    --accent: #3B82F6;
+    --accent-strong: #2563EB;
 
-    --border: #1e293b;
+    --border: #1E293B;
 
-    --radius: 14px; /* sistema coherente */
+    --radius: 14px;
 }
 
 /* =========================
-   BASE
+   BASE RESET (CLAVE)
 ========================= */
 
 [data-theme="modern"] body,
@@ -1089,12 +1089,12 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] #chat-widget {
 
-    background: #0f172a;
-    border: 1px solid #1e293b;
+    background: #0F172A !important;
+    border: 1px solid #1E293B;
 
     border-radius: var(--radius);
 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.7);
 }
 
 /* =========================
@@ -1103,20 +1103,20 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .chat-header {
 
-    background: #0f172a;
-    border-bottom: 1px solid #1e293b;
+    background: #0F172A !important;
+    border-bottom: 1px solid #1E293B;
 
     padding: 16px 18px;
 }
 
 [data-theme="modern"] #chat-widget h3 {
     background: transparent !important;
-    padding: 0;
+    padding: 0 !important;
 }
 
 [data-theme="modern"] .chat-header h3 {
 
-    color: #f9fafb;
+    color: #F9FAFB;
 
     font-size: 15px;
     font-weight: 600;
@@ -1134,26 +1134,22 @@ body.embed-mode #chat-widget {
     width: 6px;
     height: 6px;
 
-    background: var(--accent);
+    background: #3B82F6;
     border-radius: 50%;
 }
 
 /* =========================
-   CHAT BUTTON
+   CHAT BUTTON (FIX TOTAL)
 ========================= */
 
 [data-theme="modern"] #chat-button {
 
-    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
     color: white;
 
     border-radius: 999px;
 
-    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
-}
-
-[data-theme="modern"] #chat-button:hover {
-    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(37,99,235,0.5);
 }
 
 /* =========================
@@ -1174,21 +1170,21 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .bot-message {
 
-    background: #1e293b;
-    border: 1px solid #1e293b;
+    background: #1E293B !important;
+    border: 1px solid #1E293B;
 
-    color: #e2e8f0;
+    color: #E2E8F0;
 
     border-radius: var(--radius);
     padding: 12px 14px;
 }
 
-/* USER */
+/* USER (FIX IMPORTANTE) */
 
 [data-theme="modern"] .user {
 
-    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
-    color: white;
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+    color: white !important;
 
     border-radius: var(--radius);
     padding: 12px 14px;
@@ -1200,30 +1196,30 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .bot-avatar {
 
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
     color: white;
 
-    box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+    box-shadow: 0 4px 14px rgba(37,99,235,0.5);
 }
 
 /* =========================
-   QUICK ACTIONS
+   QUICK ACTIONS (IDENTIDAD)
 ========================= */
 
 [data-theme="modern"] #quick-actions button,
 [data-theme="modern"] #proactive-actions button {
 
     background: #020617;
-    border: 1px solid #1e293b;
+    border: 1px solid #1E293B;
 
-    color: #cbd5f5;
+    color: #CBD5F5;
 
-    border-radius: var(--radius);
+    border-radius: 999px;
 }
 
 [data-theme="modern"] #quick-actions button:hover {
 
-    border-color: var(--accent);
+    border-color: #3B82F6;
     color: white;
 }
 
@@ -1233,10 +1229,10 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .place-card {
 
-    background: #1e293b;
-    border: 1px solid #1e293b;
+    background: #1E293B;
+    border: 1px solid #1E293B;
 
-    border-radius: var(--radius);
+    border-radius: 16px;
 }
 
 /* =========================
@@ -1246,32 +1242,32 @@ body.embed-mode #chat-widget {
 [data-theme="modern"] .input-area {
 
     background: #020617;
-    border-top: 1px solid #1e293b;
+    border-top: 1px solid #1E293B;
 }
 
 [data-theme="modern"] input {
 
-    background: #0f172a;
-    border: 1px solid #1e293b;
+    background: #0F172A;
+    border: 1px solid #1E293B;
 
-    color: #f9fafb;
+    color: #F9FAFB;
 
     border-radius: var(--radius);
     padding: 12px 14px;
 }
 
 [data-theme="modern"] input::placeholder {
-    color: #64748b;
+    color: #64748B;
 }
 
 [data-theme="modern"] input:focus {
 
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
 }
 
 /* =========================
-   SEND BUTTON
+   SEND BUTTON (FIX REAL)
 ========================= */
 
 [data-theme="modern"] button.send {
@@ -1281,14 +1277,10 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
     color: white;
 
-    box-shadow: 0 6px 18px rgba(37,99,235,0.4);
-}
-
-[data-theme="modern"] button.send:hover {
-    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.5);
 }
 
 /* =========================
@@ -1297,7 +1289,7 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .maps-btn {
 
-    background: var(--accent);
+    background: #3B82F6;
     color: white;
 
     border-radius: 8px;
@@ -1308,5 +1300,5 @@ body.embed-mode #chat-widget {
 ========================= */
 
 [data-theme="modern"] #messages::-webkit-scrollbar-thumb {
-    background: #1e293b;
+    background: #1E293B;
 }
