@@ -1678,7 +1678,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   ZEN V3 — TACTILE NEUMORPHIC SYSTEM
+   ZEN V3.1 — TRUE NEUMORPHIC SYSTEM
 ========================= */
 
 [data-theme="zen"] {
@@ -1693,9 +1693,25 @@ body.embed-mode #chat-widget {
     --accent: #8FA2B7;
 
     --shadow-light: #FFFFFF;
-    --shadow-dark: rgba(22,27,29,0.10);
+    --shadow-dark: rgba(22,27,29,0.08);
 
     --radius: 18px;
+}
+
+/* =========================
+   🔥 HARD RESET (CLAVE)
+========================= */
+
+[data-theme="zen"] * {
+    border: none !important;
+}
+
+/* elimina hover global */
+
+[data-theme="zen"] #quick-actions button:hover,
+[data-theme="zen"] #proactive-actions button:hover {
+    background: var(--bg-main) !important;
+    border: none !important;
 }
 
 /* =========================
@@ -1707,7 +1723,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   WIDGET (NO GLOW, PURE DEPTH)
+   WIDGET (NO GLOW REAL)
 ========================= */
 
 [data-theme="zen"] #chat-widget {
@@ -1716,15 +1732,13 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    box-shadow:
-        12px 12px 30px var(--shadow-dark),
-        -12px -12px 30px var(--shadow-light);
+    
 
-    border: none;
+    border: none !important;
 }
 
 /* =========================
-   HEADER (FLOATING BLOCK)
+   HEADER (SOFT BLOCK)
 ========================= */
 
 [data-theme="zen"] .chat-header {
@@ -1732,22 +1746,20 @@ body.embed-mode #chat-widget {
     background: var(--bg-main);
 
     margin: 10px;
-    margin-bottom: 0;
-
-    padding: 14px 16px;
 
     border-radius: var(--radius);
 
     box-shadow:
         6px 6px 14px var(--shadow-dark),
         -6px -6px 14px var(--shadow-light);
-}
 
-/* limpiar estilos heredados */
+    padding: 14px 16px;
+}
 
 [data-theme="zen"] #chat-widget h3 {
     background: transparent !important;
     padding: 0 !important;
+    color: var(--text-primary)
 }
 
 [data-theme="zen"] .chat-header h3 {
@@ -1782,15 +1794,6 @@ body.embed-mode #chat-widget {
     gap: 16px;
 }
 
-/* eliminar bordes heredados */
-
-[data-theme="zen"] .bot-message,
-[data-theme="zen"] .place-card,
-[data-theme="zen"] input,
-[data-theme="zen"] .input-area {
-    border: none !important;
-}
-
 /* BOT */
 
 [data-theme="zen"] .bot-message {
@@ -1807,17 +1810,10 @@ body.embed-mode #chat-widget {
         6px 6px 14px var(--shadow-dark),
         -6px -6px 14px var(--shadow-light);
 
-    transition: all .2s ease;
+    transition: all .15s ease;
 }
 
-/* hover lift */
-
-[data-theme="zen"] .bot-message:hover {
-
-    transform: translateY(-1px);
-}
-
-/* USER (pressed style) */
+/* USER */
 
 [data-theme="zen"] .user {
 
@@ -1847,12 +1843,10 @@ body.embed-mode #chat-widget {
     box-shadow:
         4px 4px 10px var(--shadow-dark),
         -4px -4px 10px var(--shadow-light);
-
-    transition: all .2s ease;
 }
 
 /* =========================
-   BUTTONS (TACTILE SYSTEM)
+   BUTTONS (REAL TACTILE)
 ========================= */
 
 [data-theme="zen"] #quick-actions button,
@@ -1871,10 +1865,10 @@ body.embed-mode #chat-widget {
         5px 5px 12px var(--shadow-dark),
         -5px -5px 12px var(--shadow-light);
 
-    transition: all .15s ease;
+    transition: all .12s ease;
 }
 
-/* hover (ligero lift) */
+/* hover limpio (SIN herencia) */
 
 [data-theme="zen"] #quick-actions button:hover,
 [data-theme="zen"] #proactive-actions button:hover,
@@ -1889,7 +1883,7 @@ body.embed-mode #chat-widget {
 [data-theme="zen"] #proactive-actions button:active,
 [data-theme="zen"] #messages button:active {
 
-    transform: scale(.96);
+    transform: scale(.94);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -1903,8 +1897,6 @@ body.embed-mode #chat-widget {
 [data-theme="zen"] .input-area {
 
     background: var(--bg-main);
-
-    padding: 14px;
 
     margin: 10px;
 
@@ -1928,21 +1920,10 @@ body.embed-mode #chat-widget {
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
         inset -2px -2px 6px var(--shadow-light);
-
-    transition: all .2s ease;
-}
-
-[data-theme="zen"] input:focus {
-
-    transform: scale(1.01);
-}
-
-[data-theme="zen"] input::placeholder {
-    color: var(--text-secondary);
 }
 
 /* =========================
-   SEND BUTTON (YA PERFECTO + TACTILE)
+   SEND BUTTON (KEEP PERFECT)
 ========================= */
 
 [data-theme="zen"] button.send {
@@ -1960,17 +1941,12 @@ body.embed-mode #chat-widget {
         5px 5px 12px var(--shadow-dark),
         -5px -5px 12px var(--shadow-light);
 
-    transition: all .15s ease;
-}
-
-[data-theme="zen"] button.send:hover {
-
-    transform: scale(1.05);
+    transition: all .12s ease;
 }
 
 [data-theme="zen"] button.send:active {
 
-    transform: scale(.92);
+    transform: scale(.9);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -1978,12 +1954,12 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   MAP BUTTON (MATCH SEND)
+   MAP BUTTON (FIX TOTAL)
 ========================= */
 
 [data-theme="zen"] .maps-btn {
 
-    background: var(--bg-main);
+    background: var(--bg-main) !important;
 
     color: var(--text-primary);
 
@@ -1995,17 +1971,17 @@ body.embed-mode #chat-widget {
         5px 5px 12px var(--shadow-dark),
         -5px -5px 12px var(--shadow-light);
 
-    transition: all .15s ease;
+    transition: all .12s ease;
 }
 
 [data-theme="zen"] .maps-btn:hover {
 
-    transform: scale(1.05);
+    transform: translateY(-1px);
 }
 
 [data-theme="zen"] .maps-btn:active {
 
-    transform: scale(.92);
+    transform: scale(.94);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -2013,32 +1989,23 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   CHAT BUTTON (CONCIERGE FIX)
+   CHAT BUTTON (FIX FINAL)
 ========================= */
 
 [data-theme="zen"] #chat-button {
 
-    background: var(--bg-main);
+    background: var(--bg-main) !important;
 
     color: var(--text-primary);
 
     border-radius: 999px;
 
-    box-shadow:
-        8px 8px 18px var(--shadow-dark),
-        -8px -8px 18px var(--shadow-light);
-
-    transition: all .2s ease;
-}
-
-[data-theme="zen"] #chat-button:hover {
-
-    transform: translateY(-1px);
+    transition: all .12s ease;
 }
 
 [data-theme="zen"] #chat-button:active {
 
-    transform: scale(.95);
+    transform: scale(.94);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -2049,17 +2016,7 @@ body.embed-mode #chat-widget {
    SCROLL
 ========================= */
 
-[data-theme="zen"] #messages::-webkit-scrollbar {
-    width: 6px;
-}
-
 [data-theme="zen"] #messages::-webkit-scrollbar-thumb {
 
     background: #d6dce5;
-
-    border-radius: 10px;
-}
-
-[data-theme="zen"] #messages {
-    scrollbar-color: #d6dce5 transparent;
 }
