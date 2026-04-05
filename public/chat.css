@@ -920,6 +920,7 @@ body.embed-mode #chat-widget {
 [data-theme="luxury"] #chat-widget h3 {
     background: transparent !important;
     padding: 0;
+    color: var(--accent)
 }
 
 /* título */
@@ -1175,25 +1176,37 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   SCROLL (MICRO DETAIL)
+   🔥 SCROLL FIX FINAL (LUXURY REAL)
 ========================= */
 
 [data-theme="luxury"] #messages::-webkit-scrollbar {
     width: 6px;
 }
 
+[data-theme="luxury"] #messages::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb {
 
-    background: rgba(212,177,115,0.18); /* más oscuro, más elegante */
+    background: rgba(212,177,115,0.18) !important;
 
     border-radius: 10px;
+
 }
 
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb:hover {
 
-    background: rgba(212,177,115,0.45); /* glow al hover */
+    background: rgba(212,177,115,0.45) !important;
+
 }
 
+/* 🔥 FIREFOX SUPPORT (CLAVE) */
+
+[data-theme="luxury"] #messages {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212,177,115,0.25) transparent;
+}
 
 /* ********************** */
 
