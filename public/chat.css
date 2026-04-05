@@ -691,7 +691,10 @@ body.embed-mode #chat-widget {
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
-[data-theme="minimal"] #quick-actions button:hover {
+[data-theme="minimal"] #quick-actions button:hover,
+[data-theme="minimal"] #proactive-actions button:hover,
+[data-theme="minimal"] #messages button:hover {
+
     background: var(--accent-soft);
 }
 
