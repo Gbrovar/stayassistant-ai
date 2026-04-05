@@ -512,29 +512,24 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   MINIMAL V2 — WARM HOSPITALITY SYSTEM
+   MINIMAL V5 — CLEAN + NO-BORDERS
 ========================= */
 
 [data-theme="minimal"] {
 
-    /* 🎨 COLOR SYSTEM (COHERENTE) */
-
-    --bg-main: #f8f6f2;
+    --bg-main: #f9f7f3;
     --bg-widget: #ffffff;
-    --bg-soft: #f3efe9;
+    --bg-soft: #f5f1eb;
 
-    --text-primary: #1a1a1a;
-    --text-secondary: #6b6b6b;
-    --text-muted: #9ca3af;
+    --text-primary: #2d2d2d;
+    --text-secondary: #8c8c8c;
+    --text-muted: #bdbdbd;
 
     --accent: #c8a97e;
-    --accent-soft: #efe6d8;
+    --accent-soft: #f2e8d9;
 
-    --border: #ede7df;
-
-    --radius-lg: 18px;
-    --radius-md: 14px;
-    --radius-sm: 10px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
 }
 
 /* =========================
@@ -544,13 +539,11 @@ body.embed-mode #chat-widget {
 [data-theme="minimal"] body,
 [data-theme="minimal"] input,
 [data-theme="minimal"] button {
-
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto !important;
-    letter-spacing: -0.2px;
 }
 
 [data-theme="minimal"] body {
-    background: linear-gradient(180deg, #f8f6f2, #f3efe9);
+    background: linear-gradient(180deg, #f9f7f3, #f5f1eb);
 }
 
 /* =========================
@@ -563,53 +556,60 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius-lg);
 
-    border: 1px solid var(--border);
+    border: none; /* 🔥 eliminado */
 
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.05);
 }
 
 /* =========================
-   HEADER
+   HEADER — FIX REAL
 ========================= */
 
 [data-theme="minimal"] .chat-header {
 
-    background: linear-gradient(180deg, #ffffff, #f8f6f2);
+    background: linear-gradient(180deg, #ffffff, #f9f7f3);
 
-    border-bottom: 1px solid var(--border);
+    border: none; /* 🔥 fuera línea */
 
     padding: 16px 18px;
 }
 
+/* 🔥 ELIMINA EL FONDO OSCURO HEREDADO */
+
 [data-theme="minimal"] #chat-widget h3 {
     background: transparent !important;
-    padding: 0;
+    padding: 0 !important;
 }
+
+/* 🔥 TEXTO LIMPIO Y LEGIBLE */
 
 [data-theme="minimal"] .chat-header h3 {
 
-    color: var(--text-primary);
+    color: #2b2b2b;
 
     font-size: 15.5px;
     font-weight: 600;
 
-    letter-spacing: -0.3px;
+    letter-spacing: -0.2px;
 
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* ONLINE DOT */
+/* DOT SUTIL */
 
 [data-theme="minimal"] .chat-header h3::before {
 
     content: "";
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
 
     background: var(--accent);
+
     border-radius: 50%;
+
+    opacity: 0.6;
 }
 
 /* CLOSE */
@@ -618,34 +618,8 @@ body.embed-mode #chat-widget {
     color: var(--text-muted);
 }
 
-[data-theme="minimal"] #close-chat:hover {
-    color: var(--text-primary);
-}
-
 /* =========================
-   CHAT BUTTON
-========================= */
-
-[data-theme="minimal"] #chat-button {
-
-    background: var(--accent);
-    color: white;
-
-    border: none;
-
-    border-radius: 999px;
-
-    box-shadow: 0 10px 30px rgba(200, 169, 126, 0.35);
-}
-
-[data-theme="minimal"] #chat-button:hover {
-
-    transform: translateY(-2px);
-    box-shadow: 0 14px 35px rgba(200, 169, 126, 0.45);
-}
-
-/* =========================
-   MESSAGES
+   MESSAGES — SIN BORDES
 ========================= */
 
 [data-theme="minimal"] #messages {
@@ -653,63 +627,52 @@ body.embed-mode #chat-widget {
     gap: 16px;
 }
 
-[data-theme="minimal"] .message {
-    font-size: 14.5px;
-    line-height: 1.6;
-}
-
-/* BOT MESSAGE */
-
 [data-theme="minimal"] .bot-message {
 
     background: var(--bg-soft);
 
-    color: var(--text-primary);
+    border: none; /* 🔥 clave */
 
     border-radius: 20px;
 
     padding: 12px 16px;
 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-}
+    color: var(--text-primary);
 
-/* USER MESSAGE */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
 
 [data-theme="minimal"] .user {
 
     background: var(--accent-soft);
 
-    color: var(--text-primary);
+    border: none; /* 🔥 clave */
 
     border-radius: 20px;
 
     padding: 12px 16px;
 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    color: var(--text-primary);
+
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
 }
 
 /* =========================
-   AVATAR (MINIMAL REAL)
+   AVATAR
 ========================= */
 
 [data-theme="minimal"] .bot-avatar {
 
-    background: var(--bg-soft);
+    background: #f3eee7;
 
-    color: var(--text-secondary);
+    color: #a89f93;
 
-    font-size: 13px;
+    box-shadow: none;
 }
 
 /* =========================
-   QUICK ACTIONS (CHIPS UX)
+   QUICK ACTIONS — SIN BORDE
 ========================= */
-
-[data-theme="minimal"] #quick-actions,
-[data-theme="minimal"] #proactive-actions {
-
-    gap: 10px;
-}
 
 [data-theme="minimal"] #quick-actions button,
 [data-theme="minimal"] #proactive-actions button {
@@ -718,23 +681,17 @@ body.embed-mode #chat-widget {
 
     border: none;
 
-    color: var(--text-primary);
+    border-radius: 999px;
 
     padding: 10px 16px;
 
-    border-radius: 999px;
+    color: var(--text-primary);
 
-    font-size: 13.5px;
-
-    transition: all .2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
-[data-theme="minimal"] #quick-actions button:hover,
-[data-theme="minimal"] #proactive-actions button:hover {
-
+[data-theme="minimal"] #quick-actions button:hover {
     background: var(--accent-soft);
-
-    transform: translateY(-1px);
 }
 
 /* =========================
@@ -743,69 +700,48 @@ body.embed-mode #chat-widget {
 
 [data-theme="minimal"] .place-card {
 
-    background: white;
+    background: #ffffff;
+
+    border: none; /* 🔥 fuera borde */
 
     border-radius: var(--radius-lg);
 
-    border: 1px solid var(--border);
-
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 /* =========================
-   MAP BUTTON
-========================= */
-
-[data-theme="minimal"] .maps-btn {
-
-    background: var(--accent-soft);
-
-    color: var(--text-primary);
-
-    border-radius: 8px;
-}
-
-[data-theme="minimal"] .maps-btn:hover {
-    background: #e6d8c3;
-}
-
-/* =========================
-   INPUT
+   INPUT — LIMPIO
 ========================= */
 
 [data-theme="minimal"] .input-area {
 
     background: #ffffff;
 
-    border-top: 1px solid var(--border);
+    border: none;
 
     padding: 14px;
+
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
 }
 
 [data-theme="minimal"] input {
 
     background: var(--bg-main);
 
-    border: 1px solid var(--border);
-
-    color: var(--text-primary);
+    border: none;
 
     border-radius: 999px;
 
     padding: 14px 18px;
 
-    transition: all .2s ease;
-}
+    color: var(--text-primary);
 
-[data-theme="minimal"] input::placeholder {
-    color: var(--text-muted);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
 }
 
 [data-theme="minimal"] input:focus {
 
-    border-color: var(--accent);
-
-    box-shadow: 0 0 0 2px rgba(200, 169, 126, 0.2);
+    box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 /* =========================
@@ -825,28 +761,47 @@ body.embed-mode #chat-widget {
 
     border: none;
 
-    box-shadow: 0 6px 18px rgba(200, 169, 126, 0.4);
-}
-
-[data-theme="minimal"] button.send:hover {
-
-    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(200,169,126,0.35);
 }
 
 /* =========================
-   SCROLL
+   CHAT BUTTON
 ========================= */
 
+[data-theme="minimal"] #chat-button {
+
+    background: var(--accent);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 999px;
+
+    box-shadow: 0 10px 30px rgba(200,169,126,0.35);
+}
+
+/* =========================
+   SCROLL — INTEGRADO
+========================= */
+
+[data-theme="minimal"] #messages::-webkit-scrollbar {
+    width: 6px;
+}
+
 [data-theme="minimal"] #messages::-webkit-scrollbar-thumb {
-    background: var(--border);
+
+    background: #e8e2db;
+
+    border-radius: 10px;
 }
 
 [data-theme="minimal"] #messages::-webkit-scrollbar-thumb:hover {
-    background: #d6d3d1;
+    background: #ddd6cf;
 }
 
 [data-theme="minimal"] #messages {
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: #e8e2db transparent;
 }
 
 /* ************************* */
