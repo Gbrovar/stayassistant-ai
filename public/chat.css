@@ -1043,3 +1043,270 @@ body.embed-mode #chat-widget {
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb {
     background: #3F4E4F;
 }
+
+/* ********************** */
+
+/* =========================
+   MODERN SAAS (CONVERSION THEME)
+========================= */
+
+[data-theme="modern"] {
+
+    --bg-main: #0b1220;
+    --bg-widget: #0f172a;
+    --bg-soft: #1e293b;
+
+    --text-primary: #f9fafb;
+    --text-secondary: #cbd5f5;
+
+    --accent: #3b82f6;
+    --accent-strong: #2563eb;
+
+    --border: #1e293b;
+
+    --radius: 14px; /* sistema coherente */
+}
+
+/* =========================
+   BASE
+========================= */
+
+[data-theme="modern"] body,
+[data-theme="modern"] input,
+[data-theme="modern"] button {
+
+    font-family: "Inter", sans-serif !important;
+    letter-spacing: -0.2px;
+}
+
+[data-theme="modern"] body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+}
+
+/* =========================
+   WIDGET
+========================= */
+
+[data-theme="modern"] #chat-widget {
+
+    background: #0f172a;
+    border: 1px solid #1e293b;
+
+    border-radius: var(--radius);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+[data-theme="modern"] .chat-header {
+
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+
+    padding: 16px 18px;
+}
+
+[data-theme="modern"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0;
+}
+
+[data-theme="modern"] .chat-header h3 {
+
+    color: #f9fafb;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* DOT */
+
+[data-theme="modern"] .chat-header h3::before {
+
+    content: "";
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+/* =========================
+   CHAT BUTTON
+========================= */
+
+[data-theme="modern"] #chat-button {
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: white;
+
+    border-radius: 999px;
+
+    box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+}
+
+[data-theme="modern"] #chat-button:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+[data-theme="modern"] #messages {
+    padding: 24px;
+    gap: 16px;
+}
+
+[data-theme="modern"] .message {
+    font-size: 14.5px;
+    line-height: 1.6;
+}
+
+/* BOT */
+
+[data-theme="modern"] .bot-message {
+
+    background: #1e293b;
+    border: 1px solid #1e293b;
+
+    color: #e2e8f0;
+
+    border-radius: var(--radius);
+    padding: 12px 14px;
+}
+
+/* USER */
+
+[data-theme="modern"] .user {
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: white;
+
+    border-radius: var(--radius);
+    padding: 12px 14px;
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+[data-theme="modern"] .bot-avatar {
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+
+    box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+[data-theme="modern"] #quick-actions button,
+[data-theme="modern"] #proactive-actions button {
+
+    background: #020617;
+    border: 1px solid #1e293b;
+
+    color: #cbd5f5;
+
+    border-radius: var(--radius);
+}
+
+[data-theme="modern"] #quick-actions button:hover {
+
+    border-color: var(--accent);
+    color: white;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+[data-theme="modern"] .place-card {
+
+    background: #1e293b;
+    border: 1px solid #1e293b;
+
+    border-radius: var(--radius);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+[data-theme="modern"] .input-area {
+
+    background: #020617;
+    border-top: 1px solid #1e293b;
+}
+
+[data-theme="modern"] input {
+
+    background: #0f172a;
+    border: 1px solid #1e293b;
+
+    color: #f9fafb;
+
+    border-radius: var(--radius);
+    padding: 12px 14px;
+}
+
+[data-theme="modern"] input::placeholder {
+    color: #64748b;
+}
+
+[data-theme="modern"] input:focus {
+
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+[data-theme="modern"] button.send {
+
+    width: 46px;
+    height: 42px;
+
+    border-radius: var(--radius);
+
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: white;
+
+    box-shadow: 0 6px 18px rgba(37,99,235,0.4);
+}
+
+[data-theme="modern"] button.send:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="modern"] .maps-btn {
+
+    background: var(--accent);
+    color: white;
+
+    border-radius: 8px;
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+[data-theme="modern"] #messages::-webkit-scrollbar-thumb {
+    background: #1e293b;
+}
