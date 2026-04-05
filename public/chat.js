@@ -2,12 +2,12 @@ let LIMIT_REACHED = false
 
 const API_BASE = window.location.origin
 
-const lastActive = localStorage.getItem("stayassistant_last_active");
+let conversationId = localStorage.getItem("stayassistant_conversation");
 
+const lastActive = localStorage.getItem("stayassistant_last_active");
 const now = Date.now();
 
-if (!lastActive || now - lastActive > 1000 * 60 * 30) {
-    // 30 min → nueva conversación
+if (!conversationId || !lastActive || now - lastActive > 1000 * 60 * 30) {
     conversationId = crypto.randomUUID();
     localStorage.setItem("stayassistant_conversation", conversationId);
 }
@@ -934,6 +934,37 @@ async function sendMessage(forcedText = null, displayLabel = null) {
             })
 
         });
+
+        // 🔥 RETRY AUTOMÁTICO
+        if (response.status === 401) {
+
+            console.log("🔄 Token inválido → regenerando...");
+
+            localStorage.removeItem("stayassistant_chat_token");
+
+            const newToken = await initChatToken();
+
+            if (!newToken) {
+                throw new Error("Token regeneration failed");
+            }
+
+            response = await fetch(`${API_BASE}/chat`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-chat-token": newToken
+                },
+                body: JSON.stringify({
+                    message: userText,
+                    language: selectedLanguage || "English",
+                    conversationId,
+                    propertyId,
+                    hour,
+                    visitorId
+                })
+            });
+
+        }
 
         const data = await response.json();
 
