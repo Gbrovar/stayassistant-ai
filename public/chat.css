@@ -35,8 +35,13 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 
     transition: .3s;
+
+    opacity: 0.6;    
 }
 
+.theme-configurator:hover {
+    opacity: 1;
+}
 
 
 /* CARD */
@@ -87,6 +92,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.theme-card-v2 span {
+    font-size: 11px;
+    color: #9ca3af;
+    transition: .2s;
+}
+
+.theme-card-v2:hover span {
+    color: white;
 }
 
 /* PREVIEW SKELETON */
