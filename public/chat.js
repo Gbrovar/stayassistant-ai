@@ -1,4 +1,4 @@
-let LIMIT_REACHED = false
+let LIMIT_REACHED = localStorage.getItem("stayassistant_limit_reached") === "true";
 
 const API_BASE = window.location.origin
 
@@ -129,14 +129,14 @@ function renderPlacesFromBackend(places) {
 function getLimitMessage() {
 
     if (selectedLanguage === "Español") {
-        return "Lo siento, ahora mismo no puedo ayudarte con eso 🙏. Por favor, contacta con recepción para asistencia inmediata.";
+        return "Has alcanzado el límite de la demo 🙌\n\nSi quieres seguir usando StayAssistant, contacta con nosotros.";
     }
 
     if (selectedLanguage === "Deutsch") {
-        return "Es tut mir leid, ich kann dir gerade nicht weiterhelfen 🙏. Bitte wende dich an die Rezeption für Unterstützung.";
+        return "Du hast das Demo-Limit erreicht 🙌\n\nKontaktiere uns, um weiterzumachen.";
     }
 
-    return "I'm sorry, I can't assist with that right now 🙏. Please contact reception for immediate assistance.";
+    return "You've reached the demo limit 🙌\n\nContact us to continue using StayAssistant.";
 }
 
 /* --- CHAT TOKEN INIT --- */
@@ -900,7 +900,9 @@ async function sendMessage(forcedText = null, displayLabel = null) {
                             ${getLimitMessage()}
                         </div>
                     </div>
-                `
+                `;
+
+            return;
         }
 
         let chatToken = localStorage.getItem("stayassistant_chat_token");
@@ -989,6 +991,7 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         if (data.limit_reached) {
             LIMIT_REACHED = true;
+            localStorage.setItem("stayassistant_limit_reached", "true");
 
             messages.innerHTML += `
                 <div class="bot-wrapper">
