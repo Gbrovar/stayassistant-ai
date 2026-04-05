@@ -62,24 +62,27 @@ body {
 #chat-widget {
     display: flex;
     position: fixed;
+
     width: 380px;
     height: 560px;
+
     background: #111827;
     border-radius: 14px;
+
     flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
     overflow: hidden;
 
-    /* posición centrada SIEMPRE */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -40%) scale(.95);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
 
-    /* oculto por defecto */
+    /* ✅ POSICIÓN REAL (PRODUCCIÓN) */
+    bottom: 90px;
+    right: 25px;
+
+    /* estado inicial */
     opacity: 0;
     visibility: hidden;
+    transform: translateY(20px) scale(.96);
 
-    /* animación */
     transition:
         opacity .25s ease,
         transform .25s ease;
@@ -88,8 +91,7 @@ body {
 #chat-widget.open {
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, -50%) scale(1);
-
+    transform: translateY(0) scale(1);
 }
 
 @keyframes chatOpen {
@@ -104,32 +106,6 @@ body {
     }
 }
 
-/* DESKTOP DEMO MODE */
-
-@media (min-width:1100px) {
-
-    #chat-widget {
-
-        width: 420px;
-        height: 620px;
-
-        bottom: 50%;
-        right: 50%;
-
-        transform: translate(50%, 50%);
-
-        border-radius: 16px;
-
-    }
-
-    #chat-button {
-
-        bottom: 40px;
-        right: 40px;
-
-    }
-
-}
 
 /* HEADER */
 
