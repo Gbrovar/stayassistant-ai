@@ -16,10 +16,11 @@ function getVisitorId() {
 
         localStorage.setItem("stayassistant_visitor", visitorId)
 
+        // 🔥 CRÍTICO: reset token si cambia visitor
+        localStorage.removeItem("stayassistant_chat_token")
     }
 
     return visitorId
-
 }
 
 const visitorId = getVisitorId()
@@ -131,10 +132,6 @@ function getLimitMessage() {
 /* --- CHAT TOKEN INIT --- */
 
 async function initChatToken() {
-
-    let token = localStorage.getItem("stayassistant_chat_token");
-
-    if (token) return token;
 
     try {
 
@@ -896,8 +893,12 @@ async function sendMessage(forcedText = null, displayLabel = null) {
                 `
         }
 
-        const chatToken = localStorage.getItem("stayassistant_chat_token");
-        const response = await fetch(`${API_BASE}/chat`, {
+        let chatToken = localStorage.getItem("stayassistant_chat_token");
+
+        if (!chatToken) {
+            chatToken = await initChatToken();
+        }
+        let response = await fetch(`${API_BASE}/chat`, {
 
             method: "POST",
 

@@ -921,7 +921,10 @@ app.post("/chat/token", tokenLimiter, async (req, res) => {
 
   const origin = req.headers.origin || "";
 
-  if (!origin.includes("stayassistantai.com")) {
+  if (
+    !origin.includes("stayassistantai.com") &&
+    !origin.includes("localhost")
+  ) {
     return res.status(403).json({ error: "Invalid origin" });
   }
 
@@ -4575,15 +4578,15 @@ app.get("/debug/hours/:propertyId", async (req, res) => {
 
 /* ROUTING */
 app.get('/legal/privacy', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/privacy.html'));
+  res.sendFile(path.join(__dirname, '../public/privacy.html'));
 });
 
 app.get('/legal/cookies', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/cookies.html'));
+  res.sendFile(path.join(__dirname, '../public/cookies.html'));
 });
 
 app.get('/legal/terms', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/terms.html'));
+  res.sendFile(path.join(__dirname, '../public/terms.html'));
 });
 
 
