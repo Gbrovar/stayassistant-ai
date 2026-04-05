@@ -1253,7 +1253,12 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] #chat-widget {
 
-    background: var(--bg-widget);
+    background:
+        radial-gradient(circle at 20% 0%, rgba(91,140,255,0.12), transparent 40%),
+        radial-gradient(circle at 80% 100%, rgba(124,58,237,0.10), transparent 50%),
+        rgba(17, 10, 30, 0.85);
+
+    backdrop-filter: blur(18px);
 
     backdrop-filter: blur(16px);
 
@@ -1272,7 +1277,14 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .chat-header {
 
-    background: rgba(15,20,40,0.75);
+    /*background: rgba(15,20,40,0.75);*/
+
+    background:
+        linear-gradient(180deg, rgba(20,30,60,0.9), rgba(10,15,30,0.9));
+
+    box-shadow:
+        inset 0 -1px 0 rgba(255,255,255,0.04),
+        0 10px 30px rgba(0,0,0,0.6);
 
     backdrop-filter: blur(14px);
 
@@ -1410,6 +1422,8 @@ body.embed-mode #chat-widget {
 
     background: linear-gradient(120deg, transparent, rgba(91,140,255,0.25), transparent);
 
+    pointer-events: none; /* 🔥 CLAVE */
+
     opacity: 0;
     transition: .3s;
 }
@@ -1507,9 +1521,16 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .input-area {
 
+    /*
     background: rgba(5,10,25,0.9);
 
     border-top: 1px solid var(--border);
+    */
+    background:
+        radial-gradient(circle at center, rgba(91,140,255,0.08), transparent 60%),
+        rgba(5,10,25,0.95);
+
+    border-top: 1px solid rgba(255,255,255,0.04);
 }
 
 [data-theme="modern"] input {
@@ -1584,15 +1605,17 @@ body.embed-mode #chat-widget {
 
 [data-theme="modern"] .maps-btn {
 
-    background: rgba(91,140,255,0.15);
+    background: linear-gradient(135deg, rgba(91,140,255,0.2), rgba(124,58,237,0.2));
 
-    color: var(--accent);
+    border: 1px solid rgba(91,140,255,0.3);
+
+    color: #cfe1ff;
 
     border-radius: 999px;
 
-    padding: 8px 14px;
+    backdrop-filter: blur(6px);
 
-    transition: all .2s ease;
+    transition: all .25s ease;
 }
 
 [data-theme="modern"] .maps-btn:hover {
@@ -1600,6 +1623,9 @@ body.embed-mode #chat-widget {
     background: linear-gradient(135deg, #5b8cff, #7c3aed);
 
     color: white;
+
+    box-shadow:
+        0 0 25px rgba(91,140,255,0.5);
 }
 
 /* =========================
