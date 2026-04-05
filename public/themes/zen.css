@@ -42,7 +42,8 @@
 ========================= */
 
 [data-theme="zen"] body {
-    background: var(--bg-main);
+    /*background: var(--bg-main);*/
+    background: linear-gradient(180deg, #e3e7eb, #bfcad4);
 }
 
 /* =========================

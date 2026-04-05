@@ -96,7 +96,11 @@
             root.innerHTML = `
                 <div class="theme-configurator">
 
-                    <!-- CONTROLES -->
+                    <div class="theme-header">
+                        <span>Choose style</span>
+                        <button id="close-theme">✕</button>
+                    </div>
+
                     <div class="theme-grid-v2">
 
                         <div class="theme-card-v2" data-theme="default">
@@ -133,6 +137,27 @@
 
                 </div>
             `;
+
+            // 🔥 FIX REAL: bind después de render
+            const panel = root.querySelector(".theme-configurator");
+            const closeBtn = panel.querySelector("#close-theme");
+            const btn = document.getElementById("theme-toggle-btn");
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", (e) => {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    panel.classList.remove("open");
+
+                    if (btn) {
+                        btn.classList.add("idle");
+                        btn.classList.remove("active");
+                    }
+
+                });
+            }
 
         })();
     </script>
@@ -244,6 +269,8 @@
 
             if (!btn) return;
 
+            btn.classList.add("idle");
+
             btn.onclick = () => {
 
                 const panel = document.querySelector(".theme-configurator");
@@ -251,10 +278,19 @@
 
                 panel.classList.toggle("open");
 
+                if (panel.classList.contains("open")) {
+                    btn.classList.remove("idle");
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.add("idle");
+                    btn.classList.remove("active");
+                }
+
             };
 
         })();
     </script>
+
 
 
 </body>
