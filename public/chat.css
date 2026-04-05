@@ -1220,7 +1220,7 @@ body.embed-mode #chat-widget {
     --bg-widget: rgba(15,20,40,0.75);
     --bg-soft: rgba(30,40,70,0.6);
 
-    --text-primary: #f1f5ff;
+    --text-primary: #c7d4f5;
     --text-secondary: #9aa8c7;
     --text-muted: #5f6b8a;
 
@@ -1316,6 +1316,7 @@ body.embed-mode #chat-widget {
 [data-theme="modern"] #chat-widget h3 {
     background: transparent !important;
     padding: 0;
+    color: var(--text-primary);
 }
 
 [data-theme="modern"] .chat-header h3 {
