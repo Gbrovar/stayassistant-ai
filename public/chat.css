@@ -1678,7 +1678,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   ZEN — SOFT UI / NEUMORPHIC
+   ZEN V3 — TACTILE NEUMORPHIC SYSTEM
 ========================= */
 
 [data-theme="zen"] {
@@ -1693,7 +1693,7 @@ body.embed-mode #chat-widget {
     --accent: #8FA2B7;
 
     --shadow-light: #FFFFFF;
-    --shadow-dark: rgba(22,27,29,0.15);
+    --shadow-dark: rgba(22,27,29,0.10);
 
     --radius: 18px;
 }
@@ -1703,14 +1703,11 @@ body.embed-mode #chat-widget {
 ========================= */
 
 [data-theme="zen"] body {
-
     background: var(--bg-main);
-
-    font-family: "Inter", sans-serif;
 }
 
 /* =========================
-   WIDGET
+   WIDGET (NO GLOW, PURE DEPTH)
 ========================= */
 
 [data-theme="zen"] #chat-widget {
@@ -1720,25 +1717,37 @@ body.embed-mode #chat-widget {
     border-radius: var(--radius);
 
     box-shadow:
-        8px 8px 20px var(--shadow-dark),
-        -8px -8px 20px var(--shadow-light);
+        12px 12px 30px var(--shadow-dark),
+        -12px -12px 30px var(--shadow-light);
+
+    border: none;
 }
 
 /* =========================
-   HEADER
+   HEADER (FLOATING BLOCK)
 ========================= */
 
 [data-theme="zen"] .chat-header {
 
     background: var(--bg-main);
 
-    border-radius: var(--radius) var(--radius) 0 0;
+    margin: 10px;
+    margin-bottom: 0;
+
+    padding: 14px 16px;
+
+    border-radius: var(--radius);
 
     box-shadow:
-        inset 2px 2px 6px var(--shadow-dark),
-        inset -2px -2px 6px var(--shadow-light);
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+}
 
-    padding: 16px 18px;
+/* limpiar estilos heredados */
+
+[data-theme="zen"] #chat-widget h3 {
+    background: transparent !important;
+    padding: 0 !important;
 }
 
 [data-theme="zen"] .chat-header h3 {
@@ -1755,6 +1764,7 @@ body.embed-mode #chat-widget {
 [data-theme="zen"] .chat-header h3::before {
 
     content: "";
+
     width: 6px;
     height: 6px;
 
@@ -1768,12 +1778,20 @@ body.embed-mode #chat-widget {
 ========================= */
 
 [data-theme="zen"] #messages {
-
     padding: 24px;
     gap: 16px;
 }
 
-/* BOT MESSAGE */
+/* eliminar bordes heredados */
+
+[data-theme="zen"] .bot-message,
+[data-theme="zen"] .place-card,
+[data-theme="zen"] input,
+[data-theme="zen"] .input-area {
+    border: none !important;
+}
+
+/* BOT */
 
 [data-theme="zen"] .bot-message {
 
@@ -1788,9 +1806,18 @@ body.embed-mode #chat-widget {
     box-shadow:
         6px 6px 14px var(--shadow-dark),
         -6px -6px 14px var(--shadow-light);
+
+    transition: all .2s ease;
 }
 
-/* USER MESSAGE */
+/* hover lift */
+
+[data-theme="zen"] .bot-message:hover {
+
+    transform: translateY(-1px);
+}
+
+/* USER (pressed style) */
 
 [data-theme="zen"] .user {
 
@@ -1820,10 +1847,12 @@ body.embed-mode #chat-widget {
     box-shadow:
         4px 4px 10px var(--shadow-dark),
         -4px -4px 10px var(--shadow-light);
+
+    transition: all .2s ease;
 }
 
 /* =========================
-   BUTTONS
+   BUTTONS (TACTILE SYSTEM)
 ========================= */
 
 [data-theme="zen"] #quick-actions button,
@@ -1839,17 +1868,28 @@ body.embed-mode #chat-widget {
     padding: 10px 16px;
 
     box-shadow:
-        4px 4px 10px var(--shadow-dark),
-        -4px -4px 10px var(--shadow-light);
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
 
-    transition: all .2s ease;
+    transition: all .15s ease;
 }
 
-/* hover (pressed effect) */
+/* hover (ligero lift) */
 
 [data-theme="zen"] #quick-actions button:hover,
 [data-theme="zen"] #proactive-actions button:hover,
 [data-theme="zen"] #messages button:hover {
+
+    transform: translateY(-1px);
+}
+
+/* press real */
+
+[data-theme="zen"] #quick-actions button:active,
+[data-theme="zen"] #proactive-actions button:active,
+[data-theme="zen"] #messages button:active {
+
+    transform: scale(.96);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -1864,7 +1904,11 @@ body.embed-mode #chat-widget {
 
     background: var(--bg-main);
 
-    padding: 16px;
+    padding: 14px;
+
+    margin: 10px;
+
+    border-radius: var(--radius);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -1884,6 +1928,13 @@ body.embed-mode #chat-widget {
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
         inset -2px -2px 6px var(--shadow-light);
+
+    transition: all .2s ease;
+}
+
+[data-theme="zen"] input:focus {
+
+    transform: scale(1.01);
 }
 
 [data-theme="zen"] input::placeholder {
@@ -1891,7 +1942,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   SEND BUTTON
+   SEND BUTTON (YA PERFECTO + TACTILE)
 ========================= */
 
 [data-theme="zen"] button.send {
@@ -1906,13 +1957,20 @@ body.embed-mode #chat-widget {
     color: var(--accent);
 
     box-shadow:
-        4px 4px 10px var(--shadow-dark),
-        -4px -4px 10px var(--shadow-light);
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
 
-    transition: all .2s ease;
+    transition: all .15s ease;
 }
 
 [data-theme="zen"] button.send:hover {
+
+    transform: scale(1.05);
+}
+
+[data-theme="zen"] button.send:active {
+
+    transform: scale(.92);
 
     box-shadow:
         inset 2px 2px 6px var(--shadow-dark),
@@ -1920,7 +1978,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   MAP BUTTON
+   MAP BUTTON (MATCH SEND)
 ========================= */
 
 [data-theme="zen"] .maps-btn {
@@ -1934,13 +1992,66 @@ body.embed-mode #chat-widget {
     padding: 8px 14px;
 
     box-shadow:
-        4px 4px 10px var(--shadow-dark),
-        -4px -4px 10px var(--shadow-light);
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+
+    transition: all .15s ease;
+}
+
+[data-theme="zen"] .maps-btn:hover {
+
+    transform: scale(1.05);
+}
+
+[data-theme="zen"] .maps-btn:active {
+
+    transform: scale(.92);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   CHAT BUTTON (CONCIERGE FIX)
+========================= */
+
+[data-theme="zen"] #chat-button {
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    box-shadow:
+        8px 8px 18px var(--shadow-dark),
+        -8px -8px 18px var(--shadow-light);
+
+    transition: all .2s ease;
+}
+
+[data-theme="zen"] #chat-button:hover {
+
+    transform: translateY(-1px);
+}
+
+[data-theme="zen"] #chat-button:active {
+
+    transform: scale(.95);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
 }
 
 /* =========================
    SCROLL
 ========================= */
+
+[data-theme="zen"] #messages::-webkit-scrollbar {
+    width: 6px;
+}
 
 [data-theme="zen"] #messages::-webkit-scrollbar-thumb {
 
