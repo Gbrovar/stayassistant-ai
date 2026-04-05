@@ -43,47 +43,7 @@
 
 <body>
 
-    <div class="theme-selector">
-
-        <div class="theme-header">
-            <span>Theme</span>
-        </div>
-
-        <div class="theme-grid">
-
-            <button class="theme-card active" data-theme="default">
-                <div class="preview default"></div>
-                <span>Default</span>
-            </button>
-
-            <button class="theme-card" data-theme="minimal">
-                <div class="preview minimal"></div>
-                <span>Minimal</span>
-            </button>
-
-            <button class="theme-card" data-theme="luxury">
-                <div class="preview luxury"></div>
-                <span>Luxury</span>
-            </button>
-
-            <button class="theme-card" data-theme="modern">
-                <div class="preview modern"></div>
-                <span>Modern</span>
-            </button>
-
-            <button class="theme-card" data-theme="zen">
-                <div class="preview zen"></div>
-                <span>Zen</span>
-            </button>
-
-            <button class="theme-card" data-theme="zen-noir">
-                <div class="preview zen-noir"></div>
-                <span>Zen Noir</span>
-            </button>
-
-        </div>
-
-    </div>
+    <div id="theme-panel-root"></div>
 
     <script>
 
@@ -117,6 +77,64 @@
             }
         }
 
+    </script>
+
+    <script>
+        (function () {
+
+            const params = new URLSearchParams(window.location.search);
+            const isEmbed = params.get("embed");
+            const isPreview = params.get("preview") === "true";
+
+            // ❌ NO renderizar selector dentro de iframe
+            if (isEmbed || isPreview) return;
+
+            const root = document.getElementById("theme-panel-root");
+
+            root.innerHTML = `
+                <div class="theme-configurator">
+
+                    
+
+                    <!-- CONTROLES -->
+                    <div class="theme-grid-v2">
+
+                        <div class="theme-card-v2 active" data-theme="default">
+                            <div class="card-preview default"></div>
+                            <span>Default</span>
+                        </div>
+
+                        <div class="theme-card-v2" data-theme="minimal">
+                            <div class="card-preview minimal"></div>
+                            <span>Minimal</span>
+                        </div>
+
+                        <div class="theme-card-v2" data-theme="luxury">
+                            <div class="card-preview luxury"></div>
+                            <span>Luxury</span>
+                        </div>
+
+                        <div class="theme-card-v2" data-theme="modern">
+                            <div class="card-preview modern"></div>
+                            <span>Modern</span>
+                        </div>
+
+                        <div class="theme-card-v2" data-theme="zen">
+                            <div class="card-preview zen"></div>
+                            <span>Zen</span>
+                        </div>
+
+                        <div class="theme-card-v2" data-theme="zen-noir">
+                            <div class="card-preview zen-noir"></div>
+                            <span>Zen Noir</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+        })();
     </script>
 
     <button id="chat-button" onclick="toggleChat()">
@@ -179,34 +197,45 @@
     <script type="module">
         import { setTheme, getTheme } from "./theme.js";
 
-        const buttons = document.querySelectorAll(".theme-card");
+        (function () {
 
-        // estado inicial correcto
-        const current = getTheme();
+            const params = new URLSearchParams(window.location.search);
+            const isEmbed = params.get("embed");
+            const isPreview = params.get("preview") === "true";
 
-        buttons.forEach(btn => {
-            if (btn.dataset.theme === current) {
-                btn.classList.add("active");
-            }
-        });
+            if (isEmbed || isPreview) return;
 
-        // click handler
-        buttons.forEach(btn => {
+            const cards = document.querySelectorAll(".theme-card-v2");
+            const iframe = document.getElementById("main-preview");
 
-            btn.addEventListener("click", () => {
+            const current = getTheme();
 
-                const theme = btn.dataset.theme;
+            cards.forEach(card => {
+                if (card.dataset.theme === current) {
+                    card.classList.add("active");
+                }
+            });
 
-                setTheme(theme);
+            cards.forEach(card => {
 
-                // UI update
-                buttons.forEach(b => b.classList.remove("active"));
-                btn.classList.add("active");
+                card.addEventListener("click", () => {
+
+                    const theme = card.dataset.theme;
+
+                    setTheme(theme);
+
+                    cards.forEach(c => c.classList.remove("active"));
+                    card.classList.add("active");
+
+                    iframe.src = `/chat.html?embed=true&preview=true&theme=${theme}`;
+
+                });
 
             });
 
-        });
+        })();
     </script>
+
 
 </body>
 
