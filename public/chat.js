@@ -2,7 +2,12 @@ let LIMIT_REACHED = false
 
 const API_BASE = window.location.origin
 
-const conversationId = crypto.randomUUID();
+let conversationId = localStorage.getItem("stayassistant_conversation");
+
+if (!conversationId) {
+    conversationId = crypto.randomUUID();
+    localStorage.setItem("stayassistant_conversation", conversationId);
+}
 
 /* DEMO VISITOR ID */
 
