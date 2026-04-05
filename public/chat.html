@@ -43,6 +43,48 @@
 
 <body>
 
+    <div class="theme-selector">
+
+        <div class="theme-header">
+            <span>Theme</span>
+        </div>
+
+        <div class="theme-grid">
+
+            <button class="theme-card active" data-theme="default">
+                <div class="preview default"></div>
+                <span>Default</span>
+            </button>
+
+            <button class="theme-card" data-theme="minimal">
+                <div class="preview minimal"></div>
+                <span>Minimal</span>
+            </button>
+
+            <button class="theme-card" data-theme="luxury">
+                <div class="preview luxury"></div>
+                <span>Luxury</span>
+            </button>
+
+            <button class="theme-card" data-theme="modern">
+                <div class="preview modern"></div>
+                <span>Modern</span>
+            </button>
+
+            <button class="theme-card" data-theme="zen">
+                <div class="preview zen"></div>
+                <span>Zen</span>
+            </button>
+
+            <button class="theme-card" data-theme="zen-noir">
+                <div class="preview zen-noir"></div>
+                <span>Zen Noir</span>
+            </button>
+
+        </div>
+
+    </div>
+
     <script>
 
         const params = new URLSearchParams(window.location.search);
@@ -132,6 +174,38 @@
 
         // asegurar estado correcto
         setTheme(getTheme());
+    </script>
+
+    <script type="module">
+        import { setTheme, getTheme } from "./theme.js";
+
+        const buttons = document.querySelectorAll(".theme-card");
+
+        // estado inicial correcto
+        const current = getTheme();
+
+        buttons.forEach(btn => {
+            if (btn.dataset.theme === current) {
+                btn.classList.add("active");
+            }
+        });
+
+        // click handler
+        buttons.forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                const theme = btn.dataset.theme;
+
+                setTheme(theme);
+
+                // UI update
+                buttons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+            });
+
+        });
     </script>
 
 </body>
