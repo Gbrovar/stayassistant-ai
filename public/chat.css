@@ -844,14 +844,11 @@ body.embed-mode #chat-widget {
 
 /* ************************* */
 
-
 /* =========================
-   LUXURY V2 — REAL PREMIUM SYSTEM
+   LUXURY V3 — PREMIUM INTERACTIONS
 ========================= */
 
 [data-theme="luxury"] {
-
-    /* 🎨 DEEP LUXURY COLORS */
 
     --bg-main: #1c1f22;
     --bg-widget: #1f2327;
@@ -862,9 +859,12 @@ body.embed-mode #chat-widget {
     --text-muted: #8f887d;
 
     --accent: #c6a56b;
-    --accent-soft: rgba(198,165,107,0.15);
+    --accent-soft: rgba(198,165,107,0.12);
 
     --radius: 14px;
+
+    /* 🔥 easing premium */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* =========================
@@ -894,11 +894,18 @@ body.embed-mode #chat-widget {
 
     border: none;
 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+
+[data-theme="luxury"] #chat-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 35px 90px rgba(0,0,0,0.7);
 }
 
 /* =========================
-   HEADER (UPGRADE)
+   HEADER
 ========================= */
 
 [data-theme="luxury"] .chat-header {
@@ -910,14 +917,10 @@ body.embed-mode #chat-widget {
     border: none;
 }
 
-/* eliminar base rota */
-
 [data-theme="luxury"] #chat-widget h3 {
     background: transparent !important;
     padding: 0;
 }
-
-/* título premium */
 
 [data-theme="luxury"] .chat-header h3 {
 
@@ -931,7 +934,7 @@ body.embed-mode #chat-widget {
     gap: 8px;
 }
 
-/* dot elegante */
+/* DOT */
 
 [data-theme="luxury"] .chat-header h3::before {
 
@@ -970,6 +973,13 @@ body.embed-mode #chat-widget {
     color: var(--text-primary);
 
     box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+
+[data-theme="luxury"] .bot-message:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* USER */
@@ -985,6 +995,12 @@ body.embed-mode #chat-widget {
     padding: 14px 16px;
 
     box-shadow: 0 6px 18px rgba(198,165,107,0.25);
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] .user:hover {
+    box-shadow: 0 10px 25px rgba(198,165,107,0.35);
 }
 
 /* =========================
@@ -1000,7 +1016,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   QUICK ACTIONS (FIX REAL)
+   BUTTONS (LUXURY CORE)
 ========================= */
 
 [data-theme="luxury"] #quick-actions button,
@@ -1017,10 +1033,10 @@ body.embed-mode #chat-widget {
 
     padding: 10px 16px;
 
-    transition: all .2s ease;
+    transition: all .25s var(--ease);
 }
 
-/* 🔥 hover premium */
+/* 🔥 hover premium con glow */
 
 [data-theme="luxury"] #quick-actions button:hover,
 [data-theme="luxury"] #proactive-actions button:hover,
@@ -1031,6 +1047,11 @@ body.embed-mode #chat-widget {
     color: var(--accent);
 
     border-color: var(--accent);
+
+    box-shadow: 0 0 0 2px rgba(198,165,107,0.12),
+                0 6px 18px rgba(198,165,107,0.15);
+
+    transform: translateY(-1px);
 }
 
 /* =========================
@@ -1045,11 +1066,17 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+
+    transition: all .3s var(--ease);
+}
+
+[data-theme="luxury"] .place-card:hover {
+    transform: translateY(-2px);
 }
 
 /* =========================
-   MAP BUTTON (INTEGRADO)
+   MAP BUTTON
 ========================= */
 
 [data-theme="luxury"] .maps-btn {
@@ -1062,6 +1089,7 @@ body.embed-mode #chat-widget {
 
     padding: 8px 14px;
 
+    transition: all .25s var(--ease);
 }
 
 [data-theme="luxury"] .maps-btn:hover {
@@ -1069,6 +1097,8 @@ body.embed-mode #chat-widget {
     background: var(--accent);
 
     color: #1c1f22;
+
+    box-shadow: 0 6px 18px rgba(198,165,107,0.3);
 }
 
 /* =========================
@@ -1082,7 +1112,6 @@ body.embed-mode #chat-widget {
     border: none;
 
     padding: 16px;
-
 }
 
 [data-theme="luxury"] input {
@@ -1096,6 +1125,14 @@ body.embed-mode #chat-widget {
     padding: 12px 14px;
 
     color: var(--text-primary);
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] input:focus {
+
+    box-shadow: 0 0 0 1px var(--accent),
+                0 0 0 3px rgba(198,165,107,0.15);
 }
 
 /* =========================
@@ -1114,6 +1151,15 @@ body.embed-mode #chat-widget {
     color: #1c1f22;
 
     box-shadow: 0 6px 20px rgba(198,165,107,0.3);
+
+    transition: all .25s var(--ease);
+}
+
+[data-theme="luxury"] button.send:hover {
+
+    transform: scale(1.05);
+
+    box-shadow: 0 10px 28px rgba(198,165,107,0.4);
 }
 
 /* =========================
@@ -1129,6 +1175,15 @@ body.embed-mode #chat-widget {
     border-radius: 999px;
 
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+    transition: all .3s var(--ease);
+}
+
+[data-theme="luxury"] #chat-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
 
 /* =========================
