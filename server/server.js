@@ -1351,7 +1351,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const userMessage = req.body.message || "";
 
     // 🔐 CHAT TOKEN VALIDATION
-    const chatToken = req.headers["x-chat-token"]
+    const chatToken =
+      req.headers["x-chat-token"] ||
+      req.headers.authorization?.split(" ")[1]
 
     if (!chatToken) {
       return res.status(401).json(
