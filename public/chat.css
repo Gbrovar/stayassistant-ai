@@ -823,87 +823,106 @@ body.embed-mode #chat-widget {
 /* ************************* */
 
 /* =========================
-   LUXURY V3 — PREMIUM INTERACTIONS
+   LUXURY V4 — ULTRA PREMIUM
 ========================= */
 
 [data-theme="luxury"] {
 
-    --bg-main: #1c1f22;
-    --bg-widget: #1f2327;
-    --bg-soft: #262b30;
+    /* 🎨 COLOR SYSTEM REFINADO */
+
+    --bg-main: #181b1f;
+    --bg-widget: #1c2024;
+    --bg-soft: #23282e;
 
     --text-primary: #d6d0c4;
     --text-secondary: #a8a090;
     --text-muted: #7e776b;
 
     --accent: #d4b173;
-    --accent-soft: rgba(198, 165, 107, 0.12);
+    --accent-soft: rgba(212,177,115,0.12);
+    --accent-strong: #b8965c;
 
-    --radius: 14px;
+    --radius: 16px;
 
-    /* 🔥 easing premium */
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* =========================
-   BASE
+   BACKGROUND (DEPTH REAL)
 ========================= */
 
-[data-theme="luxury"] body,
-[data-theme="luxury"] input,
-[data-theme="luxury"] button {
-    font-family: "Inter", sans-serif !important;
-    letter-spacing: -0.2px;
-}
-
 [data-theme="luxury"] body {
-    background: radial-gradient(circle at top, #1f2327, #121417);
+
+    background:
+        radial-gradient(circle at 20% 0%, rgba(212,177,115,0.06), transparent 40%),
+        radial-gradient(circle at 80% 100%, rgba(212,177,115,0.04), transparent 50%),
+        #121417;
 }
 
 /* =========================
-   WIDGET
+   WIDGET (MATERIAL)
 ========================= */
 
 [data-theme="luxury"] #chat-widget {
 
-    background: var(--bg-widget);
+    background:
+        linear-gradient(180deg, #1f2327, #1c2024);
 
     border-radius: var(--radius);
 
-    border: none;
+    border: 1px solid rgba(255,255,255,0.03);
 
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.03);
 
-    transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+    transition: all .4s var(--ease);
 }
 
 [data-theme="luxury"] #chat-widget:hover {
+
     transform: translateY(-2px);
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+[data-theme="luxury"] #chat-button {
+
+    background: linear-gradient(135deg, #d4b173, #b8965c) !important;
+
+    color: #1c1f22;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.5),
+        0 6px 20px rgba(212,177,115,0.25);
 }
 
 /* =========================
-   HEADER
+   HEADER (GLASS + DEPTH)
 ========================= */
 
 [data-theme="luxury"] .chat-header {
 
-    background: linear-gradient(180deg, #2a2f34, #1f2327);
+    background:
+        linear-gradient(180deg, rgba(40,45,50,0.9), rgba(28,32,36,0.9));
 
-    border-bottom: 1px solid rgba(198, 165, 107, 0.08);
+    backdrop-filter: blur(8px);
 
-    backdrop-filter: blur(6px);
-    /* 🔥 sensación premium */
+    border-bottom: 1px solid rgba(212,177,115,0.08);
 
     padding: 18px 20px;
-
-    border: none;
 }
+
+/* eliminar base */
 
 [data-theme="luxury"] #chat-widget h3 {
     background: transparent !important;
     padding: 0;
 }
+
+/* título */
 
 [data-theme="luxury"] .chat-header h3 {
 
@@ -917,21 +936,22 @@ body.embed-mode #chat-widget {
     gap: 8px;
 }
 
-/* DOT */
+/* DOT CON GLOW */
 
 [data-theme="luxury"] .chat-header h3::before {
 
     content: "";
+
     width: 6px;
     height: 6px;
 
     background: var(--accent);
 
-    box-shadow: 0 0 6px rgba(212,177,115,0.4);
-
     border-radius: 50%;
 
-    opacity: 0.7;
+    box-shadow: 0 0 8px rgba(212,177,115,0.5);
+
+    opacity: 0.9;
 }
 
 /* =========================
@@ -939,17 +959,16 @@ body.embed-mode #chat-widget {
 ========================= */
 
 [data-theme="luxury"] #messages {
-    padding: 26px;
-    gap: 18px;
+    padding: 28px;
+    gap: 20px;
 }
 
 /* BOT */
 
 [data-theme="luxury"] .bot-message {
 
-    /*background: var(--bg-soft);*/
-
-    background: linear-gradient(180deg, #262b30, #23282d);
+    background:
+        linear-gradient(180deg, #262b30, #22272c);
 
     border: none;
 
@@ -959,21 +978,39 @@ body.embed-mode #chat-widget {
 
     color: var(--text-primary);
 
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.03);
 
-    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+    transition: all .3s var(--ease);
 }
 
 [data-theme="luxury"] .bot-message:hover {
+
     transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.5);
 }
+
+[data-theme="luxury"] .bot-avatar {
+
+    background: linear-gradient(135deg, #d4b173, #b8965c);
+
+    color: #1c1f22;
+
+    box-shadow:
+        0 4px 12px rgba(212,177,115,0.25);
+}
+
+
 
 /* USER */
 
 [data-theme="luxury"] .user {
 
-    background: var(--accent);
+    background:
+        linear-gradient(135deg, #d4b173, #b8965c);
 
     color: #1c1f22;
 
@@ -981,38 +1018,22 @@ body.embed-mode #chat-widget {
 
     padding: 14px 16px;
 
-    box-shadow: 0 6px 18px rgba(198, 165, 107, 0.25);
-
-    transition: all .25s var(--ease);
-}
-
-[data-theme="luxury"] .user:hover {
-    box-shadow: 0 10px 25px rgba(198, 165, 107, 0.35);
-}
-
-/* =========================
-   AVATAR
-========================= */
-
-[data-theme="luxury"] .bot-avatar {
-
-    background: rgba(198, 165, 107, 0.15);
-
-    color: var(--accent);
+    box-shadow:
+        0 8px 25px rgba(212,177,115,0.25);
 
 }
 
 /* =========================
-   BUTTONS (LUXURY CORE)
+   BUTTONS (JEWEL EFFECT)
 ========================= */
 
 [data-theme="luxury"] #quick-actions button,
 [data-theme="luxury"] #proactive-actions button,
 [data-theme="luxury"] #messages button {
 
-    background: transparent;
+    background: rgba(255,255,255,0.02);
 
-    border: 1px solid rgba(198, 165, 107, 0.25);
+    border: 1px solid rgba(212,177,115,0.2);
 
     color: var(--text-secondary);
 
@@ -1023,7 +1044,7 @@ body.embed-mode #chat-widget {
     transition: all .25s var(--ease);
 }
 
-/* 🔥 hover premium con glow */
+/* hover con glow */
 
 [data-theme="luxury"] #quick-actions button:hover,
 [data-theme="luxury"] #proactive-actions button:hover,
@@ -1035,31 +1056,28 @@ body.embed-mode #chat-widget {
 
     border-color: var(--accent);
 
-    box-shadow: 0 0 0 2px rgba(198, 165, 107, 0.12),
-        0 6px 18px rgba(198, 165, 107, 0.15);
+    box-shadow:
+        0 0 0 2px rgba(212,177,115,0.12),
+        0 8px 25px rgba(212,177,115,0.18);
 
-    transform: translateY(-1px);
 }
 
 /* =========================
-   PLACE CARDS
+   CARDS
 ========================= */
 
 [data-theme="luxury"] .place-card {
 
-    background: var(--bg-soft);
-
-    border: none;
+    background:
+        linear-gradient(180deg, #262b30, #22272c);
 
     border-radius: var(--radius);
 
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    border: none;
 
-    transition: all .3s var(--ease);
-}
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.5);
 
-[data-theme="luxury"] .place-card:hover {
-    transform: translateY(-2px);
 }
 
 /* =========================
@@ -1085,27 +1103,29 @@ body.embed-mode #chat-widget {
 
     color: #1c1f22;
 
-    box-shadow: 0 6px 18px rgba(198, 165, 107, 0.3);
+    box-shadow: 0 8px 25px rgba(212,177,115,0.35);
 }
 
 /* =========================
-   INPUT
+   INPUT (SOFT GLASS)
 ========================= */
 
 [data-theme="luxury"] .input-area {
 
-    background: #1c1f22;
+    background: rgba(20,22,25,0.9);
 
-    border: none;
+    backdrop-filter: blur(6px);
+
+    border-top: 1px solid rgba(255,255,255,0.04);
 
     padding: 16px;
 }
 
 [data-theme="luxury"] input {
 
-    background: var(--bg-soft);
+    background: rgba(255,255,255,0.03);
 
-    border: none;
+    border: 1px solid rgba(255,255,255,0.05);
 
     border-radius: var(--radius);
 
@@ -1118,12 +1138,15 @@ body.embed-mode #chat-widget {
 
 [data-theme="luxury"] input:focus {
 
-    box-shadow: 0 0 0 1px var(--accent),
-        0 0 0 3px rgba(198, 165, 107, 0.15);
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 1px var(--accent),
+        0 0 0 4px rgba(212,177,115,0.12);
 }
 
 /* =========================
-   SEND BUTTON
+   SEND BUTTON (JEWEL)
 ========================= */
 
 [data-theme="luxury"] button.send {
@@ -1133,11 +1156,12 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    background: var(--accent);
+    background: linear-gradient(135deg, #d4b173, #b8965c);
 
     color: #1c1f22;
 
-    box-shadow: 0 6px 20px rgba(198, 165, 107, 0.3);
+    box-shadow:
+        0 8px 25px rgba(212,177,115,0.35);
 
     transition: all .25s var(--ease);
 }
@@ -1146,49 +1170,28 @@ body.embed-mode #chat-widget {
 
     transform: scale(1.05);
 
-    box-shadow: 0 10px 28px rgba(198, 165, 107, 0.4);
+    box-shadow:
+        0 12px 35px rgba(212,177,115,0.45);
 }
 
 /* =========================
-   CHAT BUTTON
+   SCROLL (MICRO DETAIL)
 ========================= */
 
-[data-theme="luxury"] #chat-button {
-
-    background: var(--accent) !important;
-
-    color: #1c1f22;
-
-    border-radius: 999px;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-
-    transition: all .3s var(--ease);
+[data-theme="luxury"] #messages::-webkit-scrollbar {
+    width: 6px;
 }
-
-[data-theme="luxury"] #chat-button:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* =========================
-   SCROLL
-========================= */
 
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb {
 
-    background: rgba(198,165,107,0.25);
+    background: rgba(212,177,115,0.18); /* más oscuro, más elegante */
 
     border-radius: 10px;
-
 }
 
 [data-theme="luxury"] #messages::-webkit-scrollbar-thumb:hover {
 
-    background: rgba(198,165,107,0.45);
-
+    background: rgba(212,177,115,0.45); /* glow al hover */
 }
 
 
