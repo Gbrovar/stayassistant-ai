@@ -579,6 +579,7 @@ body.embed-mode #chat-widget {
 [data-theme="minimal"] #chat-widget h3 {
     background: transparent !important;
     padding: 0 !important;
+    color: #b1936a;
 }
 
 /* 🔥 NOMBRE HOTEL — AHORA PERFECTO */
