@@ -1678,7 +1678,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   ZEN V3.1 — TRUE NEUMORPHIC SYSTEM
+   ZEN V3.1 — TRUE NEUMORPHIC SYSTEM (IMPROVED)
 ========================= */
 
 [data-theme="zen"] {
@@ -1723,22 +1723,18 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   WIDGET (NO GLOW REAL)
+   WIDGET
 ========================= */
 
 [data-theme="zen"] #chat-widget {
 
     background: var(--bg-main);
-
     border-radius: var(--radius);
-
-    
-
     border: none !important;
 }
 
 /* =========================
-   HEADER (SOFT BLOCK)
+   HEADER
 ========================= */
 
 [data-theme="zen"] .chat-header {
@@ -1786,12 +1782,16 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   MESSAGES
+   MESSAGES (🔥 MÁS AIRE)
 ========================= */
 
 [data-theme="zen"] #messages {
-    padding: 24px;
-    gap: 16px;
+    padding: 28px;
+    gap: 20px;
+}
+
+[data-theme="zen"] .bot-wrapper {
+    margin-bottom: 8px;
 }
 
 /* BOT */
@@ -1802,7 +1802,7 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    padding: 14px 16px;
+    padding: 16px 18px;
 
     color: var(--text-primary);
 
@@ -1821,7 +1821,7 @@ body.embed-mode #chat-widget {
 
     border-radius: var(--radius);
 
-    padding: 14px 16px;
+    padding: 16px 18px;
 
     color: var(--text-primary);
 
@@ -1846,8 +1846,15 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   BUTTONS (REAL TACTILE)
+   BUTTONS
 ========================= */
+
+[data-theme="zen"] #quick-actions,
+[data-theme="zen"] #proactive-actions {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
 
 [data-theme="zen"] #quick-actions button,
 [data-theme="zen"] #proactive-actions button,
@@ -1868,16 +1875,12 @@ body.embed-mode #chat-widget {
     transition: all .12s ease;
 }
 
-/* hover limpio (SIN herencia) */
-
 [data-theme="zen"] #quick-actions button:hover,
 [data-theme="zen"] #proactive-actions button:hover,
 [data-theme="zen"] #messages button:hover {
 
     transform: translateY(-1px);
 }
-
-/* press real */
 
 [data-theme="zen"] #quick-actions button:active,
 [data-theme="zen"] #proactive-actions button:active,
@@ -1898,7 +1901,7 @@ body.embed-mode #chat-widget {
 
     background: var(--bg-main);
 
-    margin: 10px;
+    margin: 14px;
 
     border-radius: var(--radius);
 
@@ -1923,7 +1926,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   SEND BUTTON (KEEP PERFECT)
+   SEND BUTTON
 ========================= */
 
 [data-theme="zen"] button.send {
@@ -1954,7 +1957,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   MAP BUTTON (FIX TOTAL)
+   MAP BUTTON
 ========================= */
 
 [data-theme="zen"] .maps-btn {
@@ -1975,7 +1978,6 @@ body.embed-mode #chat-widget {
 }
 
 [data-theme="zen"] .maps-btn:hover {
-
     transform: translateY(-1px);
 }
 
@@ -1989,7 +1991,7 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   CHAT BUTTON (FIX FINAL)
+   CHAT BUTTON
 ========================= */
 
 [data-theme="zen"] #chat-button {
@@ -2013,10 +2015,49 @@ body.embed-mode #chat-widget {
 }
 
 /* =========================
-   SCROLL
+   🔥 SCROLL NEUMORPHIC REAL
 ========================= */
+
+[data-theme="zen"] #messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-track {
+
+    background: var(--bg-main);
+
+    border-radius: 10px;
+
+    box-shadow:
+        inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+}
 
 [data-theme="zen"] #messages::-webkit-scrollbar-thumb {
 
-    background: #d6dce5;
+    background: var(--bg-soft);
+
+    border-radius: 10px;
+
+    box-shadow:
+        2px 2px 5px var(--shadow-dark),
+        -2px -2px 5px var(--shadow-light);
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb:hover {
+    background: #d6dde6;
+}
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb:active {
+
+    box-shadow:
+        inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+}
+
+/* FIREFOX */
+
+[data-theme="zen"] #messages {
+    scrollbar-width: thin;
+    scrollbar-color: #d6dde6 var(--bg-main);
 }
