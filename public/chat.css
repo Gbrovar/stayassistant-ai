@@ -521,11 +521,11 @@ body.embed-mode #chat-widget {
     --bg-widget: #ffffff;
     --bg-soft: #f5f1eb;
 
-    --text-primary: #44403c;   /* 🔥 más suave */
+    --text-primary: #4d463f;   /* 🔥 más suave */
     --text-secondary: #8b8680;
     --text-muted: #bdb6ae;
 
-    --accent: #c8a97e;
+    --accent: #aa8c62;
     --accent-soft: #f2e8d9;
 
     --radius-lg: 20px;
