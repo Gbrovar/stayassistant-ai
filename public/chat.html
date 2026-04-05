@@ -206,7 +206,6 @@
             if (isEmbed || isPreview) return;
 
             const cards = document.querySelectorAll(".theme-card-v2");
-            const iframe = document.getElementById("main-preview");
 
             const current = getTheme();
 
@@ -227,7 +226,9 @@
                     cards.forEach(c => c.classList.remove("active"));
                     card.classList.add("active");
 
-                    iframe.src = `/chat.html?embed=true&preview=true&theme=${theme}`;
+                    if (iframe) {
+                        iframe.src = `/chat.html?embed=true&preview=true&theme=${theme}`;
+                    }
 
                 });
 
