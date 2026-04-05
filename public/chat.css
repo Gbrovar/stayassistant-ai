@@ -1676,3 +1676,279 @@ body.embed-mode #chat-widget {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+
+/* =========================
+   ZEN — SOFT UI / NEUMORPHIC
+========================= */
+
+[data-theme="zen"] {
+
+    --bg-main: #EFF2F9;
+    --bg-soft: #E4EBF1;
+    --bg-elevated: #FFFFFF;
+
+    --text-primary: #6E7F8D;
+    --text-secondary: #9AA8B5;
+
+    --accent: #8FA2B7;
+
+    --shadow-light: #FFFFFF;
+    --shadow-dark: rgba(22,27,29,0.15);
+
+    --radius: 18px;
+}
+
+/* =========================
+   BASE
+========================= */
+
+[data-theme="zen"] body {
+
+    background: var(--bg-main);
+
+    font-family: "Inter", sans-serif;
+}
+
+/* =========================
+   WIDGET
+========================= */
+
+[data-theme="zen"] #chat-widget {
+
+    background: var(--bg-main);
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        8px 8px 20px var(--shadow-dark),
+        -8px -8px 20px var(--shadow-light);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+[data-theme="zen"] .chat-header {
+
+    background: var(--bg-main);
+
+    border-radius: var(--radius) var(--radius) 0 0;
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+
+    padding: 16px 18px;
+}
+
+[data-theme="zen"] .chat-header h3 {
+
+    color: var(--text-primary);
+
+    font-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+[data-theme="zen"] .chat-header h3::before {
+
+    content: "";
+    width: 6px;
+    height: 6px;
+
+    background: var(--accent);
+
+    border-radius: 50%;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+[data-theme="zen"] #messages {
+
+    padding: 24px;
+    gap: 16px;
+}
+
+/* BOT MESSAGE */
+
+[data-theme="zen"] .bot-message {
+
+    background: var(--bg-soft);
+
+    border-radius: var(--radius);
+
+    padding: 14px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        6px 6px 14px var(--shadow-dark),
+        -6px -6px 14px var(--shadow-light);
+}
+
+/* USER MESSAGE */
+
+[data-theme="zen"] .user {
+
+    background: var(--bg-elevated);
+
+    border-radius: var(--radius);
+
+    padding: 14px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+[data-theme="zen"] .bot-avatar {
+
+    background: var(--bg-soft);
+
+    color: var(--text-secondary);
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+[data-theme="zen"] #quick-actions button,
+[data-theme="zen"] #proactive-actions button,
+[data-theme="zen"] #messages button {
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 10px 16px;
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+
+    transition: all .2s ease;
+}
+
+/* hover (pressed effect) */
+
+[data-theme="zen"] #quick-actions button:hover,
+[data-theme="zen"] #proactive-actions button:hover,
+[data-theme="zen"] #messages button:hover {
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+[data-theme="zen"] .input-area {
+
+    background: var(--bg-main);
+
+    padding: 16px;
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+[data-theme="zen"] input {
+
+    background: var(--bg-soft);
+
+    border-radius: 999px;
+
+    padding: 12px 16px;
+
+    color: var(--text-primary);
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+[data-theme="zen"] input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+[data-theme="zen"] button.send {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--bg-main);
+
+    color: var(--accent);
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+
+    transition: all .2s ease;
+}
+
+[data-theme="zen"] button.send:hover {
+
+    box-shadow:
+        inset 2px 2px 6px var(--shadow-dark),
+        inset -2px -2px 6px var(--shadow-light);
+}
+
+/* =========================
+   MAP BUTTON
+========================= */
+
+[data-theme="zen"] .maps-btn {
+
+    background: var(--bg-main);
+
+    color: var(--text-primary);
+
+    border-radius: 999px;
+
+    padding: 8px 14px;
+
+    box-shadow:
+        4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light);
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+[data-theme="zen"] #messages::-webkit-scrollbar-thumb {
+
+    background: #d6dce5;
+
+    border-radius: 10px;
+}
+
+[data-theme="zen"] #messages {
+    scrollbar-color: #d6dce5 transparent;
+}
