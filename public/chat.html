@@ -25,8 +25,8 @@
 
 <script>
     (function () {
-        const saved = localStorage.getItem("stayassistant_theme") || "default";
-        document.documentElement.setAttribute("data-theme", saved);
+        document.documentElement.setAttribute("data-theme", "default");
+        localStorage.setItem("stayassistant_theme", "default");
     })();
 
     (function () {
@@ -99,7 +99,7 @@
                     <!-- CONTROLES -->
                     <div class="theme-grid-v2">
 
-                        <div class="theme-card-v2 active" data-theme="default">
+                        <div class="theme-card-v2" data-theme="default">
                             <div class="card-preview default"></div>
                             <span>Default</span>
                         </div>
@@ -207,13 +207,15 @@
 
             const cards = document.querySelectorAll(".theme-card-v2");
 
-            const current = getTheme();
+            const current = getTheme() || "default";
 
-            cards.forEach(card => {
-                if (card.dataset.theme === current) {
-                    card.classList.add("active");
-                }
-            });
+            cards.forEach(c => c.classList.remove("active"));
+
+            const activeCard = [...cards].find(c => c.dataset.theme === current);
+
+            if (activeCard) {
+                activeCard.classList.add("active");
+            }
 
             cards.forEach(card => {
 
