@@ -64,6 +64,7 @@ export default function OverviewPage() {
           <KPI label="Usage Capacity" value={`${Math.round(kpis.usage_pct * 100)}%`} />
           <KPI label="Estimated Value" value={`€${kpis.messages * 5}`} />
           <KPI label="System Status" value={kpis.usage_pct > 0.8 ? "Near capacity" : "Running smoothly"} />
+          <KPI label="Remaining Capacity" value={`${kpis.usage_limit - kpis.messages}`} />
         </div>
 
         <div className="page-content">
@@ -77,11 +78,9 @@ export default function OverviewPage() {
 
           <RevenueCard kpis={kpis} upgrade={upgrade} />
 
-          {upgrade && (
-            <div className="card upgrade-highlight">
-              <UpgradeCard strategy={upgrade} />
-            </div>
-          )}
+          <UpgradeCard strategy={upgrade} />
+
+
 
         </div>
 

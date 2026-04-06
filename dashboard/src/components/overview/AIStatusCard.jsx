@@ -4,16 +4,18 @@ export default function AIStatusCard({ kpis, upgrade }) {
   const ratio = kpis.usage_pct
 
   let status = "Healthy"
+  let message = "Your assistant is running smoothly"
   let color = "#22c55e"
 
-  if (ratio > 0.8) {
-    status = "High usage"
+  if (ratio > 0.8 && ratio < 1) {
+    status = "Near capacity"
+    message = "You're approaching your plan limit"
     color = "#f59e0b"
-    return "You're close to your limit → upgrade to avoid interruptions"
   }
 
   if (ratio >= 1) {
     status = "Limit reached"
+    message = "You have reached your plan limit"
     color = "#ef4444"
   }
 
@@ -33,15 +35,20 @@ export default function AIStatusCard({ kpis, upgrade }) {
         </p>
       </div>
 
-      {upgrade && (
+      {ratio > 0.7 && (
         <div className="inline-upgrade">
-          <p>{upgrade.message}</p>
+
+          <p>
+            You're using {Math.round(ratio * 100)}% of your plan
+          </p>
+
           <button
             className="btn btn-primary"
             onClick={() => window.location.href = "/billing"}
           >
-            Unlock more guest requests
+            Upgrade to avoid interruptions
           </button>
+
         </div>
       )}
 

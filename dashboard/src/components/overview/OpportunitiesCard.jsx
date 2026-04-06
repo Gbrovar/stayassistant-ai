@@ -15,12 +15,6 @@ export default function OpportunitiesCard({ insights, actions }) {
 
       {actions?.map((a, i) => (
         <div key={i} className="card card-soft">
-          <p>{a.text}</p>
-        </div>
-      ))}
-
-      {actions?.map((a, i) => (
-        <div key={i} className="card card-soft">
 
           <p>{a.text}</p>
 

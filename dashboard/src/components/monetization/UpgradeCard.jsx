@@ -3,7 +3,9 @@ import { useApp } from "../../context/AppContext"
 export default function UpgradeCard() {
   const { conversion } = useApp()
 
-  if (!conversion?.show) return null
+  const shouldShow = conversion?.show || conversion?.urgency === "high"
+
+  if (!shouldShow) return null
 
   const isUrgent = conversion.urgency === "high"
 
