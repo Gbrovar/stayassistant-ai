@@ -78,10 +78,6 @@ export default function OverviewPage() {
 
           <RevenueCard kpis={kpis} upgrade={upgrade} />
 
-          <UpgradeCard strategy={upgrade} />
-
-
-
         </div>
 
       </div>
