@@ -186,12 +186,14 @@ export default function PropertyInfo() {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            saveAll()
-        }, 1200)
+            if (Object.values(form).some(v => v)) {
+                saveAll()
+            }
+        }, 2000)
 
         return () => clearTimeout(timeout)
     }, [JSON.stringify(form)])
-
+    
     return (
 
         <div className="stack" style={{ gap: 28 }}>
@@ -394,16 +396,6 @@ export default function PropertyInfo() {
 
 /* UI */
 
-function Section({ title, children }) {
-    return (
-        <div>
-            <h3 style={{ marginBottom: 10 }}>{title}</h3>
-            <div className="stack" style={{ gap: 14 }}>
-                {children}
-            </div>
-        </div>
-    )
-}
 
 function Grid({ children }) {
     return (

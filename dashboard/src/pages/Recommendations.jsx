@@ -13,6 +13,8 @@ export default function Recommendations() {
 
     const { setRefreshPreview, showToast } = useContext(AppContext)
 
+    const [saving, setSaving] = useState(false)
+
     useEffect(() => {
 
         async function load() {
@@ -85,25 +87,23 @@ export default function Recommendations() {
 
     async function save() {
 
+        setSaving(true)
+
         await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + getToken()
             },
-
             body: JSON.stringify({
                 recommendations: items
             })
-
         })
 
         showToast("Recommendations saved")
-
         setRefreshPreview(prev => prev + 1)
 
+        setSaving(false)
     }
 
 
@@ -153,7 +153,7 @@ export default function Recommendations() {
                 </button>
 
                 <button className="btn btn-primary" onClick={save}>
-                    Save
+                    {saving ? "Saving..." : "Save"}
                 </button>
 
             </div>

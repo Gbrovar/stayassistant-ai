@@ -158,7 +158,7 @@ export default function FAQEditor() {
                 </Button>
 
                 <Button onClick={save}>
-                    Save knowledge  {loading ? "Saving..." : "Save FAQ"}
+                    {loading ? "Saving..." : "Save FAQ"}
                 </Button>
 
             </div>
