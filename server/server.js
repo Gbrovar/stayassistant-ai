@@ -3190,7 +3190,7 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 });
 
 /* --- DASHBOARD OVERVIEW --- */
-app.get("/dashboard/overview", authenticate, async (req, res) => {
+app.get("/api/dashboard/overview", authenticate, async (req, res) => {
 
   try {
 
