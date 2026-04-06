@@ -13,7 +13,7 @@ export default function useOverview() {
 
         const token = localStorage.getItem("token")
 
-        const res = await fetch("/api/dashboard/overview", {
+        const res = await fetch("http://localhost:3000/api/dashboard/overview", {
           headers: {
             Authorization: `Bearer ${token}`
           }
