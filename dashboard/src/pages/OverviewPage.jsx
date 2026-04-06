@@ -23,6 +23,18 @@ export default function OverviewPage() {
         <h1 className="title-lg">Dashboard</h1>
       </div>
 
+      <div className="hero-card">
+        <h2>Your AI Concierge is working</h2>
+
+        <p>
+          You've handled <strong>{kpis.messages}</strong> guest requests automatically
+        </p>
+
+        <p>
+          Estimated savings: <strong>€{kpis.messages * 5}</strong>
+        </p>
+      </div>
+
       <div className="stack-lg">
 
         {/* KPI */}
