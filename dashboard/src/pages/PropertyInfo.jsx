@@ -4,7 +4,7 @@ import { API_URL } from "../api/config"
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
-export default function PropertyInfo() {
+export default function PropertyInfo({ onComplete }) {
 
     const propertyId = getPropertyId()
     const { showToast, setRefreshPreview } = useContext(AppContext)
@@ -182,6 +182,8 @@ export default function PropertyInfo() {
         }
 
         setSaving(false)
+
+        if (onComplete) onComplete()
     }
 
     useEffect(() => {
@@ -193,7 +195,7 @@ export default function PropertyInfo() {
 
         return () => clearTimeout(timeout)
     }, [JSON.stringify(form)])
-    
+
     return (
 
         <div className="stack" style={{ gap: 28 }}>

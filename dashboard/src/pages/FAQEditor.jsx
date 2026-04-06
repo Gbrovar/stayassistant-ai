@@ -6,7 +6,7 @@ import Button from "../components/UI/Button"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
 
-export default function FAQEditor() {
+export default function FAQEditor({ onComplete }) {
 
     const propertyId = getPropertyId()
 
@@ -87,6 +87,8 @@ export default function FAQEditor() {
         }
 
         setLoading(false)
+
+        if (onComplete) onComplete()
 
     }
 

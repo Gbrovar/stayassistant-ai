@@ -1105,6 +1105,26 @@ body {
   display: block;
 }
 
+.section-done {
+  border-color: rgba(34,197,94,0.4);
+  background: linear-gradient(180deg, rgba(34,197,94,0.05), transparent);
+}
+
+.section-collapsed {
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.section-collapsed:hover {
+  opacity: 1;
+  border-color: rgba(99,102,241,0.4);
+}
+
+.section-active {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.2);
+}
+
 .show-more-btn {
   display: block;
   margin-left: auto;

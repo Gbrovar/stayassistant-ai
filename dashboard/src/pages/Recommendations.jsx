@@ -5,7 +5,7 @@ import { API_URL } from "../api/config"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
 
-export default function Recommendations() {
+export default function Recommendations({ onComplete }) {
 
     const propertyId = getPropertyId()
 
@@ -104,6 +104,8 @@ export default function Recommendations() {
         setRefreshPreview(prev => prev + 1)
 
         setSaving(false)
+
+        if (onComplete) onComplete()
     }
 
 
