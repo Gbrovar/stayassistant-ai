@@ -9,11 +9,19 @@ export default function UpgradeCard() {
 
   const isUrgent = conversion.urgency === "high"
 
+  const title = isUrgent
+    ? "You're reaching your limit"
+    : conversion.title || "Upgrade your plan"
+
+  const cta = isUrgent
+    ? "Upgrade now"
+    : conversion.cta || "Upgrade"
+
   return (
     <div className={`upgrade-card ${isUrgent ? "urgent" : ""}`}>
 
       <div className="upgrade-content">
-        <h3>{conversion.title || "Upgrade your plan"}</h3>
+        <h3>{title}</h3>
         <p>{conversion.message}</p>
       </div>
 
@@ -21,7 +29,7 @@ export default function UpgradeCard() {
         className="upgrade-btn"
         onClick={() => window.location.href = "/billing"}
       >
-        {conversion.cta || "Upgrade now"}
+        {cta}
       </button>
 
     </div>

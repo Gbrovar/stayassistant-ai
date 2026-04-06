@@ -31,7 +31,7 @@ export default function AIStatusCard({ kpis, upgrade }) {
         <p>Your assistant is currently <strong>{status}</strong></p>
 
         <p className="text-muted">
-          {kpis.messages} of {kpis.usage_limit} messages used
+          {message}
         </p>
       </div>
 
