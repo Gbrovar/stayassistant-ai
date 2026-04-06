@@ -19,6 +19,21 @@ export default function OpportunitiesCard({ insights, actions }) {
         </div>
       ))}
 
+      {actions?.map((a, i) => (
+        <div key={i} className="card card-soft">
+
+          <p>{a.text}</p>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => window.location.href = "/property-setup"}
+          >
+            Fix this
+          </button>
+
+        </div>
+      ))}
+
     </div>
   )
 }

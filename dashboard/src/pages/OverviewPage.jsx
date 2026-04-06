@@ -16,33 +16,54 @@ export default function OverviewPage() {
 
   const { kpis, insights, alerts, actions, upgrade } = data
 
+  const estimatedSavings = kpis.messages * 5
+
   return (
     <div className="container">
 
+
       <div className="page-header">
-        <h1 className="title-lg">Dashboard</h1>
+        <h1 className="title-lg">Your AI Performance</h1>
       </div>
 
-      <div className="hero-card">
-        <h2>Your AI Concierge is working</h2>
+      {/* HERO */}
+      <div className="card hero-card">
+        <h2>Your AI Concierge is handling guest requests automatically</h2>
+
+        <p className="text-muted">
+          Save time, reduce workload, and improve guest experience
+        </p>
 
         <p>
           You've handled <strong>{kpis.messages}</strong> guest requests automatically
         </p>
 
         <p>
-          Estimated savings: <strong>€{kpis.messages * 5}</strong>
+          Estimated savings: <strong>€{estimatedSavings}</strong>
         </p>
+
+        {kpis.messages === 0 && (
+          <div className="empty-state">
+            <p>Start using your AI assistant to see real results</p>
+
+            <button
+              className="btn btn-primary"
+              onClick={() => window.location.href = "/install"}
+            >
+              Activate Assistant
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="stack-lg">
 
         {/* KPI */}
         <div className="grid grid-4">
-          <KPI label="Messages" value={kpis.messages} />
-          <KPI label="Usage" value={`${Math.round(kpis.usage_pct * 100)}%`} />
-          <KPI label="Revenue" value={`€${kpis.revenue}`} />
-          <KPI label="Profit" value={`€${kpis.profit}`} />
+          <KPI label="AI Requests Handled" value={kpis.messages} />
+          <KPI label="Usage Capacity" value={`${Math.round(kpis.usage_pct * 100)}%`} />
+          <KPI label="Estimated Value" value={`€${kpis.messages * 5}`} />
+          <KPI label="System Status" value={kpis.usage_pct > 0.8 ? "Near capacity" : "Running smoothly"} />
         </div>
 
         <div className="page-content">
@@ -57,7 +78,9 @@ export default function OverviewPage() {
           <RevenueCard kpis={kpis} upgrade={upgrade} />
 
           {upgrade && (
-            <UpgradeCard strategy={upgrade} />
+            <div className="card upgrade-highlight">
+              <UpgradeCard strategy={upgrade} />
+            </div>
           )}
 
         </div>

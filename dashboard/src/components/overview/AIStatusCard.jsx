@@ -40,7 +40,7 @@ export default function AIStatusCard({ kpis, upgrade }) {
             className="btn btn-primary"
             onClick={() => window.location.href = "/billing"}
           >
-            Upgrade
+            Unlock more guest requests
           </button>
         </div>
       )}
