@@ -1,9 +1,7 @@
-import { useApp } from "../../context/AppContext"
 
-export default function AIStatusCard() {
-  const { usage, limit, subscription, conversion } = useApp()
+export default function AIStatusCard({ kpis, upgrade }) {
 
-  const ratio = usage / limit
+  const ratio = kpis.usage_pct
 
   let status = "Healthy"
   let color = "#22c55e"
@@ -23,25 +21,25 @@ export default function AIStatusCard() {
 
       <div className="card-header">
         <h3>AI Status</h3>
-        <span className={`status status-${status.toLowerCase().replace(" ", "-")}`}>
-          {status}
-        </span>
+        <span>{status}</span>
       </div>
 
       <div className="card-body">
         <p>Your assistant is currently <strong>{status}</strong></p>
 
         <p className="text-muted">
-          {usage} of {limit} messages used this month
+          {kpis.messages} of {kpis.usage_limit} messages used
         </p>
       </div>
 
-      {conversion?.show && (
+      {upgrade && (
         <div className="inline-upgrade">
-          <p>{conversion.message}</p>
-          <button className="btn btn-primary"
-            onClick={() => window.location.href = "/billing"}>
-            {conversion.cta}
+          <p>{upgrade.message}</p>
+          <button
+            className="btn btn-primary"
+            onClick={() => window.location.href = "/billing"}
+          >
+            Upgrade
           </button>
         </div>
       )}

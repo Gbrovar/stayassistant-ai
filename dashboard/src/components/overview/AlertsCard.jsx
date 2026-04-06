@@ -1,16 +1,14 @@
-import useAnalytics from "../../hooks/useAnalytics"
 
-export default function AlertsCard() {
-  const { alerts } = useAnalytics()
+export default function AlertsCard({ data }) {
 
-  if (!alerts.length) return null
+  if (!data || !data.length) return null
 
   return (
     <div className="card">
       <h3>Alerts</h3>
 
-      {alerts.map((a, i) => (
-        <div key={i} className={`alert alert-${a.level}`}>
+      {data.map((a, i) => (
+        <div key={i} className="alert">
           {a.text}
         </div>
       ))}

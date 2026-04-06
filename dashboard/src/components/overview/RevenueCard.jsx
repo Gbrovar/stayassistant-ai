@@ -1,40 +1,34 @@
-import useAnalytics from "../../hooks/useAnalytics"
 
-export default function RevenueCard() {
-  const { ltv, plan, totalMessages } = useAnalytics()
-
-  if (!ltv || typeof ltv !== "object") return null
-
-  const score =
-    typeof ltv.score === "number"
-      ? ltv.score.toFixed(2)
-      : "-"
+export default function RevenueCard({ kpis, upgrade }) {
 
   return (
     <div className="card">
       <h3>Revenue Insights</h3>
 
       <div className="grid grid-2">
+
         <div>
-          <p className="text-muted">Plan</p>
-          <strong>{plan || "-"}</strong>
+          <p className="text-muted">Revenue</p>
+          <strong>€{kpis.revenue}</strong>
         </div>
 
         <div>
-          <p className="text-muted">Messages</p>
-          <strong>{totalMessages ?? "-"}</strong>
+          <p className="text-muted">Cost</p>
+          <strong>€{kpis.cost}</strong>
         </div>
 
         <div>
-          <p className="text-muted">Score</p>
-          <strong>{score}</strong>
+          <p className="text-muted">Profit</p>
+          <strong>€{kpis.profit}</strong>
         </div>
 
         <div>
-          <p className="text-muted">Strategy</p>
-          <strong>{ltv.strategy?.type || "-"}</strong>
+          <p className="text-muted">Usage</p>
+          <strong>{Math.round(kpis.usage_pct * 100)}%</strong>
         </div>
+
       </div>
+
     </div>
   )
 }
