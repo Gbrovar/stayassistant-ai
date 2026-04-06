@@ -60,7 +60,9 @@ export function detectIntent(text) {
       "waste",
       "bin",
       "rubbish",
-      "leave trash"
+      "leave the trash",
+      "where can i leave the trash",
+      "where leave trash"
     ],
 
     taxi: [
@@ -141,6 +143,12 @@ export function detectIntent(text) {
   })
 
   if (text.includes("basura")) return "waste"
+  if (text.includes("trash")) return "waste"
+  if (
+    text.includes("basura") ||
+    text.includes("trash") ||
+    text.includes("garbage")
+  ) return "waste"
 
   // 🔥 SCORING POR KEYWORDS (tu sistema mejorado)
   for (const intent in intents) {
