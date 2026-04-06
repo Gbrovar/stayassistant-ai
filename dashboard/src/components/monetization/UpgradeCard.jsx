@@ -14,7 +14,7 @@ export default function UpgradeCard() {
     : conversion.title || "Upgrade your plan"
 
   const cta = isUrgent
-    ? "Upgrade now"
+    ? "Upgrade now to avoid interruptions"
     : conversion.cta || "Upgrade"
 
   return (

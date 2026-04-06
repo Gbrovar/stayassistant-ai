@@ -9,7 +9,7 @@ export default function AIStatusCard({ kpis, upgrade }) {
 
   if (ratio > 0.8 && ratio < 1) {
     status = "Near capacity"
-    message = "You're approaching your plan limit"
+    message = "You're approaching your plan limit — guests may be affected soon"
     color = "#f59e0b"
   }
 

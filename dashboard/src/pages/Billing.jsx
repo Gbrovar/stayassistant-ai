@@ -172,6 +172,25 @@ export default function Billing() {
                     {usage} / {limit} messages
                 </p>
 
+                {/* 💰 LOST VALUE */}
+                {forecast?.usage > 0 && (
+                    <div style={{
+                        marginTop: 12,
+                        padding: 12,
+                        background: "#1e293b",
+                        borderRadius: 8
+                    }}>
+                        <p className="text-muted">Estimated value generated</p>
+                        <strong>€{Math.round(forecast.usage * 5)}</strong>
+
+                        {usageRatio > 0.7 && (
+                            <p style={{ color: "#f59e0b", marginTop: 6 }}>
+                                You could unlock significantly more value with a higher plan
+                            </p>
+                        )}
+                    </div>
+                )}
+
                 <div className="usage-bar">
                     <div
                         className="usage-fill"
@@ -216,6 +235,25 @@ export default function Billing() {
 
             </div>
 
+            {/* 💰 DECISION BLOCK */}
+            {usageRatio > 0.5 && (
+                <div style={{
+                    marginBottom: 20,
+                    padding: 16,
+                    background: "#0f172a",
+                    borderRadius: 8,
+                    border: "1px solid #1e293b"
+                }}>
+                    <p style={{ fontWeight: 600 }}>
+                        Your AI is actively handling guest requests
+                    </p>
+
+                    <p className="muted">
+                        You're already generating value. Scaling your plan will increase efficiency and guest satisfaction.
+                    </p>
+                </div>
+            )}
+
             {/* PLANS */}
             <div className="plans">
 
@@ -228,6 +266,10 @@ export default function Billing() {
 
                     <p className="price">€39 / month</p>
 
+                    <p className="muted">
+                        Handle up to €{1500 * 5} in guest interactions
+                    </p>
+
                     <ul>
                         <li>✓ 1500 messages</li>
                         <li>✓ AI insights</li>
@@ -239,7 +281,7 @@ export default function Billing() {
                         onClick={() => upgrade("pro")}
                         disabled={subscription.plan === "pro"}
                     >
-                        {subscription.plan === "pro" ? "Current Plan" : "Upgrade to Pro"}
+                        {subscription.plan === "pro" ? "Current Plan" : "Upgrade to Pro → unlock more revenue"}
                     </button>
                 </div>
 
@@ -249,6 +291,10 @@ export default function Billing() {
                     <h3>Business</h3>
 
                     <p className="price">€99 / month</p>
+
+                    <p className="muted">
+                        Scale up to €{5000 * 5} in guest interactions
+                    </p>
 
                     <ul>
                         <li>✓ 5000 messages</li>
@@ -261,7 +307,7 @@ export default function Billing() {
                         onClick={() => upgrade("business")}
                         disabled={subscription.plan === "business"}
                     >
-                        {subscription.plan === "business" ? "Current Plan" : "Upgrade to Business"}
+                        {subscription.plan === "business" ? "Current Plan" : "Scale with Business plan"}
                     </button>
 
                 </div>
