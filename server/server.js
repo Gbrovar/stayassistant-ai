@@ -3189,6 +3189,138 @@ app.get("/analytics/:propertyId/advanced", authenticate, async (req, res) => {
 
 });
 
+/* --- DASHBOARD OVERVIEW --- */
+app.get("/dashboard/overview", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+    const month = new Date().toISOString().slice(0, 7)
+
+    /* -----------------------------
+       1. KPI CORE (YA EXISTENTE)
+    ----------------------------- */
+
+    const usageKey = `stayassistant:usage:${propertyId}:${month}`
+    const costKey = `stayassistant:cost:${propertyId}:${month}`
+    const snapshotKey = `stayassistant:billing_snapshot:${propertyId}:${month}`
+
+    const usage = Number(await redis.get(usageKey) || 0)
+    const costData = await redis.hGetAll(costKey)
+    const cost = Number(costData.cost || 0)
+
+    const usageLimit = await getUsageLimit(propertyId)
+
+    const snapshotRaw = await redis.get(snapshotKey)
+
+    let revenue = 0
+    let plan = "free"
+
+    if (snapshotRaw) {
+      const snap = JSON.parse(snapshotRaw)
+      revenue = snap.revenue
+      plan = snap.plan
+    }
+
+    const profit = revenue - cost
+    const usagePct = usageLimit ? (usage / usageLimit) : 0
+
+    /* -----------------------------
+       2. INSIGHTS (CACHE YA EXISTE)
+    ----------------------------- */
+
+    const semanticRaw = await redis.get(`stayassistant:semantic:${propertyId}`)
+    const aiRaw = await redis.get(`stayassistant:ai_insights:${propertyId}`)
+
+    const semantic = semanticRaw ? JSON.parse(semanticRaw).insights : []
+    const ai = aiRaw ? JSON.parse(aiRaw).insights : []
+
+    const insights = [...semantic, ...ai].slice(0, 4)
+
+    /* -----------------------------
+       3. ALERTS (REUTILIZAR LÓGICA)
+    ----------------------------- */
+
+    const intentKey = `stayassistant:analytics:${propertyId}:questions`
+    const intents = await redis.zRangeWithScores(intentKey, 0, 2, { REV: true })
+
+    const alerts = []
+
+    const top = intents[0]
+
+    if (top && top.score >= 10) {
+      alerts.push({
+        type: "demand",
+        text: `High demand for "${top.value}"`
+      })
+    }
+
+    /* -----------------------------
+       4. ACTIONS (NUEVO - SIMPLE)
+    ----------------------------- */
+
+    const actions = []
+
+    if (top && top.value === "restaurants" && top.score >= 5) {
+      actions.push({
+        type: "faq",
+        text: "Add restaurant FAQ to improve conversions",
+        impact: "high"
+      })
+    }
+
+    if (usagePct > 0.8) {
+      actions.push({
+        type: "usage",
+        text: "You're close to your limit. Consider upgrading.",
+        impact: "high"
+      })
+    }
+
+    /* -----------------------------
+       5. UPGRADE SIGNAL (YA EXISTE)
+    ----------------------------- */
+
+    const upgradeRaw = await redis.get(`stayassistant:ltv:${propertyId}`)
+
+    let upgrade = null
+
+    if (upgradeRaw) {
+      const parsed = JSON.parse(upgradeRaw)
+      upgrade = parsed.strategy || null
+    }
+
+    /* -----------------------------
+       RESPONSE FINAL
+    ----------------------------- */
+
+    res.json({
+      kpis: {
+        messages: usage,
+        usage_limit: usageLimit,
+        usage_pct: Number(usagePct.toFixed(2)),
+        cost: Number(cost.toFixed(2)),
+        revenue,
+        profit: Number(profit.toFixed(2))
+      },
+      insights,
+      alerts,
+      actions,
+      upgrade
+    })
+
+  } catch (err) {
+
+    console.error("Overview error:", err)
+
+    res.status(500).json({
+      error: "overview_failed"
+    })
+
+  }
+
+})
+
 /* --- BUSINESS INSIGHTS (SAAS LEVEL) --- */
 app.get("/analytics/:propertyId/business", authenticate, async (req, res) => {
 

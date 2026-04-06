@@ -1,11 +1,20 @@
-import AIStatusCard from "../components/overview/AIStatusCard"
-import RevenueCard from "../components/overview/RevenueCard"
-import AlertsCard from "../components/overview/AlertsCard"
-import OpportunitiesCard from "../components/overview/OpportunitiesCard"
-import UpgradeCard from "../components/monetization/UpgradeCard"
+import useOverview from "../hooks/useOverview"
 import KPI from "../components/overview/KPICard"
+import AlertsCard from "../components/overview/AlertsCard"
+import AIStatusCard from "../components/overview/AIStatusCard"
+import OpportunitiesCard from "../components/overview/OpportunitiesCard"
+import RevenueCard from "../components/overview/RevenueCard"
+import UpgradeCard from "../components/monetization/UpgradeCard"
 
 export default function OverviewPage() {
+
+  const { data, loading } = useOverview()
+
+  if (loading || !data) {
+    return <div className="container">Loading...</div>
+  }
+
+  const { kpis, insights, alerts, actions, upgrade } = data
 
   return (
     <div className="container">
@@ -16,23 +25,28 @@ export default function OverviewPage() {
 
       <div className="stack-lg">
 
+        {/* KPI */}
         <div className="grid grid-4">
-          <KPI label="Messages" value="--" />
-          <KPI label="Top Intent" value="--" />
-          <KPI label="Peak Hour" value="--" />
-          <KPI label="Status" value="--" />
+          <KPI label="Messages" value={kpis.messages} />
+          <KPI label="Usage" value={`${Math.round(kpis.usage_pct * 100)}%`} />
+          <KPI label="Revenue" value={`€${kpis.revenue}`} />
+          <KPI label="Profit" value={`€${kpis.profit}`} />
         </div>
 
         <div className="page-content">
 
           <div className="grid grid-2">
-            <AlertsCard />
-            <AIStatusCard />
+            <AlertsCard data={alerts} />
+            <AIStatusCard kpis={kpis} upgrade={upgrade} />
           </div>
 
-          <OpportunitiesCard />
+          <OpportunitiesCard insights={insights} actions={actions} />
 
-          <RevenueCard />
+          <RevenueCard kpis={kpis} upgrade={upgrade} />
+
+          {upgrade && (
+            <UpgradeCard strategy={upgrade} />
+          )}
 
         </div>
 
