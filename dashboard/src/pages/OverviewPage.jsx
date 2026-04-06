@@ -4,7 +4,7 @@ import AlertsCard from "../components/overview/AlertsCard"
 import AIStatusCard from "../components/overview/AIStatusCard"
 import OpportunitiesCard from "../components/overview/OpportunitiesCard"
 import RevenueCard from "../components/overview/RevenueCard"
-import UpgradeCard from "../components/monetization/UpgradeCard"
+
 
 export default function OverviewPage() {
 

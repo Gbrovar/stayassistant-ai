@@ -22,6 +22,8 @@ export default function Topbar({ setSidebarOpen }) {
 
   const percentage = (safeUsage / safeLimit) * 100
 
+  const isUrgent = conversion?.level === "critical"
+
   function trackClick() {
     const variant = localStorage.getItem("sa_ab_variant")
 
@@ -40,24 +42,57 @@ export default function Topbar({ setSidebarOpen }) {
 
   return (
 
-
     <div className="topbar">
 
-      {conversion?.show && conversion.location === "topbar" && (
-        <div style={{
-          background:
-            conversion.level === "critical"
-              ? "#7f1d1d"
-              : conversion.level === "high"
-                ? "#78350f"
-                : "#1e3a8a",
-          color: "white",
-          padding: "8px 16px",
-          marginBottom: 10,
-          borderRadius: 6,
-          fontSize: 14
-        }}>
-          {conversion.message}
+      {/* 🔥 GLOBAL UPGRADE BANNER */}
+      {conversion?.show && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background:
+              conversion.level === "critical"
+                ? "#7f1d1d"
+                : conversion.level === "high"
+                  ? "#78350f"
+                  : "#1e3a8a",
+            color: "white",
+            padding: "10px 16px",
+            marginBottom: 10,
+            borderRadius: 8,
+            fontSize: 14,
+            animation: isUrgent ? "pulse 1.5s infinite" : "none"
+          }}
+        >
+
+          <span style={{ fontWeight: 500 }}>
+            {conversion.message}
+          </span>
+
+          <Button
+            variant="primary"
+            style={{
+              marginLeft: 16,
+              background:
+                conversion.level === "critical"
+                  ? "#dc2626"
+                  : conversion.level === "high"
+                    ? "#f59e0b"
+                    : "#22c55e",
+              color: "white",
+              fontWeight: "bold"
+            }}
+            onClick={() => {
+              trackClick()
+              window.location.href = "/dashboard/billing"
+            }}
+          >
+            {isUrgent
+              ? "🚨 Upgrade now"
+              : conversion.cta || "Upgrade"}
+          </Button>
+
         </div>
       )}
 
@@ -87,44 +122,17 @@ export default function Topbar({ setSidebarOpen }) {
           {usage} / {limit}
         </div>
 
-        {conversion?.show && conversion.location === "topbar" && (
-          <Button
-            variant="primary"
-            style={{
-              background:
-                conversion.level === "critical"
-                  ? "#dc2626"
-                  : conversion.level === "high"
-                    ? "#f59e0b"
-                    : "#22c55e",
-              color: "white",
-              fontWeight: "bold"
-            }}
-            onClick={() => {
-              trackClick()
-              window.location.href = "/dashboard/billing"
-            }}
-          >
-            {conversion.level === "critical"
-              ? "🚨 Upgrade now"
-              : conversion.level === "high"
-                ? "⚡ Upgrade"
-                : "Upgrade"}
-          </Button>
-        )}
-
         <Button
           variant="secondary"
           onClick={() => {
             localStorage.clear()
-            window.location.href = "/login"
+            window.location.href = "/dashboard/login"
           }}
         >
           Logout
         </Button>
 
       </div>
-
 
     </div>
 
