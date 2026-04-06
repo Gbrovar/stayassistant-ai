@@ -9,6 +9,7 @@ export default function AIStatusCard({ kpis, upgrade }) {
   if (ratio > 0.8) {
     status = "High usage"
     color = "#f59e0b"
+    return "You're close to your limit → upgrade to avoid interruptions"
   }
 
   if (ratio >= 1) {
