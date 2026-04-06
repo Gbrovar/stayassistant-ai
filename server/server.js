@@ -1511,6 +1511,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     /* --- INTENT DETECTION --- */
     const intent = detectIntent(userMessage)
+    console.log("🔥 INTENT DETECTED:", intent)
 
 
     const addressParts = [

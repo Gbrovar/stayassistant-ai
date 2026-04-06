@@ -52,14 +52,15 @@ export function detectIntent(text) {
       "basura",
       "tirar basura",
       "donde tirar basura",
-      "donde tirar la basura",
+      "donde puedo tirar la basura",
+      "tirar la basura",
+      "basura donde",
       "trash",
       "garbage",
       "waste",
       "bin",
       "rubbish",
-      "dispose",
-      "disposal"
+      "leave trash"
     ],
 
     taxi: [
@@ -139,6 +140,8 @@ export function detectIntent(text) {
     scores[intent] = 0
   })
 
+  if (text.includes("basura")) return "waste"
+
   // 🔥 SCORING POR KEYWORDS (tu sistema mejorado)
   for (const intent in intents) {
     for (const keyword of intents[intent]) {
@@ -172,11 +175,11 @@ export function detectIntent(text) {
 
   // 🔥 PRIORIDAD (como tu sistema original)
   const priorityOrder = [
+    "waste",
     "checkin",
     "checkout",
     "address",
     "wifi",
-    "waste",
     "taxi",
     "transport",
     "restaurants",
