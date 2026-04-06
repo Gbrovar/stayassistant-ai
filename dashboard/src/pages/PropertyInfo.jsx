@@ -183,7 +183,6 @@ export default function PropertyInfo({ onComplete }) {
 
         setSaving(false)
 
-        if (onComplete) onComplete()
     }
 
     useEffect(() => {
