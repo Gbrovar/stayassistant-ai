@@ -48,6 +48,20 @@ export function detectIntent(text) {
       "supermercado"
     ],
 
+    waste: [
+      "basura",
+      "tirar basura",
+      "donde tirar basura",
+      "donde tirar la basura",
+      "trash",
+      "garbage",
+      "waste",
+      "bin",
+      "rubbish",
+      "dispose",
+      "disposal"
+    ],
+
     taxi: [
       "taxi",
       "uber",
@@ -162,6 +176,7 @@ export function detectIntent(text) {
     "checkout",
     "address",
     "wifi",
+    "waste",
     "taxi",
     "transport",
     "restaurants",

@@ -1713,6 +1713,26 @@ app.post("/chat", chatLimiter, async (req, res) => {
       )
     }
 
+    if (intent === "waste") {
+
+      const info = property.knowledge.property_info
+
+      if (!info.waste) {
+        return res.json(
+          buildResponse({
+            reply: "Please check with reception for waste disposal instructions.",
+            intent
+          })
+        )
+      }
+
+      return res.json(
+        buildResponse({
+          reply: info.waste,
+          intent
+        })
+      )
+    }
 
 
     if (intent === "checkin") {

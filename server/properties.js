@@ -140,7 +140,12 @@ export const properties = {
 
                     Bus stop:
                     3 minutes walking from the apartment.
-                    `
+                   `,
+                waste: `
+                    Trash containers are located at the end of the street next to the supermarket.
+
+                    Please dispose of waste after 20:00 if possible.
+                    `,
 
             },
 
@@ -185,11 +190,6 @@ export const properties = {
                 {
                     question: "How do I open the smart lock?",
                     answer: "Use the keypad next to the door and enter the access code sent to you on the day of arrival."
-                },
-
-                {
-                    question: "Where can I leave the trash?",
-                    answer: "Trash containers are located at the end of the street next to the supermarket."
                 },
 
                 {

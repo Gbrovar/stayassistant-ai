@@ -53,6 +53,35 @@ INSTRUCTIONS:
 - If user asks for address → give it clearly
 - Keep answer short and direct
 `
+        case "waste":
+
+            const wasteInfo = k.property_info?.waste
+
+            if (!wasteInfo) {
+                return `
+WASTE DISPOSAL:
+
+No specific waste information is configured for this property.
+
+INSTRUCTIONS:
+- DO NOT invent details
+- Tell the guest to contact reception
+- Be polite and helpful
+`
+            }
+
+            return `
+WASTE DISPOSAL:
+
+${wasteInfo}
+
+INSTRUCTIONS:
+- Be clear and practical
+- Tell the guest exactly where to go
+- Mention schedule if available
+
+${buildUserContext()}
+`
 
         case "restaurants":
 
