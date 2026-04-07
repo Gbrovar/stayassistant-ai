@@ -38,7 +38,7 @@ export default function Sidebar({ open, setSidebarOpen }) {
             onClick={handleClick}
             className={({ isActive }) => isActive ? "active" : ""}
           >
-            <span>{item.label}</span>
+            <span className="sidebar-label">{item.label}</span>
 
             {item.hasDot && ltv?.strategy && (
               <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
