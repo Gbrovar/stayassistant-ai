@@ -88,8 +88,6 @@ export default function FAQEditor({ onComplete }) {
 
         setLoading(false)
 
-        if (onComplete) onComplete()
-
     }
 
     return (

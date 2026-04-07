@@ -391,6 +391,17 @@ export default function PropertyInfo({ onComplete }) {
                 />
             </Section>
 
+            <div style={{ marginTop: 20 }}>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                        if (onComplete) onComplete()
+                    }}
+                >
+                    Continue →
+                </button>
+            </div>
+
         </div>
     )
 }
@@ -465,17 +476,6 @@ function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
 
                 <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
                     Add
-                </button>
-            </div>
-
-            <div style={{ marginTop: 16 }}>
-                <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                        if (onComplete) onComplete()
-                    }}
-                >
-                    Continue →
                 </button>
             </div>
 

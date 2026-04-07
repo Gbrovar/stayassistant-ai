@@ -21,15 +21,6 @@ export default function PropertySetupPage() {
   function completeStep(step) {
     setStepsDone(prev => ({ ...prev, [step]: true }))
 
-    // avanzar automáticamente
-    if (step < 3) {
-      setActiveStep(step + 1)
-    }
-  }
-
-  function completeStep(step) {
-    setStepsDone(prev => ({ ...prev, [step]: true }))
-
     // solo avanzar si el usuario hizo click (no autosave)
     setActiveStep(prev => (prev === step ? step + 1 : prev))
   }
