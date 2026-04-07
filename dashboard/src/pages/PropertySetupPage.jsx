@@ -25,19 +25,24 @@ export default function PropertySetupPage() {
 
   async function handleAutoFill() {
     try {
+      // 🔴 VALIDAR QUE HAY DIRECCIÓN REAL
+      const propertyRes = await fetch(`${API_URL}/property/${propertyId}`, {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
+
+      const property = await propertyRes.json()
+
+      if (!property?.coordinates) {
+        alert("Please add your property address first to generate real local recommendations.")
+        setActiveStep(1)
+        return
+      }
 
       const token = localStorage.getItem("token")
       const propertyId = localStorage.getItem("propertyId")
 
-      // 🧠 0. ENSURE SETUP FIRST (CRÍTICO)
-      await fetch(`${API_URL}/property/setup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        },
-        body: JSON.stringify({})
-      })
 
       // 1️⃣ AI DATA
       const res = await fetch(`${API_URL}/ai/setup-generator`, {

@@ -119,10 +119,26 @@ export default function PropertyInfo({ onComplete }) {
 
 
     function handleChange(e) {
-        setForm({
+
+        const updated = {
             ...form,
             [e.target.name]: e.target.value
-        })
+        }
+
+        setForm(updated)
+
+        // 🧠 detectar si usuario está completando dirección
+        if (
+            (e.target.name === "address" ||
+                e.target.name === "city" ||
+                e.target.name === "country") &&
+            updated.address &&
+            updated.city &&
+            updated.country
+        ) {
+            // guardar en localStorage (opcional fallback UX)
+            localStorage.setItem("property_address_ready", "true")
+        }
     }
 
     function addItem(type, value) {
@@ -197,6 +213,22 @@ export default function PropertyInfo({ onComplete }) {
                     primary_color: "#22c55e"
                 })
             })
+
+            // 🧠 VALIDACIÓN DIRECCIÓN (CRÍTICO)
+            if (!form.address || !form.city || !form.country) {
+                showToast("Please complete your property location to enable recommendations")
+                return
+            }
+
+            // 🔵 VALIDACIÓN PRO (evitar datos basura)
+            if (
+                form.address.trim().length < 5 ||
+                form.city.trim().length < 2 ||
+                form.country.trim().length < 2
+            ) {
+                showToast("Please enter a valid property location")
+                return
+            }
 
             await fetch(`${API_URL}/property/setup`, {
                 method: "POST",
@@ -405,6 +437,10 @@ export default function PropertyInfo({ onComplete }) {
                         onChange={handleChange}
                     />
                 </Grid>
+
+                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                    This location is used to generate real local recommendations for your guests.
+                </p>
             </Section>
 
             {/* CONTACT */}
