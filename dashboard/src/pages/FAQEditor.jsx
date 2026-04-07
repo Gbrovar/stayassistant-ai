@@ -35,6 +35,24 @@ export default function FAQEditor({ onComplete }) {
 
     }, [])
 
+    useEffect(() => {
+
+        function handleAutoFill(e) {
+
+            const data = e.detail
+
+            if (!data?.faq) return
+
+            setFaq(data.faq)
+
+        }
+
+        window.addEventListener("ai-autofill", handleAutoFill)
+
+        return () => window.removeEventListener("ai-autofill", handleAutoFill)
+
+    }, [])
+
 
     function updateQuestion(index, value) {
         const copy = [...faq]

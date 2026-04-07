@@ -41,6 +41,24 @@ export default function Recommendations({ onComplete }) {
 
     }, [])
 
+    useEffect(() => {
+
+        function handleAutoFill(e) {
+
+            const data = e.detail
+
+            if (!data?.recommendations) return
+
+            setItems(data.recommendations)
+
+        }
+
+        window.addEventListener("ai-autofill", handleAutoFill)
+
+        return () => window.removeEventListener("ai-autofill", handleAutoFill)
+
+    }, [])
+
 
     function updateName(index, value) {
 
