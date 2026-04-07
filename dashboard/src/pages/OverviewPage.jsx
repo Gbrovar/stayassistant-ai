@@ -19,33 +19,28 @@ export default function OverviewPage() {
   const estimatedSavings = kpis.messages * 5
 
   return (
-    <div className="container">
+    <div className="container stack-xl">
 
-
+      {/* HEADER */}
       <div className="page-header">
         <h1 className="title-lg">Your AI Performance</h1>
       </div>
 
       {/* HERO */}
-      <div className="card hero-card">
-        <h2>Your AI Concierge is handling guest requests automatically</h2>
+      <div className="card-v2 card-hero">
+        <h2>Your AI Concierge is working for you</h2>
 
         <p className="text-muted">
-          Save time, reduce workload, and improve guest experience
+          Automate guest communication, save time and increase efficiency
         </p>
 
-        <p>
-          You've handled <strong>{kpis.messages}</strong> guest requests automatically
-        </p>
-
-        <p>
-          Estimated savings: <strong>€{estimatedSavings}</strong>
-        </p>
+        <div style={{ marginTop: 16 }}>
+          <strong>{kpis.messages}</strong> requests handled ·
+          <strong> €{estimatedSavings}</strong> saved
+        </div>
 
         {kpis.messages === 0 && (
-          <div className="empty-state">
-            <p>Start using your AI assistant to see real results</p>
-
+          <div style={{ marginTop: 20 }}>
             <button
               className="btn btn-primary"
               onClick={() => window.location.href = "/install"}
@@ -56,31 +51,75 @@ export default function OverviewPage() {
         )}
       </div>
 
-      <div className="stack-lg">
+      {/* KPI STRIP */}
+      <div className="grid-dashboard">
 
-        {/* KPI */}
-        <div className="grid grid-4">
-          <KPI label="AI Requests Handled" value={kpis.messages} />
-          <KPI label="Usage Capacity" value={`${Math.round(kpis.usage_pct * 100)}%`} />
-          <KPI label="Estimated Value" value={`€${kpis.messages * 5}`} />
-          <KPI label="System Status" value={kpis.usage_pct > 0.8 ? "Near capacity" : "Running smoothly"} />
-          <KPI label="Remaining Capacity" value={`${kpis.usage_limit - kpis.messages}`} />
+        <div className="col-3 kpi-card">
+          <div className="kpi-label">Requests</div>
+          <div className="kpi-value-lg">{kpis.messages}</div>
         </div>
 
-        <div className="page-content">
-
-          <div className="grid grid-2">
-            <AlertsCard data={alerts} />
-            <AIStatusCard kpis={kpis} upgrade={upgrade} />
+        <div className="col-3 kpi-card">
+          <div className="kpi-label">Usage</div>
+          <div className="kpi-value-lg">
+            {Math.round(kpis.usage_pct * 100)}%
           </div>
+        </div>
 
-          <OpportunitiesCard insights={insights} actions={actions} />
+        <div className="col-3 kpi-card">
+          <div className="kpi-label">Value</div>
+          <div className="kpi-value-lg">
+            €{kpis.messages * 5}
+          </div>
+        </div>
 
-          <RevenueCard kpis={kpis} upgrade={upgrade} />
-
+        <div className="col-3 kpi-card">
+          <div className="kpi-label">Status</div>
+          <div className="kpi-value-lg">
+            {kpis.usage_pct > 0.8 ? "Near limit" : "Healthy"}
+          </div>
         </div>
 
       </div>
+
+      {/* MAIN GRID */}
+      <div className="grid-dashboard">
+
+        {/* ALERTS */}
+        <div className="col-6">
+          <div className="card-v2">
+            <div className="section-title-v2">Alerts</div>
+            <AlertsCard data={alerts} />
+          </div>
+        </div>
+
+        {/* AI STATUS */}
+        <div className="col-6">
+          <div className="card-v2">
+            <div className="section-title-v2">System</div>
+            <AIStatusCard kpis={kpis} upgrade={upgrade} />
+          </div>
+        </div>
+
+        {/* OPPORTUNITIES */}
+        <div className="col-8">
+          <div className="card-v2">
+            <div className="section-title-v2">Opportunities</div>
+            <OpportunitiesCard insights={insights} actions={actions} />
+          </div>
+        </div>
+
+        {/* REVENUE */}
+        <div className="col-4">
+          <div className="card-v2">
+            <div className="section-title-v2">Revenue</div>
+            <RevenueCard kpis={kpis} upgrade={upgrade} />
+          </div>
+        </div>
+
+      </div>
+
     </div>
   )
+
 }

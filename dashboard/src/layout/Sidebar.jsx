@@ -48,14 +48,8 @@ export default function Sidebar({ open, setSidebarOpen }) {
         <NavLink to="/billing" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
           Billing
           {ltv?.strategy && (
-            <span style={{
-              marginLeft: 8,
-              color: ltv?.strategy?.urgency === "high"
-                ? "#dc2626"
-                : "#facc15"
-            }}>
-              ●
-            </span>
+            <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
+            
           )}
         </NavLink>
 

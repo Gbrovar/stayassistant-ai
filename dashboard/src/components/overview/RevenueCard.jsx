@@ -40,7 +40,7 @@ export default function RevenueCard({ kpis, upgrade }) {
       </div>
 
       {/* 💰 NUEVO BLOQUE: VALOR REAL */}
-      <div style={{ marginTop: 20 }}>
+      <div>
 
         <div className="card card-soft" style={{ marginBottom: 12 }}>
           <p className="text-muted">Estimated savings</p>

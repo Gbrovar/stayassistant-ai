@@ -24,7 +24,7 @@ export default function OpportunitiesCard({ insights, actions }) {
 
       {/* INSIGHTS (información) */}
       {insights?.map((text, i) => (
-        <div key={`insight-${i}`} className="card card-soft">
+        <div key={`insight-${i}`} className="card-soft-v2">
           <p>{text}</p>
         </div>
       ))}
@@ -32,7 +32,7 @@ export default function OpportunitiesCard({ insights, actions }) {
       {/* ACTIONS (acciones reales) */}
       {actions?.map((a, i) => (
 
-        <div key={`action-${i}`} className="card card-soft">
+        <div key={`action-${i}`} className="card-soft-v2">
 
           {/* Texto */}
           <p style={{ marginBottom: 8 }}>

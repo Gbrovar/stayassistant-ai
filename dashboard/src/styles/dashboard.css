@@ -1515,3 +1515,260 @@ textarea.input {
 
 
 }
+
+
+/* ============================= */
+/* 🚀 NEW DESIGN SYSTEM (V2) */
+/* ============================= */
+
+/* --- GRID SYSTEM --- */
+
+.grid-dashboard {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+.col-12 { grid-column: span 12; }
+.col-8 { grid-column: span 8; }
+.col-6 { grid-column: span 6; }
+.col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+
+/* --- RESPONSIVE --- */
+
+@media (max-width: 1024px) {
+  .col-8, .col-6, .col-4, .col-3 {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .col-12,
+  .col-8,
+  .col-6,
+  .col-4,
+  .col-3 {
+    grid-column: span 1;
+  }
+}
+
+/* --- CARDS V2 --- */
+
+.card-v2 {
+  background: linear-gradient(180deg, #0f172a, #0b1220);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.card-v2:hover {
+  border-color: rgba(99,102,241,0.3);
+  transform: translateY(-2px);
+}
+
+/* HERO CARD */
+
+.card-hero {
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.05));
+  border: 1px solid rgba(99,102,241,0.3);
+}
+
+/* SOFT CARD (nested) */
+
+.card-soft-v2 {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+/* --- KPI STRIP --- */
+
+.kpi-card {
+  padding: 18px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-soft);
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.kpi-value-lg {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* --- SECTION TITLES --- */
+
+.section-title-v2 {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- CLEAN SPACING --- */
+
+.stack-xl {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ============================= */
+/* SIDEBAR V2 */
+/* ============================= */
+
+.sidebar {
+  background: linear-gradient(180deg, #0f172a, #0b1220);
+  border-right: 1px solid var(--border-primary);
+  width: 250px;
+  padding: 24px 16px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  letter-spacing: 0.5px;
+}
+
+/* NAV */
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 14px;
+  border-radius: 10px;
+
+  color: var(--text-secondary);
+  font-size: 14px;
+
+  transition: all 0.2s ease;
+}
+
+/* hover */
+
+.sidebar nav a:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+}
+
+/* active */
+
+.sidebar nav a.active {
+  background: rgba(99,102,241,0.15);
+  color: white;
+  border: 1px solid rgba(99,102,241,0.3);
+}
+
+/* subtle glow */
+
+.sidebar nav a.active:hover {
+  background: rgba(99,102,241,0.2);
+}
+
+.sidebar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.sidebar-dot.high {
+  background: var(--danger);
+}
+
+.sidebar-dot.medium {
+  background: var(--warning);
+}
+
+/* ============================= */
+/* TOPBAR V2 */
+/* ============================= */
+
+.topbar {
+  min-height: 64px;
+  border-bottom: 1px solid var(--border-primary);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+}
+
+/* LEFT */
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plan-badge {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-soft);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+/* RIGHT */
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* usage */
+
+.usage-box {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* banner */
+
+.topbar-banner {
+  width: 100%;
+  border-bottom: 1px solid var(--border-primary);
+  padding: 10px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 13px;
+}
+
+.topbar-banner.critical {
+  background: rgba(239,68,68,0.15);
+}
+
+.topbar-banner.high {
+  background: rgba(245,158,11,0.15);
+}
+
+.topbar-banner.normal {
+  background: rgba(99,102,241,0.15);
+}
