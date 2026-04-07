@@ -468,6 +468,17 @@ function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
                 </button>
             </div>
 
+            <div style={{ marginTop: 16 }}>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                        if (onComplete) onComplete()
+                    }}
+                >
+                    Continue →
+                </button>
+            </div>
+
         </div>
     )
 }

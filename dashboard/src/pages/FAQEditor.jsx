@@ -165,6 +165,17 @@ export default function FAQEditor({ onComplete }) {
 
             </div>
 
+            <div style={{ marginTop: 16 }}>
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        if (onComplete) onComplete()
+                    }}
+                >
+                    Continue →
+                </Button>
+            </div>
+
             {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
         </div>

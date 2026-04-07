@@ -105,7 +105,7 @@ export default function Recommendations({ onComplete }) {
 
         setSaving(false)
 
-        if (onComplete) onComplete()
+
     }
 
 
@@ -159,6 +159,15 @@ export default function Recommendations({ onComplete }) {
                 </button>
 
             </div>
+
+            <button
+                className="btn btn-primary"
+                onClick={() => {
+                    if (onComplete) onComplete()
+                }}
+            >
+                Finish setup →
+            </button>
 
 
         </div>
