@@ -25,6 +25,33 @@ export default function PropertySetupPage() {
     setActiveStep(prev => (prev === step ? step + 1 : prev))
   }
 
+  async function handleAutoFill() {
+
+    try {
+
+      const res = await fetch(`${API_URL}/ai/setup-generator`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+          propertyId: localStorage.getItem("propertyId")
+        })
+      })
+
+      const data = await res.json()
+
+      // 👉 DISPARAR EVENTO GLOBAL
+      window.dispatchEvent(new CustomEvent("ai-autofill", {
+        detail: data
+      }))
+
+    } catch (err) {
+      console.error("Auto-fill error", err)
+    }
+  }
+
   return (
     <div className="container">
 
@@ -33,6 +60,17 @@ export default function PropertySetupPage() {
         <p className="page-subtitle">
           Configure how your assistant works and responds to guests.
         </p>
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+
+        <button
+          className="btn btn-primary"
+          onClick={handleAutoFill}
+        >
+          ✨ Auto-fill with AI
+        </button>
+
       </div>
 
       <div className="setup-layout">

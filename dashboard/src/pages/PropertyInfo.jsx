@@ -76,6 +76,38 @@ export default function PropertyInfo({ onComplete }) {
         load()
     }, [])
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (Object.values(form).some(v => v)) {
+                saveAll()
+            }
+        }, 2000)
+
+        return () => clearTimeout(timeout)
+    }, [JSON.stringify(form)])
+
+    useEffect(() => {
+
+        function handleAutoFill(e) {
+
+            const data = e.detail
+
+            if (!data?.property_info) return
+
+            setForm(prev => ({
+                ...prev,
+                ...data.property_info
+            }))
+
+        }
+
+        window.addEventListener("ai-autofill", handleAutoFill)
+
+        return () => window.removeEventListener("ai-autofill", handleAutoFill)
+
+    }, [])
+
+
     function handleChange(e) {
         setForm({
             ...form,
@@ -185,15 +217,82 @@ export default function PropertyInfo({ onComplete }) {
 
     }
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (Object.values(form).some(v => v)) {
-                saveAll()
-            }
-        }, 2000)
+    /* UI */
 
-        return () => clearTimeout(timeout)
-    }, [JSON.stringify(form)])
+
+    function Grid({ children }) {
+        return (
+            <div style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12
+            }}>
+                {children}
+            </div>
+        )
+    }
+
+    function Input({ label, placeholder, ...props }) {
+        return (
+            <div>
+                <label>{label}</label>
+                <input className="input" placeholder={placeholder} {...props} />
+            </div>
+        )
+    }
+
+    function Textarea({ label, ...props }) {
+        return (
+            <div>
+                <label>{label}</label>
+                <textarea className="input" {...props} />
+            </div>
+        )
+    }
+
+    function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
+        return (
+            <div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                    {items.map((item, i) => (
+                        <div key={i} style={{
+                            padding: "6px 10px",
+                            borderRadius: 999,
+                            background: "rgba(99,102,241,0.15)",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6
+                        }}>
+                            {item}
+                            <span
+                                style={{ cursor: "pointer", opacity: 0.6 }}
+                                onClick={() => onRemove(i)}
+                                onMouseEnter={(e) => e.target.style.opacity = 1}
+                                onMouseLeave={(e) => e.target.style.opacity = 0.6}
+                            >
+                                ✕
+                            </span>
+                        </div>
+                    ))}
+                </div>
+
+                <div style={{ display: "flex", gap: 8 }}>
+                    <input
+                        className="input"
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                        placeholder="Type and click Add..."
+                    />
+
+                    <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
+                        Add
+                    </button>
+                </div>
+
+            </div>
+        )
+    }
 
     return (
 
@@ -406,79 +505,3 @@ export default function PropertyInfo({ onComplete }) {
     )
 }
 
-/* UI */
-
-
-function Grid({ children }) {
-    return (
-        <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 12
-        }}>
-            {children}
-        </div>
-    )
-}
-
-function Input({ label, placeholder, ...props }) {
-    return (
-        <div>
-            <label>{label}</label>
-            <input className="input" placeholder={placeholder} {...props} />
-        </div>
-    )
-}
-
-function Textarea({ label, ...props }) {
-    return (
-        <div>
-            <label>{label}</label>
-            <textarea className="input" {...props} />
-        </div>
-    )
-}
-
-function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
-    return (
-        <div>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
-                {items.map((item, i) => (
-                    <div key={i} style={{
-                        padding: "6px 10px",
-                        borderRadius: 999,
-                        background: "rgba(99,102,241,0.15)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6
-                    }}>
-                        {item}
-                        <span
-                            style={{ cursor: "pointer", opacity: 0.6 }}
-                            onClick={() => onRemove(i)}
-                            onMouseEnter={(e) => e.target.style.opacity = 1}
-                            onMouseLeave={(e) => e.target.style.opacity = 0.6}
-                        >
-                            ✕
-                        </span>
-                    </div>
-                ))}
-            </div>
-
-            <div style={{ display: "flex", gap: 8 }}>
-                <input
-                    className="input"
-                    value={newValue}
-                    onChange={(e) => setNewValue(e.target.value)}
-                    placeholder="Type and click Add..."
-                />
-
-                <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
-                    Add
-                </button>
-            </div>
-
-        </div>
-    )
-}
