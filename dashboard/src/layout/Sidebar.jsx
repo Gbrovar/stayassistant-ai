@@ -21,46 +21,36 @@ export default function Sidebar({ open, setSidebarOpen }) {
 
       <nav>
 
-        <NavLink to="/" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Overview
-        </NavLink>
+        {[
+          { to: "/", label: "Overview" },
+          { to: "/conversations", label: "Conversations" },
+          { to: "/analytics", label: "Analytics" },
+          { to: "/insights", label: "AI Insights" },
+          { to: "/property", label: "Property Setup" },
+          { to: "/install", label: "Install" },
+          { to: "/billing", label: "Billing", hasDot: true },
+          { to: "/admin", label: "Admin" }
+        ].map((item) => (
 
-        <NavLink to="/conversations" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Conversations
-        </NavLink>
+          <NavLink
+            key={item.to}
+            to={item.to}
+            onClick={handleClick}
+            className={({ isActive }) => isActive ? "active" : ""}
+          >
+            <span>{item.label}</span>
 
-        <NavLink to="/analytics" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Analytics
-        </NavLink>
+            {item.hasDot && ltv?.strategy && (
+              <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
+            )}
 
-        <NavLink to="/insights" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          AI Insights
-        </NavLink>
+          </NavLink>
 
-        <NavLink to="/property" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Property Setup
-        </NavLink>
-
-        <NavLink to="/install" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Install
-        </NavLink>
-
-        <NavLink to="/billing" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Billing
-          {ltv?.strategy && (
-            <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
-            
-          )}
-        </NavLink>
-
-        <NavLink to="/admin" onClick={handleClick} className={({ isActive }) => isActive ? "active" : ""}>
-          Admin
-        </NavLink>
+        ))}
 
       </nav>
 
     </aside>
 
   )
-
 }
