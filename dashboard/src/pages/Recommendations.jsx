@@ -49,7 +49,13 @@ export default function Recommendations({ onComplete }) {
 
             if (!data?.recommendations) return
 
-            setItems(data.recommendations)
+            setItems(
+                data.recommendations.map(r =>
+                    typeof r === "string"
+                        ? { name: r, description: "" }
+                        : r
+                )
+            )
 
         }
 

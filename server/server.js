@@ -3845,7 +3845,13 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 
     const text = completion.choices[0].message.content
 
-    const json = JSON.parse(text)
+    let json
+
+    try {
+      json = JSON.parse(text)
+    } catch {
+      return res.status(500).json({ error: "invalid AI response" })
+    }
 
     property.knowledge.faq = json.faq
 
@@ -3872,6 +3878,69 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 
     res.status(500).json({ error: "setup failed" })
 
+  }
+
+})
+
+app.post("/ai/setup-generator", authenticate, async (req, res) => {
+
+  try {
+
+    const propertyId = req.propertyId
+
+    const property = await getProperty(propertyId)
+
+    if (!property) {
+      return res.status(404).json({ error: "property not found" })
+    }
+
+    const city = property.city || "a tourist city"
+
+    const prompt = `
+    Create a full concierge setup for a vacation rental in ${city}.
+
+    Return STRICT JSON:
+
+    {
+      "property_info": {
+        "welcome_message": "...",
+        "checkin": "15:00",
+        "checkout": "11:00"
+      },
+      "faq": [
+        { "question": "...", "answer": "..." }
+      ],
+      "recommendations": [
+        { "name": "...", "description": "..." }
+      ]
+    }
+    `
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.4,
+      messages: [
+        { role: "system", content: "You generate structured JSON only." },
+        { role: "user", content: prompt }
+      ]
+    })
+
+    let data
+
+    try {
+      data = JSON.parse(completion.choices[0].message.content)
+    } catch (err) {
+      console.log("JSON parse error", err)
+      return res.status(500).json({ error: "invalid AI response" })
+    }
+
+    res.json(data)
+
+  } catch (err) {
+
+    console.error("AI generator error", err)
+
+    res.status(500).json({ error: "generator failed" })
   }
 
 })

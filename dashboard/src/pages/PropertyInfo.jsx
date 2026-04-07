@@ -11,6 +11,7 @@ export default function PropertyInfo({ onComplete }) {
 
     const [saving, setSaving] = useState(false)
     const [saved, setSaved] = useState(false)
+    const [isAutoFilling, setIsAutoFilling] = useState(false)
 
     const fallbackWelcome =
         "Welcome 👋 I'm here to help you during your stay 😊"
@@ -77,6 +78,9 @@ export default function PropertyInfo({ onComplete }) {
     }, [])
 
     useEffect(() => {
+
+        if (isAutoFilling) return // 🚫 NO autosave durante autofill
+
         const timeout = setTimeout(() => {
             if (Object.values(form).some(v => v)) {
                 saveAll()
@@ -84,7 +88,8 @@ export default function PropertyInfo({ onComplete }) {
         }, 2000)
 
         return () => clearTimeout(timeout)
-    }, [JSON.stringify(form)])
+
+    }, [JSON.stringify(form), isAutoFilling])
 
     useEffect(() => {
 
@@ -94,13 +99,18 @@ export default function PropertyInfo({ onComplete }) {
 
             if (!data?.property_info) return
 
+            setIsAutoFilling(true)
+
             setForm(prev => ({
                 ...prev,
                 ...data.property_info
             }))
 
+            // ⏱️ desbloquear autosave después
+            setTimeout(() => {
+                setIsAutoFilling(false)
+            }, 1500)
         }
-
         window.addEventListener("ai-autofill", handleAutoFill)
 
         return () => window.removeEventListener("ai-autofill", handleAutoFill)

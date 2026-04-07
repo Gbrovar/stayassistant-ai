@@ -4,6 +4,7 @@ import Recommendations from "./Recommendations"
 import { useContext, useState, useEffect } from "react"
 import { AppContext } from "../context/AppContext"
 import Section from "../components/UI/Section"
+import { API_URL } from "../api/config"
 
 export default function PropertySetupPage() {
 
@@ -20,31 +21,80 @@ export default function PropertySetupPage() {
 
   function completeStep(step) {
     setStepsDone(prev => ({ ...prev, [step]: true }))
-
-    // solo avanzar si el usuario hizo click (no autosave)
-    setActiveStep(prev => (prev === step ? step + 1 : prev))
   }
 
   async function handleAutoFill() {
-
     try {
 
+      const token = localStorage.getItem("token")
+      const propertyId = localStorage.getItem("propertyId")
+
+      // 🧠 0. ENSURE SETUP FIRST (CRÍTICO)
+      await fetch(`${API_URL}/property/setup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({})
+      })
+
+      // 1️⃣ AI DATA
       const res = await fetch(`${API_URL}/ai/setup-generator`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-          propertyId: localStorage.getItem("propertyId")
-        })
+          "Authorization": "Bearer " + token
+        }
       })
 
-      const data = await res.json()
+      const aiData = await res.json()
 
-      // 👉 DISPARAR EVENTO GLOBAL
+      // 2️⃣ GOOGLE PLACES (MULTI CATEGORY 🔥)
+      const types = ["restaurants", "cafes", "attractions"]
+
+      const placesResults = await Promise.all(
+        types.map(type =>
+          fetch(`${API_URL}/property/${propertyId}/places/${type}`)
+            .then(r => r.json())
+            .catch(() => ({ items: [] }))
+        )
+      )
+
+      // 3️⃣ NORMALIZE PLACES
+      const realPlaces = placesResults.flatMap(res =>
+        (res.items || []).slice(0, 5).map(p => ({
+          name: p.name,
+          description: `${p.address || ""} • ⭐ ${p.rating || "N/A"}`
+        }))
+      )
+
+      // 4️⃣ DEDUPE SYSTEM 🔥
+      function dedupe(list) {
+        const seen = new Set()
+        return list.filter(item => {
+          const key = item.name.toLowerCase().trim()
+          if (seen.has(key)) return false
+          seen.add(key)
+          return true
+        })
+      }
+
+      // 5️⃣ MERGE INTELIGENTE
+      const finalRecommendations = dedupe([
+        ...(aiData.recommendations || []),
+        ...realPlaces
+      ]).slice(0, 12)
+
+      // 6️⃣ FINAL DATA
+      const finalData = {
+        ...aiData,
+        recommendations: finalRecommendations
+      }
+
+      // 7️⃣ DISPATCH
       window.dispatchEvent(new CustomEvent("ai-autofill", {
-        detail: data
+        detail: finalData
       }))
 
     } catch (err) {
