@@ -6,6 +6,8 @@
   /* 🔥 más separación */
 }
 
+/* TODO: remove legacy grid */
+
 .grid-2 {
   grid-template-columns: 1fr 1fr;
 }
@@ -17,6 +19,8 @@
 .grid-4 {
   grid-template-columns: repeat(4, 1fr);
 }
+
+/* ******************** */
 
 .stack-md {
   display: flex;
@@ -1102,10 +1106,7 @@ body {
 }
 
 .conversations-list {
-  background: #0f172a;
-  border-radius: 12px;
-  border: 1px solid #1f2937;
-  height: calc(100vh - 180px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
@@ -1145,11 +1146,7 @@ body {
 }
 
 .conversation-detail {
-  background: #0f172a;
-  border-radius: 12px;
-  border: 1px solid #1f2937;
-  padding: 20px;
-  height: calc(100vh - 180px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
@@ -1157,6 +1154,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .message-user {
@@ -1767,3 +1765,7 @@ h3 {
 
 .mb-md { margin-bottom: 16px; }
 .text-warning { color: var(--warning); }
+
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }

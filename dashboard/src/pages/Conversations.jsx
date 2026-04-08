@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { API_URL } from "../api/config"
 import { useApp } from "../context/AppContext"
 import useResponsive from "../hooks/useResponsive"
+import Button from "../components/UI/Button"
 
 export default function Conversations() {
 
@@ -89,9 +90,9 @@ export default function Conversations() {
           <h3>Usage limit reached</h3>
           <p>You have reached your monthly limit.</p>
 
-          <button onClick={() => window.location.href = "/billing"}>
+          <Button variant="primary" onClick={() => window.location.href = "/billing"}>
             Upgrade plan
-          </button>
+          </Button>
         </div>
       )}
 
@@ -123,7 +124,7 @@ export default function Conversations() {
                   }}
                 >
 
-                  <strong>Guest</strong>
+                  <strong>Guest #{c.id.slice(-4)}</strong>
 
                   <p className="conversation-preview">
                     {c.preview}
@@ -150,18 +151,19 @@ export default function Conversations() {
           <div className="conversation-detail card-v2">
 
             {isMobile && selected && (
-              <button
-                className="btn-secondary mb-sm"
+              <Button variant="secondary" size="sm" className="mb-sm"
                 onClick={() => {
                   setSelected(null)
                   document.querySelector(".conversation-detail")?.classList.remove("open")
                 }}
               >
                 ← Back
-              </button>
+              </Button>
             )}
 
-            {!selected && <p>Select a conversation</p>}
+            {!selected && <div className="text-muted">
+              Select a conversation to view messages
+            </div>}
 
             {selected && (
 
