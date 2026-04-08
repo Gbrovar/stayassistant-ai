@@ -52,7 +52,7 @@ export default function Analytics() {
 
   if (!hasData) {
     return (
-      <div className="card">
+      <div className="card-v2">
         Analytics will appear once guests start using the assistant.
       </div>
     )
@@ -62,27 +62,27 @@ export default function Analytics() {
     <div className="stack-lg">
 
       {/* KPIs */}
-      <div className="grid grid-4">
-        <div className="card">
-          <div className="text-muted">Total Messages</div>
-          <div className="kpi-value">{totalMessages}</div>
+      <div className="grid-dashboard">
+        <div className="kpi-card col-3">
+          <div className="kpi-label">Total Messages</div>
+          <div className="kpi-value-lg">{totalMessages}</div>
         </div>
 
-        <div className="card">
-          <div className="text-muted">Top Intent</div>
-          <div className="kpi-value">{topIntents[0]?.intent || "-"}</div>
+        <div className="kpi-card col-3">
+          <div className="kpi-label">Top Intent</div>
+          <div className="kpi-value-lg">{topIntents[0]?.intent || "-"}</div>
         </div>
 
-        <div className="card">
-          <div className="text-muted">Peak Hour</div>
-          <div className="kpi-value">
+        <div className="kpi-card col-3">
+          <div className="kpi-label">Peak Hour</div>
+          <div className="kpi-value-lg">
             {Object.entries(peakHours)[0]?.[0] || "-"}:00
           </div>
         </div>
 
-        <div className="card">
-          <div className="text-muted">Status</div>
-          <div className="kpi-value">
+        <div className="kpi-card col-3">
+          <div className="kpi-label">Status</div>
+          <div className="kpi-value-lg">
             {totalMessages > 0 ? "Active" : "Idle"}
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function Analytics() {
 
       {/* 🚀 UPGRADE SIGNAL */}
       {upgradeSignal && (
-        <div className={`card card-highlight upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
+        <div className={`card-v2 card-highlight upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
           <div className="upgrade-content">
             <h3 className="title-md">
               {upgradeSignal === "upgrade_strong"
@@ -118,7 +118,7 @@ export default function Analytics() {
               return (
                 <div
                   key={idx}
-                  className={`card alert alert-${level}`}
+                  className={`card-v2 alert alert-${level}`}
                 >
                   ⚠️ {a.text}
                 </div>
@@ -127,7 +127,7 @@ export default function Analytics() {
           </div>
         )
       ) : (
-        <div className="card">
+        <div className="card-v2">
           <p>Unlock alerts to detect issues automatically</p>
           <Button onClick={() => navigate("/billing")}>
             Upgrade to Pro
@@ -137,7 +137,7 @@ export default function Analytics() {
 
       {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
-        <div className="card">
+        <div className="card-v2">
           <h3 className="title-md">Business Insights</h3>
 
           <div className="stack-md">
@@ -151,7 +151,7 @@ export default function Analytics() {
       {/* AI INSIGHTS */}
       {isPro ? (
         aiInsights.length > 0 && (
-          <div className="card">
+          <div className="card-v2">
             <h3 className="title-md">AI Insights</h3>
 
             <div className="stack-md">
@@ -164,7 +164,7 @@ export default function Analytics() {
           </div>
         )
       ) : (
-        <div className="card">
+        <div className="card-v2">
           <h3 className="title-md">AI Insights</h3>
           <p>Unlock AI-powered recommendations</p>
           <Button onClick={() => navigate("/billing")}>
@@ -175,7 +175,7 @@ export default function Analytics() {
 
       {/* CONVERSATION INSIGHTS */}
       {semanticInsights.length > 0 && (
-        <div className="card">
+        <div className="card-v2">
           <h3 className="title-md">Conversation Insights</h3>
 
           <div className="stack-md">
@@ -190,7 +190,7 @@ export default function Analytics() {
 
       {/* QUALITY */}
       {conversationScore && (
-        <div className="card">
+        <div className="card-v2">
           <h3 className="title-md">Conversation Quality</h3>
 
           <div className="stack-md">
@@ -202,7 +202,7 @@ export default function Analytics() {
       )}
 
       {/* OPTIMIZATION */}
-      <div className="card">
+      <div className="card-v2">
         <h3 className="title-md">Optimization</h3>
 
         <Button
@@ -229,7 +229,7 @@ export default function Analytics() {
       <LockedFeature title="Unlock advanced analytics">
         <div className="grid grid-2">
 
-          <div className="card">
+          <div className="card-v2">
             <h3 className="title-md">Top guest requests</h3>
 
             <ResponsiveContainer width="100%" height={250}>
@@ -242,7 +242,7 @@ export default function Analytics() {
             </ResponsiveContainer>
           </div>
 
-          <div className="card">
+          <div className="card-v2">
             <h3 className="title-md">Peak hours</h3>
 
             <ResponsiveContainer width="100%" height={250}>
