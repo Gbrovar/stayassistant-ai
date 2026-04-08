@@ -1764,3 +1764,6 @@ h3 {
   font-size: 12px;
   color: var(--success);
 }
+
+.mb-md { margin-bottom: 16px; }
+.text-warning { color: var(--warning); }

@@ -71,17 +71,11 @@ export default function Conversations() {
 
   if (conversations.length === 0) {
     return (
-      <div>
-        <div className="page-header">
-          <h2 className="page-title">Guest Conversations</h2>
-          <p className="page-subtitle">
-            Monitor how your AI concierge interacts with guests
-          </p>
-        </div>
-
-        <div className="card-v2">
-          No guest conversations yet.
-        </div>
+      <div className="card-v2">
+        <h3>No conversations yet</h3>
+        <p className="text-muted">
+          Once guests start chatting, conversations will appear here.
+        </p>
       </div>
     )
   }
@@ -91,7 +85,7 @@ export default function Conversations() {
     <>
 
       {limitReached && (
-        <div className="card-v2" style={{ marginBottom: 20 }}>
+        <div className="card-v2 mb-md">
           <h3>Usage limit reached</h3>
           <p>You have reached your monthly limit.</p>
 
@@ -101,11 +95,11 @@ export default function Conversations() {
         </div>
       )}
 
-      <div className="conversations-page">
+      <div>
 
         <div className="conversations-layout">
 
-          <div className="conversations-list">
+          <div className="conversations-list card-v2">
 
             {conversations.map(c => {
 
@@ -141,7 +135,7 @@ export default function Conversations() {
                     <span>{analysis.messagesCount} msgs</span>
 
                     {analysis.fallback && (
-                      <span style={{ color: "orange" }}>⚠ fallback</span>
+                      <span className="text-warning">⚠ fallback</span>
                     )}
                   </div>
 
@@ -153,12 +147,11 @@ export default function Conversations() {
 
           </div>
 
-          <div className="conversation-detail">
+          <div className="conversation-detail card-v2">
 
             {isMobile && selected && (
               <button
-                className="btn-secondary"
-                style={{ marginBottom: 10 }}
+                className="btn-secondary mb-sm"
                 onClick={() => {
                   setSelected(null)
                   document.querySelector(".conversation-detail")?.classList.remove("open")

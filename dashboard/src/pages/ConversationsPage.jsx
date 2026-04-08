@@ -4,7 +4,7 @@ export default function ConversationsPage() {
   return (
   <div className="container">
     <div className="page-header">
-      <h2 className="page-title">Guest Conversations</h2>
+      <h2 className="title-lg">Guest Conversations</h2>
       <p className="page-subtitle">
         Monitor how your AI concierge interacts with guests
       </p>
