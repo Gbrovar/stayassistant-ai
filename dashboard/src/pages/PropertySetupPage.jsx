@@ -110,27 +110,35 @@ export default function PropertySetupPage() {
   return (
     <div className="container">
 
-      <div className="page-header">
-        <h1 className="title-lg">Your AI concierge</h1>
-        <p className="page-subtitle">
-          Configure how your assistant works and responds to guests.
-        </p>
-      </div>
+      <div className="card-v2 card-hero mb-lg">
 
-      <div className="mb-lg">
+        <div className="flex-between">
 
-        <button
-          className="btn btn-md btn-primary"
-          onClick={handleAutoFill}
-        >
-          ✨ Auto-fill with AI
-        </button>
+          <div>
+            <h3>Quick setup with AI</h3>
+            <p className="text-muted">
+              Automatically generate property info, FAQs and recommendations.
+            </p>
+          </div>
+
+          <button
+            className="btn btn-md btn-primary"
+            onClick={handleAutoFill}
+          >
+            ✨ Auto-fill
+          </button>
+
+        </div>
 
       </div>
 
       <div className="setup-layout">
 
-        <div className="setup-main stack-lg">
+        <div className="setup-main stack-xl">
+
+          <div className="section-title-v2">
+            Setup steps
+          </div>
 
           {/* STEP 1 */}
           <Section
