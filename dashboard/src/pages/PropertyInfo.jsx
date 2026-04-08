@@ -267,7 +267,7 @@ export default function PropertyInfo({ onComplete }) {
         return (
             <div style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
                 gap: 12
             }}>
                 {children}
@@ -492,7 +492,7 @@ export default function PropertyInfo({ onComplete }) {
                 />
             </Section>
 
-            <div style={{ marginTop: 20 }}>
+            <div className="mt-md">
                 <button
                     className="btn btn-primary"
                     onClick={() => {
