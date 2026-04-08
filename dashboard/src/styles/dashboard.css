@@ -183,13 +183,6 @@ body {
   overflow-y: auto;
 }
 
-
-.kpi-value {
-  font-size: 26px;
-  font-weight: 600;
-}
-
-
 /* --- TOPBAR PRO --- */
 
 .topbar-right {
@@ -801,6 +794,8 @@ body {
   font-weight: 600;
 }
 
+/* TODO: remove (legacy KPI grid) */
+
 .kpis {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1185,12 +1180,6 @@ body {
 }
 
 /* ANALYTICS */
-.analytics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 20px;
-}
 
 .label {
   font-size: 12px;
@@ -1346,12 +1335,6 @@ textarea.input {
     max-height: none;
     z-index: 999;
   }
-
-  .analytics-grid {
-    grid-template-columns: 1fr;
-  }
-
-
 
 }
 

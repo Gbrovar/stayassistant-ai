@@ -90,9 +90,9 @@ export default function Analytics() {
 
       {/* 🚀 UPGRADE SIGNAL */}
       {upgradeSignal && (
-        <div className={`card-v2 card-highlight upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
+        <div className={`card-v2 card-hero upgrade-card ${upgradeSignal === "upgrade_strong" ? "urgent" : ""}`}>
           <div className="upgrade-content">
-            <h3 className="title-md">
+            <h3>
               {upgradeSignal === "upgrade_strong"
                 ? "High usage detected"
                 : "Growing usage"}
@@ -138,7 +138,7 @@ export default function Analytics() {
       {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
         <div className="card-v2">
-          <h3 className="title-md">Business Insights</h3>
+          <h3>Business Insights</h3>
 
           <div className="stack-md">
             {insights.map((i, idx) => (
@@ -152,7 +152,7 @@ export default function Analytics() {
       {isPro ? (
         aiInsights.length > 0 && (
           <div className="card-v2">
-            <h3 className="title-md">AI Insights</h3>
+            <h3>AI Insights</h3>
 
             <div className="stack-md">
               {aiInsights.map((text, idx) => (
@@ -165,7 +165,7 @@ export default function Analytics() {
         )
       ) : (
         <div className="card-v2">
-          <h3 className="title-md">AI Insights</h3>
+          <h3>AI Insights</h3>
           <p>Unlock AI-powered recommendations</p>
           <Button onClick={() => navigate("/billing")}>
             Upgrade to Pro
@@ -176,7 +176,7 @@ export default function Analytics() {
       {/* CONVERSATION INSIGHTS */}
       {semanticInsights.length > 0 && (
         <div className="card-v2">
-          <h3 className="title-md">Conversation Insights</h3>
+          <h3>Conversation Insights</h3>
 
           <div className="stack-md">
             {semanticInsights.map((text, idx) => (
@@ -191,7 +191,7 @@ export default function Analytics() {
       {/* QUALITY */}
       {conversationScore && (
         <div className="card-v2">
-          <h3 className="title-md">Conversation Quality</h3>
+          <h3>Conversation Quality</h3>
 
           <div className="stack-md">
             <p>Clarity: {conversationScore.clarity?.toFixed(1)} / 10</p>
@@ -203,7 +203,7 @@ export default function Analytics() {
 
       {/* OPTIMIZATION */}
       <div className="card-v2">
-        <h3 className="title-md">Optimization</h3>
+        <h3>Optimization</h3>
 
         <Button
           variant="primary"
@@ -227,10 +227,10 @@ export default function Analytics() {
 
       {/* LOCKED ANALYTICS */}
       <LockedFeature title="Unlock advanced analytics">
-        <div className="grid grid-2">
+        <div className="grid-dashboard">
 
-          <div className="card-v2">
-            <h3 className="title-md">Top guest requests</h3>
+          <div className="card-v2 col-6">
+            <h3>Top guest requests</h3>
 
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={intentData}>
@@ -242,8 +242,8 @@ export default function Analytics() {
             </ResponsiveContainer>
           </div>
 
-          <div className="card-v2">
-            <h3 className="title-md">Peak hours</h3>
+          <div className="card-v2 col-6">
+            <h3>Peak hours</h3>
 
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={hourData}>

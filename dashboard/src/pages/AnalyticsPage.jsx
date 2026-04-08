@@ -11,7 +11,7 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      <div className="stack-lg">
+      <div className="stack-xl">
         <Analytics />
       </div>
 
