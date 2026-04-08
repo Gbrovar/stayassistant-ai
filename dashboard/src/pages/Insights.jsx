@@ -117,20 +117,20 @@ export default function Insights() {
 
   if (loading) {
     return (
-      <div className="card">
+      <div className="card-v2">
         <p>Analyzing guest conversations...</p>
       </div>
     )
   }
 
   return (
-    <div className="stack">
+    <div className="stack-lg">
 
       {/* BUSINESS INSIGHTS */}
       {insights.length > 0 && (
-        <div className="card card-highlight">
+        <div className="card-v2 card-hero">
           <div className="card-header">
-            <h3>AI Insights</h3>
+            <h2 className="section-title-v2">AI Insights</h2>
           </div>
 
           <div className="stack-md">
@@ -146,7 +146,7 @@ export default function Insights() {
 
       {/* EMPTY STATE */}
       {suggestions.length === 0 && (
-        <div className="card card-highlight">
+        <div className="card-v2 card-hero">
           <p className="text-muted">
             Your AI is learning from guest conversations.
             Insights will appear once enough data is collected.
@@ -164,7 +164,7 @@ export default function Insights() {
         return (
           <div
             key={s.question + idx}
-            className={`card insight-card ${s.count >= 5 ? "high-demand" : "low-demand"
+            className={`card-v2 insight-card ${s.count >= 5 ? "high-demand" : "low-demand"
               }`}
           >
             <div className="insight-header">
@@ -191,7 +191,7 @@ export default function Insights() {
             )}
 
             <button
-              className="btn-primary btn-full"
+              className="btn btn-md btn-full btn-primary"
               onClick={() => addToFAQ(s.question, s.suggested_answer)}
             >
               + Add to FAQ
@@ -203,7 +203,7 @@ export default function Insights() {
       {/* LOCKED */}
       <LockedFeature title="Unlock all AI recommendations">
         {suggestions.slice(2).map((s, idx) => (
-          <div key={s.question + idx} className="card">
+          <div key={s.question + idx} className="card-soft-v2">
             <h3>{s.question}</h3>
             <p>{s.suggested_answer}</p>
           </div>
