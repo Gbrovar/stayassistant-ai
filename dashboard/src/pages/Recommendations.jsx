@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import Card from "../components/Card"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import { useContext } from "react"

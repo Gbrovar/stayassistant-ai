@@ -438,14 +438,14 @@ export default function PropertyInfo({ onComplete }) {
                     />
                 </Grid>
 
-                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                <p className="text-muted">
                     This location is used to generate real local recommendations for your guests.
                 </p>
             </Section>
 
             {/* CONTACT */}
             <Section title="Contact">
-                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                <p className="text-muted">
                     This will be shared with guests if they need to contact you.
                 </p>
 
@@ -493,7 +493,7 @@ export default function PropertyInfo({ onComplete }) {
             </Section>
 
             <Section title="House rules">
-                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                <p className="text-muted">
                     Inform guests about important rules (e.g. no smoking, no parties).
                 </p>
 
@@ -508,7 +508,7 @@ export default function PropertyInfo({ onComplete }) {
 
             {/* AMENITIES */}
             <Section title="Amenities">
-                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                <p className="text-muted">
                     Facilities available for guests (e.g. WiFi, pool, air conditioning).
                 </p>
 
@@ -523,7 +523,7 @@ export default function PropertyInfo({ onComplete }) {
 
             {/* SERVICES */}
             <Section title="Services">
-                <p style={{ fontSize: 12, color: "#94a3b8" }}>
+                <p className="text-muted">
                     Services you offer (e.g. airport transfer, breakfast, cleaning).
                 </p>
 
