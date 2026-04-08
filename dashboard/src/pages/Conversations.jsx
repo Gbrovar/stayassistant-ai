@@ -79,7 +79,7 @@ export default function Conversations() {
           </p>
         </div>
 
-        <div className="card">
+        <div className="card-v2">
           No guest conversations yet.
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function Conversations() {
     <>
 
       {limitReached && (
-        <div className="card" style={{ marginBottom: 20 }}>
+        <div className="card-v2" style={{ marginBottom: 20 }}>
           <h3>Usage limit reached</h3>
           <p>You have reached your monthly limit.</p>
 
