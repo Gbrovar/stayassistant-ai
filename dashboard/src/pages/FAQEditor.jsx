@@ -130,7 +130,7 @@ export default function FAQEditor({ onComplete }) {
 
                 <div key={index} className="faq-card">
 
-                    <div style={{ marginBottom: 8, fontSize: 12, color: "#64748b" }}>
+                    <div className="input-label">
                         Question
                     </div>
 
@@ -141,7 +141,7 @@ export default function FAQEditor({ onComplete }) {
                         placeholder="What time is check-in?"
                     />
 
-                    <div style={{ marginTop: 10, marginBottom: 8, fontSize: 12, color: "#64748b" }}>
+                    <div className="input-label mt-sm">
                         AI Answer
                     </div>
 
@@ -152,7 +152,7 @@ export default function FAQEditor({ onComplete }) {
                         placeholder="Check-in starts at 3pm..."
                     />
 
-                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
+                    <div className="flex-between mt-sm">
                         <Button variant="secondary" onClick={() => removeFaq(index)}>
                             Delete
                         </Button>
@@ -162,7 +162,7 @@ export default function FAQEditor({ onComplete }) {
 
             ))}
 
-            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <div className="flex gap-sm mt-sm">
 
                 <Button variant="secondary" onClick={addFaq}>
                     + Add question
@@ -174,7 +174,7 @@ export default function FAQEditor({ onComplete }) {
 
             </div>
 
-            <div style={{ marginTop: 16 }}>
+            <div className="mt-md">
                 <Button
                     variant="primary"
                     onClick={() => {

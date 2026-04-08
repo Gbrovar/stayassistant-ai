@@ -145,7 +145,7 @@ export default function Recommendations({ onComplete }) {
 
                 <div key={index} className="card-soft-v2">
 
-                    <div style={{ marginBottom: 10 }}>
+                    <div className="mb-sm">
                         <input className="input"
                             value={item.name}
                             placeholder="Place name"
@@ -153,7 +153,7 @@ export default function Recommendations({ onComplete }) {
                         />
                     </div>
 
-                    <div style={{ marginBottom: 10 }}>
+                    <div className="mb-sm">
                         <input className="input"
                             value={item.description}
                             placeholder="Description"
@@ -161,7 +161,7 @@ export default function Recommendations({ onComplete }) {
                         />
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="flex-end">
                         <button className="btn btn-secondary" onClick={() => removeItem(index)}>
                             Delete
                         </button>
@@ -171,7 +171,7 @@ export default function Recommendations({ onComplete }) {
 
             ))}
 
-            <div style={{ display: "flex", gap: 10 }}>
+            <div className="flex gap-sm">
 
                 <button className="btn btn-md btn-primary" onClick={addItem}>
                     + Add recommendation

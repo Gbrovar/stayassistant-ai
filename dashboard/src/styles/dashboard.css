@@ -1779,3 +1779,33 @@ h3 {
 .mb-lg { margin-bottom: var(--space-lg); }
 
 .text-warning { color: var(--warning); }
+
+
+/* NEW FLEX SYSTEM */
+
+.flex {
+  display: flex;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.gap-sm {
+  gap: 10px;
+}
+
+.mt-sm {
+  margin-top: 10px;
+}
+
+.mt-md {
+  margin-top: 16px;
+}

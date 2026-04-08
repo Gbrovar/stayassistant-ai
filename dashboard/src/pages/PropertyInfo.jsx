@@ -3,6 +3,8 @@ import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import Input from "../components/UI/Input";
+import Textarea from "../components/UI/Textarea";
 
 export default function PropertyInfo({ onComplete }) {
 
@@ -273,24 +275,6 @@ export default function PropertyInfo({ onComplete }) {
         )
     }
 
-    function Input({ label, placeholder, ...props }) {
-        return (
-            <div>
-                <label>{label}</label>
-                <input className="input" placeholder={placeholder} {...props} />
-            </div>
-        )
-    }
-
-    function Textarea({ label, ...props }) {
-        return (
-            <div>
-                <label>{label}</label>
-                <textarea className="input" {...props} />
-            </div>
-        )
-    }
-
     function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
         return (
             <div>
@@ -335,42 +319,14 @@ export default function PropertyInfo({ onComplete }) {
         )
     }
 
-    
+
     return (
 
         <div className="stack-xl">
 
-            <div style={{
-                position: "sticky",
-                top: 0,
-                zIndex: 50,
-                marginBottom: 10
-            }}>
-                {saving && (
-                    <div style={{
-                        background: "#1f2937",
-                        padding: "8px 12px",
-                        borderRadius: 8,
-                        fontSize: 12,
-                        color: "#94a3b8",
-                        display: "inline-block"
-                    }}>
-                        Saving...
-                    </div>
-                )}
-
-                {saved && (
-                    <div style={{
-                        background: "rgba(34,197,94,0.15)",
-                        padding: "8px 12px",
-                        borderRadius: 8,
-                        fontSize: 12,
-                        color: "#22c55e",
-                        display: "inline-block"
-                    }}>
-                        Saved ✓
-                    </div>
-                )}
+            <div className={`save-indicator ${saving ? "saving" : saved ? "saved" : ""}`}>
+                {saving && "Saving..."}
+                {saved && "Saved ✓"}
             </div>
 
             {/* BASIC */}

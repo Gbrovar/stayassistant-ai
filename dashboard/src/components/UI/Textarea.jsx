@@ -1,22 +1,20 @@
-export default function Input({
+// components/UI/Textarea.jsx
+export default function Textarea({
   label,
   name,
   value,
   onChange,
-  placeholder,
-  type = "text"
+  placeholder
 }) {
   return (
     <div className="form-field">
       {label && <label className="input-label">{label}</label>}
-
-      <input
+      <textarea
         className="input"
-        name={name}              // 🔥 CRÍTICO
-        value={value || ""}     // 🔥 evita uncontrolled
+        name={name}
+        value={value || ""}
         onChange={onChange}
         placeholder={placeholder}
-        type={type}
       />
     </div>
   )
