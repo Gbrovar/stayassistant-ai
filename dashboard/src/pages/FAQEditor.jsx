@@ -3,6 +3,8 @@ import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import Toast from "../components/UI/Toast"
 import Button from "../components/UI/Button"
+import Textarea from "../components/UI/Textarea"
+import Input from "../components/UI/Input"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
 
@@ -55,15 +57,19 @@ export default function FAQEditor({ onComplete }) {
 
 
     function updateQuestion(index, value) {
-        const copy = [...faq]
-        copy[index].question = value
-        setFaq(copy)
+        setFaq(prev =>
+            prev.map((item, i) =>
+                i === index ? { ...item, question: value } : item
+            )
+        )
     }
 
     function updateAnswer(index, value) {
-        const copy = [...faq]
-        copy[index].answer = value
-        setFaq(copy)
+        setFaq(prev =>
+            prev.map((item, i) =>
+                i === index ? { ...item, answer: value } : item
+            )
+        )
     }
 
     function addFaq() {
