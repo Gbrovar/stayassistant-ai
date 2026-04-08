@@ -111,7 +111,7 @@ export default function FAQEditor({ onComplete }) {
     return (
 
         <div>
-            <div className="card card-highlight">
+            <div className="card-v2 card-hero">
                 <p className="text-muted">
                     These questions train your AI concierge.
                     Add the most common things guests ask.
@@ -121,14 +121,7 @@ export default function FAQEditor({ onComplete }) {
 
 
             {faq.length === 0 && (
-                <div style={{
-                    padding: 12,
-                    background: "rgba(255,255,255,0.03)",
-                    borderRadius: 10,
-                    marginBottom: 12,
-                    fontSize: 13,
-                    color: "#94a3b8"
-                }}>
+                <div className="info-box mb-sm">
                     Start by adding common questions like check-in time or WiFi.
                 </div>
             )}
@@ -171,11 +164,11 @@ export default function FAQEditor({ onComplete }) {
 
             <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
 
-                <Button onClick={addFaq}>
+                <Button variant="secondary" onClick={addFaq}>
                     + Add question
                 </Button>
 
-                <Button onClick={save}>
+                <Button variant="secondary" onClick={save}>
                     {loading ? "Saving..." : "Save FAQ"}
                 </Button>
 

@@ -164,7 +164,7 @@ export default function PropertyInfo({ onComplete }) {
 
     function Section({ title, children }) {
         return (
-            <div className="card">
+            <div className="card-v2">
                 <div className="card-header">
                     <h3>{title}</h3>
                 </div>
@@ -261,7 +261,6 @@ export default function PropertyInfo({ onComplete }) {
 
     /* UI */
 
-
     function Grid({ children }) {
         return (
             <div style={{
@@ -336,9 +335,10 @@ export default function PropertyInfo({ onComplete }) {
         )
     }
 
+    
     return (
 
-        <div className="stack" style={{ gap: 28 }}>
+        <div className="stack-xl">
 
             <div style={{
                 position: "sticky",

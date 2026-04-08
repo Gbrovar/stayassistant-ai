@@ -124,6 +124,10 @@
   height: fit-content;
 }
 
+.setup-main {
+  max-width: 760px;
+}
+
 .info-box {
   background: rgba(99, 102, 241, 0.1);
   padding: 12px;

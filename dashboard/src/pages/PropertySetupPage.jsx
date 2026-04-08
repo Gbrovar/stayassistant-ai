@@ -117,10 +117,10 @@ export default function PropertySetupPage() {
         </p>
       </div>
 
-      <div style={{ marginBottom: 20 }}>
+      <div className="mb-lg">
 
         <button
-          className="btn btn-primary"
+          className="btn btn-md btn-primary"
           onClick={handleAutoFill}
         >
           ✨ Auto-fill with AI

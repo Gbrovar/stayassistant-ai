@@ -144,7 +144,7 @@ export default function Recommendations({ onComplete }) {
 
             {items.map((item, index) => (
 
-                <div key={index} className="rec-card">
+                <div key={index} className="card-soft-v2">
 
                     <div style={{ marginBottom: 10 }}>
                         <input className="input"
@@ -174,18 +174,18 @@ export default function Recommendations({ onComplete }) {
 
             <div style={{ display: "flex", gap: 10 }}>
 
-                <button className="btn btn-primary" onClick={addItem}>
+                <button className="btn btn-md btn-primary" onClick={addItem}>
                     + Add recommendation
                 </button>
 
-                <button className="btn btn-primary" onClick={save}>
+                <button className="btn btn-md btn-primary" onClick={save}>
                     {saving ? "Saving..." : "Save"}
                 </button>
 
             </div>
 
             <button
-                className="btn btn-primary"
+                className="btn btn-md btn-primary"
                 onClick={() => {
                     if (onComplete) onComplete()
                 }}
