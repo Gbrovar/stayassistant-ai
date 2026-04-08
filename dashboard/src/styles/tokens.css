@@ -31,4 +31,22 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+
+  /* 🔥 NEW: SHADOWS */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.2);
+  --shadow-md: 0 10px 25px rgba(0,0,0,0.3);
+  --shadow-lg: 0 25px 50px rgba(0,0,0,0.4);
+
+  /* 🔥 NEW: TRANSITIONS */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* 🔥 NEW: FONT SYSTEM */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 28px;
 }

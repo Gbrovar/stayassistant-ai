@@ -1763,9 +1763,10 @@ h3 {
   color: var(--success);
 }
 
-.mb-md { margin-bottom: 16px; }
-.text-warning { color: var(--warning); }
+/* --- SPACING SYSTEM (TOKEN BASED) --- */
 
 .mb-sm { margin-bottom: var(--space-sm); }
 .mb-md { margin-bottom: var(--space-md); }
 .mb-lg { margin-bottom: var(--space-lg); }
+
+.text-warning { color: var(--warning); }
