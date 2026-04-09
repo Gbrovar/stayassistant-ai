@@ -150,9 +150,8 @@ export default function Billing() {
                     </div>
                 )}
 
+                {/* CURRENT PLAN */}
                 <div className="col-8">
-
-                    {/* CURRENT PLAN */}
                     <div className="card-v2 card-hero">
 
                         <h3>Current Plan</h3>
@@ -256,6 +255,32 @@ export default function Billing() {
                     )}
                 </div>
 
+                                {/* PORTAL */}
+                <div className="col-4">
+                    <div className="card-v2 billing-section">
+
+                        <h3>Manage billing</h3>
+
+                        <div className="billing-actions">
+
+                            <button className="btn btn-secondary btn-full"
+                                onClick={openPortal}
+                            >
+                                Open billing portal
+                            </button>
+
+                            {subscription.plan !== "free" && subscription.status !== "cancel_scheduled" && (
+                                <button className="btn btn-secondary btn-full"
+                                    onClick={cancelSubscription}
+                                >
+                                    Cancel subscription
+                                </button>
+                            )}
+
+                        </div>
+                    </div>
+                </div>
+
                 {/* PLANS */}
                 <div className="col-12">
                     <div className="grid-dashboard">
@@ -344,46 +369,49 @@ export default function Billing() {
                     </div>
                 </div>
 
-                <div className="card-v2 billing-section">
+                {/* INVOICES */}
+                <div className="col-12">
+                    <div className="card-v2 billing-section">
 
-                    <h3>Invoices</h3>
+                        <h3>Invoices</h3>
 
-                    {invoices.length === 0 ? (
-                        <p className="muted">No invoices yet</p>
-                    ) : (
-                        <div className="invoice-list">
+                        {invoices.length === 0 ? (
+                            <p className="muted">No invoices yet</p>
+                        ) : (
+                            <div className="invoice-list">
 
-                            {invoices.map(inv => (
-                                <div key={inv.id} className="invoice-row">
+                                {invoices.map(inv => (
+                                    <div key={inv.id} className="invoice-row">
 
-                                    <div>
-                                        <strong>€{inv.amount.toFixed(2)}</strong>
-                                        <p className="muted">
-                                            {new Date(inv.date * 1000).toLocaleDateString()}
-                                        </p>
+                                        <div>
+                                            <strong>€{inv.amount.toFixed(2)}</strong>
+                                            <p className="muted">
+                                                {new Date(inv.date * 1000).toLocaleDateString()}
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <span className="status">
+                                                {inv.status}
+                                            </span>
+
+                                            <a
+                                                href={inv.pdf}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="btn-secondary"
+                                            >
+                                                Download PDF
+                                            </a>
+                                        </div>
+
                                     </div>
+                                ))}
 
-                                    <div>
-                                        <span className="status">
-                                            {inv.status}
-                                        </span>
+                            </div>
+                        )}
 
-                                        <a
-                                            href={inv.pdf}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="btn-secondary"
-                                        >
-                                            Download PDF
-                                        </a>
-                                    </div>
-
-                                </div>
-                            ))}
-
-                        </div>
-                    )}
-
+                    </div>
                 </div>
 
             </div>
