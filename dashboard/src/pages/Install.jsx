@@ -73,172 +73,188 @@ export default function Install() {
                             <p className="page-subtitle">Takes less than 2 minutes</p>
                         </div>
                     </div>
-
-                    <div className="plan-badge">
-                        {stepsCompleted} / 2
-                    </div>
                 </div>
+            </div>
 
-                <p className="text-muted mt-sm">
-                    {detected === true && "🟢 Live on your website"}
-                    {detected === false && "⚠️ Not detected yet"}
-                    {detected === null && "Ready to install"}
-                </p>
+            <div className="col-4">
+
+                <div className="card-v2">
+
+                    <div className="section-title-v2">Installation status</div>
+
+                    <p className="text-muted">
+                        {stepsCompleted} of 2 steps completed
+                    </p>
+
+                    <p className="mt-sm">
+                        {detected === true && "🟢 Live on your website"}
+                        {detected === false && "⚠️ Not detected yet"}
+                        {detected === null && "Ready to install"}
+                    </p>
+
+                </div>
 
             </div>
 
-            <div className="stack">
 
-                {/* STEP 1 */}
-                <div className="card-v2 card-hero">
+            <div className="grid-dashboard">
 
-                    <div className="section-title-v2">
-                        <span className={`step-dot ${copied ? "done" : ""}`}></span>
-                        <strong>Step 1 — Copy your widget</strong>
-                    </div>
+                <div className="col-8">
+                    {/* STEP 1 */}
+                    <div className="card-v2 card-hero">
 
-                    <p className="subtitle">
-                        This is your unique AI concierge script
-                    </p>
-
-                    <p>
-                        Copy this script and paste it into your website before the closing
-                        <code>{" </body> "}</code> tag.
-                    </p>
-
-                    <pre className="install-code">
-                        {script}
-                    </pre>
-
-                    <CopyButton
-                        text={script}
-                        onClick={() => {
-                            setCopied(true)
-                            localStorage.setItem("install_copied", "true")
-                        }}
-                        onCopy={() => {
-
-                            const token = localStorage.getItem("token")
-
-                            fetch(`${API_URL}/onboarding/complete`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${token}`
-                                },
-                                body: JSON.stringify({
-                                    step: "widget"
-                                })
-                            })
-
-                        }}
-                    />
-
-                    {copied && (
-                        <div style={{ marginTop: 10, fontSize: 12, color: "#22c55e" }}>
-                            Copied ✓ Now paste it into your website
+                        <div className="section-title-v2">
+                            <span className={`step-dot ${copied ? "done" : ""}`}></span>
+                            <strong>Step 1 — Copy your widget</strong>
                         </div>
-                    )}
 
-                </div>
+                        <p className="subtitle">
+                            This is your unique AI concierge script
+                        </p>
 
-                {/* STEP 2 */}
-                <div className="card-v2">
+                        <p>
+                            Copy this script and paste it into your website before the closing
+                            <code>{" </body> "}</code> tag.
+                        </p>
 
-                    <div className="section-title-v2">
-                        <span className={`step-dot ${copied ? "done" : ""}`}></span>
-                        <strong>Step 2 — Add to your website</strong>
-                    </div>
+                        <pre className="install-code">
+                            {script}
+                        </pre>
 
-                    <p className="subtitle">
-                        Paste it before the closing <code>{"</body>"}</code> tag
-                    </p>
+                        <CopyButton
+                            text={script}
+                            onClick={() => {
+                                setCopied(true)
+                                localStorage.setItem("install_copied", "true")
+                            }}
+                            onCopy={() => {
 
-                    <p>
-                        Open your website HTML and paste the script before the closing
-                        <code>{" </body> "}</code>.
-                    </p>
+                                const token = localStorage.getItem("token")
 
-                    <div className="install-hint">
-                        Paste before &lt;/body&gt;
-                    </div>
+                                fetch(`${API_URL}/onboarding/complete`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        step: "widget"
+                                    })
+                                })
 
-                    <pre className="install-code">
-                        {`<body>
-
-    ... your website ...
-
-    ${script}
-
-</body>`}
-                    </pre>
-
-                </div>
-
-                {/* STEP 3 */}
-                <div className="card-v2">
-
-                    <div className="section-title-v2">
-                        <span className={`step-dot ${(tested || detected) ? "done" : ""}`}></span>
-                        <strong>Step 3 — Test your AI concierge</strong>
-                    </div>
-
-                    <p className="subtitle">
-                        Open a live preview and see how guests interact
-                    </p>
-
-                    <div className="form-group-block">
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="https://yourwebsite.com"
-                            value={siteUrl}
-                            onChange={(e) => {
-                                setSiteUrl(e.target.value)
-                                localStorage.setItem("property_url", e.target.value)
                             }}
                         />
-                    </div>
 
-                    <div className="install-step-input-block">
-
-                        {checking && "Checking installation..."}
-                        {!checking && detected === true && "✅ Widget detected"}
-                        {!checking && detected === false && (
-                            <div style={{ fontSize: 12, color: "#f59e0b" }}>
-                                Could not detect automatically. Open your site manually.
+                        {copied && (
+                            <div style={{ marginTop: 10, fontSize: 12, color: "#22c55e" }}>
+                                Copied ✓ Now paste it into your website
                             </div>
                         )}
 
                     </div>
+                </div>
 
-                    <Button
-                        className="btn btn-md btn-primary"
-                        onClick={async () => {
+                <div className="col-6">
+                    {/* STEP 2 */}
+                    <div className="card-v2">
 
-                            setTested(true)
-                            localStorage.setItem("install_tested", "true")
+                        <div className="section-title-v2">
+                            <span className={`step-dot ${copied ? "done" : ""}`}></span>
+                            <strong>Step 2 — Add to your website</strong>
+                        </div>
 
-                            const token = localStorage.getItem("token")
+                        <p className="subtitle">
+                            Paste it before the closing <code>{"</body>"}</code> tag
+                        </p>
 
-                            await fetch(`${API_URL}/onboarding/complete`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${token}`
-                                },
-                                body: JSON.stringify({
-                                    step: "widget"
+                        <p>
+                            Open your website HTML and paste the script before the closing
+                            <code>{" </body> "}</code>.
+                        </p>
+
+                        <div className="install-hint">
+                            Paste before &lt;/body&gt;
+                        </div>
+
+                        <pre className="install-code">
+                            {`<body>
+
+                            ... your website ...
+
+                            ${script}
+
+                        </body>`}
+                        </pre>
+
+                    </div>
+                </div>
+
+                <div className="col-6">
+                    {/* STEP 3 */}
+                    <div className="card-v2">
+
+                        <div className="section-title-v2">
+                            <span className={`step-dot ${(tested || detected) ? "done" : ""}`}></span>
+                            <strong>Step 3 — Test your AI concierge</strong>
+                        </div>
+
+                        <p className="subtitle">
+                            Open a live preview and see how guests interact
+                        </p>
+
+                        <div className="form-group-block">
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="https://yourwebsite.com"
+                                value={siteUrl}
+                                onChange={(e) => {
+                                    setSiteUrl(e.target.value)
+                                    localStorage.setItem("property_url", e.target.value)
+                                }}
+                            />
+                        </div>
+
+                        <div className="install-step-input-block">
+
+                            {checking && "Checking installation..."}
+                            {!checking && detected === true && "✅ Widget detected"}
+                            {!checking && detected === false && (
+                                <div style={{ fontSize: 12, color: "#f59e0b" }}>
+                                    Could not detect automatically. Open your site manually.
+                                </div>
+                            )}
+
+                        </div>
+
+                        <Button
+                            className="btn btn-md btn-primary"
+                            onClick={async () => {
+
+                                setTested(true)
+                                localStorage.setItem("install_tested", "true")
+
+                                const token = localStorage.getItem("token")
+
+                                await fetch(`${API_URL}/onboarding/complete`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        step: "widget"
+                                    })
                                 })
-                            })
 
-                            window.open(`/chat.html?property=${propertyId}`, "_blank")
+                                window.open(`/chat.html?property=${propertyId}`, "_blank")
 
-                        }}
-                    >
-                        Open test chat
-                    </Button>
+                            }}
+                        >
+                            Open test chat
+                        </Button>
 
+                    </div>
                 </div>
 
                 {/* CHECK BUTTON EXTRA */}
