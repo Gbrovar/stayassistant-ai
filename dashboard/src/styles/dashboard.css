@@ -1435,7 +1435,7 @@ textarea.input {
 .card-hero {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.05));
   border: 1px solid rgba(99, 102, 241, 0.3);
-  width: 100%;
+  /*width: 100%;*/
 }
 
 /* SOFT CARD (nested) */
@@ -1471,7 +1471,7 @@ textarea.input {
 
 .section-title-v2 {
   font-size: 16px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-bottom: 16px;
   text-transform: none;
   letter-spacing: 0.5px;
