@@ -103,9 +103,17 @@ export default function Install() {
                         <CopyButton
                             text={script}
                             onClick={() => {
+
                                 setCopied(true)
+
                                 localStorage.setItem("install_copied", "true")
+
+                                setTimeout(() => {
+                                    setCopied(false)
+                                }, 1500)
+
                             }}
+
                             onCopy={() => {
 
                                 const token = localStorage.getItem("token")
@@ -218,7 +226,7 @@ export default function Install() {
 
                             {checking && "Checking installation..."}
                             {!checking && detected === true && "✅ Widget detected"}
-                            
+
 
                         </div>
 
