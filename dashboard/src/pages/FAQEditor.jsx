@@ -180,9 +180,9 @@ export default function FAQEditor({ onComplete }) {
 
             </div>
 
-            <div className="mt-md">
+            <div className="flex-end mt-md">
                 <Button
-                    variant="primary"
+                    variant="btn btn-md btn-primary"
                     onClick={() => {
                         if (onComplete) onComplete()
                     }}

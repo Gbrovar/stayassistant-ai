@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import Input from "../components/UI/Input";
 import Textarea from "../components/UI/Textarea";
+import Button from "../components/UI/Button"
 
 export default function PropertyInfo({ onComplete }) {
 
@@ -167,8 +168,8 @@ export default function PropertyInfo({ onComplete }) {
     function Section({ title, children }) {
         return (
             <div className="card-v2">
-                <div className="card-header">
-                    <h3>{title}</h3>
+                <div className="section-title-v2">
+                    {title}
                 </div>
 
                 <div className="stack">
@@ -265,11 +266,7 @@ export default function PropertyInfo({ onComplete }) {
 
     function Grid({ children }) {
         return (
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: 12
-            }}>
+            <div className="form-grid-2">
                 {children}
             </div>
         )
@@ -279,30 +276,16 @@ export default function PropertyInfo({ onComplete }) {
         return (
             <div>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                <div className="chips-container">
                     {items.map((item, i) => (
-                        <div key={i} style={{
-                            padding: "6px 10px",
-                            borderRadius: 999,
-                            background: "rgba(99,102,241,0.15)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6
-                        }}>
+                        <div key={i} className="chip">
                             {item}
-                            <span
-                                style={{ cursor: "pointer", opacity: 0.6 }}
-                                onClick={() => onRemove(i)}
-                                onMouseEnter={(e) => e.target.style.opacity = 1}
-                                onMouseLeave={(e) => e.target.style.opacity = 0.6}
-                            >
-                                ✕
-                            </span>
+                            <span className="chip-remove" onClick={() => onRemove(i)}>✕</span>
                         </div>
                     ))}
                 </div>
 
-                <div style={{ display: "flex", gap: 8 }}>
+                <div className="chips-input-row">
                     <input
                         className="input"
                         value={newValue}
@@ -331,68 +314,79 @@ export default function PropertyInfo({ onComplete }) {
 
             {/* BASIC */}
             <Section title="Basic info">
-                <Grid>
-                    <Input
-                        label="Property name"
-                        name="property_name"
-                        value={form.property_name}
-                        placeholder="e.g. Villa Sunset, Hotel Central..."
+
+                <div className="form-group-block">
+                    <Grid>
+                        <Input
+                            label="Property name"
+                            name="property_name"
+                            value={form.property_name}
+                            placeholder="e.g. Villa Sunset, Hotel Central..."
+                            onChange={handleChange}
+                        />
+
+                        <Input
+                            label="Widget text"
+                            name="button_text"
+                            value={form.button_text}
+                            placeholder="e.g. Ask concierge"
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                </div>
+
+                <div className="form-group-block">
+                    <Textarea
+                        label="Welcome message"
+                        name="welcome_message"
+                        value={form.welcome_message}
+                        placeholder={fallbackWelcome}
                         onChange={handleChange}
                     />
+                </div>
 
-                    <Input
-                        label="Widget text"
-                        name="button_text"
-                        value={form.button_text}
-                        placeholder="e.g. Ask concierge"
-                        onChange={handleChange}
-                    />
-                </Grid>
-
-                <Textarea
-                    label="Welcome message"
-                    name="welcome_message"
-                    value={form.welcome_message}
-                    placeholder={fallbackWelcome}
-                    onChange={handleChange}
-                />
             </Section>
 
             {/* LOCATION */}
             <Section title="Location">
-                <Input
-                    label="Address"
-                    name="address"
-                    value={form.address}
-                    placeholder="Street name and number"
-                    onChange={handleChange}
-                />
 
-                <Grid>
+                <div className="form-group-block">
                     <Input
-                        label="City"
-                        name="city"
-                        value={form.city}
-                        placeholder="e.g. Barcelona"
+                        label="Address"
+                        name="address"
+                        value={form.address}
+                        placeholder="Street name and number"
                         onChange={handleChange}
                     />
+                </div>
 
-                    <Input
-                        label="Country"
-                        name="country"
-                        value={form.country}
-                        placeholder="e.g. Spain"
-                        onChange={handleChange}
-                    />
+                <div className="form-group-block">
+                    <Grid>
+                        <Input
+                            label="City"
+                            name="city"
+                            value={form.city}
+                            placeholder="e.g. Barcelona"
+                            onChange={handleChange}
+                        />
 
-                    <Input
-                        label="Postal code"
-                        name="postal_code"
-                        value={form.postal_code}
-                        placeholder="e.g. 08001"
-                        onChange={handleChange}
-                    />
-                </Grid>
+                        <Input
+                            label="Country"
+                            name="country"
+                            value={form.country}
+                            placeholder="e.g. Spain"
+                            onChange={handleChange}
+                        />
+
+                        <Input
+                            label="Postal code"
+                            name="postal_code"
+                            value={form.postal_code}
+                            placeholder="e.g. 08001"
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                </div>
 
                 <p className="text-muted">
                     This location is used to generate real local recommendations for your guests.
@@ -405,47 +399,54 @@ export default function PropertyInfo({ onComplete }) {
                     This will be shared with guests if they need to contact you.
                 </p>
 
-                <Grid>
-                    <Input
-                        label="Phone"
-                        name="phone"
-                        value={form.phone}
-                        placeholder="+34 600 000 000"
-                        onChange={handleChange}
-                    />
+                <div className="form-group-block">
+                    <Grid>
+                        <Input
+                            label="Phone"
+                            name="phone"
+                            value={form.phone}
+                            placeholder="+34 600 000 000"
+                            onChange={handleChange}
+                        />
 
-                    <Input
-                        label="Email"
-                        name="email"
-                        value={form.email}
-                        placeholder="contact@yourproperty.com"
-                        onChange={handleChange}
-                    />
-                </Grid>
+                        <Input
+                            label="Email"
+                            name="email"
+                            value={form.email}
+                            placeholder="contact@yourproperty.com"
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                </div>
             </Section>
 
             {/* STAY */}
             <Section title="Stay details">
-                <Grid>
-                    <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
-                    <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
-                </Grid>
 
-                <Textarea
-                    label="Check-in instructions"
-                    name="checkin_instructions"
-                    value={form.checkin_instructions}
-                    placeholder="Explain how guests should check in"
-                    onChange={handleChange}
-                />
+                <div className="form-group-block">
+                    <Grid>
+                        <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
+                        <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+                    </Grid>
+                </div>
 
-                <Textarea
-                    label="Late check-in"
-                    name="late_checkin"
-                    value={form.late_checkin}
-                    placeholder="Instructions for late arrivals"
-                    onChange={handleChange}
-                />
+                <div className="form-group-block">
+                    <Textarea
+                        label="Check-in instructions"
+                        name="checkin_instructions"
+                        value={form.checkin_instructions}
+                        placeholder="Explain how guests should check in"
+                        onChange={handleChange}
+                    />
+
+                    <Textarea
+                        label="Late check-in"
+                        name="late_checkin"
+                        value={form.late_checkin}
+                        placeholder="Instructions for late arrivals"
+                        onChange={handleChange}
+                    />
+                </div>
             </Section>
 
             <Section title="House rules">
@@ -453,13 +454,15 @@ export default function PropertyInfo({ onComplete }) {
                     Inform guests about important rules (e.g. no smoking, no parties).
                 </p>
 
-                <Textarea
-                    label="Rules"
-                    name="house_rules"
-                    value={form.house_rules}
-                    placeholder="e.g. No smoking inside. Quiet hours after 22:00."
-                    onChange={handleChange}
-                />
+                <div className="form-group-block">
+                    <Textarea
+                        label="Rules"
+                        name="house_rules"
+                        value={form.house_rules}
+                        placeholder="e.g. No smoking inside. Quiet hours after 22:00."
+                        onChange={handleChange}
+                    />
+                </div>
             </Section>
 
             {/* AMENITIES */}
@@ -492,15 +495,15 @@ export default function PropertyInfo({ onComplete }) {
                 />
             </Section>
 
-            <div className="mt-md">
-                <button
-                    className="btn btn-primary"
+            <div className="flex-end mt-md">
+                <Button
+                    className="btn btn-md btn-primary"
                     onClick={() => {
                         if (onComplete) onComplete()
                     }}
                 >
                     Continue →
-                </button>
+                </Button>
             </div>
 
         </div>

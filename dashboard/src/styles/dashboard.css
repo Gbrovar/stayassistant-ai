@@ -527,6 +527,12 @@ body {
   letter-spacing: 0.5px;
 }
 
+.form-group-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 
 .section-hint {
   font-size: 12px;
@@ -695,6 +701,7 @@ body {
 .text-muted {
   color: #94a3b8;
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .alert {
@@ -1801,4 +1808,52 @@ h3 {
 
 .mt-md {
   margin-top: 16px;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CHIP SYSTEM */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+
+  font-size: 12px;
+}
+
+.chip-remove {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.chip-remove:hover {
+  opacity: 1;
+}
+
+.chips-input-row {
+  display: flex;
+  gap: 8px;
 }

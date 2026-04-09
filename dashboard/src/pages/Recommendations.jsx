@@ -3,6 +3,7 @@ import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
+import Button from "../components/UI/Button"
 
 export default function Recommendations({ onComplete }) {
 
@@ -183,15 +184,16 @@ export default function Recommendations({ onComplete }) {
 
             </div>
 
-            <button
-                className="btn btn-md btn-primary"
-                onClick={() => {
-                    if (onComplete) onComplete()
-                }}
-            >
-                Finish setup →
-            </button>
-
+            <div className="flex-end mt-md">
+                <Button
+                    className="btn btn-md btn-primary"
+                    onClick={() => {
+                        if (onComplete) onComplete()
+                    }}
+                >
+                    Finish setup →
+                </Button>
+            </div>
 
         </div>
 
