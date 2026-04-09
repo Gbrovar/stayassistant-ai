@@ -76,27 +76,6 @@ export default function Install() {
                 </div>
             </div>
 
-            <div className="col-4">
-
-                <div className="card-v2">
-
-                    <div className="section-title-v2">Installation status</div>
-
-                    <p className="text-muted">
-                        {stepsCompleted} of 2 steps completed
-                    </p>
-
-                    <p className="mt-sm">
-                        {detected === true && "🟢 Live on your website"}
-                        {detected === false && "⚠️ Not detected yet"}
-                        {detected === null && "Ready to install"}
-                    </p>
-
-                </div>
-
-            </div>
-
-
             <div className="grid-dashboard">
 
                 <div className="col-8">
@@ -152,6 +131,26 @@ export default function Install() {
                         )}
 
                     </div>
+                </div>
+
+                <div className="col-4">
+
+                    <div className="card-v2">
+
+                        <div className="section-title-v2">Installation status</div>
+
+                        <p className="text-muted">
+                            {stepsCompleted} of 2 steps completed
+                        </p>
+
+                        <p className="mt-sm">
+                            {detected === true && "🟢 Live on your website"}
+                            {detected === false && "⚠️ Not detected yet"}
+                            {detected === null && "Ready to install"}
+                        </p>
+
+                    </div>
+
                 </div>
 
                 <div className="col-6">
