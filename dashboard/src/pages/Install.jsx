@@ -102,12 +102,10 @@ export default function Install() {
 
                         <CopyButton
                             text={script}
+                            copied={copied}
                             onClick={() => {
-
                                 setCopied(true)
-
-                                localStorage.setItem("install_copied", "true")
-
+                                
                                 setTimeout(() => {
                                     setCopied(false)
                                 }, 1500)
@@ -131,12 +129,6 @@ export default function Install() {
 
                             }}
                         />
-
-                        {copied && (
-                            <div className="mt-sm text-success">
-                                Copied ✓ Now paste it into your website
-                            </div>
-                        )}
 
                     </div>
                 </div>
