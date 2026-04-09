@@ -255,9 +255,9 @@ export default function Billing() {
                     )}
                 </div>
 
-                                {/* PORTAL */}
+                {/* PORTAL */}
                 <div className="col-4">
-                    <div className="card-v2 billing-section">
+                    <div className="card-v2">
 
                         <h3>Manage billing</h3>
 
@@ -340,32 +340,6 @@ export default function Billing() {
 
                         </div>
 
-                    </div>
-                </div>
-
-                {/* PORTAL */}
-                <div className="col-4">
-                    <div className="card-v2 billing-section">
-
-                        <h3>Manage billing</h3>
-
-                        <div className="billing-actions">
-
-                            <button className="btn btn-secondary btn-full"
-                                onClick={openPortal}
-                            >
-                                Open billing portal
-                            </button>
-
-                            {subscription.plan !== "free" && subscription.status !== "cancel_scheduled" && (
-                                <button className="btn btn-secondary btn-full"
-                                    onClick={cancelSubscription}
-                                >
-                                    Cancel subscription
-                                </button>
-                            )}
-
-                        </div>
                     </div>
                 </div>
 
