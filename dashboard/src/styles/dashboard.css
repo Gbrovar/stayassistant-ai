@@ -1361,7 +1361,7 @@ textarea.input {
 /* --- CARDS V2 --- */
 
 .card-v2 {
-  background: linear-gradient(180deg, #0f172a, #0b1220);
+  background: linear-gradient(180deg, #17233f, #121d33);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
   padding: 24px;
