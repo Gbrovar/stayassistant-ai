@@ -134,7 +134,7 @@ export default function FAQEditor({ onComplete }) {
 
             {faq.map((item, index) => (
 
-                <div key={index} className="faq-card">
+                <div key={index} className="card-soft-v2 faq-card">
 
                     <div className="input-label">
                         Question
@@ -158,7 +158,7 @@ export default function FAQEditor({ onComplete }) {
                         placeholder="Check-in starts at 3pm..."
                     />
 
-                    <div className="flex-between mt-sm">
+                    <div className="flex-end mt-sm">
                         <Button variant="secondary" onClick={() => removeFaq(index)}>
                             Delete
                         </Button>
@@ -168,16 +168,16 @@ export default function FAQEditor({ onComplete }) {
 
             ))}
 
-            <div className="flex gap-sm mt-sm">
+            <div className="flex-between mt-md">
+                <div className="flex gap-sm">
+                    <Button variant="secondary" onClick={addFaq}>
+                        + Add question
+                    </Button>
 
-                <Button variant="secondary" onClick={addFaq}>
-                    + Add question
-                </Button>
-
-                <Button variant="secondary" onClick={save}>
-                    {loading ? "Saving..." : "Save FAQ"}
-                </Button>
-
+                    <Button variant="secondary" onClick={save}>
+                        {loading ? "Saving..." : "Save FAQ"}
+                    </Button>
+                </div>
             </div>
 
             <div className="flex-end mt-md">

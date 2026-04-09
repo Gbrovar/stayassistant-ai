@@ -137,24 +137,23 @@ export default function Recommendations({ onComplete }) {
 
         <div>
 
-            <p className="text-muted">
-                Add local recommendations to improve guest experience and reduce repetitive questions.
-            </p>
-
+            <div className="card-v2 card-hero">
+                <p className="text-muted">
+                    Add local recommendations to improve guest experience and reduce repetitive questions.
+                </p>
+            </div>
 
             {items.map((item, index) => (
 
-                <div key={index} className="card-soft-v2">
+                <div key={index} className="card-soft-v2 rec-card">
 
-                    <div className="mb-sm">
+                    <div className="form-group-block">
                         <input className="input"
                             value={item.name}
                             placeholder="Place name"
                             onChange={(e) => updateName(index, e.target.value)}
                         />
-                    </div>
 
-                    <div className="mb-sm">
                         <input className="input"
                             value={item.description}
                             placeholder="Description"
@@ -162,7 +161,7 @@ export default function Recommendations({ onComplete }) {
                         />
                     </div>
 
-                    <div className="flex-end">
+                    <div className="flex-end  mt-sm">
                         <button className="btn btn-secondary" onClick={() => removeItem(index)}>
                             Delete
                         </button>
@@ -172,16 +171,18 @@ export default function Recommendations({ onComplete }) {
 
             ))}
 
-            <div className="flex gap-sm">
+            <div className="flex-between mt-md">
+                <div className="flex gap-sm">
 
-                <button className="btn btn-md btn-primary" onClick={addItem}>
-                    + Add recommendation
-                </button>
+                    <Button className="btn btn-md btn-primary" onClick={addItem}>
+                        + Add recommendation
+                    </Button>
 
-                <button className="btn btn-md btn-primary" onClick={save}>
-                    {saving ? "Saving..." : "Save"}
-                </button>
+                    <Button className="btn btn-md btn-primary" onClick={save}>
+                        {saving ? "Saving..." : "Save"}
+                    </Button>
 
+                </div>
             </div>
 
             <div className="flex-end mt-md">
