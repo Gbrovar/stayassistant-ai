@@ -261,6 +261,7 @@ export default function Install() {
                     <div className="install-check-wrapper">
 
                         <Button
+                            className="btn btn-secondary"
                             variant={detected ? "primary" : "secondary"}
                             onClick={checkInstallation}
                             disabled={checking}
