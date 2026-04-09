@@ -824,7 +824,8 @@ body {
   color: white;
   font-weight: 600;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent; /* 🔥 FIX CLAVE */
 
   transition: all 0.2s ease;
 }
@@ -929,11 +930,14 @@ body {
 .input {
   width: 100%;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #334155;
-  background: #0f172a;
-  color: white;
-  font-size: 14px;
+
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-primary);
+
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+
+  font-size: var(--text-md);
   box-sizing: border-box;
 }
 
@@ -952,11 +956,12 @@ body {
 }
 
 .section-content {
-  background: linear-gradient(180deg, #0f172a, #0b1220);
-  border: 1px solid #1f2937;
-  border-radius: 16px;
+  background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+
   padding: 28px;
-  border-radius: 12px;
+
   transition: all 0.2s ease;
 }
 
