@@ -125,7 +125,7 @@ export default function Install() {
                         />
 
                         {copied && (
-                            <div style={{ marginTop: 10, fontSize: 12, color: "#22c55e" }}>
+                            <div className="mt-sm text-success">
                                 Copied ✓ Now paste it into your website
                             </div>
                         )}
@@ -256,19 +256,19 @@ export default function Install() {
                     </div>
                 </div>
 
-                {/* CHECK BUTTON EXTRA */}
-                <div className="install-check-wrapper">
+                <div className="col-12">
+                    {/* CHECK BUTTON EXTRA */}
+                    <div className="install-check-wrapper">
 
-                    <Button
-                        variant={detected ? "primary" : "secondary"}
-                        onClick={checkInstallation}
-                        disabled={checking}
-                    >
-                        {checking ? "Checking..." : "Check installation"}
-                    </Button>
-
+                        <Button
+                            variant={detected ? "primary" : "secondary"}
+                            onClick={checkInstallation}
+                            disabled={checking}
+                        >
+                            {checking ? "Checking..." : "Check installation"}
+                        </Button>
+                    </div>
                 </div>
-
             </div>
 
         </div>
