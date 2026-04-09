@@ -1,22 +1,25 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
-export default function CopyButton({text}){
+export default function CopyButton({ text, onClick, onCopy, copied }) {
 
   const { showToast } = useContext(AppContext);
 
-  function copy(){
+  function copy() {
 
     navigator.clipboard.writeText(text)
 
     showToast("Script copied!");
 
+    if (onClick) onClick()
+    if (onCopy) onCopy()
+
   }
 
-  return(
+  return (
 
-    <button onClick={copy} className="btn-primary">
-      Copy script
+    <button onClick={copy} className="btn btn-primary">
+      {copied ? "Copied ✓" : "Copy script"}
     </button>
 
   )

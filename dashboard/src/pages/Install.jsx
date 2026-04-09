@@ -218,11 +218,7 @@ export default function Install() {
 
                             {checking && "Checking installation..."}
                             {!checking && detected === true && "✅ Widget detected"}
-                            {!checking && detected === false && (
-                                <div className="mt-sm status-healthy">
-                                    Copied ✓ Now paste it into your website
-                                </div>
-                            )}
+                            
 
                         </div>
 
