@@ -162,7 +162,7 @@ export default function Billing() {
 
 
                         {subscription.status === "cancel_scheduled" && (
-                            <p style={{ color: "#f59e0b" }}>
+                            <p className="text-warning">
                                 Cancels at end of billing period
                             </p>
                         )}
@@ -184,7 +184,7 @@ export default function Billing() {
                                 <strong>€{Math.round(forecast.usage * 5)}</strong>
 
                                 {usageRatio > 0.7 && (
-                                    <p style={{ color: "#f59e0b", marginTop: 6 }}>
+                                    <p className="text-warning mt-sm">
                                         You could unlock significantly more value with a higher plan
                                     </p>
                                 )}
@@ -211,24 +211,24 @@ export default function Billing() {
                         )}
 
                         {billingDetails?.renewal_date && (
-                            <p className="muted">
+                            <p className="text-muted">
                                 Renews on:{" "}
                                 {new Date(billingDetails.renewal_date * 1000).toLocaleDateString()}
                             </p>
                         )}
 
                         {billingDetails?.next_invoice && (
-                            <p className="muted">
+                            <p className="text-muted">
                                 Next invoice: €{billingDetails.next_invoice.amount.toFixed(2)} on{" "}
                                 {new Date(billingDetails.next_invoice.date * 1000).toLocaleDateString()}
                             </p>
                         )}
 
-                        <p className="muted">
+                        <p className="text-muted">
                             Estimated this month: €{forecast.estimated_total.toFixed(2)}
                         </p>
 
-                        <p className="muted">
+                        <p className="text-muted">
                             Cost per message: €
                             {(forecast.cost / Math.max(usage, 1)).toFixed(4)}
                         </p>
@@ -237,18 +237,12 @@ export default function Billing() {
 
                     {/* 💰 DECISION BLOCK */}
                     {usageRatio > 0.5 && (
-                        <div style={{
-                            marginBottom: 20,
-                            padding: 16,
-                            background: "#0f172a",
-                            borderRadius: 8,
-                            border: "1px solid #1e293b"
-                        }}>
-                            <p style={{ fontWeight: 600 }}>
+                        <div className="card-soft-v2 mb-md">
+                            <p className="text-muted">
                                 Your AI is actively handling guest requests
                             </p>
 
-                            <p className="muted">
+                            <p className="text-muted">
                                 You're already generating value. Scaling your plan will increase efficiency and guest satisfaction.
                             </p>
                         </div>
@@ -294,7 +288,7 @@ export default function Billing() {
 
                             <p className="price">€39 / month</p>
 
-                            <p className="muted">
+                            <p className="text-muted">
                                 Handle up to €{1500 * 5} in guest interactions
                             </p>
 
@@ -320,7 +314,7 @@ export default function Billing() {
 
                             <p className="price">€99 / month</p>
 
-                            <p className="muted">
+                            <p className="text-muted">
                                 Scale up to €{5000 * 5} in guest interactions
                             </p>
 
@@ -350,7 +344,7 @@ export default function Billing() {
                         <h3>Invoices</h3>
 
                         {invoices.length === 0 ? (
-                            <p className="muted">No invoices yet</p>
+                            <p className="text-muted">No invoices yet</p>
                         ) : (
                             <div className="invoice-list">
 
@@ -359,7 +353,7 @@ export default function Billing() {
 
                                         <div>
                                             <strong>€{inv.amount.toFixed(2)}</strong>
-                                            <p className="muted">
+                                            <p className="text-muted">
                                                 {new Date(inv.date * 1000).toLocaleDateString()}
                                             </p>
                                         </div>
