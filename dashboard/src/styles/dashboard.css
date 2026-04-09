@@ -1182,6 +1182,8 @@ textarea.input {
 * {
   scrollbar-width: thin;
   scrollbar-color: #1f2937 transparent;
+  transition: background-color 0.15s ease,
+              border-color 0.15s ease;
 }
 
 /* Chrome / Edge / Safari */
@@ -1408,6 +1410,7 @@ textarea.input {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.05));
   border: 1px solid rgba(99, 102, 241, 0.3);
   margin-bottom: 14px;
+  box-shadow: var(--shadow-md);
   /*width: 100%;*/
 }
 
@@ -1419,6 +1422,7 @@ textarea.input {
   border-radius: var(--radius-md);
   padding: 16px;
   transition: all 0.2s ease;
+  backdrop-filter: blur(6px);
 }
 
 .card-soft-v2:hover {
@@ -1454,6 +1458,8 @@ textarea.input {
   margin-bottom: 16px;
   text-transform: none;
   letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .title-lg {
