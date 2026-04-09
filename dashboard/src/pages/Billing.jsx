@@ -117,7 +117,7 @@ export default function Billing() {
     const usageRatio = usage / limit
 
     return (
-        <div className="container">
+        <div className="container stack-lg">
 
             {/* HEADER */}
             <div className="page-header">
@@ -147,7 +147,7 @@ export default function Billing() {
             )}
 
             {/* CURRENT PLAN */}
-            <div className="card">
+            <div className="card-v2 card-hero">
 
                 <h3>Current Plan</h3>
 
@@ -163,7 +163,7 @@ export default function Billing() {
                 )}
 
                 {subscription.status === "active" && (
-                    <p style={{ color: "#22c55e" }}>
+                    <p className="status-healthy">
                         Active subscription
                     </p>
                 )}
@@ -174,12 +174,7 @@ export default function Billing() {
 
                 {/* 💰 LOST VALUE */}
                 {forecast?.usage > 0 && (
-                    <div style={{
-                        marginTop: 12,
-                        padding: 12,
-                        background: "#1e293b",
-                        borderRadius: 8
-                    }}>
+                    <div className="card-soft-v2 mt-sm">
                         <p className="text-muted">Estimated value generated</p>
                         <strong>€{Math.round(forecast.usage * 5)}</strong>
 
@@ -255,10 +250,10 @@ export default function Billing() {
             )}
 
             {/* PLANS */}
-            <div className="plans">
+            <div className="grid-dashboard">
 
                 {/* PRO */}
-                <div className="plan-card recommended">
+                <div className="plan-card recommended col-6">
 
                     <div className="badge">Most popular</div>
 
@@ -286,7 +281,7 @@ export default function Billing() {
                 </div>
 
                 {/* BUSINESS */}
-                <div className="plan-card">
+                <div className="plan-card col-6">
 
                     <h3>Business</h3>
 
@@ -315,22 +310,20 @@ export default function Billing() {
             </div>
 
             {/* PORTAL */}
-            <div className="card billing-section">
+            <div className="card-v2 billing-section">
 
                 <h3>Manage billing</h3>
 
                 <div className="billing-actions">
 
-                    <button
-                        className="billing-portal-btn"
+                    <button className="btn btn-secondary btn-full"
                         onClick={openPortal}
                     >
                         Open billing portal
                     </button>
 
                     {subscription.plan !== "free" && subscription.status !== "cancel_scheduled" && (
-                        <button
-                            className="billing-cancel-btn"
+                        <button className="btn btn-secondary btn-full"
                             onClick={cancelSubscription}
                         >
                             Cancel subscription
@@ -340,7 +333,7 @@ export default function Billing() {
                 </div>
             </div>
 
-            <div className="card billing-section">
+            <div className="card-v2 billing-section">
 
                 <h3>Invoices</h3>
 

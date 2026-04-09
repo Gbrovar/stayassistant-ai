@@ -1,5 +1,4 @@
 import { getPropertyId } from "../api/auth"
-import Card from "../components/Card"
 import CopyButton from "../components/CopyButton"
 import { API_URL } from "../api/config"
 import { useEffect, useState } from "react"
@@ -62,40 +61,38 @@ export default function Install() {
 
     return (
 
-        <div className="container">
+        <div className="container stack-lg">
 
             {/* 🔥 HEADER UNIFICADO */}
             <div className="page-header">
 
-                <div className="install-header-top">
-                    <div className="page-header">
-                        <div className="install-title">
-                            Install your AI concierge
-                        </div>
-                        <div className="install-subtitle">
-                            Takes less than 2 minutes
+                <div className="flex-between">
+                    <div>
+                        <div>
+                            <h1 className="title-lg">Install your AI concierge</h1>
+                            <p className="page-subtitle">Takes less than 2 minutes</p>
                         </div>
                     </div>
 
-                    <div className="install-progress">
+                    <div className="plan-badge">
                         {stepsCompleted} / 2
                     </div>
                 </div>
 
-                <div className="install-status">
+                <p className="text-muted mt-sm">
                     {detected === true && "🟢 Live on your website"}
                     {detected === false && "⚠️ Not detected yet"}
                     {detected === null && "Ready to install"}
-                </div>
+                </p>
 
             </div>
 
             <div className="stack">
 
                 {/* STEP 1 */}
-                <Card className="install-primary-step">
+                <div className="card-v2 card-hero">
 
-                    <div className="install-step-header">
+                    <div className="section-title-v2">
                         <span className={`step-dot ${copied ? "done" : ""}`}></span>
                         <strong>Step 1 — Copy your widget</strong>
                     </div>
@@ -143,12 +140,12 @@ export default function Install() {
                         </div>
                     )}
 
-                </Card>
+                </div>
 
                 {/* STEP 2 */}
-                <Card>
+                <div className="card-v2">
 
-                    <div className="install-step-header">
+                    <div className="section-title-v2">
                         <span className={`step-dot ${copied ? "done" : ""}`}></span>
                         <strong>Step 2 — Add to your website</strong>
                     </div>
@@ -176,12 +173,12 @@ export default function Install() {
 </body>`}
                     </pre>
 
-                </Card>
+                </div>
 
                 {/* STEP 3 */}
-                <Card>
+                <div className="card-v2">
 
-                    <div className="install-step-header">
+                    <div className="section-title-v2">
                         <span className={`step-dot ${(tested || detected) ? "done" : ""}`}></span>
                         <strong>Step 3 — Test your AI concierge</strong>
                     </div>
@@ -190,16 +187,18 @@ export default function Install() {
                         Open a live preview and see how guests interact
                     </p>
 
-                    <input
-                        className="input"
-                        type="text"
-                        placeholder="https://yourwebsite.com"
-                        value={siteUrl}
-                        onChange={(e) => {
-                            setSiteUrl(e.target.value)
-                            localStorage.setItem("property_url", e.target.value)
-                        }}
-                    />
+                    <div className="form-group-block">
+                        <input
+                            className="input"
+                            type="text"
+                            placeholder="https://yourwebsite.com"
+                            value={siteUrl}
+                            onChange={(e) => {
+                                setSiteUrl(e.target.value)
+                                localStorage.setItem("property_url", e.target.value)
+                            }}
+                        />
+                    </div>
 
                     <div className="install-step-input-block">
 
@@ -214,7 +213,7 @@ export default function Install() {
                     </div>
 
                     <Button
-                        variant="primary"
+                        className="btn btn-md btn-primary"
                         onClick={async () => {
 
                             setTested(true)
@@ -240,7 +239,7 @@ export default function Install() {
                         Open test chat
                     </Button>
 
-                </Card>
+                </div>
 
                 {/* CHECK BUTTON EXTRA */}
                 <div className="install-check-wrapper">
