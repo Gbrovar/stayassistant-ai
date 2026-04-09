@@ -20,9 +20,19 @@ export default function CopyButton({ text, onClick, onCopy, copied }) {
 
     <button
       onClick={copy}
-      className={`btn btn-primary ${copied ? "btn-copy-success animate" : ""}`}
+      className={`btn btn-primary btn-copy ${copied ? "is-copied" : ""}`}
     >
-      {copied ? "Copied ✓" : "Copy script"}
+      <span className="btn-copy-inner">
+
+        <span className="btn-copy-text">
+          Copy script
+        </span>
+
+        <span className="btn-copy-success-icon">
+          ✓
+        </span>
+
+      </span>
     </button>
 
   )

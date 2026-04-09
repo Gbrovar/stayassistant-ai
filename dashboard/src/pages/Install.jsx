@@ -6,9 +6,7 @@ import Button from "../components/UI/Button"
 
 export default function Install() {
 
-    const [copied, setCopied] = useState(() => {
-        return localStorage.getItem("install_copied") === "true"
-    })
+    const [copied, setCopied] = useState(false)
 
     const [tested, setTested] = useState(() => {
         return localStorage.getItem("install_tested") === "true"
@@ -105,11 +103,10 @@ export default function Install() {
                             copied={copied}
                             onClick={() => {
                                 setCopied(true)
-                                
+
                                 setTimeout(() => {
                                     setCopied(false)
-                                }, 1500)
-
+                                }, 1200)
                             }}
 
                             onCopy={() => {

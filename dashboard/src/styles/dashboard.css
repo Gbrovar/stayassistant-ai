@@ -864,29 +864,67 @@ body {
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* ✨ COPY SUCCESS ANIMATION */
+/* ============================= */
+/* ✨ COPY BUTTON PRO (STRIPE) */
+/* ============================= */
 
-.btn-copy-success {
+.btn-copy {
+  position: relative;
+  overflow: hidden;
+}
+
+/* inner wrapper */
+.btn-copy-inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* texto */
+.btn-copy-text {
+  transition: all 0.25s ease;
+}
+
+/* icono check */
+.btn-copy-success-icon {
+  font-weight: bold;
+  font-size: 16px;
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.25s ease;
+}
+
+/* estado copied */
+.btn-copy.is-copied {
   background: linear-gradient(90deg, #22c55e, #16a34a);
-  border-color: #16a34a;
-  color: white;
 }
 
-.btn-copy-success.animate {
-  animation: copyPulse 0.4s ease;
+/* animación texto → desaparece */
+.btn-copy.is-copied .btn-copy-text {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 
-@keyframes copyPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.06);
-  }
-  100% {
-    transform: scale(1);
-  }
+/* animación icono → aparece */
+.btn-copy.is-copied .btn-copy-success-icon {
+  opacity: 1;
+  transform: scale(1);
 }
+
+/* micro bounce */
+.btn-copy.is-copied {
+  animation: copyBounce 0.35s ease;
+}
+
+@keyframes copyBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+
 
 .input {
   width: 100%;
@@ -1009,24 +1047,39 @@ body {
 
 .toast {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #22c55e;
-  color: white;
-  border-radius: 10px;
   top: 24px;
   right: 24px;
 
   z-index: 9999;
-  /* 🔥 CLAVE */
-  border: 1px solid var(--border-primary);
-  padding: 12px 16px;
 
-  box-shadow: var(--shadow-md);
+  background: #22c55e;
+  color: white;
+
+  padding: 12px 16px;
+  border-radius: 10px;
 
   font-size: 14px;
+  font-weight: 500;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  width: auto;
+  max-width: 280px;
+
+  animation: toastIn 0.25s ease;
 }
 
+/* entrada suave */
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 .centered {
   display: flex;
