@@ -219,8 +219,8 @@ export default function Install() {
                             {checking && "Checking installation..."}
                             {!checking && detected === true && "✅ Widget detected"}
                             {!checking && detected === false && (
-                                <div style={{ fontSize: 12, color: "#f59e0b" }}>
-                                    Could not detect automatically. Open your site manually.
+                                <div className="mt-sm status-healthy">
+                                    Copied ✓ Now paste it into your website
                                 </div>
                             )}
 

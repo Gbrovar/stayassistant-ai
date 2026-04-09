@@ -110,7 +110,12 @@ export default function Billing() {
         }
     }
 
-    if (!subscription || !forecast) return <div>Loading billing...</div>
+    if (!subscription || !forecast)
+        return <div className="container">
+            <div className="card-v2">
+                <div className="text-muted">Loading billing data...</div>
+            </div>
+        </div>
 
     const usage = forecast.usage
     const limit = forecast.usage_limit
@@ -144,7 +149,7 @@ export default function Billing() {
                             <p>{conversion.message}</p>
                         </div>
 
-                        <button className="upgrade-btn" onClick={() => upgrade("pro")}>
+                        <button className="btn btn-md btn-primary btn-full" onClick={() => upgrade("pro")}>
                             Upgrade now
                         </button>
                     </div>
@@ -344,7 +349,9 @@ export default function Billing() {
                         <h3>Invoices</h3>
 
                         {invoices.length === 0 ? (
-                            <p className="text-muted">No invoices yet</p>
+                            <div className="card-soft-v2">
+                                <p className="text-muted">No invoices yet</p>
+                            </div>
                         ) : (
                             <div className="invoice-list">
 

@@ -1308,7 +1308,7 @@ textarea.input {
   gap: 24px;
 }
 
-.grid-dashboard > * {
+.grid-dashboard>* {
   min-width: 0;
 }
 
@@ -1366,9 +1366,12 @@ textarea.input {
   border-radius: var(--radius-lg);
   padding: 24px;
 
-  transition: all 0.25s ease;
+  /*transition: all 0.25s ease; */
   position: relative;
   overflow: hidden;
+  transition: transform var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 /* subtle glow */
@@ -1388,6 +1391,7 @@ textarea.input {
 .card-v2:hover {
   border-color: rgba(99, 102, 241, 0.4);
   transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 .card-v2:hover::before {
@@ -1656,7 +1660,14 @@ h3 {
   gap: 6px;
   border-radius: 10px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  /*transition: all 0.2s ease;*/
+  transition: transform var(--transition-fast),
+              box-shadow var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 /* sizes */
@@ -1834,4 +1845,18 @@ h3 {
 .chips-input-row {
   display: flex;
   gap: 8px;
+}
+
+/* SKELETON SYSTEM */
+
+.skeleton {
+  height: 16px;
+  background: linear-gradient(90deg, #1f2937, #374151, #1f2937);
+  border-radius: 6px;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
 }
