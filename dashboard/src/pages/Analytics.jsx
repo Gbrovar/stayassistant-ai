@@ -129,7 +129,9 @@ export default function Analytics() {
       ) : (
         <div className="card-v2">
           <p>Unlock alerts to detect issues automatically</p>
-          <Button onClick={() => navigate("/billing")}>
+          <Button
+            variant="primary"
+            onClick={() => navigate("/billing")}>
             Upgrade to Pro
           </Button>
         </div>
@@ -167,7 +169,7 @@ export default function Analytics() {
         <div className="card-v2">
           <h3>AI Insights</h3>
           <p>Unlock AI-powered recommendations</p>
-          <Button onClick={() => navigate("/billing")}>
+          <Button variant="primary" onClick={() => navigate("/billing")}>
             Upgrade to Pro
           </Button>
         </div>
