@@ -6,9 +6,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
   const { subscription, usage, conversion } = useApp()
 
-  if (!subscription) {
-    return <div style={{ height: 64 }} /> // placeholder topbar
-  }
+  //if (!subscription) return null
 
   const limits = {
     free: 100,

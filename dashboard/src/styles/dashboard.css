@@ -1252,7 +1252,7 @@ h3 {
 
   width: 36px;
   height: 36px;
-  display: flex;
+
   flex-direction: column;
   justify-content: center;
   gap: 5px;
@@ -1467,6 +1467,10 @@ textarea.input {
       0 20px 60px rgba(0, 0, 0, 0.6);
   }
 
+  .topbar {
+    padding: 0 12px;
+  }
+
   .topbar strong {
     font-size: 13px;
   }
@@ -1482,16 +1486,18 @@ textarea.input {
   .main {
     overflow-y: auto;
     width: 100%;
+    padding: 16px;
   }
 
 
   .topbar-right {
     width: 100%;
     justify-content: space-between;
+    gap: 8px;
   }
 
   .menu-btn {
-    display: block;
+    display: flex;
   }
 
   .install-code {
@@ -1828,6 +1834,7 @@ h3 {
 /* ============================= */
 
 .topbar {
+  position: sticky;
   min-height: 64px;
   border-bottom: 1px solid var(--border-primary);
 
