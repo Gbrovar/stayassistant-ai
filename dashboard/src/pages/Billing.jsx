@@ -149,6 +149,10 @@ export default function Billing() {
                                 </strong>
 
                                 <p>{conversion.message}</p>
+
+                                <p>
+                                    Only {limit - usage} messages left — avoid interruption
+                                </p>
                             </div>
                         </div>
 
