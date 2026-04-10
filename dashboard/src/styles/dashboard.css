@@ -833,6 +833,14 @@ body {
   box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
 }
 
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
 
 .btn-disabled {
   background: #374151;
@@ -950,8 +958,10 @@ body {
 .input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
 
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.4),
+    0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
 .input-label {
@@ -1969,4 +1979,30 @@ h3 {
   100% {
     background-position: 200px 0;
   }
+}
+
+/* ============================= */
+/* ✨ GLOBAL HOVER SYSTEM */
+/* ============================= */
+
+.card-v2,
+.card-soft-v2,
+.section-content {
+  transition:
+    transform var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.card-v2:hover,
+.section-content:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: var(--shadow-md);
+}
+
+/* más sutil para nested */
+.card-soft-v2:hover {
+  transform: translateY(-1px);
+  border-color: rgba(99, 102, 241, 0.25);
 }
