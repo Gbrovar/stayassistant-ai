@@ -82,6 +82,7 @@
 
 .insight-header {
   display: flex;
+  flex: 1;
   justify-content: space-between;
   align-items: center;
 }
@@ -222,6 +223,7 @@ body {
   z-index: 1;
   min-height: 100%;
   overflow: visible;
+  height: 100%;
 }
 
 .main.has-banner .topbar {
