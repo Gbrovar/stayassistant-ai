@@ -27,6 +27,10 @@ export default function Billing() {
 
     }, [])
 
+    useEffect(() => {
+        localStorage.setItem("seen_billing", "true")
+    }, [])
+
     async function loadSubscription() {
 
         const res = await fetch(`${API_URL}/billing/subscription`, {
@@ -141,19 +145,23 @@ export default function Billing() {
                     <div className={`upgrade-card ${conversion.level === "critical" ? "urgent" : ""}`}>
 
                         <div className="upgrade-content">
+
                             <div className="upgrade-text">
+
                                 <strong>
                                     {conversion.level === "critical"
-                                        ? "🚨 Limit reached"
-                                        : "⚡ Growing usage"}
+                                        ? "🚨 You’ve reached your limit"
+                                        : "⚡ Your usage is growing fast"}
                                 </strong>
 
                                 <p>{conversion.message}</p>
 
-                                <p>
-                                    Only {limit - usage} messages left — avoid interruption
+                                <p className="upgrade-highlight">
+                                    {limit - usage} messages remaining
                                 </p>
+
                             </div>
+
                         </div>
 
                         <div className="upgrade-cta">

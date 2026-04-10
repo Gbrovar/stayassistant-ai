@@ -6,6 +6,7 @@ export default function Sidebar({ open, setSidebarOpen }) {
 
   const { ltv } = useAnalytics()
   const { isMobile } = useResponsive()
+  const seenBilling = localStorage.getItem("seen_billing")
 
   function handleClick() {
     if (isMobile) {
@@ -40,7 +41,7 @@ export default function Sidebar({ open, setSidebarOpen }) {
           >
             <span className="sidebar-label">{item.label}</span>
 
-            {item.hasDot && ltv?.strategy && (
+            {item.hasDot && ltv?.strategy && !seenBilling && (
               <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
             )}
 

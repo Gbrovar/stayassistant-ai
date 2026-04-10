@@ -15,6 +15,9 @@ export default function Topbar({ setSidebarOpen }) {
 
   const plan = subscription.plan
   const limit = limits[plan] || 100
+  const [dismissed, setDismissed] = useState(
+    localStorage.getItem("banner_dismissed") === "true"
+  )
 
   function trackClick() {
     const variant = localStorage.getItem("sa_ab_variant")
@@ -35,19 +38,33 @@ export default function Topbar({ setSidebarOpen }) {
   return (
 
     <>
-      {conversion?.show && (
+      {conversion?.show && !dismissed && (
         <div className={`topbar-banner ${conversion.level}`}>
+
           <span>{conversion.message}</span>
 
-          <Button
-            variant="primary"
-            onClick={() => {
-              trackClick()
-              window.location.href = "/dashboard/billing"
-            }}
-          >
-            {conversion.cta || "Upgrade"}
-          </Button>
+          <div className="flex gap-sm">
+            <Button
+              variant="primary"
+              onClick={() => {
+                trackClick()
+                window.location.href = "/dashboard/billing"
+              }}
+            >
+              {conversion.cta || "Upgrade"}
+            </Button>
+
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={() => {
+                localStorage.setItem("banner_dismissed", "true")
+                setDismissed(true)
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
         </div>
       )}
 

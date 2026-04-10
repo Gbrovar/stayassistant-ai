@@ -667,21 +667,34 @@ body {
 
 
 .upgrade-card {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 20px;
-
   align-items: center;
-
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
   border-radius: 16px;
-
   padding: 18px 20px;
   margin-bottom: 20px;
-
   color: white;
-
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* glow sutil */
+.upgrade-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at left, rgba(255,255,255,0.15), transparent 60%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.upgrade-highlight {
+  margin-top: 6px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
 }
 
 .upgrade-card.urgent {
@@ -742,6 +755,8 @@ body {
   cursor: pointer;
   font-weight: 600;
 }
+
+
 
 .inline-upgrade {
   margin-top: 15px;
@@ -1825,13 +1840,16 @@ h3 {
   height: auto;
   max-height: 60px;
   overflow: hidden;
-
   padding: 8px 20px;
   min-height: 44px;
-
   font-size: 13px;
+  gap: 12px;
 
   /* 🔥 FIX CLAVE */
+  flex-shrink: 0;
+}
+
+.topbar-banner button {
   flex-shrink: 0;
 }
 
