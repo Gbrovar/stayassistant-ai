@@ -3,10 +3,9 @@ import useAnalytics from "../hooks/useAnalytics"
 import useResponsive from "../hooks/useResponsive"
 import { useApp } from "../context/AppContext"
 
-export default function Sidebar({ open, setSidebarOpen }) {
+export default function Sidebar({ open, setSidebarOpen, isMobile }) {
 
   const { conversion } = useApp()
-  const { isMobile } = useResponsive()
 
   function handleClick() {
     if (isMobile) {

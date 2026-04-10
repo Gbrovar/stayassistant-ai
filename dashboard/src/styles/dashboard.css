@@ -200,8 +200,6 @@ body {
 .layout {
   display: flex;
   min-height: 100vh;
-  overflow: hidden;
-  /* 🔥 importante */
 }
 
 .main {
@@ -690,7 +688,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at left, rgba(255,255,255,0.15), transparent 60%);
+  background: radial-gradient(circle at left, rgba(255, 255, 255, 0.15), transparent 60%);
   opacity: 0.4;
   pointer-events: none;
 }
@@ -698,7 +696,7 @@ body {
 .upgrade-highlight {
   margin-top: 6px;
   font-weight: 600;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .upgrade-card.urgent {
@@ -1422,18 +1420,22 @@ textarea.input {
     margin-bottom: 16px;
   }
 
-
   .sidebar {
     position: fixed;
-    left: -260px;
     top: 0;
+    left: 0;
+
+    width: 260px;
     height: 100%;
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
     z-index: 1000;
-    transition: left 0.3s ease;
   }
 
   .sidebar.open {
-    left: 0;
+    transform: translateX(0);
   }
 
   .topbar strong {
@@ -1446,6 +1448,7 @@ textarea.input {
 
   .main {
     overflow-y: auto;
+    width: 100%;
   }
 
 
@@ -1698,6 +1701,7 @@ h3 {
   padding: 24px 12px;
 
   position: sticky;
+  flex-shrink: 0;
   top: 0;
   height: 100vh;
   overflow-y: auto;

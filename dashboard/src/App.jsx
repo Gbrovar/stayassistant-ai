@@ -14,16 +14,21 @@ import PropertySetupPage from "./pages/PropertySetupPage"
 import OverviewPage from "./pages/OverviewPage"
 import AdminDashboard from "./pages/AdminDashboard"
 import BillingSuccess from "./pages/BillingSuccess"
+import useResponsive from "./hooks/useResponsive"
 
 
 
 function ProtectedLayout({ children }) {
+
   const location = useLocation()
+
   const { limitReached } = useApp()
 
   const token = localStorage.getItem("token")
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const { isMobile } = useResponsive()
 
   const [refreshPreview, setRefreshPreview] = useState(0)
 
@@ -44,9 +49,13 @@ function ProtectedLayout({ children }) {
 
     <div className="dashboard">
 
-      <Sidebar open={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar
+        open={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        isMobile={isMobile}
+      />
 
-      {sidebarOpen && (
+      {isMobile && sidebarOpen && (
         <div
           className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
@@ -55,7 +64,10 @@ function ProtectedLayout({ children }) {
 
       <div className="main">
 
-        <Topbar setSidebarOpen={setSidebarOpen} />
+        <Topbar
+          setSidebarOpen={setSidebarOpen}
+          isMobile={isMobile}
+        />
 
         {/* ✅ AQUÍ VA EL BLOQUE */}
         {limitReached && (
@@ -85,30 +97,30 @@ export default function App() {
 
   return (
 
-      <Routes>
+    <Routes>
 
-        {/* PUBLIC ROUTES */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+      {/* PUBLIC ROUTES */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
 
-        {/* PROTECTED ROUTES */}
-        <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
-        <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
-        <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
-        <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
-        <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
-        <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
-        <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
+      {/* PROTECTED ROUTES */}
+      <Route path="/" element={<ProtectedLayout><OverviewPage /></ProtectedLayout>} />
+      <Route path="/install" element={<ProtectedLayout><Install /></ProtectedLayout>} />
+      <Route path="/billing" element={<ProtectedLayout><Billing /></ProtectedLayout>} />
+      <Route path="/conversations" element={<ProtectedLayout><ConversationsPage /></ProtectedLayout>} />
+      <Route path="/analytics" element={<ProtectedLayout><AnalyticsPage /></ProtectedLayout>} />
+      <Route path="/insights" element={<ProtectedLayout><InsightsPage /></ProtectedLayout>} />
+      <Route path="/property" element={<ProtectedLayout><PropertySetupPage /></ProtectedLayout>} />
 
-        <Route path="/billing/success" element={<BillingSuccess />} />
+      <Route path="/billing/success" element={<BillingSuccess />} />
 
-        <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
 
-        {/* FALLBACK */}
-        <Route path="*" element={<Navigate to="/" />} />
+      {/* FALLBACK */}
+      <Route path="*" element={<Navigate to="/" />} />
 
-      </Routes>
+    </Routes>
 
   )
 
