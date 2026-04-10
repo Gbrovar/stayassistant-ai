@@ -1444,9 +1444,7 @@ textarea.input {
   gap: 24px;
 }
 
-.grid-dashboard>* {
-  min-width: 0;
-}
+
 
 .col-12 {
   grid-column: span 12;
