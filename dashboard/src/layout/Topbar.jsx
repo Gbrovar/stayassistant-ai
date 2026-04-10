@@ -14,7 +14,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
     business: 5000
   }
 
-  const plan = subscription.plan
+  const plan = subscription?.plan || "free"
   const limit = limits[plan] || 100
   const [dismissed, setDismissed] = useState(
     localStorage.getItem("banner_dismissed") === "true"
@@ -91,7 +91,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
         <div className="topbar-right">
 
           <div className="usage-box">
-            {usage} / {limit}
+            {usage || 0} / {limit}
           </div>
 
           <Button
