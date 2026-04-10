@@ -22,7 +22,7 @@ function ProtectedLayout({ children }) {
 
   const location = useLocation()
 
-  const { limitReached } = useApp()
+  const { limitReached, conversion } = useApp()
 
   const token = localStorage.getItem("token")
 
@@ -69,7 +69,10 @@ function ProtectedLayout({ children }) {
       />
 
 
-      <div className={`main ${isMobile && sidebarOpen ? "blur" : ""}`}>
+      <div className={`main 
+            ${isMobile && sidebarOpen ? "blur" : ""} 
+            ${conversion?.show ? "has-banner" : ""}
+        `}>
 
         <Topbar
           setSidebarOpen={setSidebarOpen}

@@ -221,6 +221,10 @@ html, body {
   min-height: 100dvh; /* 🔥 clave */
 }
 
+.main.has-banner .topbar {
+  top: 44px;
+}
+
 .main>*:first-child {
   margin-top: 0 !important;
 }
@@ -1854,7 +1858,7 @@ h3 {
 
 .topbar {
   position: sticky;
-  top: 0;
+  top: 44px;
   z-index: 100; /* 🔥 evitar conflictos */
   background: var(--bg-primary);
   min-height: 64px;
@@ -1901,14 +1905,15 @@ h3 {
 /* banner */
 
 .topbar-banner {
+  position: fixed;
   border-bottom: 1px solid var(--border-primary);
   border-left: 3px solid transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: auto;
-  max-height: 60px;
-  overflow: hidden;
+  overflow: visible;
+  max-height: none;
   padding: 8px 20px;
   min-height: 44px;
   font-size: 13px;
