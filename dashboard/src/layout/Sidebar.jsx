@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom"
 import useAnalytics from "../hooks/useAnalytics"
 import useResponsive from "../hooks/useResponsive"
+import { useApp } from "../context/AppContext"
 
 export default function Sidebar({ open, setSidebarOpen }) {
 
-  const { ltv } = useAnalytics()
+  const { conversion } = useApp()
   const { isMobile } = useResponsive()
 
   function handleClick() {
@@ -40,8 +41,8 @@ export default function Sidebar({ open, setSidebarOpen }) {
           >
             <span className="sidebar-label">{item.label}</span>
 
-            {item.hasDot && ltv?.strategy?.urgency !== "low" && (
-              <span className={`sidebar-dot ${ltv?.strategy?.urgency}`} />
+            {item.hasDot && conversion?.show && conversion?.level !== "low" && (
+              <span className={`sidebar-dot ${conversion?.level}`} />
             )}
 
           </NavLink>

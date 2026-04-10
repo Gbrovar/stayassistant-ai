@@ -1774,8 +1774,9 @@ h3 {
 /* DOT */
 
 .sidebar-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 6px currentColor;
   border-radius: 999px;
 }
 
