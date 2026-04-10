@@ -186,11 +186,11 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
 
-  z-index: 900;
 }
 
 .sidebar-overlay.active {
@@ -213,6 +213,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .main.blur {

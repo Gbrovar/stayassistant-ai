@@ -63,14 +63,13 @@ function ProtectedLayout({ children }) {
         isMobile={isMobile}
       />
 
-      {isMobile && sidebarOpen && (
-        <div
-          className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`}
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
 
-      <div className="main">
+
+      <div className={`main ${isMobile && sidebarOpen ? "blur" : ""}`}>
 
         <Topbar
           setSidebarOpen={setSidebarOpen}
