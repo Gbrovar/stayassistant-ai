@@ -38,7 +38,8 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
   return (
 
-    <>
+    <div className="header">
+      
       {conversion?.show && !dismissed && (
         <div className={`topbar-banner ${conversion.level}`}>
 
@@ -107,7 +108,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
         </div>
 
       </div>
-    </>
+    </div>
   )
 
 }
