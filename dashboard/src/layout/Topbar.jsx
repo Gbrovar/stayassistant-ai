@@ -72,15 +72,16 @@ export default function Topbar({ setSidebarOpen }) {
       <div className="topbar">
 
         <div className="topbar-left">
-          <button
-            className="menu-btn"
-            onClick={() => setSidebarOpen(prev => !prev)}
-          >
-            <span />
-            <span />
-            <span />
-
-          </button>
+          {isMobile && (
+            <button
+              className="menu-btn"
+              onClick={() => setSidebarOpen(prev => !prev)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          )}
 
           <div className="plan-badge">
             {plan.toUpperCase()} PLAN

@@ -1471,6 +1471,10 @@ textarea.input {
     font-size: 13px;
   }
 
+  .dashboard {
+    display: block;
+  }
+
   .usage-topbar {
     font-size: 11px;
   }
