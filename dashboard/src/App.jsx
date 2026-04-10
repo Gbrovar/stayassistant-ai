@@ -76,7 +76,7 @@ function ProtectedLayout({ children }) {
           isMobile={isMobile}
         />
 
-        {/* ✅ AQUÍ VA EL BLOQUE */}
+        
         {limitReached && (
           <div style={{
             background: "#ff3b30",
