@@ -2,11 +2,13 @@ import { useState } from "react"
 import { useApp } from "../context/AppContext"
 import Button from "../components/UI/Button"
 
-export default function Topbar({ setSidebarOpen }) {
+export default function Topbar({ setSidebarOpen, isMobile }) {
 
   const { subscription, usage, conversion } = useApp()
 
-  if (!subscription) return null
+  if (!subscription) {
+    return <div style={{ height: 64 }} /> // placeholder topbar
+  }
 
   const limits = {
     free: 100,
