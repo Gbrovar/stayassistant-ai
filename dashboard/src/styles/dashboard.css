@@ -84,8 +84,14 @@
   position: sticky;
   top: 0;
   z-index: 100;
+
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  /* 🔥 FIX CRÍTICO */
 }
 
 .insight-header {
@@ -1458,6 +1464,11 @@ textarea.input {
 
 @media (max-width: 768px) {
 
+  .content {
+    padding-top: 8px;
+    /* 🔥 elimina espacio fantasma */
+  }
+
   .install-header-card {
     margin-bottom: 16px;
   }
@@ -1503,6 +1514,7 @@ textarea.input {
   .main {
     width: 100%;
     overflow: visible;
+    overflow-x: hidden;
   }
 
 
@@ -1560,6 +1572,7 @@ textarea.input {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  padding-top: 12px;
 }
 
 /* --- GRID SYSTEM --- */
@@ -1910,21 +1923,20 @@ h3 {
   position: relative;
   border-bottom: 1px solid var(--border-primary);
   border-left: 3px solid transparent;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   height: auto;
   max-height: none;
   padding: 8px 20px;
-  /*min-height: 44px;*/
   font-size: 13px;
   gap: 12px;
   z-index: 200;
-
+  flex-wrap: wrap;
   /* 🔥 FIX CLAVE */
   flex-shrink: 0;
-
-  width: 100%;
 }
 
 .header:empty {
