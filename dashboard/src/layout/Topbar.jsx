@@ -76,7 +76,10 @@ export default function Topbar({ setSidebarOpen }) {
             className="menu-btn"
             onClick={() => setSidebarOpen(prev => !prev)}
           >
-            ☰
+            <span />
+            <span />
+            <span />
+
           </button>
 
           <div className="plan-badge">

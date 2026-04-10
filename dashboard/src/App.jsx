@@ -45,6 +45,14 @@ function ProtectedLayout({ children }) {
 
   }, [location.pathname])
 
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+  }, [sidebarOpen, isMobile])
+
   return (
 
     <div className="dashboard">
@@ -57,7 +65,7 @@ function ProtectedLayout({ children }) {
 
       {isMobile && sidebarOpen && (
         <div
-          className="sidebar-overlay"
+          className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`}
           onClick={() => setSidebarOpen(false)}
         />
       )}
