@@ -139,19 +139,28 @@ export default function Billing() {
                 {/* CONVERSION ALERT */}
                 {conversion?.show && (
                     <div className={`upgrade-card ${conversion.level === "critical" ? "urgent" : ""}`}>
-                        <div>
-                            <strong>
-                                {conversion.level === "critical"
-                                    ? "🚨 Limit reached"
-                                    : "⚡ Growing usage"}
-                            </strong>
 
-                            <p>{conversion.message}</p>
+                        <div className="upgrade-content">
+                            <div className="upgrade-text">
+                                <strong>
+                                    {conversion.level === "critical"
+                                        ? "🚨 Limit reached"
+                                        : "⚡ Growing usage"}
+                                </strong>
+
+                                <p>{conversion.message}</p>
+                            </div>
                         </div>
 
-                        <button className="btn btn-md btn-primary btn-full" onClick={() => upgrade("pro")}>
-                            Upgrade now
-                        </button>
+                        <div className="upgrade-cta">
+                            <button
+                                className="btn btn-md btn-primary"
+                                onClick={() => upgrade("pro")}
+                            >
+                                Upgrade now
+                            </button>
+                        </div>
+
                     </div>
                 )}
 

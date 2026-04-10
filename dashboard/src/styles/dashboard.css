@@ -667,20 +667,60 @@ body {
 
 
 .upgrade-card {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+
   align-items: center;
 
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 16px;
+
+  padding: 18px 20px;
   margin-bottom: 20px;
 
   color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .upgrade-card.urgent {
   background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* contenido */
+.upgrade-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* limitar ancho del texto */
+.upgrade-text {
+  max-width: 520px;
+}
+
+/* título */
+.upgrade-text strong {
+  font-size: 14px;
+}
+
+/* texto */
+.upgrade-text p {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+/* CTA */
+.upgrade-cta {
+  display: flex;
+  align-items: center;
+}
+
+/* botón */
+.upgrade-cta button {
+  white-space: nowrap;
 }
 
 .upgrade-content h3 {
@@ -1489,6 +1529,17 @@ textarea.input {
   .col-4,
   .col-3 {
     grid-column: span 1;
+  }
+
+  /* CTA */
+  .upgrade-cta {
+    display: flex;
+    align-items: center;
+  }
+
+  /* botón */
+  .upgrade-cta button {
+    white-space: nowrap;
   }
 }
 
