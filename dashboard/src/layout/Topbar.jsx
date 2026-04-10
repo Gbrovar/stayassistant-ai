@@ -40,7 +40,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
     <>
       {conversion?.show && !dismissed && (
-        <div className={`topbar-banner ${conversion.level}`}>
+        <div className={`topbar-banner ${conversion?.show ? "visible" : "hidden"}`}>
 
           <span>{conversion.message}</span>
 

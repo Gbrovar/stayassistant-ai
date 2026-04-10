@@ -181,7 +181,8 @@ body {
   color: #e5e7eb;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow-x: hidden;
 }
@@ -204,7 +205,8 @@ html, body {
 
 .dashboard {
   display: flex;
-  min-height: 100dvh; /* 🔥 FIX MOBILE REAL */
+  min-height: 100dvh;
+  /* 🔥 FIX MOBILE REAL */
 }
 
 .layout {
@@ -218,7 +220,8 @@ html, body {
   flex-direction: column;
   position: relative;
   z-index: 1;
-  min-height: 100dvh; /* 🔥 clave */
+  min-height: 100dvh;
+  /* 🔥 clave */
 }
 
 .main.has-banner .topbar {
@@ -1858,8 +1861,9 @@ h3 {
 
 .topbar {
   position: sticky;
-  top: 44px;
-  z-index: 100; /* 🔥 evitar conflictos */
+  top: 0;
+  z-index: 100;
+  /* 🔥 evitar conflictos */
   background: var(--bg-primary);
   min-height: 64px;
   border-bottom: 1px solid var(--border-primary);
@@ -1918,6 +1922,10 @@ h3 {
   min-height: 44px;
   font-size: 13px;
   gap: 12px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
 
   /* 🔥 FIX CLAVE */
   flex-shrink: 0;
@@ -1939,6 +1947,10 @@ h3 {
 
 .topbar-banner.normal {
   background: rgba(99, 102, 241, 0.15);
+}
+
+.topbar-banner.hidden {
+  display: none;
 }
 
 /* BUTTON SYSTEM */
