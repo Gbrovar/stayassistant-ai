@@ -222,16 +222,9 @@ body {
   position: relative;
   z-index: 1;
   min-height: 100%;
-  overflow: visible;
+  height: 100vh; 
+  overflow: hidden; 
   height: 100%;
-}
-
-.main.has-banner .topbar {
-  top: 44px;
-}
-
-.main>*:first-child {
-  margin-top: 0 !important;
 }
 
 .main.blur {
@@ -1561,6 +1554,8 @@ textarea.input {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 /* --- GRID SYSTEM --- */
@@ -1864,8 +1859,7 @@ h3 {
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 100;
-  /* 🔥 evitar conflictos */
+  z-index: 50;
   background: var(--bg-primary);
   min-height: 64px;
   border-bottom: 1px solid var(--border-primary);
@@ -1911,22 +1905,18 @@ h3 {
 /* banner */
 
 .topbar-banner {
-  position: fixed;
+  position: relative;
   border-bottom: 1px solid var(--border-primary);
   border-left: 3px solid transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: auto;
-  overflow: visible;
   max-height: none;
   padding: 8px 20px;
   min-height: 44px;
   font-size: 13px;
   gap: 12px;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 200;
 
   /* 🔥 FIX CLAVE */
