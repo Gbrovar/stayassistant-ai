@@ -1,4 +1,5 @@
 import { useApp } from "../../context/AppContext"
+import Button from "../UI/Button"
 
 export default function LockedFeature({ children, title = "Upgrade required" }) {
   const { subscription } = useApp()
@@ -18,9 +19,13 @@ export default function LockedFeature({ children, title = "Upgrade required" }) 
         <h3>{title}</h3>
         <p>Unlock advanced insights and optimization tools</p>
 
-        <button onClick={() => window.location.href = "/billing"}>
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => window.location.href = "/billing"}
+        >
           Upgrade to Pro
-        </button>
+        </Button>
       </div>
 
     </div>

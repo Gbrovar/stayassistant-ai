@@ -774,9 +774,7 @@ body {
 }
 
 .locked-content {
-  filter: blur(2px);
-  opacity: 0.4;
-  transform: scale(0.98);
+  opacity: 0.25;
 }
 
 .locked-overlay {
@@ -792,10 +790,10 @@ body {
   padding: 20px;
 
   background: linear-gradient(180deg,
-      rgba(15, 23, 42, 0.3),
-      rgba(15, 23, 42, 0.85));
+      rgba(15, 23, 42, 0.4),
+      rgba(15, 23, 42, 0.9));
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
 
   border-radius: 20px;
 }
