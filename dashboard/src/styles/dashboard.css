@@ -411,7 +411,7 @@ body {
   color: var(--success);
 
   overflow-x: auto;
-  white-space: pre-wrap;
+  white-space: pre;
   word-break: break-word;
 
   font-size: var(--text-sm);
@@ -975,8 +975,6 @@ body {
 
 .section-content .input,
 .section-content textarea {
-  background: #0b1220;
-  border: 1px solid #1f2937;
   margin-top: 4px;
 }
 
