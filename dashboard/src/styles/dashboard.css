@@ -964,11 +964,27 @@ body {
     0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
+.input:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
 .input-label {
   font-size: 12px;
   color: var(--text-muted);
   margin-bottom: 4px;
   display: block;
+}
+
+button,
+input,
+textarea,
+.card-v2,
+.card-soft-v2 {
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .section-content {
@@ -979,6 +995,10 @@ body {
   padding: 28px;
 
   transition: all var(--transition-base);
+}
+
+.section-content>*+* {
+  margin-top: 16px;
 }
 
 /* limpiar inputs dentro de setup */
@@ -1046,9 +1066,16 @@ body {
   color: #64748b;
 }
 
+h1,
+h2,
+h3 {
+  letter-spacing: -0.2px;
+}
+
 .page-title {
   font-size: 28px;
   font-weight: 600;
+  letter-spacing: -0.4px;
 }
 
 .page-subtitle {
@@ -1308,7 +1335,7 @@ textarea.input {
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #374151;
+  background-color: #4b5563;
 }
 
 @media (max-width: 480px) {
@@ -1741,23 +1768,32 @@ h3 {
 /* banner */
 
 .topbar-banner {
-  width: 100%;
   border-bottom: 1px solid var(--border-primary);
-  padding: 10px 20px;
-
+  border-left: 3px solid transparent;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  height: auto;
+  max-height: 60px;
+  overflow: hidden;
+
+  padding: 8px 20px;
+  min-height: 44px;
 
   font-size: 13px;
+
+  /* 🔥 FIX CLAVE */
+  flex-shrink: 0;
 }
 
 .topbar-banner.critical {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
+  border-left: 3px solid #ef4444;
 }
 
 .topbar-banner.high {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(245, 158, 11, 0.12);
+  border-left: 3px solid #f59e0b;
 }
 
 .topbar-banner.normal {
