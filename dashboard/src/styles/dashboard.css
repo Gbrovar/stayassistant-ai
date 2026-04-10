@@ -681,6 +681,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.upgrade-card-wrapper {
+  margin-bottom: 20px;
+}
+
 /* glow sutil */
 .upgrade-card::after {
   content: "";

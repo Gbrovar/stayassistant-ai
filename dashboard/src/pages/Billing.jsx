@@ -128,20 +128,19 @@ export default function Billing() {
     return (
         <div className="container">
 
-            <div className="grid-dashboard">
-
-                <div className="col-12">
-                    {/* HEADER */}
-                    <div className="page-header">
-                        <h1 className="title-lg">Billing</h1>
-                        <p className="page-subtitle">
-                            Manage your plan and scale your AI concierge
-                        </p>
-                    </div>
+            <div className="col-12">
+                {/* HEADER */}
+                <div className="page-header">
+                    <h1 className="title-lg">Billing</h1>
+                    <p className="page-subtitle">
+                        Manage your plan and scale your AI concierge
+                    </p>
                 </div>
+            </div>
 
-                {/* CONVERSION ALERT */}
-                {conversion?.show && (
+            {/* CONVERSION ALERT */}
+            {conversion?.show && (
+                <div className="upgrade-card-wrapper">
                     <div className={`upgrade-card ${conversion.level === "critical" ? "urgent" : ""}`}>
 
                         <div className="upgrade-content">
@@ -174,7 +173,12 @@ export default function Billing() {
                         </div>
 
                     </div>
-                )}
+                </div>
+            )}
+
+            <div className="grid-dashboard">
+
+
 
                 {/* CURRENT PLAN */}
                 <div className="col-8">
