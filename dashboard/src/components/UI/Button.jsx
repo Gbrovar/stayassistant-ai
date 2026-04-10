@@ -3,13 +3,29 @@ export default function Button({
   onClick,
   variant = "primary",
   size = "md",
-  full = false
+  full = false,
+  ...props
 }) {
+
+  const base = "btn"
+  const variantClass =
+    variant === "primary"
+      ? "btn-primary"
+      : "btn-secondary"
+
+  const sizeClass =
+    size === "sm"
+      ? "btn-sm"
+      : size === "lg"
+        ? "btn-lg"
+        : "btn-md"
+
+  const fullClass = full ? "btn-full" : ""
 
   return (
     <button
-      onClick={onClick}
-      className={`btn btn-${variant} btn-${size} ${full ? "btn-full" : ""}`}
+      className={`${base} ${variantClass} ${sizeClass} ${fullClass}`}
+      {...props}
     >
       {children}
     </button>
