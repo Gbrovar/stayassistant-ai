@@ -48,8 +48,10 @@ function ProtectedLayout({ children }) {
   useEffect(() => {
     if (isMobile && sidebarOpen) {
       document.body.style.overflow = "hidden"
+      document.body.style.touchAction = "none"
     } else {
       document.body.style.overflow = ""
+      document.body.style.touchAction = ""
     }
   }, [sidebarOpen, isMobile])
 
@@ -79,7 +81,7 @@ function ProtectedLayout({ children }) {
           isMobile={isMobile}
         />
 
-        
+
         {limitReached && (
           <div style={{
             background: "#ff3b30",
