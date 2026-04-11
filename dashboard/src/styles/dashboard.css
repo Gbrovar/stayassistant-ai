@@ -86,21 +86,16 @@
   top: 0;
   z-index: 100;
 
-  margin-left: 24px;
-
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
 
   position: sticky;
-  top: 0;
   z-index: 200;
 
   overflow: visible;
-
-  width: 100%;
   max-width: 100%;
-  contain: layout;
+
 }
 
 .header:empty {
@@ -250,6 +245,7 @@ body {
   position: relative;
   z-index: 1;
   margin-left: 250px;
+  padding-left: 24px;
   height: 100vh;
   min-height: 0;
   overflow: hidden;
@@ -1528,6 +1524,7 @@ textarea.input {
     width: 100%;
     overflow: hidden;
     margin-left: 0;
+    padding-left: 0;
   }
 
 

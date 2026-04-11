@@ -68,6 +68,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
         </div>
       )}
 
+      
       <div className="topbar">
 
         <div className="topbar-left">
