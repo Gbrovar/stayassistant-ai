@@ -1506,6 +1506,10 @@ textarea.input {
       0 20px 60px rgba(0, 0, 0, 0.6);
   }
 
+  .header {
+    margin-left: 0;
+  }
+
   .topbar {
     padding: 0 12px;
   }
