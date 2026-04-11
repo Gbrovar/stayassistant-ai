@@ -245,8 +245,10 @@ body {
   flex-direction: column;
   position: relative;
   z-index: 1;
-  min-height: 100vh;
+
+  height: 100vh;
   min-height: 0;
+  overflow: hidden;
 }
 
 .main.blur {
@@ -1523,8 +1525,7 @@ textarea.input {
 
   .main {
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
   }
 
 
@@ -1584,10 +1585,8 @@ textarea.input {
   padding: 20px;
   padding-top: 16px;
 
-  min-height: 0;
-  /* 🔥 FIX CLAVE */
-  overflow: auto;
-  /* 🔥 SCROLL REAL */
+  overflow-y: auto;
+  overflow-x: hidden
 }
 
 /* --- GRID SYSTEM --- */
@@ -1892,7 +1891,7 @@ h3 {
   position: sticky;
   top: 0;
   flex-shrink: 0;
-  
+
   z-index: 200;
   background: var(--bg-primary);
   min-height: 64px;
