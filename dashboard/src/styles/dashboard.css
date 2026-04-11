@@ -207,7 +207,8 @@ body {
 html,
 body {
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* OVERLAY */
@@ -1635,7 +1636,8 @@ textarea.input {
   padding-top: 0;
 
   overflow-y: auto;
-  overflow-x: hidden
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* --- GRID SYSTEM --- */
@@ -1965,16 +1967,27 @@ h3 {
   gap: 14px;
 }
 
+.topbar-left-block,
+.topbar-right {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.topbar .btn {
+  height: 36px;
+}
+
 .topbar-plan {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   line-height: 1.2;
-  gap: 4px;
+  gap: 10px;
 }
 
 .usage-sub {
-  font-size: 12px;
-  opacity: 0.8;
+  font-size: 11px;
+  opacity: 0.6;
   color: var(--text-muted);
   opacity: 0.7;
   margin-top: 2px;
