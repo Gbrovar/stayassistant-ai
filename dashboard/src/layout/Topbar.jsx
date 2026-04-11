@@ -36,44 +36,6 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
     localStorage.setItem("sa_last_click", Date.now())
   }
 
-  if (!conversion) {
-    return (
-      <div className="topbar">
-          <div className="topbar-left">
-            {isMobile && (
-              <button
-                className="menu-btn"
-                onClick={() => setSidebarOpen(prev => !prev)}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-            )}
-
-            <div className="plan-badge">
-              {plan.toUpperCase()} PLAN
-            </div>
-          </div>
-
-          <div className="topbar-right">
-            <div className="usage-box">
-              {usage || 0} / {limit}
-            </div>
-
-            <Button
-              variant="secondary"
-              onClick={() => {
-                localStorage.clear()
-                window.location.href = "/dashboard/login"
-              }}
-            >
-              Logout
-            </Button>
-          </div>
-        </div>
-    )
-  }
 
   return (
 

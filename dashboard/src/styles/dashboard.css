@@ -207,7 +207,7 @@ body {
 html,
 body {
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* OVERLAY */
@@ -1477,11 +1477,6 @@ textarea.input {
 
 @media (max-width: 768px) {
 
-  .content {
-    padding-top: 8px;
-    /* 🔥 elimina espacio fantasma */
-  }
-
   .install-header-card {
     margin-bottom: 16px;
   }
@@ -1491,7 +1486,7 @@ textarea.input {
     top: 0;
     left: 0;
 
-    width: 260px;
+    width: 240px;
     height: 100vh;
 
     transform: translateX(-100%);
@@ -1526,6 +1521,7 @@ textarea.input {
   .main {
     width: 100%;
     overflow: hidden;
+    margin-left: 0;
   }
 
 
@@ -1780,6 +1776,13 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+
+.topbar,
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 /* ============================= */
