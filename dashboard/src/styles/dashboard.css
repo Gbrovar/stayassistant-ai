@@ -86,6 +86,8 @@
   top: 0;
   z-index: 100;
 
+  margin-left: 24px;
+
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
