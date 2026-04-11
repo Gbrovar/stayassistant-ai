@@ -38,11 +38,9 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
 
   return (
+    <div className="header">
 
-    (conversion && conversion.show && !dismissed) ? (
-
-      <div className="header">
-
+      {(conversion && conversion.show && !dismissed) && (
         <div className={`topbar-banner ${conversion.level}`}>
           <span>{conversion.message}</span>
 
@@ -68,45 +66,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
             </button>
           </div>
         </div>
-
-        <div className="topbar">
-          <div className="topbar-left">
-            {isMobile && (
-              <button
-                className="menu-btn"
-                onClick={() => setSidebarOpen(prev => !prev)}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-            )}
-
-            <div className="plan-badge">
-              {plan.toUpperCase()} PLAN
-            </div>
-          </div>
-
-          <div className="topbar-right">
-            <div className="usage-box">
-              {usage || 0} / {limit}
-            </div>
-
-            <Button
-              variant="secondary"
-              onClick={() => {
-                localStorage.clear()
-                window.location.href = "/dashboard/login"
-              }}
-            >
-              Logout
-            </Button>
-          </div>
-        </div>
-
-      </div>
-
-    ) : (
+      )}
 
       <div className="topbar">
 
@@ -145,8 +105,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
       </div>
 
-    )
-
+    </div>
   )
 
 }

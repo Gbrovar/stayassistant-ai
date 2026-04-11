@@ -90,7 +90,10 @@
   flex-direction: column;
   flex-shrink: 0;
 
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+
   overflow: visible;
 
   width: 100%;
@@ -228,8 +231,7 @@ body {
 
 .dashboard {
   display: flex;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  height: 100vh;
 
   align-items: stretch;
 }
@@ -245,7 +247,7 @@ body {
   flex-direction: column;
   position: relative;
   z-index: 1;
-
+  margin-left: 250px;
   height: 100vh;
   min-height: 0;
   overflow: hidden;
@@ -1477,10 +1479,6 @@ textarea.input {
 
 @media (max-width: 768px) {
 
-  .content {
-    padding-top: 8px;
-    /* 🔥 elimina espacio fantasma */
-  }
 
   .install-header-card {
     margin-bottom: 16px;
@@ -1514,10 +1512,7 @@ textarea.input {
     font-size: 13px;
   }
 
-  .dashboard {
-    display: flex;
-    flex-direction: column;
-  }
+
 
   .usage-topbar {
     font-size: 11px;
@@ -1526,6 +1521,7 @@ textarea.input {
   .main {
     width: 100%;
     overflow: hidden;
+    margin-left: 0;
   }
 
 
@@ -1583,7 +1579,7 @@ textarea.input {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  padding-top: 16px;
+  padding-top: 0;
 
   overflow-y: auto;
   overflow-x: hidden
@@ -1793,11 +1789,12 @@ h3 {
   width: 250px;
   padding: 24px 12px;
 
-  position: sticky;
+  position: fixed;
   flex-shrink: 0;
   top: 0;
+  left: 0;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   flex-shrink: 0;
   z-index: 1000;
 }
@@ -1888,8 +1885,6 @@ h3 {
 /* ============================= */
 
 .topbar {
-  position: sticky;
-  top: 0;
   flex-shrink: 0;
 
   z-index: 200;
