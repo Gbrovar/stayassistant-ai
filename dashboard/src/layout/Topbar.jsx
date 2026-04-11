@@ -108,7 +108,7 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
           </div>
 
           <div className="usage-inline">
-            {usage || 0} / {limit}
+            {Math.round((usage / limit) * 100)}%
           </div>
         </div>
 
