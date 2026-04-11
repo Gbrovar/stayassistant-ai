@@ -71,49 +71,51 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
       <div className="topbar">
 
-        {/* ROW 1 */}
-        <div className="topbar-row">
+  <div className="topbar-inner">
 
-          <div className="topbar-left">
-            {isMobile && (
-              <button
-                className="menu-btn"
-                onClick={() => setSidebarOpen(prev => !prev)}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-            )}
-          </div>
+    {/* LEFT */}
+    <div className="topbar-left-block">
 
-          <div className="topbar-right">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                localStorage.clear()
-                window.location.href = "/dashboard/login"
-              }}
-            >
-              Logout
-            </Button>
-          </div>
+      {isMobile && (
+        <button
+          className="menu-btn"
+          onClick={() => setSidebarOpen(prev => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      )}
 
+      <div className="topbar-plan">
+        <div className="plan-badge">
+          {plan.toUpperCase()} PLAN
         </div>
 
-        {/* ROW 2 */}
-        <div className="topbar-meta">
-          <div className="plan-badge">
-            {plan.toUpperCase()} PLAN
-          </div>
-
-          <div className="usage-inline">
-            {Math.round((usage / limit) * 100)}%
-          </div>
+        <div className="usage-sub">
+          {Math.round((usage / limit) * 100)}% used
         </div>
-
       </div>
 
+    </div>
+
+    {/* RIGHT */}
+    <div className="topbar-right">
+      <Button
+        variant="secondary"
+        size="md"
+        onClick={() => {
+          localStorage.clear()
+          window.location.href = "/dashboard/login"
+        }}
+      >
+        ⎋
+      </Button>
+    </div>
+
+  </div>
+
+</div>
     </div>
   )
 
