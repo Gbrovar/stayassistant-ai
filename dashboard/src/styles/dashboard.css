@@ -1477,6 +1477,11 @@ textarea.input {
 
 @media (max-width: 768px) {
 
+  .content {
+    padding-top: 8px;
+    /* 🔥 elimina espacio fantasma */
+  }
+
   .install-header-card {
     margin-bottom: 16px;
   }
@@ -1486,7 +1491,7 @@ textarea.input {
     top: 0;
     left: 0;
 
-    width: 240px;
+    width: 260px;
     height: 100vh;
 
     transform: translateX(-100%);
@@ -1521,7 +1526,6 @@ textarea.input {
   .main {
     width: 100%;
     overflow: hidden;
-    margin-left: 0;
   }
 
 
@@ -1776,13 +1780,6 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-.topbar,
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 /* ============================= */
