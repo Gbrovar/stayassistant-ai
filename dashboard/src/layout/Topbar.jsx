@@ -68,40 +68,48 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
         </div>
       )}
 
-      
+
       <div className="topbar">
 
-        <div className="topbar-left">
-          {isMobile && (
-            <button
-              className="menu-btn"
-              onClick={() => setSidebarOpen(prev => !prev)}
-            >
-              <span />
-              <span />
-              <span />
-            </button>
-          )}
+        {/* ROW 1 */}
+        <div className="topbar-row">
 
+          <div className="topbar-left">
+            {isMobile && (
+              <button
+                className="menu-btn"
+                onClick={() => setSidebarOpen(prev => !prev)}
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            )}
+          </div>
+
+          <div className="topbar-right">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                localStorage.clear()
+                window.location.href = "/dashboard/login"
+              }}
+            >
+              Logout
+            </Button>
+          </div>
+
+        </div>
+
+        {/* ROW 2 */}
+        <div className="topbar-meta">
           <div className="plan-badge">
             {plan.toUpperCase()} PLAN
           </div>
-        </div>
 
-        <div className="topbar-right">
-          <div className="usage-box">
+          <div className="usage-inline">
             {usage || 0} / {limit}
           </div>
-
-          <Button
-            variant="secondary"
-            onClick={() => {
-              localStorage.clear()
-              window.location.href = "/dashboard/login"
-            }}
-          >
-            Logout
-          </Button>
         </div>
 
       </div>
