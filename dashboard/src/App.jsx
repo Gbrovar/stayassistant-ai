@@ -73,7 +73,7 @@ function ProtectedLayout({ children }) {
 
       <div className={`main 
             ${isMobile && sidebarOpen ? "blur" : ""} 
-            ${conversion?.show ? "has-banner" : ""}
+            ${conversion?.show && localStorage.getItem("banner_dismissed") !== "true" ? "has-banner" : ""}
         `}>
 
         <Topbar

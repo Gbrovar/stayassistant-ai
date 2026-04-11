@@ -38,40 +38,37 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
 
   return (
 
+  (conversion?.show && !dismissed) ? (
+
     <div className="header">
-      
-      {conversion?.show && !dismissed && (
-        <div className={`topbar-banner ${conversion.level}`}>
 
-          <span>{conversion.message}</span>
+      <div className={`topbar-banner ${conversion.level}`}>
+        <span>{conversion.message}</span>
 
-          <div className="flex gap-sm">
-            <Button
-              variant="primary"
-              onClick={() => {
-                trackClick()
-                window.location.href = "/dashboard/billing"
-              }}
-            >
-              {conversion.cta || "Upgrade"}
-            </Button>
+        <div className="flex gap-sm">
+          <Button
+            variant="primary"
+            onClick={() => {
+              trackClick()
+              window.location.href = "/dashboard/billing"
+            }}
+          >
+            {conversion.cta || "Upgrade"}
+          </Button>
 
-            <button
-              className="btn btn-sm btn-secondary"
-              onClick={() => {
-                localStorage.setItem("banner_dismissed", "true")
-                setDismissed(true)
-              }}
-            >
-              ✕
-            </button>
-          </div>
-
+          <button
+            className="btn btn-sm btn-secondary"
+            onClick={() => {
+              localStorage.setItem("banner_dismissed", "true")
+              setDismissed(true)
+            }}
+          >
+            ✕
+          </button>
         </div>
-      )}
+      </div>
 
       <div className="topbar">
-
         <div className="topbar-left">
           {isMobile && (
             <button
@@ -90,7 +87,6 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
         </div>
 
         <div className="topbar-right">
-
           <div className="usage-box">
             {usage || 0} / {limit}
           </div>
@@ -104,11 +100,52 @@ export default function Topbar({ setSidebarOpen, isMobile }) {
           >
             Logout
           </Button>
+        </div>
+      </div>
 
+    </div>
+
+  ) : (
+
+    <div className="topbar">
+
+      <div className="topbar-left">
+        {isMobile && (
+          <button
+            className="menu-btn"
+            onClick={() => setSidebarOpen(prev => !prev)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        )}
+
+        <div className="plan-badge">
+          {plan.toUpperCase()} PLAN
+        </div>
+      </div>
+
+      <div className="topbar-right">
+        <div className="usage-box">
+          {usage || 0} / {limit}
         </div>
 
+        <Button
+          variant="secondary"
+          onClick={() => {
+            localStorage.clear()
+            window.location.href = "/dashboard/login"
+          }}
+        >
+          Logout
+        </Button>
       </div>
+
     </div>
+
   )
+
+)
 
 }
