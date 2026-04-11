@@ -98,6 +98,10 @@
   contain: layout;
 }
 
+.header:empty {
+  display: none !important;
+}
+
 .insight-header {
   display: flex;
   flex: 1;

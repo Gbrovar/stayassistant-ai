@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 
 export default function useResponsive() {
 
-    
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+    const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
 
     useEffect(() => {
 
