@@ -24,6 +24,7 @@ export default function Button({
 
   return (
     <button
+      onClick={onClick}
       className={`${base} ${variantClass} ${sizeClass} ${fullClass}`}
       {...props}
     >
