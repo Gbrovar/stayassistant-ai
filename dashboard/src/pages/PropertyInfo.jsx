@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import React from "react"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
 import { useContext } from "react";
@@ -6,6 +7,19 @@ import { AppContext } from "../context/AppContext";
 import Input from "../components/UI/Input";
 import Textarea from "../components/UI/Textarea";
 import Button from "../components/UI/Button"
+
+const SaveIndicator = React.memo(({ saving, saved, dirty }) => {
+    return (
+        <div className={`save-indicator ${saving ? "saving" :
+            saved ? "saved" :
+                dirty ? "unsaved" : ""
+            }`}>
+            {saving && "Saving..."}
+            {saved && "Saved ✓"}
+            {!saving && !saved && dirty && "Unsaved changes"}
+        </div>
+    )
+})
 
 export default function PropertyInfo({ onComplete }) {
 
@@ -15,6 +29,11 @@ export default function PropertyInfo({ onComplete }) {
     const [saving, setSaving] = useState(false)
     const [saved, setSaved] = useState(false)
     const [isAutoFilling, setIsAutoFilling] = useState(false)
+
+    /* AUTOSAVE SYSTEM */
+    const [dirty, setDirty] = useState(false)
+    const [lastSavedData, setLastSavedData] = useState(null)
+    /* ********* */
 
     const fallbackWelcome =
         "Welcome 👋 I'm here to help you during your stay 😊"
@@ -60,8 +79,7 @@ export default function PropertyInfo({ onComplete }) {
             const infoData = await infoRes.json()
             const brandingData = await brandingRes.json()
 
-            setForm(prev => ({
-                ...prev,
+            const initialForm = {
                 ...infoData.property_info,
 
                 address: setupData.address || "",
@@ -72,27 +90,27 @@ export default function PropertyInfo({ onComplete }) {
                 amenities: setupData.amenities || [],
                 services: setupData.services || [],
 
-                property_name: brandingData.property_name || prev.property_name,
-                button_text: brandingData.button_text || prev.button_text
-            }))
+                property_name: brandingData.property_name || "",
+                button_text: brandingData.button_text || ""
+            }
+
+            setForm(initialForm)
+            setLastSavedData(initialForm)
         }
 
         load()
     }, [])
 
     useEffect(() => {
-
-        if (isAutoFilling) return // 🚫 NO autosave durante autofill
+        if (!dirty || isAutoFilling) return
 
         const timeout = setTimeout(() => {
-            if (Object.values(form).some(v => v)) {
-                saveAll()
-            }
-        }, 2000)
+            silentSave()
+        }, 4000) // ⏱️ más humano
 
         return () => clearTimeout(timeout)
 
-    }, [JSON.stringify(form), isAutoFilling])
+    }, [form, dirty, isAutoFilling])
 
     useEffect(() => {
 
@@ -120,7 +138,6 @@ export default function PropertyInfo({ onComplete }) {
 
     }, [])
 
-
     function handleChange(e) {
 
         const updated = {
@@ -129,6 +146,9 @@ export default function PropertyInfo({ onComplete }) {
         }
 
         setForm(updated)
+        if (!dirty) {
+            setDirty(true)
+        }
 
         // 🧠 detectar si usuario está completando dirección
         if (
@@ -179,13 +199,14 @@ export default function PropertyInfo({ onComplete }) {
         )
     }
 
-    async function saveAll() {
+    async function saveAll({ silent = false } = {}) {
 
         setSaving(true)
         setSaved(false)
 
         try {
 
+            //1. BASISC INFO
             await fetch(`${API_URL}/property/${propertyId}/property-info`, {
                 method: "POST",
                 headers: {
@@ -204,6 +225,7 @@ export default function PropertyInfo({ onComplete }) {
                 })
             })
 
+            //2. BRANDING
             await fetch(`${API_URL}/property/${propertyId}/branding`, {
                 method: "POST",
                 headers: {
@@ -218,21 +240,25 @@ export default function PropertyInfo({ onComplete }) {
             })
 
             // 🧠 VALIDACIÓN DIRECCIÓN (CRÍTICO)
-            if (!form.address || !form.city || !form.country) {
-                showToast("Please complete your property location to enable recommendations")
-                return
+            if (!silent) {
+
+                if (!form.address || !form.city || !form.country) {
+                    showToast("Please complete your property location to enable recommendations")
+                    return
+                }
+
+                if (
+                    form.address.trim().length < 5 ||
+                    form.city.trim().length < 2 ||
+                    form.country.trim().length < 2
+                ) {
+                    showToast("Please enter a valid property location")
+                    return
+                }
+
             }
 
-            // 🔵 VALIDACIÓN PRO (evitar datos basura)
-            if (
-                form.address.trim().length < 5 ||
-                form.city.trim().length < 2 ||
-                form.country.trim().length < 2
-            ) {
-                showToast("Please enter a valid property location")
-                return
-            }
-
+            //3. SETUP (LOCATION)
             await fetch(`${API_URL}/property/setup`, {
                 method: "POST",
                 headers: {
@@ -252,6 +278,10 @@ export default function PropertyInfo({ onComplete }) {
             setSaved(true)
             setRefreshPreview(prev => prev + 1)
 
+            if (!silent) {
+                showToast("Saved successfully")
+            }
+
             setTimeout(() => setSaved(false), 1500)
 
         } catch {
@@ -260,6 +290,23 @@ export default function PropertyInfo({ onComplete }) {
 
         setSaving(false)
 
+    }
+
+    async function silentSave() {
+
+        // 🧠 evitar guardar si no hay cambios reales
+        if (JSON.stringify(form) === JSON.stringify(lastSavedData)) return
+
+        try {
+
+            await saveAll({ silent: true })
+
+            setLastSavedData({ ...form })
+            setDirty(false)
+
+        } catch (err) {
+            console.error("Silent save failed", err)
+        }
     }
 
     /* UI */
@@ -307,10 +354,11 @@ export default function PropertyInfo({ onComplete }) {
 
         <div className="stack-xl">
 
-            <div className={`save-indicator ${saving ? "saving" : saved ? "saved" : ""}`}>
-                {saving && "Saving..."}
-                {saved && "Saved ✓"}
-            </div>
+            <SaveIndicator
+                saving={saving}
+                saved={saved}
+                dirty={dirty}
+            />
 
             {/* BASIC */}
             <Section title="Basic info">
@@ -495,7 +543,15 @@ export default function PropertyInfo({ onComplete }) {
                 />
             </Section>
 
-            <div className="flex-end mt-md">
+            <div className="flex-between mt-md">
+
+                <Button
+                    variant="secondary"
+                    onClick={() => saveAll()}
+                >
+                    Save changes
+                </Button>
+
                 <Button
                     className="btn btn-md btn-primary"
                     onClick={() => {
@@ -504,6 +560,7 @@ export default function PropertyInfo({ onComplete }) {
                 >
                     Continue →
                 </Button>
+
             </div>
 
         </div>

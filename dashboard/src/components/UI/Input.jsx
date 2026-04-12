@@ -1,4 +1,6 @@
-export default function Input({
+import React from "react"
+
+function InputComponent({
   label,
   name,
   value,
@@ -12,8 +14,8 @@ export default function Input({
 
       <input
         className="input"
-        name={name}              // 🔥 CRÍTICO
-        value={value || ""}     // 🔥 evita uncontrolled
+        name={name}
+        value={value || ""}
         onChange={onChange}
         placeholder={placeholder}
         type={type}
@@ -21,3 +23,5 @@ export default function Input({
     </div>
   )
 }
+
+export default React.memo(InputComponent)
