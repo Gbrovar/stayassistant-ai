@@ -13,6 +13,7 @@ export default function Conversations() {
   const [loading, setLoading] = useState(true)
   const { isMobile } = useResponsive()
   const { limitReached } = useApp()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
 
   function analyzeConversation(messages) {
@@ -43,6 +44,12 @@ export default function Conversations() {
       fallback
     }
   }
+
+  useEffect(() => {
+    if (!isMobile) {
+      setMobileOpen(false)
+    }
+  }, [isMobile])
 
   useEffect(() => {
 
@@ -100,7 +107,7 @@ export default function Conversations() {
 
         <div className="conversations-layout">
 
-          <div className="conversations-list card-v2">
+          <div className="conversations-list">
 
             {conversations.map(c => {
 
@@ -119,7 +126,7 @@ export default function Conversations() {
                     setSelected(c)
 
                     if (isMobile) {
-                      document.querySelector(".conversation-detail")?.classList.add("open")
+                      setMobileOpen(true)
                     }
                   }}
                 >
@@ -148,17 +155,24 @@ export default function Conversations() {
 
           </div>
 
-          <div className="conversation-detail card-v2">
+          <div className={`conversation-detail ${mobileOpen ? "open" : ""}`}>
 
             {isMobile && selected && (
-              <Button variant="secondary" size="sm" className="mb-sm"
-                onClick={() => {
-                  setSelected(null)
-                  document.querySelector(".conversation-detail")?.classList.remove("open")
-                }}
-              >
-                ← Back
-              </Button>
+              <div className="conversation-mobile-header">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setSelected(null)
+                    setMobileOpen(false)
+                  }}
+                >
+                  ← Back
+                </Button>
+                <span className="conversation-mobile-title">
+                  Conversation
+                </span>
+              </div>
             )}
 
             {!selected && <div className="text-muted">
@@ -167,28 +181,30 @@ export default function Conversations() {
 
             {selected && (
 
-              <div className="stack">
+              <div className="conversation-wrapper">
 
                 <div className="chat-header">
                   <h3>Conversation</h3>
                   <span className="text-muted">{selected.id}</span>
                 </div>
 
-                <div className="messages">
-                  {selected.messages.map((m, i) => (
+                <div className="chat-body">
+                  <div className="messages">
+                    {selected.messages.map((m, i) => (
 
-                    <div
-                      key={`${selected.id}-${i}`}
-                      className={
-                        m.role === "user"
-                          ? "message-user"
-                          : "message-ai"
-                      }
-                    >
-                      {m.content}
-                    </div>
+                      <div
+                        key={`${selected.id}-${i}`}
+                        className={
+                          m.role === "user"
+                            ? "message-user"
+                            : "message-ai"
+                        }
+                      >
+                        {m.content}
+                      </div>
 
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
               </div>
