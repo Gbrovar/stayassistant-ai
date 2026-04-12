@@ -21,6 +21,20 @@ const SaveIndicator = React.memo(({ saving, saved, dirty }) => {
     )
 })
 
+function Section({ title, children }) {
+    return (
+        <div className="card-v2">
+            <div className="section-title-v2">
+                {title}
+            </div>
+
+            <div className="stack">
+                {children}
+            </div>
+        </div>
+    )
+}
+
 export default function PropertyInfo({ onComplete }) {
 
     const propertyId = getPropertyId()
@@ -171,12 +185,6 @@ export default function PropertyInfo({ onComplete }) {
     }
     */
 
-    function handleBlur() {
-        if (!dirty) return
-
-        silentSave()
-    }
-
 
     function addItem(type, value) {
         if (!value.trim()) return
@@ -199,24 +207,14 @@ export default function PropertyInfo({ onComplete }) {
         }))
     }
 
-    function Section({ title, children }) {
-        return (
-            <div className="card-v2">
-                <div className="section-title-v2">
-                    {title}
-                </div>
 
-                <div className="stack">
-                    {children}
-                </div>
-            </div>
-        )
-    }
 
     async function saveAll({ silent = false } = {}) {
 
-        setSaving(true)
-        setSaved(false)
+        if (!silent) {
+            setSaving(true)
+            setSaved(false)
+        }
 
         try {
 
@@ -302,7 +300,9 @@ export default function PropertyInfo({ onComplete }) {
             showToast("Error saving")
         }
 
-        setSaving(false)
+        if (!silent) {
+            setSaving(false)
+        }
 
     }
 
@@ -385,8 +385,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.property_name}
                             placeholder="e.g. Villa Sunset, Hotel Central..."
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -395,8 +393,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.button_text}
                             placeholder="e.g. Ask concierge"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -423,8 +419,6 @@ export default function PropertyInfo({ onComplete }) {
                         value={form.address}
                         placeholder="Street name and number"
                         onChange={handleChange}
-
-                        onBlur={handleBlur}
                     />
                 </div>
 
@@ -436,8 +430,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.city}
                             placeholder="e.g. Barcelona"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -446,8 +438,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.country}
                             placeholder="e.g. Spain"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -456,8 +446,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.postal_code}
                             placeholder="e.g. 08001"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -481,8 +469,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.phone}
                             placeholder="+34 600 000 000"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -491,8 +477,6 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.email}
                             placeholder="contact@yourproperty.com"
                             onChange={handleChange}
-
-                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -503,22 +487,18 @@ export default function PropertyInfo({ onComplete }) {
 
                 <div className="form-group-block">
                     <Grid>
-                        <Input 
-                            label="Check-in" 
-                            name="checkin" 
-                            value={form.checkin} 
+                        <Input
+                            label="Check-in"
+                            name="checkin"
+                            value={form.checkin}
                             onChange={handleChange}
-                            
-                            onBlur={handleBlur}
                         />
 
-                        <Input 
-                            label="Check-out" 
-                            name="checkout" 
-                            value={form.checkout} 
-                            onChange={handleChange} 
-                            
-                            onBlur={handleBlur}
+                        <Input
+                            label="Check-out"
+                            name="checkout"
+                            value={form.checkout}
+                            onChange={handleChange}
                         />
                     </Grid>
                 </div>

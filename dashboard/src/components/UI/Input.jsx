@@ -1,11 +1,8 @@
-import React from "react"
-
-function InputComponent({
+export default function Input({
   label,
   name,
   value,
   onChange,
-  onBlur,
   placeholder,
   type = "text"
 }) {
@@ -15,15 +12,12 @@ function InputComponent({
 
       <input
         className="input"
-        name={name}
-        value={value || ""}
+        name={name}              // 🔥 CRÍTICO
+        value={value || ""}     // 🔥 evita uncontrolled
         onChange={onChange}
-        onBlur={onBlur}
         placeholder={placeholder}
         type={type}
       />
     </div>
   )
 }
-
-export default React.memo(InputComponent)
