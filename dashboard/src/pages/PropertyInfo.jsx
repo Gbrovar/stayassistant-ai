@@ -23,7 +23,7 @@ const SaveIndicator = React.memo(({ saving, saved, dirty }) => {
 
 function Section({ title, children }) {
     return (
-        <div className="card-v2">
+        <div className="card-v2 no-hover">
             <div className="section-title-v2">
                 {title}
             </div>
@@ -35,43 +35,43 @@ function Section({ title, children }) {
     )
 }
 
- function Grid({ children }) {
-        return (
-            <div className="form-grid-2">
-                {children}
+function Grid({ children }) {
+    return (
+        <div className="form-grid-2">
+            {children}
+        </div>
+    )
+}
+
+function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
+    return (
+        <div>
+
+            <div className="chips-container">
+                {items.map((item, i) => (
+                    <div key={i} className="chip">
+                        {item}
+                        <span className="chip-remove" onClick={() => onRemove(i)}>✕</span>
+                    </div>
+                ))}
             </div>
-        )
-    }
 
-    function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
-        return (
-            <div>
+            <div className="chips-input-row">
+                <input
+                    className="input"
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    placeholder="Type and click Add..."
+                />
 
-                <div className="chips-container">
-                    {items.map((item, i) => (
-                        <div key={i} className="chip">
-                            {item}
-                            <span className="chip-remove" onClick={() => onRemove(i)}>✕</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="chips-input-row">
-                    <input
-                        className="input"
-                        value={newValue}
-                        onChange={(e) => setNewValue(e.target.value)}
-                        placeholder="Type and click Add..."
-                    />
-
-                    <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
-                        Add
-                    </button>
-                </div>
-
+                <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
+                    Add
+                </button>
             </div>
-        )
-    }
+
+        </div>
+    )
+}
 
 export default function PropertyInfo({ onComplete }) {
 
@@ -367,7 +367,7 @@ export default function PropertyInfo({ onComplete }) {
 
     /* UI */
 
-   
+
 
 
     return (
@@ -585,7 +585,8 @@ export default function PropertyInfo({ onComplete }) {
 
                 <Button
                     className="btn btn-md btn-primary"
-                    onClick={() => {
+                    onClick={async () => {
+                        await saveAll()
                         if (onComplete) onComplete()
                     }}
                 >

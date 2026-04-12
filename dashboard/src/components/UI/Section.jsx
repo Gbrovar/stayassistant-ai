@@ -14,10 +14,9 @@ export default function Section({
         ${isDone ? "section-done" : ""}
         ${isActive ? "section-active" : "section-collapsed"}
       `}
-      onClick={!isActive ? onClick : undefined}
     >
 
-      <div className="section-header">
+      <div className="section-header" onClick={onClick}>
 
         <div className="section-left">
 

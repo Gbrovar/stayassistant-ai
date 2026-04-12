@@ -188,7 +188,8 @@ export default function Recommendations({ onComplete }) {
             <div className="flex-end mt-md">
                 <Button
                     className="btn btn-md btn-primary"
-                    onClick={() => {
+                    onClick={async () => {
+                        await save()
                         if (onComplete) onComplete()
                     }}
                 >

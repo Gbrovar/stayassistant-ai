@@ -183,7 +183,8 @@ export default function FAQEditor({ onComplete }) {
             <div className="flex-end mt-md">
                 <Button
                     variant="btn btn-md btn-primary"
-                    onClick={() => {
+                    onClick={async () => {
+                        await save()
                         if (onComplete) onComplete()
                     }}
                 >

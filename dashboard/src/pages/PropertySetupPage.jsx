@@ -12,19 +12,73 @@ export default function PropertySetupPage() {
 
   const [activeStep, setActiveStep] = useState(1)
 
-  // 👉 lógica simple de progreso (mejoraremos luego)
-  const [stepsDone, setStepsDone] = useState({
-    1: false,
-    2: false,
-    3: false
-  })
+  const [autoFilling, setAutoFilling] = useState(false)
+
+  useEffect(() => {
+    async function loadProgress() {
+
+      const token = localStorage.getItem("token")
+      const propertyId = localStorage.getItem("propertyId")
+
+      const [infoRes, faqRes, recRes] = await Promise.all([
+        fetch(`${API_URL}/property/${propertyId}/property-info`, {
+          headers: { Authorization: "Bearer " + token }
+        }),
+        fetch(`${API_URL}/property/${propertyId}/faq`, {
+          headers: { Authorization: "Bearer " + token }
+        }),
+        fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+          headers: { Authorization: "Bearer " + token }
+        })
+      ])
+
+      const info = await infoRes.json()
+      const faq = await faqRes.json()
+      const rec = await recRes.json()
+
+      if (!info || !faq || !rec) return
+
+      const done = {
+        1: !!info?.property_info?.property_name,
+        2: (faq?.faq || []).length > 0,
+        3: (rec?.recommendations || []).length > 0
+      }
+
+      setStepsDone(done)
+
+      // 🔥 si todo está completo → colapsar
+      if (done[1] && done[2] && done[3]) {
+        setActiveStep(null)
+      }
+    }
+
+    loadProgress()
+  }, [])
+
+
+  const [stepsDone, setStepsDone] = useState(null)
+  /*
+    // 👉 lógica simple de progreso (mejoraremos luego)
+    const [stepsDone, setStepsDone] = useState({
+      1: false,
+      2: false,
+      3: false
+    })
+  */
 
   function completeStep(step) {
     setStepsDone(prev => ({ ...prev, [step]: true }))
   }
 
   async function handleAutoFill() {
+
+    setAutoFilling(true)
+
     try {
+
+      const token = localStorage.getItem("token")
+      const propertyId = localStorage.getItem("propertyId")
+
       // 🔴 VALIDAR QUE HAY DIRECCIÓN REAL
       const propertyRes = await fetch(`${API_URL}/property/${propertyId}`, {
         headers: {
@@ -39,10 +93,6 @@ export default function PropertySetupPage() {
         setActiveStep(1)
         return
       }
-
-      const token = localStorage.getItem("token")
-      const propertyId = localStorage.getItem("propertyId")
-
 
       // 1️⃣ AI DATA
       const res = await fetch(`${API_URL}/ai/setup-generator`, {
@@ -104,8 +154,12 @@ export default function PropertySetupPage() {
 
     } catch (err) {
       console.error("Auto-fill error", err)
+    } finally {
+      setAutoFilling(false)
     }
   }
+
+  if (!stepsDone) return null
 
   return (
     <div className="container">
@@ -124,8 +178,9 @@ export default function PropertySetupPage() {
           <button
             className="btn btn-md btn-primary"
             onClick={handleAutoFill}
+            disabled={autoFilling}
           >
-            ✨ Auto-fill
+            {autoFilling ? "Generating..." : "✨ Auto-fill"}
           </button>
 
         </div>
@@ -146,7 +201,7 @@ export default function PropertySetupPage() {
             title="Basic setup"
             isDone={stepsDone[1]}
             isActive={activeStep === 1}
-            onClick={() => setActiveStep(1)}
+            onClick={() => setActiveStep(prev => prev === 1 ? null : 1)}
           >
             {activeStep === 1 && (
               <PropertyInfo onComplete={() => completeStep(1)} />
@@ -159,7 +214,7 @@ export default function PropertySetupPage() {
             title="Train your AI"
             isDone={stepsDone[2]}
             isActive={activeStep === 2}
-            onClick={() => setActiveStep(2)}
+            onClick={() => setActiveStep(prev => prev === 2 ? null : 2)}
           >
             {activeStep === 2 && (
               <FAQEditor onComplete={() => completeStep(2)} />
@@ -172,7 +227,7 @@ export default function PropertySetupPage() {
             title="Recommendations"
             isDone={stepsDone[3]}
             isActive={activeStep === 3}
-            onClick={() => setActiveStep(3)}
+            onClick={() => setActiveStep(prev => prev === 3 ? null : 3)}
           >
             {activeStep === 3 && (
               <Recommendations onComplete={() => completeStep(3)} />
