@@ -85,8 +85,6 @@ export default function PropertyInfo({ onComplete }) {
     /* AUTOSAVE SYSTEM */
     const [dirty, setDirty] = useState(false)
     const [lastSavedData, setLastSavedData] = useState(null)
-    const typingTimeoutRef = useRef(null)
-    /* ********* */
 
     const fallbackWelcome =
         "Welcome 👋 I'm here to help you during your stay 😊"
@@ -193,43 +191,6 @@ export default function PropertyInfo({ onComplete }) {
         if (!dirty) setDirty(true)
     }
 
-
-    /*
-    function handleChange(e) {
-        
-
-        const updated = {
-            ...form,
-            [e.target.name]: e.target.value
-        }
-
-        setForm(updated)
-        if (!dirty) {
-            setDirty(true)
-        }
-
-        // 🧠 detectar si usuario está completando dirección
-        if (
-            (e.target.name === "address" ||
-                e.target.name === "city" ||
-                e.target.name === "country") &&
-            updated.address &&
-            updated.city &&
-            updated.country
-        ) {
-            // guardar en localStorage (opcional fallback UX)
-            localStorage.setItem("property_address_ready", "true")
-        }
-    }
-    */
-
-    function handleBlur() {
-        if (!dirty) return
-
-        silentSave()
-    }
-
-
     function addItem(type, value) {
         if (!value.trim()) return
 
@@ -294,22 +255,23 @@ export default function PropertyInfo({ onComplete }) {
             })
 
             // 🧠 VALIDACIÓN DIRECCIÓN (CRÍTICO)
-            if (!silent) {
-
-                if (!form.address || !form.city || !form.country) {
+            // 🔥 validar SIEMPRE (también en autosave)
+            if (!form.address || !form.city || !form.country) {
+                if (!silent) {
                     showToast("Please complete your property location to enable recommendations")
-                    return
                 }
+                return
+            }
 
-                if (
-                    form.address.trim().length < 5 ||
-                    form.city.trim().length < 2 ||
-                    form.country.trim().length < 2
-                ) {
+            if (
+                form.address.trim().length < 5 ||
+                form.city.trim().length < 2 ||
+                form.country.trim().length < 2
+            ) {
+                if (!silent) {
                     showToast("Please enter a valid property location")
-                    return
                 }
-
+                return
             }
 
             //3. SETUP (LOCATION)

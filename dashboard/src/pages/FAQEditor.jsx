@@ -14,6 +14,7 @@ export default function FAQEditor({ onComplete }) {
 
     const [faq, setFaq] = useState([])
     const [loading, setLoading] = useState(false)
+    const [saved, setSaved] = useState(false)
     const [toast, setToast] = useState(null)
     const { setRefreshPreview } = useContext(AppContext)
 
@@ -102,6 +103,8 @@ export default function FAQEditor({ onComplete }) {
             })
 
             setToast("FAQ saved successfully")
+            setSaved(true)
+            setTimeout(() => setSaved(false), 1500)
             setRefreshPreview(prev => prev + 1)
 
         } catch (err) {
@@ -182,7 +185,7 @@ export default function FAQEditor({ onComplete }) {
 
             <div className="flex-end mt-md">
                 <Button
-                    variant="btn btn-md btn-primary"
+                    className="btn btn-md btn-primary"
                     onClick={async () => {
                         await save()
                         if (onComplete) onComplete()
@@ -192,6 +195,8 @@ export default function FAQEditor({ onComplete }) {
                 </Button>
             </div>
 
+            {loading && <div className="text-muted">Saving...</div>}
+            {saved && <div className="text-success">Saved ✓</div>}
             {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
         </div>

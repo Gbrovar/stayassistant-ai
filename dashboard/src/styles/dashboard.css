@@ -1125,7 +1125,7 @@ textarea,
 }
 
 .section-collapsed {
-  opacity: 0.7;
+  opacity: 0.85;
   transition: all 0.2s ease;
 }
 

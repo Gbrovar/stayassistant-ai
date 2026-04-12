@@ -68,6 +68,13 @@ export default function PropertySetupPage() {
 
   function completeStep(step) {
     setStepsDone(prev => ({ ...prev, [step]: true }))
+
+    // 👉 avanzar automáticamente
+    setActiveStep(prev => {
+      if (step === 1) return 2
+      if (step === 2) return 3
+      return null
+    })
   }
 
   async function handleAutoFill() {
@@ -151,6 +158,15 @@ export default function PropertySetupPage() {
       window.dispatchEvent(new CustomEvent("ai-autofill", {
         detail: finalData
       }))
+
+      // 🔥 marcar setup como completado
+      setStepsDone({
+        1: true,
+        2: true,
+        3: true
+      })
+
+      setActiveStep(null)
 
     } catch (err) {
       console.error("Auto-fill error", err)

@@ -10,10 +10,11 @@ export default function Recommendations({ onComplete }) {
     const propertyId = getPropertyId()
 
     const [items, setItems] = useState([])
-
     const { setRefreshPreview, showToast } = useContext(AppContext)
-
+    const [loading, setLoading] = useState(false)
+    const [toast, setToast] = useState(null)
     const [saving, setSaving] = useState(false)
+    const [saved, setSaved] = useState(false)
 
     useEffect(() => {
 
@@ -124,7 +125,9 @@ export default function Recommendations({ onComplete }) {
             })
         })
 
-        showToast("Recommendations saved")
+        setToast("Recommendations saved")
+        setSaved(true)
+        setTimeout(() => setSaved(false), 1500)
         setRefreshPreview(prev => prev + 1)
 
         setSaving(false)
@@ -162,9 +165,9 @@ export default function Recommendations({ onComplete }) {
                     </div>
 
                     <div className="flex-end  mt-sm">
-                        <button className="btn btn-secondary" onClick={() => removeItem(index)}>
+                        <Button variant="secondary" onClick={() => removeItem(index)}>
                             Delete
-                        </button>
+                        </Button>
                     </div>
 
                 </div>
@@ -174,11 +177,11 @@ export default function Recommendations({ onComplete }) {
             <div className="flex-between mt-md">
                 <div className="flex gap-sm">
 
-                    <Button className="btn btn-md btn-primary" onClick={addItem}>
+                    <Button variant="secondary" onClick={addItem}>
                         + Add recommendation
                     </Button>
 
-                    <Button className="btn btn-md btn-primary" onClick={save}>
+                    <Button variant="secondary" onClick={save}>
                         {saving ? "Saving..." : "Save"}
                     </Button>
 
@@ -196,6 +199,11 @@ export default function Recommendations({ onComplete }) {
                     Finish setup →
                 </Button>
             </div>
+
+
+            {loading && <div className="text-muted">Saving...</div>}
+            {saved && <div className="text-success">Saved ✓</div>}
+            {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
         </div>
 
