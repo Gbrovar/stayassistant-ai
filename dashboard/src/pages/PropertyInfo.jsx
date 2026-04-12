@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import React from "react"
 import { getToken, getPropertyId } from "../api/auth"
 import { API_URL } from "../api/config"
@@ -33,6 +33,7 @@ export default function PropertyInfo({ onComplete }) {
     /* AUTOSAVE SYSTEM */
     const [dirty, setDirty] = useState(false)
     const [lastSavedData, setLastSavedData] = useState(null)
+    const typingTimeoutRef = useRef(null)
     /* ********* */
 
     const fallbackWelcome =
@@ -101,16 +102,6 @@ export default function PropertyInfo({ onComplete }) {
         load()
     }, [])
 
-    useEffect(() => {
-        if (!dirty || isAutoFilling) return
-
-        const timeout = setTimeout(() => {
-            silentSave()
-        }, 4000) // ⏱️ más humano
-
-        return () => clearTimeout(timeout)
-
-    }, [form, dirty, isAutoFilling])
 
     useEffect(() => {
 
@@ -146,6 +137,30 @@ export default function PropertyInfo({ onComplete }) {
         }
 
         setForm(updated)
+
+        if (!dirty) setDirty(true)
+
+        // 🔥 CONTROL REAL DE TYPING
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
+
+        typingTimeoutRef.current = setTimeout(() => {
+            silentSave()
+        }, 2000) // 2s después de dejar de escribir
+    }
+
+
+    /*
+    function handleChange(e) {
+        
+
+        const updated = {
+            ...form,
+            [e.target.name]: e.target.value
+        }
+
+        setForm(updated)
         if (!dirty) {
             setDirty(true)
         }
@@ -163,6 +178,8 @@ export default function PropertyInfo({ onComplete }) {
             localStorage.setItem("property_address_ready", "true")
         }
     }
+    */
+
 
     function addItem(type, value) {
         if (!value.trim()) return
