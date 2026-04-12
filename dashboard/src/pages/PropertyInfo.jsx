@@ -35,6 +35,44 @@ function Section({ title, children }) {
     )
 }
 
+ function Grid({ children }) {
+        return (
+            <div className="form-grid-2">
+                {children}
+            </div>
+        )
+    }
+
+    function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
+        return (
+            <div>
+
+                <div className="chips-container">
+                    {items.map((item, i) => (
+                        <div key={i} className="chip">
+                            {item}
+                            <span className="chip-remove" onClick={() => onRemove(i)}>✕</span>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="chips-input-row">
+                    <input
+                        className="input"
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                        placeholder="Type and click Add..."
+                    />
+
+                    <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
+                        Add
+                    </button>
+                </div>
+
+            </div>
+        )
+    }
+
 export default function PropertyInfo({ onComplete }) {
 
     const propertyId = getPropertyId()
@@ -185,6 +223,12 @@ export default function PropertyInfo({ onComplete }) {
     }
     */
 
+    function handleBlur() {
+        if (!dirty) return
+
+        silentSave()
+    }
+
 
     function addItem(type, value) {
         if (!value.trim()) return
@@ -206,8 +250,6 @@ export default function PropertyInfo({ onComplete }) {
             [type]: copy
         }))
     }
-
-
 
     async function saveAll({ silent = false } = {}) {
 
@@ -325,43 +367,7 @@ export default function PropertyInfo({ onComplete }) {
 
     /* UI */
 
-    function Grid({ children }) {
-        return (
-            <div className="form-grid-2">
-                {children}
-            </div>
-        )
-    }
-
-    function Chips({ items, newValue, setNewValue, onAdd, onRemove }) {
-        return (
-            <div>
-
-                <div className="chips-container">
-                    {items.map((item, i) => (
-                        <div key={i} className="chip">
-                            {item}
-                            <span className="chip-remove" onClick={() => onRemove(i)}>✕</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="chips-input-row">
-                    <input
-                        className="input"
-                        value={newValue}
-                        onChange={(e) => setNewValue(e.target.value)}
-                        placeholder="Type and click Add..."
-                    />
-
-                    <button className="btn btn-secondary" onClick={() => onAdd(newValue)}>
-                        Add
-                    </button>
-                </div>
-
-            </div>
-        )
-    }
+   
 
 
     return (
