@@ -148,9 +148,10 @@ export default function PropertySetupPage() {
             isActive={activeStep === 1}
             onClick={() => setActiveStep(1)}
           >
-            {activeStep === 1 && (
+            <div style={{ display: activeStep === 1 ? "block" : "none" }}>
               <PropertyInfo onComplete={() => completeStep(1)} />
-            )}
+            </div>
+
           </Section>
 
           {/* STEP 2 */}
@@ -161,9 +162,10 @@ export default function PropertySetupPage() {
             isActive={activeStep === 2}
             onClick={() => setActiveStep(2)}
           >
-            {activeStep === 2 && (
+            <div style={{ display: activeStep === 2 ? "block" : "none" }}>
               <FAQEditor onComplete={() => completeStep(2)} />
-            )}
+            </div>
+
           </Section>
 
           {/* STEP 3 */}
@@ -174,9 +176,9 @@ export default function PropertySetupPage() {
             isActive={activeStep === 3}
             onClick={() => setActiveStep(3)}
           >
-            {activeStep === 3 && (
+            <div style={{ display: activeStep === 3 ? "block" : "none" }}>
               <Recommendations onComplete={() => completeStep(3)} />
-            )}
+            </div>
           </Section>
 
         </div>
