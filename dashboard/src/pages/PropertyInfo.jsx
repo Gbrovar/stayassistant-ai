@@ -139,15 +139,6 @@ export default function PropertyInfo({ onComplete }) {
         setForm(updated)
 
         if (!dirty) setDirty(true)
-
-        // 🔥 CONTROL REAL DE TYPING
-        if (typingTimeoutRef.current) {
-            clearTimeout(typingTimeoutRef.current)
-        }
-
-        typingTimeoutRef.current = setTimeout(() => {
-            silentSave()
-        }, 2000) // 2s después de dejar de escribir
     }
 
 
@@ -179,6 +170,12 @@ export default function PropertyInfo({ onComplete }) {
         }
     }
     */
+
+    function handleBlur() {
+        if (!dirty) return
+
+        silentSave()
+    }
 
 
     function addItem(type, value) {
@@ -388,6 +385,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.property_name}
                             placeholder="e.g. Villa Sunset, Hotel Central..."
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -396,6 +395,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.button_text}
                             placeholder="e.g. Ask concierge"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -422,6 +423,8 @@ export default function PropertyInfo({ onComplete }) {
                         value={form.address}
                         placeholder="Street name and number"
                         onChange={handleChange}
+
+                        onBlur={handleBlur}
                     />
                 </div>
 
@@ -433,6 +436,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.city}
                             placeholder="e.g. Barcelona"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -441,6 +446,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.country}
                             placeholder="e.g. Spain"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -449,6 +456,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.postal_code}
                             placeholder="e.g. 08001"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -472,6 +481,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.phone}
                             placeholder="+34 600 000 000"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
 
                         <Input
@@ -480,6 +491,8 @@ export default function PropertyInfo({ onComplete }) {
                             value={form.email}
                             placeholder="contact@yourproperty.com"
                             onChange={handleChange}
+
+                            onBlur={handleBlur}
                         />
                     </Grid>
                 </div>
@@ -490,8 +503,23 @@ export default function PropertyInfo({ onComplete }) {
 
                 <div className="form-group-block">
                     <Grid>
-                        <Input label="Check-in" name="checkin" value={form.checkin} onChange={handleChange} />
-                        <Input label="Check-out" name="checkout" value={form.checkout} onChange={handleChange} />
+                        <Input 
+                            label="Check-in" 
+                            name="checkin" 
+                            value={form.checkin} 
+                            onChange={handleChange}
+                            
+                            onBlur={handleBlur}
+                        />
+
+                        <Input 
+                            label="Check-out" 
+                            name="checkout" 
+                            value={form.checkout} 
+                            onChange={handleChange} 
+                            
+                            onBlur={handleBlur}
+                        />
                     </Grid>
                 </div>
 

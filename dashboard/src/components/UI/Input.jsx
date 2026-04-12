@@ -5,6 +5,7 @@ function InputComponent({
   name,
   value,
   onChange,
+  onBlur,
   placeholder,
   type = "text"
 }) {
@@ -17,6 +18,7 @@ function InputComponent({
         name={name}
         value={value || ""}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
         type={type}
       />
