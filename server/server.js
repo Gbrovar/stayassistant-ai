@@ -3857,7 +3857,19 @@ app.post("/ai/setup", authenticate, async (req, res) => {
 
     property.knowledge.faq = json.faq
 
-    property.knowledge.local_recommendations = json.recommendations
+    //property.knowledge.local_recommendations = json.recommendations
+
+    property.knowledge.local_recommendations = (json.recommendations || []).map(r => {
+
+      if (typeof r === "string") {
+        return {
+          name: r,
+          description: ""
+        }
+      }
+
+      return r
+    })
 
     property.knowledge.property_info.checkin = checkin
     property.knowledge.property_info.checkout = checkout
@@ -3871,6 +3883,21 @@ app.post("/ai/setup", authenticate, async (req, res) => {
     await invalidateAnalyticsCache(propertyId)
 
     triggerPrecompute(propertyId)
+
+    /* --- ONBOARDING AUTO COMPLETE (FIX UX) --- */
+
+    const onboardingKey = `stayassistant:onboarding:${propertyId}`
+
+    let onboarding = await redis.get(onboardingKey)
+
+    onboarding = onboarding ? JSON.parse(onboarding) : {}
+
+    onboarding.recommendations = true
+    onboarding.faq = true
+
+    await redis.set(onboardingKey, JSON.stringify(onboarding))
+
+    /* --- END FIX --- */
 
     res.json({ success: true })
 
