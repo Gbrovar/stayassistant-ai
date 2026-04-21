@@ -1257,6 +1257,10 @@ app.get("/property/:id/property-info", authenticate, async (req, res) => {
 /* --- GET RECOMMENDATIONS --- */
 app.get("/property/:id/recommendations", authenticate, async (req, res) => {
 
+  res.set("Cache-Control", "no-store")
+  res.set("Pragma", "no-cache")
+  res.set("Expires", "0")
+
   const propertyId = req.params.id
 
   if (req.propertyId !== propertyId) {

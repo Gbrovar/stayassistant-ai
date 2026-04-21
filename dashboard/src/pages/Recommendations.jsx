@@ -26,7 +26,8 @@ export default function Recommendations({ onComplete }) {
             const res = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
                 headers: {
                     "Authorization": "Bearer " + getToken()
-                }
+                },
+                cache: "no-store"
             })
 
             const data = await res.json()
