@@ -159,6 +159,12 @@ export default function PropertySetupPage() {
         detail: finalData
       }))
 
+      const normalizedRecommendations =
+        (finalData.recommendations?.items) ||
+        (Array.isArray(finalData.recommendations)
+          ? finalData.recommendations
+          : [])
+
       // 🔥 GUARDAR EN BACKEND (FIX REAL)
       await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
         method: "POST",
@@ -167,7 +173,7 @@ export default function PropertySetupPage() {
           "Authorization": "Bearer " + token
         },
         body: JSON.stringify({
-          recommendations: finalRecommendations
+          recommendations: normalizedRecommendations
         })
       })
 
