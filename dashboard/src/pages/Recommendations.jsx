@@ -17,6 +17,8 @@ export default function Recommendations({ onComplete }) {
     const [saved, setSaved] = useState(false)
 
 
+    const { refreshPreview } = useContext(AppContext)
+
     useEffect(() => {
 
         async function load() {
@@ -29,6 +31,8 @@ export default function Recommendations({ onComplete }) {
 
             const data = await res.json()
 
+            console.log("📥 FRONT RECOMMENDATIONS:", data)
+
             setItems(
                 (data.recommendations || []).map(r =>
                     typeof r === "string"
@@ -36,12 +40,11 @@ export default function Recommendations({ onComplete }) {
                         : r
                 )
             )
-
         }
 
         load()
 
-    }, [])
+    }, [propertyId, refreshPreview])
 
     useEffect(() => {
 

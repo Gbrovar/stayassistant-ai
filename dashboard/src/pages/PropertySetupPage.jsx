@@ -280,9 +280,10 @@ export default function PropertySetupPage() {
             isActive={activeStep === 3}
             onClick={() => setActiveStep(prev => prev === 3 ? null : 3)}
           >
-            {activeStep === 3 && (
+            
+      
               <Recommendations onComplete={() => completeStep(3)} />
-            )}
+           
           </Section>
 
         </div>
