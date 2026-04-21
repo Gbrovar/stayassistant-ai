@@ -4,6 +4,7 @@ import { API_URL } from "../api/config"
 import { useContext } from "react"
 import { AppContext } from "../context/AppContext"
 import Button from "../components/UI/Button"
+import Toast from "../components/UI/Toast"
 
 export default function Recommendations({ onComplete }) {
 
@@ -55,13 +56,16 @@ export default function Recommendations({ onComplete }) {
 
             if (!data?.recommendations) return
 
-            setItems(
-                data.recommendations.map(r =>
-                    typeof r === "string"
-                        ? { name: r, description: "" }
-                        : r
-                )
+            const recs = data.recommendations.map(r =>
+                typeof r === "string"
+                    ? { name: r, description: "" }
+                    : r
             )
+
+            setItems(recs)
+
+            // 🔥 FIX CRÍTICO → GUARDAR AUTOMÁTICAMENTE
+            saveAuto(recs)
 
         }
 
@@ -117,28 +121,45 @@ export default function Recommendations({ onComplete }) {
 
     async function save() {
 
-        setSaving(true)
+        try {
 
-        await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + getToken()
-            },
-            body: JSON.stringify({
-                recommendations: items
+            setSaving(true)
+
+            const res = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + getToken()
+                },
+                body: JSON.stringify({
+                    recommendations: items
+                })
             })
-        })
 
-        setToast("Recommendations saved")
-        setSaved(true)
-        setTimeout(() => setSaved(false), 1500)
-        setRefreshPreview(prev => prev + 1)
+            const data = await res.json()
 
-        setSaving(false)
+            console.log("SAVE RESPONSE:", data)
 
+            setToast("Recommendations saved")
+            setSaved(true)
+            setTimeout(() => setSaved(false), 1500)
+
+            setRefreshPreview(prev => prev + 1)
+
+        } catch (err) {
+
+            console.error("❌ SAVE ERROR:", err)
+
+            setToast("Error saving recommendations")
+
+        } finally {
+
+            setSaving(false)
+
+        }
 
     }
+
 
 
     return (
