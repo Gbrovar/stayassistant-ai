@@ -163,6 +163,8 @@ export default function PropertySetupPage() {
 
       const normalizedRecommendations = finalData.recommendations || []
 
+      console.log("🔥 SAVING RECOMMENDATIONS", finalRecommendations)
+      
       // 🔥 GUARDAR EN BACKEND (FIX REAL)
       await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
         method: "POST",
@@ -174,6 +176,8 @@ export default function PropertySetupPage() {
           recommendations: normalizedRecommendations
         })
       })
+
+      console.log("🔥 CALLING POST /recommendations")
 
       // 🔥 DISPATCH DESPUÉS (CRÍTICO)
       window.dispatchEvent(new CustomEvent("ai-autofill", {
