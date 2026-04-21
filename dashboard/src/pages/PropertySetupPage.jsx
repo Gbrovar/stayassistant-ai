@@ -113,7 +113,7 @@ export default function PropertySetupPage() {
       const aiData = await res.json()
 
       // 2️⃣ GOOGLE PLACES (MULTI CATEGORY 🔥)
-      const types = ["restaurants", "cafes", "attractions"]
+      const types = ["restaurants", "cafes", "activities"]
 
       const placesResults = await Promise.all(
         types.map(type =>
@@ -155,15 +155,13 @@ export default function PropertySetupPage() {
       }
 
       // 7️⃣ DISPATCH
+      /*
       window.dispatchEvent(new CustomEvent("ai-autofill", {
         detail: finalData
       }))
+        */
 
-      const normalizedRecommendations =
-        (finalData.recommendations?.items) ||
-        (Array.isArray(finalData.recommendations)
-          ? finalData.recommendations
-          : [])
+      const normalizedRecommendations = finalData.recommendations || []
 
       // 🔥 GUARDAR EN BACKEND (FIX REAL)
       await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
