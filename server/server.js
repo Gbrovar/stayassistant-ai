@@ -766,7 +766,6 @@ app.get("/property/:id", async (req, res) => {
     postal_code: property.postal_code,
     coordinates: property.coordinates,
 
-
     amenities: property.amenities,
     services: property.services
   })
