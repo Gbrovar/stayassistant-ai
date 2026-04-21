@@ -159,6 +159,18 @@ export default function PropertySetupPage() {
         detail: finalData
       }))
 
+      // 🔥 GUARDAR EN BACKEND (FIX REAL)
+      await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+          recommendations: finalRecommendations
+        })
+      })
+
       // 🔥 marcar setup como completado
       setStepsDone({
         1: true,
