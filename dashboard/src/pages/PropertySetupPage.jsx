@@ -171,6 +171,11 @@ export default function PropertySetupPage() {
         })
       })
 
+      // 🔥 DISPATCH DESPUÉS (CRÍTICO)
+      window.dispatchEvent(new CustomEvent("ai-autofill", {
+        detail: finalData
+      }))
+
       // 🔥 marcar setup como completado
       setStepsDone({
         1: true,
