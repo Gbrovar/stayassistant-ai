@@ -1271,7 +1271,14 @@ app.get("/property/:id/recommendations", authenticate, async (req, res) => {
   }
 
   res.json({
-    recommendations: property.knowledge.local_recommendations
+    recommendations: (property.knowledge.local_recommendations || []).map(r => {
+
+      if (typeof r === "string") {
+        return { name: r, description: "" }
+      }
+
+      return r
+    })
   })
 
 });
@@ -1294,7 +1301,18 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
     return res.status(404).json({ error: "property not found" })
   }
 
-  property.knowledge.local_recommendations = recommendations
+  //property.knowledge.local_recommendations = recommendations
+  property.knowledge.local_recommendations = (recommendations || []).map(r => {
+
+    if (typeof r === "string") {
+      return {
+        name: r,
+        description: ""
+      }
+    }
+
+    return r
+  })
 
   property.updatedAt = Date.now()
 

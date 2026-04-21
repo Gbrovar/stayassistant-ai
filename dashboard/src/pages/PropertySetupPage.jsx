@@ -155,12 +155,6 @@ export default function PropertySetupPage() {
       }
 
       // 7️⃣ DISPATCH
-      /*
-      window.dispatchEvent(new CustomEvent("ai-autofill", {
-        detail: finalData
-      }))
-        */
-
       const normalizedRecommendations = finalData.recommendations || []
 
 
