@@ -183,13 +183,10 @@ export default function PropertySetupPage() {
 
       const freshData = await freshRes.json()
 
-      console.log("🔥 FRESH DATA FROM BACKEND:", freshData)
-
-
       // 🔥 DISPATCH DESPUÉS (CRÍTICO)
       window.dispatchEvent(new CustomEvent("ai-autofill", {
         detail: {
-          ...finalData,
+          //...finalData,
           recommendations: freshData.recommendations || []
         }
       }))

@@ -20,6 +20,26 @@ export default function Recommendations({ onComplete }) {
 
     const { refreshPreview } = useContext(AppContext)
 
+    async function loadFromBackend() {
+
+        const res = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
+            cache: "no-store"
+        })
+
+        const data = await res.json()
+
+        setItems(
+            (data.recommendations || []).map(r =>
+                typeof r === "string"
+                    ? { name: r, description: "" }
+                    : r
+            )
+        )
+    }
+
     useEffect(() => {
 
         async function load() {
@@ -56,6 +76,9 @@ export default function Recommendations({ onComplete }) {
 
             if (!data?.recommendations) return
 
+            loadFromBackend()
+
+            /*
             const recs = data.recommendations.map(r =>
                 typeof r === "string"
                     ? { name: r, description: "" }
@@ -66,6 +89,7 @@ export default function Recommendations({ onComplete }) {
 
             // 🔥 FIX CRÍTICO → GUARDAR AUTOMÁTICAMENTE
             saveAuto(recs)
+            */
 
         }
 
