@@ -163,10 +163,9 @@ export default function PropertySetupPage() {
 
       const normalizedRecommendations = finalData.recommendations || []
 
-      console.log("🔥 SAVING RECOMMENDATIONS", finalRecommendations)
-      
+
       // 🔥 GUARDAR EN BACKEND (FIX REAL)
-      await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+      const saveRes = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,11 +176,28 @@ export default function PropertySetupPage() {
         })
       })
 
-      console.log("🔥 CALLING POST /recommendations")
+      const saveData = await saveRes.json()
+
+      console.log("✅ SAVE RESPONSE:", saveData)
+
+      // 🔥 FORZAR REFETCH REAL DESDE BACKEND
+      const freshRes = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+
+      const freshData = await freshRes.json()
+
+      console.log("🔥 FRESH DATA FROM BACKEND:", freshData)
+
 
       // 🔥 DISPATCH DESPUÉS (CRÍTICO)
       window.dispatchEvent(new CustomEvent("ai-autofill", {
-        detail: finalData
+        detail: {
+          ...finalData,
+          recommendations: freshData.recommendations || []
+        }
       }))
 
       // 🔥 marcar setup como completado
