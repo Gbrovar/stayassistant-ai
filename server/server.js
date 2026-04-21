@@ -1263,6 +1263,7 @@ app.get("/property/:id/recommendations", authenticate, async (req, res) => {
     return res.status(403).json({ error: "forbidden" })
   }
 
+  propertyCache.delete(propertyId) // 🔥 CRÍTICO
   const property = await loadProperty(propertyId)
 
   if (!property) {
