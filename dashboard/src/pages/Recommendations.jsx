@@ -76,9 +76,6 @@ export default function Recommendations({ onComplete }) {
 
             if (!data?.recommendations) return
 
-            loadFromBackend()
-
-            /*
             const recs = data.recommendations.map(r =>
                 typeof r === "string"
                     ? { name: r, description: "" }
@@ -86,11 +83,6 @@ export default function Recommendations({ onComplete }) {
             )
 
             setItems(recs)
-
-            // 🔥 FIX CRÍTICO → GUARDAR AUTOMÁTICAMENTE
-            saveAuto(recs)
-            */
-
         }
 
         window.addEventListener("ai-autofill", handleAutoFill)
