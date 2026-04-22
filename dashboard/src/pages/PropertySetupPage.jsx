@@ -160,10 +160,10 @@ export default function PropertySetupPage() {
         recommendations: finalRecommendations
       }
 
+      console.log("🚀 SENDING TO BACKEND:", finalRecommendations)
+
       // 7️⃣ DISPATCH
       const normalizedRecommendations = finalData.recommendations || []
-
-      console.log("🔥 FINAL RECOMMENDATIONS:", finalRecommendations)
 
       if (!finalRecommendations.length) {
         console.warn("❌ No recommendations generated")
@@ -181,6 +181,8 @@ export default function PropertySetupPage() {
           recommendations: normalizedRecommendations
         })
       })
+
+      console.log("✅ POST DONE")
 
       const saveData = await saveRes.json()
 
