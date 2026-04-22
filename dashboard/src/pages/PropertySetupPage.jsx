@@ -71,7 +71,7 @@ export default function PropertySetupPage() {
   }
 
   async function handleAutoFill() {
-
+    console.log("🔥 AUTOFILL CLICKED")
     setAutoFilling(true)
 
     try {
