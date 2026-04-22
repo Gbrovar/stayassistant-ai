@@ -57,14 +57,7 @@ export default function PropertySetupPage() {
 
 
   const [stepsDone, setStepsDone] = useState(null)
-  /*
-    // 👉 lógica simple de progreso (mejoraremos luego)
-    const [stepsDone, setStepsDone] = useState({
-      1: false,
-      2: false,
-      3: false
-    })
-  */
+
 
   function completeStep(step) {
     setStepsDone(prev => ({ ...prev, [step]: true }))
@@ -134,18 +127,31 @@ export default function PropertySetupPage() {
       // 4️⃣ DEDUPE SYSTEM 🔥
       function dedupe(list) {
         const seen = new Set()
+
         return list.filter(item => {
+          if (!item || !item.name) return false
+
           const key = item.name.toLowerCase().trim()
+
+          if (!key) return false
+
           if (seen.has(key)) return false
+
           seen.add(key)
           return true
         })
       }
 
       // 5️⃣ MERGE INTELIGENTE
+      const safeAI = (aiData?.recommendations || [])
+        .filter(r => r && typeof r === "object" && r.name)
+
+      const safePlaces = (realPlaces || [])
+        .filter(p => p && p.name)
+
       const finalRecommendations = dedupe([
-        ...(aiData.recommendations || []),
-        ...realPlaces
+        ...safeAI,
+        ...safePlaces
       ]).slice(0, 12)
 
       // 6️⃣ FINAL DATA
@@ -157,6 +163,12 @@ export default function PropertySetupPage() {
       // 7️⃣ DISPATCH
       const normalizedRecommendations = finalData.recommendations || []
 
+      console.log("🔥 FINAL RECOMMENDATIONS:", finalRecommendations)
+
+      if (!finalRecommendations.length) {
+        console.warn("❌ No recommendations generated")
+        return
+      }
 
       // 🔥 GUARDAR EN BACKEND (FIX REAL)
       const saveRes = await fetch(`${API_URL}/property/${propertyId}/recommendations`, {
