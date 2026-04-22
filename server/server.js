@@ -1299,7 +1299,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
   const { recommendations } = req.body
 
-  const property = await getProperty(propertyId)
+  //const property = await getProperty(propertyId)
+  const property = await loadProperty(propertyId)
 
   if (!property) {
     return res.status(404).json({ error: "property not found" })
@@ -1341,6 +1342,8 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
   }
 
   onboarding.recommendations = true
+
+  console.log("📥 SAVING RECOMMENDATIONS:", recommendations)
 
   await redis.set(onboardingKey, JSON.stringify(onboarding))
 
