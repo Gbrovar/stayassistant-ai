@@ -224,7 +224,7 @@ export default function PropertySetupPage() {
   if (!stepsDone) return null
 
   return (
-    <div className="container">
+    <div className="container stack-lg">
 
       <div className="card-v2 card-hero mb-lg">
 
