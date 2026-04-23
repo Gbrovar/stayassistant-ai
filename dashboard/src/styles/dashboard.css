@@ -1851,6 +1851,7 @@ textarea.input {
   padding: 16px;
   transition: all 0.2s ease;
   backdrop-filter: blur(6px);
+  margin-bottom: 10px;
 }
 
 .card-soft-v2:hover {
@@ -2210,7 +2211,7 @@ h3 {
 .section {
   margin-top: 0;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .section+.section {

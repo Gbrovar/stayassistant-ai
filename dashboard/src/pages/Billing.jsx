@@ -126,7 +126,7 @@ export default function Billing() {
     const usageRatio = usage / limit
 
     return (
-        <div className="container">
+        <div className="container stack-lg">
 
             <div className="col-12">
                 {/* HEADER */}
