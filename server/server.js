@@ -546,7 +546,10 @@ app.get("/property/:id/suggestions", async (req, res) => {
     return res.json({ suggestions: [] })
   }
 
-  const faq = (property.knowledge?.faq || []).slice(0, 2)
+  //const faq = (property.knowledge?.faq || []).slice(0, 2)
+  const faq = (property.knowledge?.faq || [])
+    .sort((a, b) => b.priority || 0 - (a.priority || 0))
+    .slice(0, 4)
   const services = (property.knowledge?.services || []).slice(0, 2)
 
   const suggestions = []

@@ -405,6 +405,7 @@ async function showQuickActions() {
 
 /* SMART RECOMMENDATIONS */
 
+
 async function showRecommendations(text) {
 
     const messages = document.getElementById("messages");
@@ -413,7 +414,7 @@ async function showRecommendations(text) {
 
     let type = null;
 
-    /* --- INTENT DETECTION --- */
+    // INTENT DETECTION
 
     if (
         text.includes("restaurant") ||
@@ -525,7 +526,7 @@ async function showRecommendations(text) {
 
         if (!data.items || !data.items.length) return;
 
-        /* --- HEADER (MULTI LANGUAGE) --- */
+        // HEADER (MULTI LANGUAGE)
 
         let title = "Nearby places you may like:";
 
@@ -583,11 +584,11 @@ async function showRecommendations(text) {
 
         }
 
-        /* --- RENDER PLACES --- */
+        // RENDER PLACES
 
         data.items.forEach(place => {
 
-            /* --- DISTANCE --- */
+            // DISTANCE
 
             let distanceText = "";
 
@@ -605,7 +606,7 @@ async function showRecommendations(text) {
 
             }
 
-            /* --- ETA WALKING --- */
+            // ETA WALKING
 
             let etaText = "";
 
@@ -622,7 +623,7 @@ async function showRecommendations(text) {
 
             }
 
-            /* --- OPEN / CLOSED STATUS --- */
+            // OPEN / CLOSED STATUS
 
             let openStatus = "";
 
@@ -681,6 +682,7 @@ async function showRecommendations(text) {
     });
 
 }
+
 
 /* PROACTIVE SUGGESTIONS */
 const hour = new Date().getHours()
@@ -1026,7 +1028,6 @@ async function sendMessage(forcedText = null, displayLabel = null) {
 
         if (data.reply && !data.reply.includes("something went wrong")) {
             const detectedIntent = data.intent || null;
-            //await showRecommendations(detectedIntent || userText)
         }
 
         /* luego quick actions */
