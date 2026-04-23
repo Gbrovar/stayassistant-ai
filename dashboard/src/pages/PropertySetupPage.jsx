@@ -239,10 +239,7 @@ export default function PropertySetupPage() {
 
           <button
             className="btn btn-md btn-primary"
-            onClick={
-              handleAutoFill,
-              console.log("🔥 CLICK WORKING")
-            }
+            onClick={handleAutoFill}
             disabled={autoFilling}
           >
             {autoFilling ? "Generating..." : "✨ Auto-fill"}
