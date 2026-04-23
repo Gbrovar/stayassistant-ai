@@ -1727,22 +1727,29 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       const info = property.knowledge.property_info
 
-      let answer = "WiFi information: "
+      // 🟢 SOLO RESPONDE SI HAY DATOS REALES
+      if (info.wifi_name || info.wifi_password) {
 
-      if (info.wifi_name) {
-        answer += `Network: ${info.wifi_name}. `
+        let answer = "WiFi information: "
+
+        if (info.wifi_name) {
+          answer += `Network: ${info.wifi_name}. `
+        }
+
+        if (info.wifi_password) {
+          answer += `Password: ${info.wifi_password}.`
+        }
+
+        return res.json(
+          buildResponse({
+            reply: answer,
+            intent
+          })
+        )
       }
 
-      if (info.wifi_password) {
-        answer += `Password: ${info.wifi_password}.`
-      }
-
-      return res.json(
-        buildResponse({
-          reply: answer,
-          intent
-        })
-      )
+      // 🔥 SI NO HAY DATOS → NO RESPONDE AQUÍ
+      // deja que pase a FAQ o AI
     }
 
     if (intent === "waste") {
@@ -2052,6 +2059,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}:${control.mode}`
 
     /* --- FAQ AUTO ANSWER --- */
+    /*
     function similarity(a, b) {
       const aWords = a.split(" ")
       const bWords = b.split(" ")
@@ -2061,6 +2069,20 @@ app.post("/chat", chatLimiter, async (req, res) => {
       ).length
 
       return matchCount / Math.max(aWords.length, bWords.length)
+    }
+    */
+
+    function similarity(a, b) {
+      const aWords = new Set(a.split(" "))
+      const bWords = new Set(b.split(" "))
+
+      let match = 0
+
+      for (const word of aWords) {
+        if (bWords.has(word)) match++
+      }
+
+      return match / Math.min(aWords.size, bWords.size)
     }
 
     let bestMatch = null
@@ -2073,7 +2095,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
       const faqIntent = detectIntent(f.question)
 
       // 🎯 prioridad fuerte: match de intent + alta similitud
+      /*
       if (faqIntent === intent && similarityScore > bestScore) {
+        bestMatch = f
+        bestScore = similarityScore
+      }
+      */
+
+      if (similarityScore > bestScore) {
         bestMatch = f
         bestScore = similarityScore
       }
@@ -2081,7 +2110,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     }
 
     // 🔥 threshold dinámico
-    if (bestMatch && bestScore > 0.7) {
+    if (bestMatch && bestScore > 0.3) {  //antes bestScore > 0.7
 
       console.log("✅ FAQ MATCH STRONG:", bestScore)
 
