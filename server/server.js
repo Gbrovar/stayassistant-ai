@@ -1381,6 +1381,9 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const userMessage = req.body.message || "";
 
+    // 🔥 FIX: limpiar emojis de botones UI
+    const cleanedMessage = userMessage.replace(/[^\w\sáéíóúñüäöß]/gi, "").trim()
+
     // 🔐 CHAT TOKEN VALIDATION
     const chatToken =
       req.headers["x-chat-token"] ||
@@ -1544,6 +1547,23 @@ app.post("/chat", chatLimiter, async (req, res) => {
     const intent = detectIntent(userMessage)
     console.log("🔥 INTENT DETECTED:", intent)
 
+    const text = cleanedMessage.toLowerCase()
+
+    const isPlaceQuery =
+      text.includes("supermercado") ||
+      text.includes("supermarket") ||
+      text.includes("farmacia") ||
+      text.includes("pharmacy")
+
+    if (isPlaceQuery) {
+      if (text.includes("supermercado") || text.includes("supermarket")) {
+        intent = "supermarket"
+      }
+
+      if (text.includes("farmacia") || text.includes("pharmacy")) {
+        intent = "pharmacy"
+      }
+    }
 
     const addressParts = [
       property.address,
@@ -1554,7 +1574,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
     const fullAddress = addressParts.join(", ")
 
-    if (intent === "address") {
+    if (intent === "address" && !isPlaceQuery) {
 
       if (!property.address) {
         return res.json(
