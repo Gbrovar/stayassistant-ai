@@ -1544,10 +1544,11 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let plan = sub.plan || "free"
 
     /* --- INTENT DETECTION --- */
-    const intent = detectIntent(userMessage)
+    //const intent = detectIntent(userMessage)
+    let intent = detectIntent(cleanedMessage)
     console.log("🔥 INTENT DETECTED:", intent)
 
-    const text = cleanedMessage.toLowerCase()
+    //const text = cleanedMessage.toLowerCase()
 
     const isPlaceQuery =
       text.includes("supermercado") ||
@@ -1617,7 +1618,8 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
 
-    const text = userMessage.toLowerCase()
+    //const text = userMessage.toLowerCase()
+    const text = cleanedMessage.toLowerCase()
 
     const wantsPublicTransport =
       text.includes("public") ||
