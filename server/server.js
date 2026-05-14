@@ -16,7 +16,15 @@ import { createUser, getUser } from "./db/users.js";
 import { createProperty, getProperty } from "./db/properties.js";
 import redis, { connectRedis } from "./db/redis.js";
 import { selectKnowledge } from "./utils/knowledgeSelector.js";
-import { detectIntent } from "./utils/intentEngine.js"
+import { detectIntent } from "./utils/intentEngine.js";
+import {
+  getDistance,
+  translateSuggestion,
+  buildResponse,
+  detectContext,
+  normalizeMessage,
+  similarity
+} from "./utils/chat.helpers.js";
 import crypto from "crypto";
 import { computeCustomerScore, getUpgradeStrategy } from "./services/ltv.service.js";
 
@@ -376,7 +384,7 @@ const app = express();
 app.set("trust proxy", 1)
 
 /* --- DISTANCE HELPER --- */
-
+/*
 function getDistance(lat1, lon1, lat2, lon2) {
 
   const R = 6371
@@ -396,7 +404,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c
 
 }
-
+*/
 /* --- Plan price --- */
 function getPlanPrice(plan) {
   if (plan === "pro") return 39
@@ -703,7 +711,7 @@ app.get("/property/:id/places/:type", async (req, res) => {
   }
 
 });
-
+/*
 function translateSuggestion(text, language) {
 
   const translations = {
@@ -729,6 +737,7 @@ function translateSuggestion(text, language) {
   return translations[language]?.[text] || text;
 
 }
+*/
 
 /* --- root route --- */
 
@@ -1356,6 +1365,7 @@ app.post("/property/:id/recommendations", authenticate, async (req, res) => {
 
 });
 
+/*
 function buildResponse({
   reply = "",
   intent = null,
@@ -1373,6 +1383,7 @@ function buildResponse({
     error
   }
 }
+*/
 
 /* --- chat endpoint --- */
 app.post("/chat", chatLimiter, async (req, res) => {
@@ -1548,7 +1559,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     let intent = detectIntent(cleanedMessage)
     console.log("🔥 INTENT DETECTED:", intent)
 
-    //const text = cleanedMessage.toLowerCase()
+    const text = cleanedMessage.toLowerCase()
 
     const isPlaceQuery =
       text.includes("supermercado") ||
@@ -1619,7 +1630,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
 
     //const text = userMessage.toLowerCase()
-    const text = cleanedMessage.toLowerCase()
+    //const text = cleanedMessage.toLowerCase()
 
     const wantsPublicTransport =
       text.includes("public") ||
@@ -2064,6 +2075,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
     });
 
     /* --- NORMALIZACION DE PREGUNTAS --- */
+    /*
     function normalizeMessage(message) {
 
       return message
@@ -2074,26 +2086,14 @@ app.post("/chat", chatLimiter, async (req, res) => {
         .trim()
 
     }
+    */
 
     const normalizedQuestion = normalizeMessage(userMessage)
 
     /* --- AISLAMIENTO MULTI-TENANT --- */
     const cacheKey = `stayassistant:cache:${propertyId}:${intent}:${normalizedQuestion}:${property.updatedAt || "v1"}:${control.mode}`
 
-    /* --- FAQ AUTO ANSWER --- */
     /*
-    function similarity(a, b) {
-      const aWords = a.split(" ")
-      const bWords = b.split(" ")
-
-      const matchCount = aWords.filter(word =>
-        bWords.includes(word)
-      ).length
-
-      return matchCount / Math.max(aWords.length, bWords.length)
-    }
-    */
-
     function similarity(a, b) {
       const aWords = new Set(a.split(" "))
       const bWords = new Set(b.split(" "))
@@ -2106,6 +2106,7 @@ app.post("/chat", chatLimiter, async (req, res) => {
 
       return match / Math.min(aWords.size, bWords.size)
     }
+    */
 
     let bestMatch = null
     let bestScore = 0
@@ -3083,6 +3084,7 @@ app.get("/analytics/:propertyId/semantic-insights", authenticate, async (req, re
 })
 
 /* -- CONTEXT DETECTION --- */
+/*
 function detectContext(hour) {
 
   if (!hour) return "day"
@@ -3099,6 +3101,7 @@ function detectContext(hour) {
   return "evening"
 
 }
+*/
 
 /* --- ALERT SYSTEM --- */
 
