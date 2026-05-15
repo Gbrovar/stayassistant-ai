@@ -1,3 +1,4 @@
+/* --- DISTANCE HELPER --- */
 export function getDistance(lat1, lon1, lat2, lon2) {
 
   const R = 6371
@@ -18,6 +19,7 @@ export function getDistance(lat1, lon1, lat2, lon2) {
 
 }
 
+/* --- TRANSLATE SUGGESTIONS --- */
 export function translateSuggestion(text, language) {
 
   const translations = {
@@ -44,6 +46,7 @@ export function translateSuggestion(text, language) {
 
 }
 
+/* --- BUISLD RESPONSE --- */
 export function buildResponse({
   reply = "",
   intent = null,
@@ -62,6 +65,7 @@ export function buildResponse({
   }
 }
 
+/* --- DETECT CONTEXT --- */
 export function detectContext(hour) {
 
   if (!hour) return "day"
@@ -79,6 +83,7 @@ export function detectContext(hour) {
 
 }
 
+/* --- NORMALIZACION DE PREGUNTAS --- */
 export function normalizeMessage(message) {
 
   return message
@@ -90,6 +95,7 @@ export function normalizeMessage(message) {
 
 }
 
+/* --- SIMULARITY --- */
 export function similarity(a, b) {
 
   const aWords = new Set(a.split(" "))
